@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Document Card Background (centered, safe zone is 66dp) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,22 h44 a4,4 0,0 1 4,4 v56 a4,4 0,0 1 -4,4 h-44 a4,4 0,0 1 -4,-4 v-56 a4,4 0,0 1 4,-4 z" />
+    
+    <!-- Document header line: Markdown Heading (# Title) style -->
+    <path
+        android:fillColor="#181B22"
+        android:pathData="M38,32 h32 v4 h-32 z" />
+        
+    <!-- Markdown content lines -->
+    <path
+        android:fillColor="#90A4AE"
+        android:pathData="M38,42 h20 v3 h-20 z" />
+    <path
+        android:fillColor="#90A4AE"
+        android:pathData="M38,50 h24 v3 h-24 z" />
+    <path
+        android:fillColor="#90A4AE"
+        android:pathData="M38,58 h16 v3 h-16 z" />
+
+    <!-- A cool downward Markdown M and arrow badge -->
+    <path
+        android:fillColor="#181B22"
+        android:pathData="M62,66 L65,66 L65,74 L68,70 L71,74 L71,66 L74,66 L74,78 L71,78 L68,74 L65,78 L62,78 Z" />
+    <path
+        android:fillColor="#546E7A"
+        android:pathData="M77,66 L81,66 L81,72 L83,72 L79,78 L75,72 L77,72 Z" />
+</vector>

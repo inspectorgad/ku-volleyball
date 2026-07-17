@@ -1,0 +1,80 @@
+name: Build debug APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+
+      # Signing keystores are stored base64-encoded in the repo; the build
+      # expects them at ${rootDir}/debug.keystore and ${rootDir}/upload.keystore.
+      - name: Restore keystores
+        run: |
+          base64 -d debug.keystore.base64 > debug.keystore
+          base64 -d upload.keystore.base64 > upload.keystore
+
+      - name: Run unit tests
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+        run: gradle :app:testDebugUnitTest
+
+      - name: Build debug APK and Play release bundle
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+        run: gradle :app:assembleDebug :app:bundleRelease
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ku-volleyball-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload Play bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ku-volleyball-release-aab
+          path: app/build/outputs/bundle/release/app-release.aab
+
+      # Publish the APK to a rolling "latest-apk" release for one-tap phone
+      # download:
+      # https://github.com/inspectorgad/ku-volleyball/releases/latest/download/app-debug.apk
+      - name: Publish APK to rolling release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view latest-apk --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1 || \
+            gh release create latest-apk \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "KU Volleyball - latest build" \
+              --notes "Rolling release: always carries the newest APK with current season data. Download app-debug.apk below and install it on your Android device." \
+              --latest
+          gh release upload latest-apk app/build/outputs/apk/debug/app-debug.apk \
+            --repo "$GITHUB_REPOSITORY" --clobber
+          # The parsed season data rides along so the app can sync itself
+          # without an APK reinstall.
+          cp app/src/main/assets/seed.json season-data.json
+          gh release upload latest-apk season-data.json \
+            --repo "$GITHUB_REPOSITORY" --clobber
+          # Play Store bundle: download this and upload it to the Play
+          # Console (internal testing) whenever the app code changes.
+          gh release upload latest-apk app/build/outputs/bundle/release/app-release.aab \
+            --repo "$GITHUB_REPOSITORY" --clobber

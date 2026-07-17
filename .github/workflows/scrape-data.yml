@@ -1,0 +1,71 @@
+name: Scrape KU volleyball data
+
+on:
+  workflow_dispatch:
+  # Nightly at 09:00 UTC (4 AM Central) — after even late matches are final.
+  schedule:
+    - cron: '0 9 * * *'
+  push:
+    branches:
+      - main
+    paths:
+      - 'scrape-trigger.txt'
+      - 'scripts/scrape-ku-volleyball.mjs'
+      - 'scripts/update-seed.py'
+      - '.github/workflows/scrape-data.yml'
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright Chromium
+        run: |
+          npm init -y > /dev/null
+          npm install playwright@1.49.0 > /dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Scrape NCAA + kuathletics data
+        env:
+          SEASONS: '2025 2026'
+        run: node scripts/scrape-ku-volleyball.mjs
+
+      - name: Rebuild seed from scraped data
+        run: python3 scripts/update-seed.py
+
+      - name: Commit scraped data and seed update
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f scraped/
+          git diff --cached --quiet || git commit -m "Update scraped KU volleyball data [skip ci]"
+          git add app/src/main/assets/seed.json
+          if git diff --cached --quiet; then
+            echo "seed_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "Update season data from nightly scrape [skip ci]"
+            echo "seed_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          git push
+
+      # Pushes made with GITHUB_TOKEN never trigger push workflows (GitHub's
+      # recursion guard), so the APK rebuild must be dispatched explicitly —
+      # workflow_dispatch is exempt from that guard.
+      - name: Rebuild APK with new season data
+        if: steps.commit.outputs.seed_changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run build-apk.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref main
