@@ -38,21 +38,37 @@ object Seeder {
 
     /** Also used by [SeasonSync] for network-fetched season data. */
     suspend fun merge(root: JSONObject, dao: JayhawksDao) {
-        val playerIdsByName = dao.playersOnce().associate { it.name to it.id }.toMutableMap()
+        val existingByName = dao.playersOnce().associateBy { it.name }
+        val playerIdsByName = existingByName.mapValues { it.value.id }.toMutableMap()
 
         val players = root.optJSONArray("players")
         if (players != null) {
             for (i in 0 until players.length()) {
                 val p = players.getJSONObject(i)
                 val name = p.getString("name")
-                if (name !in playerIdsByName) {
+                val jersey = p.optString("jerseyNumber", "")
+                val position = p.optString("position", "")
+                val active = p.optBoolean("active", true)
+                val existing = existingByName[name]
+                if (existing == null) {
                     playerIdsByName[name] = dao.insertPlayer(
                         Player(
                             name = name,
-                            jerseyNumber = p.optString("jerseyNumber", ""),
-                            position = p.optString("position", "")
+                            jerseyNumber = jersey,
+                            position = position,
+                            active = active
                         )
                     )
+                } else {
+                    // Roster facts (number, position, current-roster status) are
+                    // scraper-owned and refreshed on every sync; blank seed values
+                    // never erase what's already there.
+                    val updated = existing.copy(
+                        jerseyNumber = jersey.ifBlank { existing.jerseyNumber },
+                        position = position.ifBlank { existing.position },
+                        active = active
+                    )
+                    if (updated != existing) dao.updatePlayer(updated)
                 }
             }
         }

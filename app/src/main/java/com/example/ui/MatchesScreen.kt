@@ -320,7 +320,10 @@ fun MatchDetailScreen(
                     )
                 }
             } else {
-                items(players, key = { it.id }) { player ->
+                // Former players only clutter stat entry unless they actually
+                // played in this match (e.g. seeded 2025 box scores).
+                val relevant = players.filter { it.active || it.id in linesByPlayer }
+                items(relevant, key = { it.id }) { player ->
                     val line = linesByPlayer[player.id]
                     Card(
                         modifier = Modifier

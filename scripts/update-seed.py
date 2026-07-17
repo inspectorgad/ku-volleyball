@@ -37,17 +37,24 @@ players = {}  # name -> {name, jerseyNumber, position}
 matches = {}  # (date, opponent.lower()) -> match dict
 
 
+# Sources capitalize names inconsistently (e.g. "McCarthy" vs "Mccarthy"),
+# so players are keyed case-insensitively; the roster's spelling wins.
 def add_player(name, jersey, position, prefer=False):
     if not name:
         return
-    existing = players.get(name)
+    existing = players.get(name.lower())
     if existing is None:
-        players[name] = {"name": name, "jerseyNumber": jersey, "position": position}
+        players[name.lower()] = {"name": name, "jerseyNumber": jersey, "position": position}
     elif prefer:
+        existing["name"] = name
         if jersey:
             existing["jerseyNumber"] = jersey
         if position:
             existing["position"] = position
+
+
+def canonical_name(name):
+    return players[name.lower()]["name"]
 
 
 # --- Finished matches from NCAA box scores ---------------------------------
@@ -113,13 +120,38 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
     matches[(match["date"], match["opponent"].lower())] = match
 
 # --- Current roster (preferred source for number/position) ------------------
+roster_names = set()
 for entry in load_json("scraped/roster.json", []):
+    name = entry.get("name", "").strip()
+    roster_names.add(name)
     add_player(
-        entry.get("name", "").strip(),
+        name,
         str(entry.get("jerseyNumber") or ""),
         (entry.get("position") or "").strip(),
         prefer=True,
     )
+
+# active = on the current scraped roster. A failed/empty roster scrape must
+# not mass-retire the team, so with an implausibly small roster the previous
+# seed's flags are carried forward instead.
+previous_seed = load_json(SEED_PATH, {})
+previous_active = {
+    (p.get("name") or "").lower(): p.get("active", True)
+    for p in previous_seed.get("players", [])
+}
+roster_keys = {n.lower() for n in roster_names}
+roster_valid = len(roster_keys) >= 8
+for key, player in players.items():
+    if roster_valid:
+        player["active"] = key in roster_keys
+    else:
+        player["active"] = previous_active.get(key, True)
+
+# Stat lines were recorded with whatever casing the box score used; align
+# them with the canonical player names so the app can match them up.
+for match in matches.values():
+    for line in match.get("lines", []):
+        line["player"] = canonical_name(line["player"])
 
 # --- Upcoming matches (no results yet) --------------------------------------
 played_dates = {key[0] for key in matches}

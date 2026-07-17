@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -70,53 +71,26 @@ fun RosterScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
         } else {
+            val (current, former) = players.partition { it.active }
             LazyColumn(
                 contentPadding = ListContentPadding,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(players, key = { it.id }) { player ->
-                    val career = aggregate(statLines.filter { it.playerId == player.id })
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onOpenPlayer(player) }
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            JerseyBadge(player.jerseyNumber)
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(start = 12.dp)
-                            ) {
-                                Text(
-                                    player.name,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                                if (player.position.isNotBlank()) {
-                                    Text(
-                                        player.position,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                            }
-                            Column(horizontalAlignment = Alignment.End) {
-                                Text(
-                                    formatPerSet(career.killsPerSet) + " K/S",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    "${career.kills} K · ${career.digs} D · ${career.totalBlocks} BLK",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
+                items(current, key = { it.id }) { player ->
+                    PlayerCard(player, statLines, onOpenPlayer)
+                }
+                if (former.isNotEmpty()) {
+                    item(key = "former-header") {
+                        Text(
+                            "Former Players",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                        )
+                    }
+                    items(former, key = { it.id }) { player ->
+                        PlayerCard(player, statLines, onOpenPlayer)
                     }
                 }
             }
@@ -155,6 +129,57 @@ fun RosterScreen(
 }
 
 @Composable
+private fun PlayerCard(
+    player: Player,
+    statLines: List<StatLine>,
+    onOpenPlayer: (Player) -> Unit
+) {
+    val career = aggregate(statLines.filter { it.playerId == player.id })
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onOpenPlayer(player) }
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            JerseyBadge(player.jerseyNumber)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 12.dp)
+            ) {
+                Text(
+                    player.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+                if (player.position.isNotBlank()) {
+                    Text(
+                        player.position,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    formatPerSet(career.killsPerSet) + " K/S",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    "${career.kills} K · ${career.digs} D · ${career.totalBlocks} BLK",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun JerseyBadge(number: String) {
     Surface(
         shape = CircleShape,
@@ -181,6 +206,7 @@ fun PlayerDialog(
     var name by remember { mutableStateOf(player?.name ?: "") }
     var number by remember { mutableStateOf(player?.jerseyNumber ?: "") }
     var position by remember { mutableStateOf(player?.position ?: "") }
+    var active by remember { mutableStateOf(player?.active ?: true) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -208,6 +234,14 @@ fun PlayerDialog(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        "On current roster",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(checked = active, onCheckedChange = { active = it })
+                }
             }
         },
         confirmButton = {
@@ -219,7 +253,8 @@ fun PlayerDialog(
                             id = player?.id ?: 0,
                             name = name.trim(),
                             jerseyNumber = number.trim(),
-                            position = position.trim()
+                            position = position.trim(),
+                            active = active
                         )
                     )
                 }

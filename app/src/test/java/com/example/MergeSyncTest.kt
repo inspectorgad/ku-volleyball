@@ -125,6 +125,51 @@ class MergeSyncTest {
     }
 
     @Test
+    fun `merge refreshes roster facts on existing players without duplicating them`() = runTest {
+        Seeder.merge(seedJson(), db.dao())
+        // Next season: new number, new position, off the roster.
+        val nextSeason = seedJson().apply {
+            getJSONArray("players").getJSONObject(0)
+                .put("jerseyNumber", "12")
+                .put("position", "MB")
+                .put("active", false)
+        }
+        Seeder.merge(nextSeason, db.dao())
+        val player = db.dao().playersOnce().single()
+        assertEquals("12", player.jerseyNumber)
+        assertEquals("MB", player.position)
+        assertEquals(false, player.active)
+    }
+
+    @Test
+    fun `blank seed fields never erase existing roster facts`() = runTest {
+        Seeder.merge(seedJson(), db.dao())
+        val blanked = seedJson().apply {
+            getJSONArray("players").getJSONObject(0)
+                .put("jerseyNumber", "")
+                .put("position", "")
+        }
+        Seeder.merge(blanked, db.dao())
+        val player = db.dao().playersOnce().single()
+        assertEquals("1", player.jerseyNumber)
+        assertEquals("OH", player.position)
+    }
+
+    @Test
+    fun `player missing an active flag defaults to active and user-added players are untouched`() =
+        runTest {
+            val dao = db.dao()
+            dao.insertPlayer(
+                com.example.data.Player(name = "Hand Entered", jerseyNumber = "99", active = false)
+            )
+            Seeder.merge(seedJson(), dao)
+            val byName = dao.playersOnce().associateBy { it.name }
+            assertEquals(true, byName.getValue("Ada Alpha").active)
+            assertEquals(false, byName.getValue("Hand Entered").active)
+            assertEquals("99", byName.getValue("Hand Entered").jerseyNumber)
+        }
+
+    @Test
     fun `unknown player in lines is skipped without error`() = runTest {
         val json = seedJson().apply {
             getJSONArray("matches").getJSONObject(0).getJSONArray("lines").getJSONObject(0)

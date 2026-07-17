@@ -10,7 +10,10 @@ data class Player(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val jerseyNumber: String = "",
-    val position: String = ""
+    val position: String = "",
+    // On the current roster. Maintained by the nightly roster scrape; former
+    // players keep their stats but are shown in a separate roster section.
+    val active: Boolean = true
 )
 
 // Dates are stored as ISO yyyy-MM-dd strings so lexicographic order matches

@@ -1,147 +1,169 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-07-17T02:54:26Z",
+ "generatedAt": "2026-07-17T22:33:23Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
    "name": "Aisha Aiono",
    "jerseyNumber": "24",
-   "position": "MB"
+   "position": "MB",
+   "active": true
   },
   {
    "name": "Audra Wilmes",
    "jerseyNumber": "6",
-   "position": "OH"
+   "position": "OH",
+   "active": false
   },
   {
    "name": "Aurora Papac",
    "jerseyNumber": "17",
-   "position": "MB"
+   "position": "MB",
+   "active": false
   },
   {
    "name": "Avery Poulton",
    "jerseyNumber": "21",
-   "position": "Pin"
+   "position": "Pin",
+   "active": true
   },
   {
    "name": "Brynn Kirsch",
    "jerseyNumber": "20",
-   "position": "L/DS"
+   "position": "L/DS",
+   "active": false
   },
   {
    "name": "Cristin Cline",
    "jerseyNumber": "11",
-   "position": "S"
+   "position": "S",
+   "active": true
   },
   {
    "name": "Cydnee Bryant",
    "jerseyNumber": "4",
-   "position": "MB"
+   "position": "MB",
+   "active": true
   },
   {
    "name": "Ellie Moore",
    "jerseyNumber": "8",
-   "position": "S"
+   "position": "S",
+   "active": false
   },
   {
    "name": "Ellie Schneider",
    "jerseyNumber": "15",
-   "position": "MB"
+   "position": "MB",
+   "active": false
   },
   {
    "name": "Grace Nelson",
    "jerseyNumber": "1",
-   "position": "Pin"
+   "position": "Pin",
+   "active": true
   },
   {
    "name": "Heidi Devers",
    "jerseyNumber": "12",
-   "position": "L/DS"
+   "position": "L/DS",
+   "active": true
   },
   {
    "name": "Jaeli Rutledge",
    "jerseyNumber": "7",
-   "position": "MB"
+   "position": "MB",
+   "active": true
   },
   {
    "name": "Jovana Zelenovic",
    "jerseyNumber": "9",
-   "position": "OH"
+   "position": "OH",
+   "active": false
   },
   {
    "name": "Katie Dalton",
    "jerseyNumber": "7",
-   "position": "S"
+   "position": "S",
+   "active": false
   },
   {
    "name": "Kenzie Dean",
    "jerseyNumber": "2",
-   "position": "Pin"
+   "position": "Pin",
+   "active": true
   },
   {
    "name": "Logan Bell",
    "jerseyNumber": "25",
-   "position": "Pin"
+   "position": "Pin",
+   "active": true
   },
   {
    "name": "Molly McCarthy",
    "jerseyNumber": "19",
-   "position": "L/DS"
-  },
-  {
-   "name": "Molly Mccarthy",
-   "jerseyNumber": "19",
-   "position": "L/DS"
+   "position": "L/DS",
+   "active": false
   },
   {
    "name": "Olivia Hasbrook",
    "jerseyNumber": "6",
-   "position": "L/DS"
+   "position": "L/DS",
+   "active": true
   },
   {
    "name": "Raegan Burns",
    "jerseyNumber": "3",
-   "position": "L/DS"
+   "position": "L/DS",
+   "active": false
   },
   {
    "name": "Reese Messer",
    "jerseyNumber": "3",
-   "position": "S"
+   "position": "S",
+   "active": true
   },
   {
    "name": "Reese Ptacek",
    "jerseyNumber": "10",
-   "position": "MB"
+   "position": "MB",
+   "active": true
   },
   {
    "name": "Rhian Swanson",
    "jerseyNumber": "4",
-   "position": "OH"
+   "position": "OH",
+   "active": false
   },
   {
    "name": "Ryan Sadler",
    "jerseyNumber": "5",
-   "position": "Pin"
+   "position": "Pin",
+   "active": true
   },
   {
    "name": "Ryan White",
    "jerseyNumber": "22",
-   "position": "L/DS"
+   "position": "L/DS",
+   "active": false
   },
   {
    "name": "Selena Leban",
    "jerseyNumber": "5",
-   "position": "OH"
+   "position": "OH",
+   "active": false
   },
   {
    "name": "Taylor Stanley",
    "jerseyNumber": "23",
-   "position": "Pin"
+   "position": "Pin",
+   "active": true
   },
   {
    "name": "Tessa Dodd",
    "jerseyNumber": "15",
-   "position": "Pin"
+   "position": "Pin",
+   "active": true
   }
  ],
  "matches": [
@@ -884,7 +906,7 @@
      "bhe": 0
     },
     {
-     "player": "Molly Mccarthy",
+     "player": "Molly McCarthy",
      "sp": 4,
      "k": 0,
      "e": 0,
@@ -5619,7 +5641,7 @@
      "bhe": 0
     },
     {
-     "player": "Molly Mccarthy",
+     "player": "Molly McCarthy",
      "sp": 3,
      "k": 0,
      "e": 0,
@@ -5914,7 +5936,7 @@
      "bhe": 0
     },
     {
-     "player": "Molly Mccarthy",
+     "player": "Molly McCarthy",
      "sp": 4,
      "k": 0,
      "e": 0,
@@ -6209,7 +6231,7 @@
      "bhe": 0
     },
     {
-     "player": "Molly Mccarthy",
+     "player": "Molly McCarthy",
      "sp": 3,
      "k": 0,
      "e": 0,
