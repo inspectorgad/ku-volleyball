@@ -170,6 +170,42 @@ class MergeSyncTest {
         }
 
     @Test
+    fun `case-duplicate players from older seeds are merged with their stat lines`() = runTest {
+        val dao = db.dao()
+        // Device state left by a pre-dedupe seed: same person under two
+        // spellings, each with stat lines in different matches.
+        val mccarthy = dao.insertPlayer(
+            com.example.data.Player(name = "Molly McCarthy", jerseyNumber = "19", active = false)
+        )
+        val mccarthyDupe = dao.insertPlayer(
+            com.example.data.Player(name = "Molly Mccarthy", active = true)
+        )
+        val match1 = dao.insertMatch(
+            com.example.data.Match(date = "2025-09-01", opponent = "Foes", season = "2025")
+        )
+        val match2 = dao.insertMatch(
+            com.example.data.Match(date = "2025-09-05", opponent = "Rivals", season = "2025")
+        )
+        dao.upsertStatLine(StatLine(playerId = mccarthy, matchId = match1, setsPlayed = 3, digs = 5))
+        dao.upsertStatLine(StatLine(playerId = mccarthyDupe, matchId = match2, setsPlayed = 4, digs = 7))
+
+        val seed = JSONObject(
+            """{"players": [{"name": "Molly McCarthy", "jerseyNumber": "19",
+                             "position": "L/DS", "active": false}], "matches": []}"""
+        )
+        Seeder.merge(seed, dao)
+
+        val survivors = dao.playersOnce().filter { it.name.lowercase() == "molly mccarthy" }
+        assertEquals(1, survivors.size)
+        val survivor = survivors.single()
+        assertEquals("Molly McCarthy", survivor.name)
+        assertEquals(false, survivor.active)
+        val herLines = dao.statLinesOnce().filter { it.playerId == survivor.id }
+        assertEquals(2, herLines.size)
+        assertEquals(12, herLines.sumOf { it.digs })
+    }
+
+    @Test
     fun `unknown player in lines is skipped without error`() = runTest {
         val json = seedJson().apply {
             getJSONArray("matches").getJSONObject(0).getJSONArray("lines").getJSONObject(0)

@@ -38,10 +38,23 @@ object Seeder {
 
     /** Also used by [SeasonSync] for network-fetched season data. */
     suspend fun merge(root: JSONObject, dao: JayhawksDao) {
-        val existingByName = dao.playersOnce().associateBy { it.name }
-        val playerIdsByName = existingByName.mapValues { it.value.id }.toMutableMap()
-
         val players = root.optJSONArray("players")
+
+        // Sources capitalize names inconsistently ("McCarthy" vs "Mccarthy"),
+        // so all player matching is case-insensitive, and duplicates that
+        // older seeds created are merged before anything else.
+        val seedNameByKey = mutableMapOf<String, String>()
+        if (players != null) {
+            for (i in 0 until players.length()) {
+                val name = players.getJSONObject(i).getString("name")
+                seedNameByKey[name.lowercase()] = name
+            }
+        }
+        healCaseDuplicates(dao, seedNameByKey)
+
+        val existingByKey = dao.playersOnce().associateBy { it.name.lowercase() }
+        val playerIdsByKey = existingByKey.mapValues { it.value.id }.toMutableMap()
+
         if (players != null) {
             for (i in 0 until players.length()) {
                 val p = players.getJSONObject(i)
@@ -49,9 +62,9 @@ object Seeder {
                 val jersey = p.optString("jerseyNumber", "")
                 val position = p.optString("position", "")
                 val active = p.optBoolean("active", true)
-                val existing = existingByName[name]
+                val existing = existingByKey[name.lowercase()]
                 if (existing == null) {
-                    playerIdsByName[name] = dao.insertPlayer(
+                    playerIdsByKey[name.lowercase()] = dao.insertPlayer(
                         Player(
                             name = name,
                             jerseyNumber = jersey,
@@ -60,10 +73,11 @@ object Seeder {
                         )
                     )
                 } else {
-                    // Roster facts (number, position, current-roster status) are
-                    // scraper-owned and refreshed on every sync; blank seed values
-                    // never erase what's already there.
+                    // Roster facts (name casing, number, position, current-roster
+                    // status) are scraper-owned and refreshed on every sync; blank
+                    // seed values never erase what's already there.
                     val updated = existing.copy(
+                        name = name,
                         jerseyNumber = jersey.ifBlank { existing.jerseyNumber },
                         position = position.ifBlank { existing.position },
                         active = active
@@ -119,7 +133,7 @@ object Seeder {
             val lines = m.optJSONArray("lines") ?: continue
             for (j in 0 until lines.length()) {
                 val l = lines.getJSONObject(j)
-                val playerId = playerIdsByName[l.getString("player")] ?: continue
+                val playerId = playerIdsByKey[l.getString("player").lowercase()] ?: continue
                 dao.upsertStatLine(
                     StatLine(
                         playerId = playerId,
@@ -138,6 +152,30 @@ object Seeder {
                         ballHandlingErrors = l.optInt("bhe")
                     )
                 )
+            }
+        }
+    }
+
+    /**
+     * Merges player rows whose names differ only by capitalization (created by
+     * seeds that predate case-insensitive matching): stat lines move to the
+     * surviving row, then the duplicates are deleted. The row matching the
+     * seed's spelling survives; ties keep the first row.
+     */
+    private suspend fun healCaseDuplicates(dao: JayhawksDao, seedNameByKey: Map<String, String>) {
+        val groups = dao.playersOnce().groupBy { it.name.lowercase() }
+        for ((key, dupes) in groups) {
+            if (dupes.size < 2) continue
+            val canonical = seedNameByKey[key]
+            val keeper = dupes.firstOrNull { it.name == canonical } ?: dupes.first()
+            for (dupe in dupes) {
+                if (dupe.id == keeper.id) continue
+                dao.statLinesOnce()
+                    .filter { it.playerId == dupe.id }
+                    // REPLACE on the (playerId, matchId) unique index absorbs the
+                    // rare case where both rows have a line for the same match.
+                    .forEach { dao.upsertStatLine(it.copy(playerId = keeper.id)) }
+                dao.deletePlayer(dupe)
             }
         }
     }
