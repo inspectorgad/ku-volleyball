@@ -97,6 +97,20 @@
   #tooltip .tt-val { font-weight: 700; }
   #tooltip .tt-sub { color: var(--ink-2); }
   footer { margin-top: 18px; color: var(--ink-3); font-size: 12px; }
+  #detail { margin-bottom: 14px; }
+  #detail .close {
+    float: right; cursor: pointer; border: 1px solid var(--hairline); background: none;
+    color: var(--ink-2); border-radius: 6px; padding: 4px 10px; font-size: 12px;
+  }
+  #detail .sub { color: var(--ink-3); font-size: 13px; margin: 2px 0 10px; }
+  #players tbody tr { cursor: pointer; }
+  #players tbody tr:hover td, #players tbody tr:focus-visible td { background: var(--chip-bg); }
+  #players th { cursor: pointer; user-select: none; }
+  .lead-row .name button {
+    all: unset; cursor: pointer; color: inherit; font: inherit; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: inline-block;
+  }
+  .lead-row .name button:hover { text-decoration: underline; }
   #status { color: var(--ink-3); padding: 40px 0; text-align: center; }
   svg text { fill: var(--ink-3); font-size: 11px; font-variant-numeric: tabular-nums; }
   @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
@@ -123,9 +137,15 @@
     </section>
   </div>
   <div class="grid leaders" id="leaders"></div>
+  <section class="card scroll" id="detail" hidden>
+    <button class="close" id="detail-close">✕ close</button>
+    <h2 id="detail-name"></h2>
+    <div class="sub" id="detail-sub"></div>
+    <table id="detail-log"></table>
+  </section>
   <div class="grid two-col">
     <section class="card scroll">
-      <h2>Player season stats</h2>
+      <h2>Player season stats <span class="muted">— click a column to sort, a row for the match log</span></h2>
       <table id="players"></table>
     </section>
     <section class="card scroll">
@@ -145,6 +165,8 @@ const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls)
 
 let SEED = null;
 let season = null; // null until data arrives; then latest season with results
+let openPlayer = null; // name of the player whose match log is open
+let sortKey = "K", sortDir = -1;
 
 async function load() {
   let resp;
@@ -206,6 +228,7 @@ function render() {
   renderLeaders(results, lines);
   renderPlayerTable(results, lines);
   renderMatchTable(results);
+  renderDetail(lines);
   document.getElementById("chart-season").textContent = season === "All" ? "· all seasons" : "· " + season;
   document.getElementById("foot").textContent =
     `Data: official NCAA box scores + kuathletics.com · updated ${SEED.generatedAt ?? "—"} · refreshed nightly`;
@@ -358,7 +381,11 @@ function renderLeaders(results, lines) {
     const max = rows[0]?.v ?? 1;
     for (const { p, v } of rows) {
       const row = el("div", "lead-row");
-      row.appendChild(el("span", "name", p.name));
+      const name = el("span", "name");
+      const btn = el("button", null, p.name);
+      btn.onclick = () => showDetail(p.name);
+      name.appendChild(btn);
+      row.appendChild(name);
       const track = el("div", "lead-bar-track");
       const bar = el("div", "lead-bar");
       bar.style.width = Math.max(2, (v / max) * 100) + "%";
@@ -372,23 +399,99 @@ function renderLeaders(results, lines) {
   }
 }
 
+const COLS = [
+  ["Player", p => p.name], ["MP", p => p.mp], ["SP", p => p.sp], ["K", p => p.k],
+  ["K/S", p => p.sp ? p.k / p.sp : 0], ["PCT", p => p.pct], ["A", p => p.a],
+  ["SA", p => p.sa], ["D", p => p.d], ["BLK", p => p.blk],
+];
+
 function renderPlayerTable(results, lines) {
   const t = document.getElementById("players");
   t.replaceChildren();
   const head = t.createTHead().insertRow();
-  for (const h of ["Player", "MP", "SP", "K", "K/S", "PCT", "A", "SA", "D", "BLK"]) head.appendChild(el("th", null, h));
+  for (const [h, sel] of COLS) {
+    const th = el("th", null, h + (h === sortHeader() ? (sortDir < 0 ? " ▾" : " ▴") : ""));
+    th.onclick = () => {
+      const key = h;
+      if (sortHeader() === key) sortDir = -sortDir;
+      else { sortKey = key; sortDir = key === "Player" ? 1 : -1; }
+      renderPlayerTable(...currentSlice());
+    };
+    head.appendChild(th);
+  }
+  const sel = COLS.find(([h]) => h === sortHeader())[1];
+  const players = playerTotals(lines).sort((a, b) => {
+    const av = sel(a), bv = sel(b);
+    return (typeof av === "string" ? av.localeCompare(bv) : av - bv) * sortDir;
+  });
   const body = t.createTBody();
-  const players = playerTotals(lines).sort((a, b) => b.k - a.k);
   const roster = new Map(SEED.players.map(p => [p.name, p]));
   for (const p of players) {
     const r = body.insertRow();
+    r.tabIndex = 0;
     const info = roster.get(p.name);
     r.insertCell().textContent = (info?.jerseyNumber ? "#" + info.jerseyNumber + " " : "") + p.name;
     for (const v of [p.mp, p.sp, p.k, p.sp ? fmt2(p.k / p.sp) : "—", fmtPct(p.pct), p.a, p.sa, p.d, p.blk]) {
       r.insertCell().textContent = String(v);
     }
+    const open = () => showDetail(p.name);
+    r.addEventListener("click", open);
+    r.addEventListener("keydown", ev => { if (ev.key === "Enter") open(); });
   }
 }
+
+function sortHeader() { return COLS.some(([h]) => h === sortKey) ? sortKey : "K"; }
+function currentSlice() { const s = slice(); return [s.results, s.lines]; }
+
+function showDetail(name) {
+  openPlayer = name;
+  renderDetail(slice().lines);
+  document.getElementById("detail").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function renderDetail(lines) {
+  const panel = document.getElementById("detail");
+  if (!openPlayer) { panel.hidden = true; return; }
+  const mine = lines.filter(l => l.player === openPlayer)
+    .sort((a, b) => (a.match.date < b.match.date ? 1 : -1));
+  const info = SEED.players.find(p => p.name === openPlayer);
+  document.getElementById("detail-name").textContent =
+    (info?.jerseyNumber ? "#" + info.jerseyNumber + " " : "") + openPlayer;
+  const t = totals(mine);
+  const bits = [];
+  if (info?.position) bits.push(info.position);
+  if (info && info.active === false) bits.push("former player");
+  bits.push(season === "All" ? "career" : season + " season");
+  bits.push(mine.length
+    ? `${mine.length} matches · ${t.k} K · ${fmtPct(t.pct)} · ${t.d} D · ${t.blk} BLK`
+    : "no matches in this view");
+  document.getElementById("detail-sub").textContent = bits.join(" · ");
+
+  const log = document.getElementById("detail-log");
+  log.replaceChildren();
+  if (mine.length) {
+    const head = log.createTHead().insertRow();
+    for (const h of ["Date", "Opponent", "", "SP", "K", "E", "TA", "PCT", "A", "SA", "D", "BS", "BA"]) {
+      head.appendChild(el("th", null, h));
+    }
+    const body = log.createTBody();
+    for (const l of mine) {
+      const m = l.match;
+      const r = body.insertRow();
+      r.insertCell().textContent = m.date;
+      const opp = r.insertCell(); opp.textContent = m.opponent; opp.style.textAlign = "left";
+      const won = m.teamSets > m.opponentSets;
+      r.insertCell().appendChild(el("span", "tag " + (won ? "w" : "l"), won ? "W" : "L"));
+      const pct = l.ta ? (l.k - l.e) / l.ta : 0;
+      for (const v of [l.sp, l.k, l.e, l.ta, l.ta ? fmtPct(pct) : "—", l.a, l.sa, l.d, l.bs, l.ba]) {
+        r.insertCell().textContent = String(v ?? 0);
+      }
+    }
+  }
+  panel.hidden = false;
+}
+
+document.getElementById("detail-close").onclick = () => { openPlayer = null; document.getElementById("detail").hidden = true; };
 
 function renderMatchTable(results) {
   const t = document.getElementById("matches");
