@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KU Volleyball Dashboard</title>
+<style>
+  :root {
+    --ku-blue: #0051BA;
+    --ku-crimson: #E8000D;
+    --ku-yellow: #FFC82D;
+    --win: #0051BA;
+    --loss: #E8000D;
+    --surface: #fcfcfb;
+    --card: #ffffff;
+    --ink: #1a1c21;
+    --ink-2: #4a4e57;
+    --ink-3: #8a8f99;
+    --hairline: #e8e8e6;
+    --wash: rgba(0, 81, 186, 0.10);
+    --chip-bg: #eef2f9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --win: #5B8AD9;
+      --loss: #E05560;
+      --ku-blue: #5B8AD9;
+      --ku-crimson: #E05560;
+      --surface: #16181d;
+      --card: #1e2128;
+      --ink: #e8eaee;
+      --ink-2: #b0b4bd;
+      --ink-3: #767b85;
+      --hairline: #2c3038;
+      --wash: rgba(91, 138, 217, 0.14);
+      --chip-bg: #262c38;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--surface);
+    color: var(--ink);
+    font: 15px/1.45 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 24px clamp(12px, 3vw, 40px) 64px;
+  }
+  header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+  header h1 { font-size: 26px; font-weight: 700; }
+  header h1 .crimson { color: var(--ku-crimson); }
+  header .sub { color: var(--ink-3); font-size: 14px; }
+  .filters { display: flex; gap: 8px; margin: 14px 0 20px; }
+  .chip {
+    border: 1px solid var(--hairline); background: var(--card); color: var(--ink-2);
+    border-radius: 999px; padding: 5px 16px; font-size: 14px; cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--ku-blue); border-color: var(--ku-blue); color: #fff; font-weight: 600; }
+  .grid { display: grid; gap: 14px; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); margin-bottom: 14px; }
+  .card { background: var(--card); border: 1px solid var(--hairline); border-radius: 10px; padding: 14px 16px; }
+  .tile .label { font-size: 13px; color: var(--ink-3); }
+  .tile .value { font-size: 26px; font-weight: 600; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .tile.hero .value { font-size: 48px; line-height: 1.1; }
+  .tile .note { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  h2 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  h2 .muted { color: var(--ink-3); font-weight: 400; }
+  .two-col { grid-template-columns: 2fr 1fr; margin-bottom: 14px; }
+  .leaders { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-bottom: 14px; }
+  .lead-row { display: grid; grid-template-columns: minmax(96px, 40%) 1fr 44px; align-items: center; gap: 8px; padding: 3px 0; font-size: 13px; }
+  .lead-row .name { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lead-row .val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .lead-bar-track { height: 14px; position: relative; }
+  .lead-bar { position: absolute; inset: 0 auto 0 0; background: var(--ku-blue); border-radius: 0 4px 4px 0; min-width: 2px; }
+  .strip { display: flex; flex-wrap: wrap; gap: 4px; }
+  .box {
+    width: 26px; height: 26px; border-radius: 5px; color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; cursor: default;
+  }
+  .box.w { background: var(--win); } .box.l { background: var(--loss); }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: right; padding: 5px 8px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--ink-3); font-weight: 600; border-bottom: 1px solid var(--hairline); position: sticky; top: 0; background: var(--card); }
+  tbody tr { border-bottom: 1px solid var(--hairline); }
+  tbody tr:last-child { border-bottom: none; }
+  td.pos { color: var(--ink-3); }
+  .scroll { overflow-x: auto; }
+  .tag { font-size: 12px; font-weight: 700; border-radius: 4px; padding: 1px 6px; color: #fff; display: inline-block; min-width: 18px; text-align: center; }
+  .tag.w { background: var(--win); } .tag.l { background: var(--loss); }
+  .upcoming li { list-style: none; display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 14px; border-bottom: 1px solid var(--hairline); }
+  .upcoming li:last-child { border-bottom: none; }
+  .upcoming .d { color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  #tooltip {
+    position: fixed; pointer-events: none; z-index: 10; display: none; max-width: 260px;
+    background: var(--card); border: 1px solid var(--hairline); border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.18); padding: 8px 10px; font-size: 13px;
+  }
+  #tooltip .tt-title { color: var(--ink-3); font-size: 12px; margin-bottom: 2px; }
+  #tooltip .tt-val { font-weight: 700; }
+  #tooltip .tt-sub { color: var(--ink-2); }
+  footer { margin-top: 18px; color: var(--ink-3); font-size: 12px; }
+  #status { color: var(--ink-3); padding: 40px 0; text-align: center; }
+  svg text { fill: var(--ink-3); font-size: 11px; font-variant-numeric: tabular-nums; }
+  @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>KU <span class="crimson">Volleyball</span></h1>
+  <span class="sub">Kansas Jayhawks · Women's Volleyball</span>
+</header>
+<div class="filters" id="filters" role="group" aria-label="Season"></div>
+<div id="status">Loading season data…</div>
+<main id="app" hidden>
+  <div class="grid kpis" id="kpis"></div>
+  <div class="grid two-col">
+    <section class="card">
+      <h2>Hitting % by match <span class="muted" id="chart-season"></span></h2>
+      <div id="linechart"></div>
+    </section>
+    <section class="card">
+      <h2>Results</h2>
+      <div class="strip" id="strip"></div>
+      <ul class="upcoming" id="upcoming" style="margin-top:12px"></ul>
+    </section>
+  </div>
+  <div class="grid leaders" id="leaders"></div>
+  <div class="grid two-col">
+    <section class="card scroll">
+      <h2>Player season stats</h2>
+      <table id="players"></table>
+    </section>
+    <section class="card scroll">
+      <h2>Match results</h2>
+      <table id="matches"></table>
+    </section>
+  </div>
+  <footer id="foot"></footer>
+</main>
+<div id="tooltip" role="status"></div>
+<script>
+"use strict";
+const RAW_URL = "https://raw.githubusercontent.com/inspectorgad/ku-volleyball/main/app/src/main/assets/seed.json";
+const fmtPct = v => { const s = (v < 0 ? "-" : "") + Math.abs(v).toFixed(3).replace(/^0/, ""); return s; };
+const fmt2 = v => v.toFixed(2);
+const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
+
+let SEED = null;
+let season = null; // null until data arrives; then latest season with results
+
+async function load() {
+  let resp;
+  try { resp = await fetch("season-data.json"); if (!resp.ok) throw 0; }
+  catch { try { resp = await fetch(RAW_URL); if (!resp.ok) throw 0; }
+  catch { document.getElementById("status").textContent = "Couldn't load season data (offline?). Try again later."; return; } }
+  SEED = await resp.json();
+  const withResults = SEED.matches.filter(m => m.teamSets != null);
+  season = withResults.length ? withResults[withResults.length - 1].season : (SEED.matches[0]?.season ?? "All");
+  document.getElementById("status").hidden = true;
+  document.getElementById("app").hidden = false;
+  buildFilters();
+  render();
+}
+
+function seasons() {
+  return [...new Set(SEED.matches.map(m => m.season))].sort().reverse();
+}
+
+function buildFilters() {
+  const box = document.getElementById("filters");
+  box.replaceChildren();
+  for (const s of [...seasons(), "All"]) {
+    const b = el("button", "chip", s);
+    b.setAttribute("aria-pressed", String(s === season));
+    b.onclick = () => { season = s; buildFilters(); render(); };
+    box.appendChild(b);
+  }
+}
+
+function slice() {
+  const matches = SEED.matches.filter(m => season === "All" || m.season === season);
+  const results = matches.filter(m => m.teamSets != null);
+  const upcoming = matches.filter(m => m.teamSets == null);
+  const lines = [];
+  for (const m of results) for (const l of m.lines ?? []) lines.push({ ...l, match: m });
+  return { matches, results, upcoming, lines };
+}
+
+function totals(lines) {
+  const t = { sp: 0, k: 0, e: 0, ta: 0, a: 0, sa: 0, se: 0, d: 0, bs: 0, ba: 0, mp: 0 };
+  const seen = new Set();
+  for (const l of lines) {
+    for (const key of ["sp","k","e","ta","a","sa","se","d","bs","ba"]) t[key] += l[key] ?? 0;
+    seen.add(l.match?.date + "|" + l.match?.opponent);
+  }
+  t.mp = seen.size;
+  t.pct = t.ta ? (t.k - t.e) / t.ta : 0;
+  t.blk = t.bs + t.ba;
+  return t;
+}
+
+function render() {
+  const { results, upcoming, lines } = slice();
+  renderKpis(results, lines);
+  renderLine(results);
+  renderStrip(results);
+  renderUpcoming(upcoming);
+  renderLeaders(results, lines);
+  renderPlayerTable(results, lines);
+  renderMatchTable(results);
+  document.getElementById("chart-season").textContent = season === "All" ? "· all seasons" : "· " + season;
+  document.getElementById("foot").textContent =
+    `Data: official NCAA box scores + kuathletics.com · updated ${SEED.generatedAt ?? "—"} · refreshed nightly`;
+}
+
+function renderKpis(results, lines) {
+  const wins = results.filter(m => m.teamSets > m.opponentSets).length;
+  const losses = results.length - wins;
+  const setsFor = results.reduce((s, m) => s + m.teamSets, 0);
+  const setsAg = results.reduce((s, m) => s + m.opponentSets, 0);
+  const t = totals(lines);
+  const teamSets = setsFor + setsAg;
+  const kpis = document.getElementById("kpis");
+  kpis.replaceChildren();
+  const tile = (label, value, note, hero) => {
+    const c = el("div", "card tile" + (hero ? " hero" : ""));
+    c.appendChild(el("div", "label", label));
+    c.appendChild(el("div", "value", value));
+    if (note) c.appendChild(el("div", "note", note));
+    kpis.appendChild(c);
+  };
+  tile("Record", results.length ? `${wins}–${losses}` : "—", `Sets ${setsFor}–${setsAg}`, true);
+  tile("Team hitting", fmtPct(t.pct), `${t.k} kills on ${t.ta} attempts`);
+  tile("Kills / set", teamSets ? fmt2(t.k / teamSets) : "—", `over ${teamSets} sets`);
+  tile("Digs / set", teamSets ? fmt2(t.d / teamSets) : "—", `${t.d} total`);
+  tile("Aces", String(t.sa), `${t.se} service errors`);
+  // Team blocks, volleyball convention: solos + half of block assists.
+  tile("Team blocks", (t.bs + t.ba / 2).toFixed(1).replace(/\.0$/, ""), `${t.bs} solo · ${t.ba} assist`);
+}
+
+function matchPct(m) {
+  let k = 0, e = 0, ta = 0;
+  for (const l of m.lines ?? []) { k += l.k ?? 0; e += l.e ?? 0; ta += l.ta ?? 0; }
+  return ta ? (k - e) / ta : null;
+}
+
+function renderLine(results) {
+  const host = document.getElementById("linechart");
+  host.replaceChildren();
+  const pts = results.map((m, i) => ({ i, m, v: matchPct(m) })).filter(p => p.v !== null);
+  if (pts.length < 2) { host.appendChild(el("div", "note", "Not enough completed matches to chart yet — check back once the season is underway.")); return; }
+  const W = Math.max(host.clientWidth || 600, 320), H = 240;
+  const pad = { l: 44, r: 14, t: 10, b: 22 };
+  const lo = Math.min(0, ...pts.map(p => p.v)), hi = Math.max(...pts.map(p => p.v));
+  const yMin = Math.floor(lo * 10) / 10, yMax = Math.ceil(hi * 10) / 10;
+  const x = i => pad.l + (i / (pts.length - 1)) * (W - pad.l - pad.r);
+  const y = v => pad.t + (1 - (v - yMin) / (yMax - yMin)) * (H - pad.t - pad.b);
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", "100%");
+  const add = (parent, name, attrs) => { const n = document.createElementNS(svgNS, name); for (const k in attrs) n.setAttribute(k, attrs[k]); parent.appendChild(n); return n; };
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  // gridlines + clean ticks
+  for (let v = yMin; v <= yMax + 1e-9; v += 0.1) {
+    add(svg, "line", { x1: pad.l, x2: W - pad.r, y1: y(v), y2: y(v), stroke: css("--hairline"), "stroke-width": 1 });
+    const t = add(svg, "text", { x: pad.l - 6, y: y(v) + 4, "text-anchor": "end" });
+    t.textContent = fmtPct(v);
+  }
+  // area wash + line
+  const path = pts.map((p, j) => `${j ? "L" : "M"}${x(j)},${y(p.v)}`).join("");
+  add(svg, "path", { d: `${path}L${x(pts.length - 1)},${y(Math.max(yMin, 0))}L${x(0)},${y(Math.max(yMin, 0))}Z`, fill: css("--wash") });
+  add(svg, "path", { d: path, fill: "none", stroke: css("--ku-blue"), "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" });
+  // markers with surface ring
+  for (let j = 0; j < pts.length; j++) {
+    add(svg, "circle", { cx: x(j), cy: y(pts[j].v), r: 6, fill: css("--card") });
+    add(svg, "circle", { cx: x(j), cy: y(pts[j].v), r: 4, fill: css("--ku-blue") });
+  }
+  // crosshair + tooltip layer
+  const cross = add(svg, "line", { y1: pad.t, y2: H - pad.b, stroke: css("--ink-3"), "stroke-width": 1, visibility: "hidden" });
+  const hit = add(svg, "rect", { x: pad.l, y: 0, width: W - pad.l - pad.r, height: H, fill: "transparent" });
+  hit.addEventListener("pointermove", ev => {
+    const r = svg.getBoundingClientRect();
+    const px = (ev.clientX - r.left) * (W / r.width);
+    const j = Math.max(0, Math.min(pts.length - 1, Math.round((px - pad.l) / ((W - pad.l - pad.r) / (pts.length - 1)))));
+    cross.setAttribute("x1", x(j)); cross.setAttribute("x2", x(j));
+    cross.setAttribute("visibility", "visible");
+    const p = pts[j];
+    const res = p.m.teamSets > p.m.opponentSets ? "W" : "L";
+    showTip(ev.clientX, ev.clientY,
+      `${p.m.date} vs ${p.m.opponent}`,
+      `${fmtPct(p.v)} hitting`,
+      `${res} ${p.m.teamSets}–${p.m.opponentSets}${p.m.setScores ? " · " + p.m.setScores : ""}`);
+  });
+  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+  host.appendChild(svg);
+}
+
+function renderStrip(results) {
+  const strip = document.getElementById("strip");
+  strip.replaceChildren();
+  for (const m of results) {
+    const won = m.teamSets > m.opponentSets;
+    const b = el("div", "box " + (won ? "w" : "l"), won ? "W" : "L");
+    b.tabIndex = 0;
+    const show = ev => showTip(ev.clientX ?? 0, ev.clientY ?? 0,
+      `${m.date} vs ${m.opponent}`,
+      `${won ? "W" : "L"} ${m.teamSets}–${m.opponentSets}`,
+      m.setScores ?? "");
+    b.addEventListener("pointermove", show);
+    b.addEventListener("focus", ev => { const r = b.getBoundingClientRect(); showTip(r.left, r.bottom, `${m.date} vs ${m.opponent}`, `${won ? "W" : "L"} ${m.teamSets}–${m.opponentSets}`, m.setScores ?? ""); });
+    b.addEventListener("pointerleave", hideTip);
+    b.addEventListener("blur", hideTip);
+    strip.appendChild(b);
+  }
+  if (!results.length) strip.appendChild(el("div", "note", "No completed matches yet."));
+}
+
+function renderUpcoming(upcoming) {
+  const ul = document.getElementById("upcoming");
+  ul.replaceChildren();
+  if (!upcoming.length) return;
+  ul.appendChild(el("li", null)).append(el("strong", null, "Upcoming"));
+  for (const m of upcoming.slice(0, 10)) {
+    const li = el("li");
+    li.appendChild(el("span", null, m.opponent));
+    li.appendChild(el("span", "d", m.date));
+    ul.appendChild(li);
+  }
+}
+
+function playerTotals(lines) {
+  const by = new Map();
+  for (const l of lines) {
+    if (!by.has(l.player)) by.set(l.player, []);
+    by.get(l.player).push(l);
+  }
+  return [...by.entries()].map(([name, ls]) => ({ name, ...totals(ls) }));
+}
+
+function renderLeaders(results, lines) {
+  const host = document.getElementById("leaders");
+  host.replaceChildren();
+  const players = playerTotals(lines);
+  const teamSets = results.reduce((s, m) => s + m.teamSets + m.opponentSets, 0);
+  const minTA = teamSets; // 1 attempt per team set to qualify for hitting %
+  const cards = [
+    ["Kills", p => p.k, String],
+    ["Hitting %" + (minTA ? ` (min ${minTA} TA)` : ""), p => (p.ta >= minTA && p.ta > 0) ? p.pct : null, fmtPct],
+    ["Digs", p => p.d, String],
+    ["Blocks", p => p.blk, String],
+    ["Assists", p => p.a, String],
+    ["Aces", p => p.sa, String],
+  ];
+  for (const [title, sel, fmt] of cards) {
+    const card = el("section", "card");
+    card.appendChild(el("h2", null, title));
+    const rows = players.map(p => ({ p, v: sel(p) })).filter(r => r.v !== null && r.v > 0)
+      .sort((a, b) => b.v - a.v).slice(0, 5);
+    const max = rows[0]?.v ?? 1;
+    for (const { p, v } of rows) {
+      const row = el("div", "lead-row");
+      row.appendChild(el("span", "name", p.name));
+      const track = el("div", "lead-bar-track");
+      const bar = el("div", "lead-bar");
+      bar.style.width = Math.max(2, (v / max) * 100) + "%";
+      track.appendChild(bar);
+      row.appendChild(track);
+      row.appendChild(el("span", "val", fmt(v)));
+      card.appendChild(row);
+    }
+    if (!rows.length) card.appendChild(el("div", "note", "No qualifying players yet."));
+    host.appendChild(card);
+  }
+}
+
+function renderPlayerTable(results, lines) {
+  const t = document.getElementById("players");
+  t.replaceChildren();
+  const head = t.createTHead().insertRow();
+  for (const h of ["Player", "MP", "SP", "K", "K/S", "PCT", "A", "SA", "D", "BLK"]) head.appendChild(el("th", null, h));
+  const body = t.createTBody();
+  const players = playerTotals(lines).sort((a, b) => b.k - a.k);
+  const roster = new Map(SEED.players.map(p => [p.name, p]));
+  for (const p of players) {
+    const r = body.insertRow();
+    const info = roster.get(p.name);
+    r.insertCell().textContent = (info?.jerseyNumber ? "#" + info.jerseyNumber + " " : "") + p.name;
+    for (const v of [p.mp, p.sp, p.k, p.sp ? fmt2(p.k / p.sp) : "—", fmtPct(p.pct), p.a, p.sa, p.d, p.blk]) {
+      r.insertCell().textContent = String(v);
+    }
+  }
+}
+
+function renderMatchTable(results) {
+  const t = document.getElementById("matches");
+  t.replaceChildren();
+  const head = t.createTHead().insertRow();
+  for (const h of ["Date", "Opponent", "", "Sets", "Set scores"]) head.appendChild(el("th", null, h));
+  const body = t.createTBody();
+  for (const m of [...results].reverse()) {
+    const r = body.insertRow();
+    r.insertCell().textContent = m.date;
+    r.insertCell().textContent = m.opponent;
+    const won = m.teamSets > m.opponentSets;
+    const tag = el("span", "tag " + (won ? "w" : "l"), won ? "W" : "L");
+    r.insertCell().appendChild(tag);
+    r.insertCell().textContent = `${m.teamSets}–${m.opponentSets}`;
+    const sc = r.insertCell(); sc.textContent = m.setScores ?? ""; sc.style.textAlign = "left"; sc.style.color = "var(--ink-2)";
+  }
+}
+
+const tip = document.getElementById("tooltip");
+function showTip(cx, cy, title, val, sub) {
+  tip.replaceChildren();
+  tip.appendChild(el("div", "tt-title", title));
+  tip.appendChild(el("div", "tt-val", val));
+  if (sub) tip.appendChild(el("div", "tt-sub", sub));
+  tip.style.display = "block";
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.min(cx + 14, innerWidth - w - 8) + "px";
+  tip.style.top = Math.min(cy + 14, innerHeight - h - 8) + "px";
+}
+function hideTip() { tip.style.display = "none"; }
+
+addEventListener("resize", () => { if (SEED) renderLine(slice().results); });
+load();
+</script>
+</body>
+</html>

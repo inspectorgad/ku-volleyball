@@ -49,7 +49,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f scraped/
           git diff --cached --quiet || git commit -m "Update scraped KU volleyball data [skip ci]"
-          git add app/src/main/assets/seed.json
+          # The dashboard (GitHub Pages, docs/) reads its own copy of the seed.
+          cp app/src/main/assets/seed.json docs/season-data.json
+          git add app/src/main/assets/seed.json docs/season-data.json
           if git diff --cached --quiet; then
             echo "seed_changed=false" >> "$GITHUB_OUTPUT"
           else
