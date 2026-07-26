@@ -3,9 +3,11 @@ package com.example
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.ConferenceStanding
 import com.example.data.JayhawksDatabase
 import com.example.data.Match
 import com.example.data.Player
+import com.example.data.PollEntry
 import com.example.data.SeasonSync
 import com.example.data.Seeder
 import com.example.data.StatLine
@@ -72,6 +74,12 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val statLines: StateFlow<List<StatLine>> = dao.observeStatLines()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val standings: StateFlow<List<ConferenceStanding>> = dao.observeStandings()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val pollEntries: StateFlow<List<PollEntry>> = dao.observePollEntries()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     fun savePlayer(player: Player) = viewModelScope.launch {

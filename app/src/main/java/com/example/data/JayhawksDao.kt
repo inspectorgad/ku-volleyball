@@ -55,4 +55,31 @@ interface JayhawksDao {
 
     @Delete
     suspend fun deleteStatLine(line: StatLine)
+
+    // Big 12 standings and poll snapshots. Scraper-owned derived data with no
+    // user-entered fields, so each sync replaces a season's rows outright —
+    // otherwise a team dropping out of the conference would linger forever.
+    @Query("SELECT * FROM standings")
+    fun observeStandings(): Flow<List<ConferenceStanding>>
+
+    @Query("SELECT * FROM standings")
+    suspend fun standingsOnce(): List<ConferenceStanding>
+
+    @Query("DELETE FROM standings WHERE season = :season")
+    suspend fun deleteStandingsForSeason(season: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertStandings(rows: List<ConferenceStanding>)
+
+    @Query("SELECT * FROM poll_entries")
+    fun observePollEntries(): Flow<List<PollEntry>>
+
+    @Query("SELECT * FROM poll_entries")
+    suspend fun pollEntriesOnce(): List<PollEntry>
+
+    @Query("DELETE FROM poll_entries WHERE season = :season")
+    suspend fun deletePollForSeason(season: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPollEntries(rows: List<PollEntry>)
 }

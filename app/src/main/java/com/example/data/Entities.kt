@@ -5,6 +5,49 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
+/**
+ * A Big 12 team's record for one season, computed by the scraper from the NCAA
+ * scoreboard sweep. Unlike players/matches this is *derived* data with no
+ * user-entered fields, so sync replaces it wholesale rather than gap-filling.
+ */
+@Entity(tableName = "standings", primaryKeys = ["season", "seo"])
+data class ConferenceStanding(
+    val season: String,
+    val seo: String,
+    val team: String,
+    val confW: Int = 0,
+    val confL: Int = 0,
+    val overallW: Int = 0,
+    val overallL: Int = 0,
+    // AVCA national rank as last reported by the scoreboard that season.
+    val nationalRank: Int? = null,
+    val rpiRank: Int? = null
+) {
+    val confPct: Double get() = (confW + confL).let { if (it == 0) 0.0 else confW.toDouble() / it }
+    val overallPct: Double get() = (overallW + overallL).let { if (it == 0) 0.0 else overallW.toDouble() / it }
+}
+
+/**
+ * One row of a national poll snapshot (AVCA coaches top 25). The endpoint only
+ * serves the current poll, so each season keeps the latest capture — which at
+ * season's end is that season's final poll.
+ */
+@Entity(tableName = "poll_entries", primaryKeys = ["season", "team"])
+data class PollEntry(
+    val season: String,
+    val team: String,
+    val rank: Int,
+    // Preserves ties as published, e.g. "T-22".
+    val rankLabel: String,
+    val record: String = "",
+    val points: String = "",
+    val previous: String = "",
+    val firstPlaceVotes: Int = 0,
+    val big12: Boolean = false,
+    val pollName: String = "",
+    val updated: String = ""
+)
+
 @Entity(tableName = "players")
 data class Player(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,

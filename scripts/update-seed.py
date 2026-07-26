@@ -268,6 +268,23 @@ if avca.get("data") and avca_season:
         "updated": (avca.get("updated") or "").strip(),
         "rows": rows,
     })
+
+    # The poll is the authoritative ranking. The scoreboard's per-game rank is
+    # only "the rank this team carried in that game", so a team that fell out
+    # of the top 25 would otherwise keep a stale number forever (Utah looked
+    # like a final #23 while actually finishing unranked). Where we hold a poll
+    # for the season, it decides: absent from the poll means unranked.
+    poll_rank = {norm_team(r["team"]): r["rank"] for r in rows}
+    restated = 0
+    for (season, key), rec in records.items():
+        if season != avca_season:
+            continue
+        fresh = poll_rank.get(key)
+        if fresh != rec["nationalRank"]:
+            restated += 1
+        rec["nationalRank"] = fresh
+    if restated:
+        print(f"  national ranks restated from the poll for {restated} teams")
     print(
         f"  AVCA poll {avca_season}: {len(rows)} teams, "
         f"{sum(1 for r in rows if r['big12'])} from the Big 12"

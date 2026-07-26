@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -28,7 +29,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.JayhawksViewModel
 
-enum class Tab(val label: String) { Roster("Roster"), Matches("Matches"), Leaders("Leaders") }
+enum class Tab(val label: String) {
+    Roster("Roster"), Matches("Matches"), Leaders("Leaders"), Big12("Big 12")
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +44,8 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     val players by viewModel.players.collectAsStateWithLifecycle()
     val matches by viewModel.matches.collectAsStateWithLifecycle()
     val statLines by viewModel.statLines.collectAsStateWithLifecycle()
+    val standings by viewModel.standings.collectAsStateWithLifecycle()
+    val pollEntries by viewModel.pollEntries.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val dataUpdatedAt by viewModel.dataUpdatedAt.collectAsStateWithLifecycle()
 
@@ -99,6 +104,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                                         Tab.Roster -> Icons.Default.Groups
                                         Tab.Matches -> Icons.AutoMirrored.Filled.List
                                         Tab.Leaders -> Icons.Default.EmojiEvents
+                                        Tab.Big12 -> Icons.Default.Leaderboard
                                     },
                                     contentDescription = tab.label
                                 )
@@ -136,6 +142,11 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                         matches = matches,
                         statLines = statLines,
                         dataUpdatedAt = dataUpdatedAt
+                    )
+
+                    Tab.Big12 -> StandingsScreen(
+                        standings = standings,
+                        pollEntries = pollEntries
                     )
                 }
             }

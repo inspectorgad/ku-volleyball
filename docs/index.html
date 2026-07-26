@@ -106,6 +106,12 @@
   #players tbody tr { cursor: pointer; }
   #players tbody tr:hover td, #players tbody tr:focus-visible td { background: var(--chip-bg); }
   #players th { cursor: pointer; user-select: none; }
+  .fineprint { color: var(--ink-3); font-size: 11px; margin-top: 8px; }
+  tbody tr.ku td { background: var(--chip-bg); font-weight: 700; }
+  .b12chip {
+    font-size: 10px; font-weight: 700; border-radius: 3px; padding: 1px 5px;
+    background: var(--chip-bg); color: var(--ink-2); margin-left: 6px;
+  }
   .lead-row .name button {
     all: unset; cursor: pointer; color: inherit; font: inherit; white-space: nowrap;
     overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: inline-block;
@@ -143,6 +149,19 @@
     <div class="sub" id="detail-sub"></div>
     <table id="detail-log"></table>
   </section>
+  <div class="grid two-col" id="big12-wrap" hidden>
+    <section class="card scroll">
+      <h2>Big 12 standings <span class="muted" id="b12-note"></span></h2>
+      <table id="standings"></table>
+      <p class="fineprint">Ordered by conference win percentage — not official Big 12
+        tiebreakers, which use head-to-head results.</p>
+    </section>
+    <section class="card scroll">
+      <h2 id="poll-title">National poll</h2>
+      <div class="sub" id="poll-updated"></div>
+      <table id="poll"></table>
+    </section>
+  </div>
   <div class="grid two-col">
     <section class="card scroll">
       <h2>Player season stats <span class="muted">— click a column to sort, a row for the match log</span></h2>
@@ -229,6 +248,7 @@ function render() {
   renderPlayerTable(results, lines);
   renderMatchTable(results);
   renderDetail(lines);
+  renderBig12();
   document.getElementById("chart-season").textContent = season === "All" ? "· all seasons" : "· " + season;
   document.getElementById("foot").textContent =
     `Data: official NCAA box scores + kuathletics.com · updated ${SEED.generatedAt ?? "—"} · refreshed nightly`;
@@ -508,6 +528,84 @@ function renderMatchTable(results) {
     r.insertCell().appendChild(tag);
     r.insertCell().textContent = `${m.teamSets}–${m.opponentSets}`;
     const sc = r.insertCell(); sc.textContent = m.setScores ?? ""; sc.style.textAlign = "left"; sc.style.color = "var(--ink-2)";
+  }
+}
+
+// --- Big 12 standings + national poll ---------------------------------------
+// Optional keys: an older season-data.json simply hides the section.
+function renderBig12() {
+  const wrap = document.getElementById("big12-wrap");
+  const all = SEED.standings ?? [];
+  const polls = SEED.polls ?? [];
+  // Season chips scope KU's own data; for the conference use the same season
+  // when we have it, else the most recent one available.
+  const seasons = [...new Set(all.map(r => r.season))].sort().reverse();
+  const pick = seasons.includes(season) ? season : seasons[0];
+  const rows = all.filter(r => r.season === pick)
+    .sort((a, b) => {
+      const pctA = (a.confW + a.confL) ? a.confW / (a.confW + a.confL) : 0;
+      const pctB = (b.confW + b.confL) ? b.confW / (b.confW + b.confL) : 0;
+      return pctB - pctA || b.confW - a.confW || a.team.localeCompare(b.team);
+    });
+  if (!rows.length) { wrap.hidden = true; return; }
+  wrap.hidden = false;
+  document.getElementById("b12-note").textContent =
+    `— ${pick}` + (pick !== season ? " (latest available)" : "");
+
+  const t = document.getElementById("standings");
+  t.replaceChildren();
+  const head = t.createTHead().insertRow();
+  for (const h of ["", "Team", "Conf", "PCT", "Overall", "AVCA", "RPI"]) {
+    const th = el("th", null, h);
+    if (h === "Team") th.style.textAlign = "left"; // matches its left-aligned cells
+    head.appendChild(th);
+  }
+  const body = t.createTBody();
+  rows.forEach((r, i) => {
+    const tr = body.insertRow();
+    const isKu = r.seo === "kansas";
+    if (isKu) tr.className = "ku";
+    tr.insertCell().textContent = String(i + 1);
+    const name = tr.insertCell();
+    name.textContent = r.team;
+    name.style.textAlign = "left";
+    const cg = r.confW + r.confL;
+    for (const v of [
+      `${r.confW}-${r.confL}`,
+      cg ? fmtPct(r.confW / cg) : "—",
+      `${r.overallW}-${r.overallL}`,
+      r.nationalRank ? "#" + r.nationalRank : "—",
+      r.rpiRank ? "#" + r.rpiRank : "—",
+    ]) tr.insertCell().textContent = v;
+  });
+
+  const poll = polls.find(p => p.season === pick) ?? polls[0];
+  const pt = document.getElementById("poll");
+  pt.replaceChildren();
+  document.getElementById("poll-title").textContent = poll?.name ?? "National poll";
+  document.getElementById("poll-updated").textContent = poll
+    ? `${poll.updated} · ${poll.rows.filter(r => r.big12).length} of ${poll.rows.length} from the Big 12`
+    : "";
+  if (!poll) return;
+  const ph = pt.createTHead().insertRow();
+  for (const h of ["#", "Team", "Record", "Pts"]) {
+    const th = el("th", null, h);
+    if (h === "Team") th.style.textAlign = "left";
+    ph.appendChild(th);
+  }
+  const pb = pt.createTBody();
+  for (const r of poll.rows) {
+    const tr = pb.insertRow();
+    if (r.big12) tr.className = "ku";
+    tr.insertCell().textContent = r.rankLabel ?? String(r.rank);
+    const name = tr.insertCell();
+    name.style.textAlign = "left";
+    name.append(document.createTextNode(
+      r.team + (r.firstPlaceVotes ? ` (${r.firstPlaceVotes})` : "")
+    ));
+    if (r.big12) name.appendChild(el("span", "b12chip", "Big 12"));
+    tr.insertCell().textContent = r.record ?? "";
+    tr.insertCell().textContent = r.points ?? "";
   }
 }
 

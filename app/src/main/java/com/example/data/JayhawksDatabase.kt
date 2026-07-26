@@ -8,8 +8,9 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
-    entities = [Player::class, Match::class, StatLine::class],
-    version = 2,
+    entities = [Player::class, Match::class, StatLine::class,
+        ConferenceStanding::class, PollEntry::class],
+    version = 3,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -26,13 +27,35 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        // v2 -> v3: Big 12 standings and national poll snapshots.
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS standings (
+                        season TEXT NOT NULL, seo TEXT NOT NULL, team TEXT NOT NULL,
+                        confW INTEGER NOT NULL, confL INTEGER NOT NULL,
+                        overallW INTEGER NOT NULL, overallL INTEGER NOT NULL,
+                        nationalRank INTEGER, rpiRank INTEGER,
+                        PRIMARY KEY(season, seo))"""
+                )
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS poll_entries (
+                        season TEXT NOT NULL, team TEXT NOT NULL, rank INTEGER NOT NULL,
+                        rankLabel TEXT NOT NULL, record TEXT NOT NULL, points TEXT NOT NULL,
+                        previous TEXT NOT NULL, firstPlaceVotes INTEGER NOT NULL,
+                        big12 INTEGER NOT NULL, pollName TEXT NOT NULL, updated TEXT NOT NULL,
+                        PRIMARY KEY(season, team))"""
+                )
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     JayhawksDatabase::class.java,
                     "ku_volleyball.db"
-                ).addMigrations(MIGRATION_1_2).build().also { instance = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build().also { instance = it }
             }
     }
 }

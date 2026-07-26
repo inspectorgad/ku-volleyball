@@ -154,6 +154,73 @@ object Seeder {
                 )
             }
         }
+
+        mergeStandings(root, dao)
+    }
+
+    /**
+     * Big 12 standings and poll snapshots are scraper-derived and change after
+     * every result, so they are replaced per season rather than gap-filled —
+     * the one deliberate exception to this file's never-overwrite rule, safe
+     * because no field here is ever user-entered. Seeds that omit these keys
+     * (older payloads) leave whatever is already stored untouched.
+     */
+    private suspend fun mergeStandings(root: JSONObject, dao: JayhawksDao) {
+        root.optJSONArray("standings")?.let { arr ->
+            val bySeason = mutableMapOf<String, MutableList<ConferenceStanding>>()
+            for (i in 0 until arr.length()) {
+                val s = arr.getJSONObject(i)
+                val season = s.optString("season").takeIf { it.isNotBlank() } ?: continue
+                val seo = s.optString("seo").takeIf { it.isNotBlank() }
+                    ?: s.optString("team").lowercase().replace(' ', '-')
+                bySeason.getOrPut(season) { mutableListOf() }.add(
+                    ConferenceStanding(
+                        season = season,
+                        seo = seo,
+                        team = s.optString("team"),
+                        confW = s.optInt("confW"),
+                        confL = s.optInt("confL"),
+                        overallW = s.optInt("overallW"),
+                        overallL = s.optInt("overallL"),
+                        nationalRank = s.optInt("nationalRank").takeIf { it > 0 },
+                        rpiRank = s.optInt("rpiRank").takeIf { it > 0 }
+                    )
+                )
+            }
+            for ((season, rows) in bySeason) {
+                dao.deleteStandingsForSeason(season)
+                dao.insertStandings(rows)
+            }
+        }
+
+        root.optJSONArray("polls")?.let { arr ->
+            for (i in 0 until arr.length()) {
+                val poll = arr.getJSONObject(i)
+                val season = poll.optString("season").takeIf { it.isNotBlank() } ?: continue
+                val name = poll.optString("name")
+                val updated = poll.optString("updated")
+                val rows = poll.optJSONArray("rows") ?: continue
+                val entries = (0 until rows.length()).mapNotNull { j ->
+                    val r = rows.getJSONObject(j)
+                    val team = r.optString("team").takeIf { it.isNotBlank() } ?: return@mapNotNull null
+                    PollEntry(
+                        season = season,
+                        team = team,
+                        rank = r.optInt("rank"),
+                        rankLabel = r.optString("rankLabel").ifBlank { r.optInt("rank").toString() },
+                        record = r.optString("record"),
+                        points = r.optString("points"),
+                        previous = r.optString("previous"),
+                        firstPlaceVotes = r.optInt("firstPlaceVotes"),
+                        big12 = r.optBoolean("big12"),
+                        pollName = name,
+                        updated = updated
+                    )
+                }
+                dao.deletePollForSeason(season)
+                dao.insertPollEntries(entries)
+            }
+        }
     }
 
     /**
