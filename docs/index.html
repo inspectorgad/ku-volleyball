@@ -108,6 +108,10 @@
   #players th { cursor: pointer; user-select: none; }
   .fineprint { color: var(--ink-3); font-size: 11px; margin-top: 8px; }
   tbody tr.ku td { background: var(--chip-bg); font-weight: 700; }
+  .sitechip {
+    font-size: 10px; font-weight: 700; border-radius: 3px; padding: 1px 5px;
+    background: var(--chip-bg); color: var(--ink-2);
+  }
   .b12chip {
     font-size: 10px; font-weight: 700; border-radius: 3px; padding: 1px 5px;
     background: var(--chip-bg); color: var(--ink-2); margin-left: 6px;
@@ -178,6 +182,12 @@
 <script>
 "use strict";
 const RAW_URL = "https://raw.githubusercontent.com/inspectorgad/ku-volleyball/main/app/src/main/assets/seed.json";
+// Standard notation: home and neutral games read "vs", road games "at".
+const isAway = m => m.home === false && !m.neutral;
+const siteWord = m => (m.home === undefined ? "vs" : isAway(m) ? "at" : "vs");
+const siteLetter = m => (m.neutral ? "N" : m.home === true ? "H" : m.home === false ? "A" : "");
+const siteTitle = m => (m.neutral ? "Neutral site" : m.home === true ? "Home" : m.home === false ? "Away" : "")
+  + (m.city ? ` — ${m.city}` : "") + (m.venue ? ` (${m.venue})` : "");
 const fmtPct = v => { const s = (v < 0 ? "-" : "") + Math.abs(v).toFixed(3).replace(/^0/, ""); return s; };
 const fmt2 = v => v.toFixed(2);
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
@@ -329,7 +339,7 @@ function renderLine(results) {
     const p = pts[j];
     const res = p.m.teamSets > p.m.opponentSets ? "W" : "L";
     showTip(ev.clientX, ev.clientY,
-      `${p.m.date} vs ${p.m.opponent}`,
+      `${p.m.date} ${siteWord(p.m)} ${p.m.opponent}`,
       `${fmtPct(p.v)} hitting`,
       `${res} ${p.m.teamSets}–${p.m.opponentSets}${p.m.setScores ? " · " + p.m.setScores : ""}`);
   });
@@ -345,11 +355,11 @@ function renderStrip(results) {
     const b = el("div", "box " + (won ? "w" : "l"), won ? "W" : "L");
     b.tabIndex = 0;
     const show = ev => showTip(ev.clientX ?? 0, ev.clientY ?? 0,
-      `${m.date} vs ${m.opponent}`,
+      `${m.date} ${siteWord(m)} ${m.opponent}`,
       `${won ? "W" : "L"} ${m.teamSets}–${m.opponentSets}`,
       m.setScores ?? "");
     b.addEventListener("pointermove", show);
-    b.addEventListener("focus", ev => { const r = b.getBoundingClientRect(); showTip(r.left, r.bottom, `${m.date} vs ${m.opponent}`, `${won ? "W" : "L"} ${m.teamSets}–${m.opponentSets}`, m.setScores ?? ""); });
+    b.addEventListener("focus", ev => { const r = b.getBoundingClientRect(); showTip(r.left, r.bottom, `${m.date} ${siteWord(m)} ${m.opponent}`, `${won ? "W" : "L"} ${m.teamSets}–${m.opponentSets}`, m.setScores ?? ""); });
     b.addEventListener("pointerleave", hideTip);
     b.addEventListener("blur", hideTip);
     strip.appendChild(b);
@@ -364,7 +374,7 @@ function renderUpcoming(upcoming) {
   ul.appendChild(el("li", null)).append(el("strong", null, "Upcoming"));
   for (const m of upcoming.slice(0, 10)) {
     const li = el("li");
-    li.appendChild(el("span", null, m.opponent));
+    li.appendChild(el("span", null, `${siteWord(m)} ${m.opponent}`));
     li.appendChild(el("span", "d", m.date));
     ul.appendChild(li);
   }
@@ -499,7 +509,9 @@ function renderDetail(lines) {
       const m = l.match;
       const r = body.insertRow();
       r.insertCell().textContent = m.date;
-      const opp = r.insertCell(); opp.textContent = m.opponent; opp.style.textAlign = "left";
+      const opp = r.insertCell();
+      opp.textContent = `${siteWord(m)} ${m.opponent}`;
+      opp.style.textAlign = "left";
       const won = m.teamSets > m.opponentSets;
       r.insertCell().appendChild(el("span", "tag " + (won ? "w" : "l"), won ? "W" : "L"));
       const pct = l.ta ? (l.k - l.e) / l.ta : 0;
@@ -517,12 +529,15 @@ function renderMatchTable(results) {
   const t = document.getElementById("matches");
   t.replaceChildren();
   const head = t.createTHead().insertRow();
-  for (const h of ["Date", "Opponent", "", "Sets", "Set scores"]) head.appendChild(el("th", null, h));
+  for (const h of ["Date", "Opponent", "", "", "Sets", "Set scores"]) head.appendChild(el("th", null, h));
   const body = t.createTBody();
   for (const m of [...results].reverse()) {
     const r = body.insertRow();
     r.insertCell().textContent = m.date;
-    r.insertCell().textContent = m.opponent;
+    r.insertCell().textContent = `${siteWord(m)} ${m.opponent}`;
+    const site = r.insertCell();
+    site.appendChild(el("span", "sitechip", siteLetter(m)));
+    site.title = siteTitle(m);
     const won = m.teamSets > m.opponentSets;
     const tag = el("span", "tag " + (won ? "w" : "l"), won ? "W" : "L");
     r.insertCell().appendChild(tag);

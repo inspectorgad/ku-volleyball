@@ -26,7 +26,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -35,8 +37,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.Match
@@ -78,13 +83,18 @@ fun MatchesScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    "vs ${match.opponent}",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold
-                                )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        "${match.versus} ${match.opponent}",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    LocationBadge(match)
+                                }
                                 Text(
                                     "${match.date} · ${match.season}" +
+                                        (match.city.takeIf { it.isNotBlank() && match.home != true }
+                                            ?.let { " · $it" } ?: "") +
                                         if (lineCount > 0) " · $lineCount player${if (lineCount == 1) "" else "s"}" else "",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -127,6 +137,37 @@ fun MatchesScreen(
     }
 }
 
+/**
+ * H / A / N chip. The letter carries the meaning, so the tint is reinforcement
+ * rather than the only signal.
+ */
+@Composable
+private fun LocationBadge(match: Match) {
+    val (letter, description) = when {
+        match.neutral -> "N" to "Neutral site"
+        match.home == true -> "H" to "Home"
+        match.home == false -> "A" to "Away"
+        else -> return
+    }
+    Surface(
+        color = if (match.home == true) MaterialTheme.colorScheme.primaryContainer
+        else MaterialTheme.colorScheme.surfaceVariant,
+        shape = RoundedCornerShape(4.dp),
+        modifier = Modifier.padding(start = 6.dp)
+    ) {
+        Text(
+            letter,
+            modifier = Modifier
+                .semantics { contentDescription = description }
+                .padding(horizontal = 5.dp, vertical = 1.dp),
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+            color = if (match.home == true) MaterialTheme.colorScheme.onPrimaryContainer
+            else MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
 @Composable
 private fun ResultText(match: Match) {
     val us = match.teamSets
@@ -162,6 +203,17 @@ fun MatchDialog(
     var teamSets by remember { mutableStateOf(match?.teamSets?.toString() ?: "") }
     var oppSets by remember { mutableStateOf(match?.opponentSets?.toString() ?: "") }
     var setScores by remember { mutableStateOf(match?.setScores ?: "") }
+    // Home / Away / Neutral, defaulting to whatever the match already says.
+    var site by remember {
+        mutableStateOf(
+            when {
+                match == null -> "Home"
+                match.neutral -> "Neutral"
+                match.home == false -> "Away"
+                else -> "Home"
+            }
+        )
+    }
 
     val dateValid = Regex("""\d{4}-\d{2}-\d{2}""").matches(date)
 
@@ -213,6 +265,15 @@ fun MatchDialog(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf("Home", "Away", "Neutral").forEach { option ->
+                        FilterChip(
+                            selected = site == option,
+                            onClick = { site = option },
+                            label = { Text(option) }
+                        )
+                    }
+                }
             }
         },
         confirmButton = {
@@ -227,7 +288,11 @@ fun MatchDialog(
                             season = season.trim(),
                             teamSets = teamSets.toIntOrNull(),
                             opponentSets = oppSets.toIntOrNull(),
-                            setScores = setScores.trim().ifBlank { null }
+                            setScores = setScores.trim().ifBlank { null },
+                            home = site == "Home",
+                            neutral = site == "Neutral",
+                            venue = match?.venue ?: "",
+                            city = match?.city ?: ""
                         )
                     )
                 }
@@ -259,7 +324,7 @@ fun MatchDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("vs ${match.opponent}") },
+                title = { Text("${match.versus} ${match.opponent}") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -291,9 +356,24 @@ fun MatchDetailScreen(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                "${match.date} · ${match.season}",
+                                "${match.date} · ${match.season} · " + when {
+                                    match.neutral -> "neutral site"
+                                    match.home == true -> "home"
+                                    match.home == false -> "away"
+                                    else -> "location unknown"
+                                },
                                 style = MaterialTheme.typography.bodyMedium
                             )
+                            listOfNotNull(
+                                match.venue.takeIf { it.isNotBlank() },
+                                match.city.takeIf { it.isNotBlank() }
+                            ).takeIf { it.isNotEmpty() }?.let {
+                                Text(
+                                    it.joinToString(" · "),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                             match.setScores?.let {
                                 Text(
                                     "Sets: $it",

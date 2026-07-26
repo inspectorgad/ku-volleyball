@@ -71,8 +71,18 @@ data class Match(
     val teamSets: Int? = null,
     val opponentSets: Int? = null,
     // Per-set points from KU's perspective, e.g. "25-16, 18-25, 25-18, 26-28, 15-10"
-    val setScores: String? = null
-)
+    val setScores: String? = null,
+    // Null when unknown (a hand-added match). Determined by venue rather than
+    // the NCAA's home designation, which marks one side home even at neutral
+    // tournament sites.
+    val home: Boolean? = null,
+    val neutral: Boolean = false,
+    val venue: String = "",
+    val city: String = ""
+) {
+    /** Standard notation: "vs" for home and neutral games, "at" on the road. */
+    val versus: String get() = if (home == false && !neutral) "at" else "vs"
+}
 
 @Entity(
     tableName = "stat_lines",

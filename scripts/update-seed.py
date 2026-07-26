@@ -83,6 +83,10 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         set_scores.append(f"{ours}-{theirs}")
 
     season = str(contest.get("seasonYear") or data["date"][:4])
+    location = contest.get("location") or {}
+    city = ", ".join(
+        p for p in [location.get("city"), location.get("stateUsps")] if p
+    )
     match = {
         "date": data["date"],
         "opponent": opp.get("nameShort") or opp.get("nameFull") or "Unknown",
@@ -90,6 +94,12 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         "teamSets": to_int(ku.get("score")),
         "opponentSets": to_int(opp.get("score")),
         "setScores": ", ".join(set_scores),
+        "venue": (location.get("venue") or "").strip(),
+        "city": city,
+        # isHome is not enough on its own: at neutral tournaments the NCAA still
+        # designates one side as home, so KU shows "home" in Sioux Falls. The
+        # venue decides instead; _kuDesignatedHome only helps spot neutrals.
+        "_kuDesignatedHome": ku_home,
         "lines": [],
     }
 
@@ -169,7 +179,40 @@ for entry in load_json("scraped/upcoming.json", []):
         "date": date,
         "opponent": opponent,
         "season": date[:4],
+        # kuathletics writes "versus" for home and "at" for road games.
+        "home": bool(entry.get("home")),
     }
+
+# --- Home / away / neutral for played matches -------------------------------
+# KU's home floor is in Lawrence, so the venue city is the one dependable
+# signal. Everything else is a road or neutral game.
+HOME_CITY = "Lawrence, KS"
+
+# A non-Lawrence venue that hosted KU against two or more different opponents in
+# one season is a multi-team event, so those games are neutral-site rather than
+# true road games.
+venue_opponents = {}
+for m in matches.values():
+    venue = m.get("venue")
+    if venue and m.get("city") != HOME_CITY:
+        venue_opponents.setdefault((m["season"], venue), set()).add(m["opponent"].lower())
+
+for m in matches.values():
+    if "_kuDesignatedHome" not in m:
+        continue  # upcoming match: home already came from kuathletics
+    designated = m.pop("_kuDesignatedHome")
+    at_home = m.get("city") == HOME_CITY
+    tournament = len(venue_opponents.get((m["season"], m.get("venue")), ())) > 1
+    m["home"] = at_home
+    # Designated home away from Lawrence can only be a neutral site.
+    if not at_home and (designated or tournament):
+        m["neutral"] = True
+
+played = [m for m in matches.values() if "teamSets" in m]
+if played:
+    h = sum(1 for m in played if m.get("home"))
+    n = sum(1 for m in played if m.get("neutral"))
+    print(f"home/away: {h} home, {n} neutral, {len(played) - h - n} away")
 
 # --- Big 12 standings, computed from the scoreboard sweep -------------------
 # /standings/volleyball-women/d1 returns HTTP 500 for this sport, so conference

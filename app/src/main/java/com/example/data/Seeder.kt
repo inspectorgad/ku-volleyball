@@ -101,6 +101,11 @@ object Seeder {
             val seedOppSets = if (m.has("opponentSets")) m.getInt("opponentSets") else null
             val seedSetScores = m.optString("setScores").takeIf { it.isNotBlank() }
 
+            val seedHome = if (m.has("home")) m.getBoolean("home") else null
+            val seedNeutral = m.optBoolean("neutral")
+            val seedVenue = m.optString("venue")
+            val seedCity = m.optString("city")
+
             val existing = matchesByKey[matchKey(date, opponent)]
             val matchId: Long
             if (existing == null) {
@@ -111,22 +116,29 @@ object Seeder {
                         season = m.getString("season"),
                         teamSets = seedTeamSets,
                         opponentSets = seedOppSets,
-                        setScores = seedSetScores
+                        setScores = seedSetScores,
+                        home = seedHome,
+                        neutral = seedNeutral,
+                        venue = seedVenue,
+                        city = seedCity
                     )
                 )
             } else {
                 matchId = existing.id
-                if (existing.teamSets == null && existing.opponentSets == null &&
+                val fillResult = existing.teamSets == null && existing.opponentSets == null &&
                     (seedTeamSets != null || seedOppSets != null)
-                ) {
-                    dao.updateMatch(
-                        existing.copy(
-                            teamSets = seedTeamSets,
-                            opponentSets = seedOppSets,
-                            setScores = existing.setScores ?: seedSetScores
-                        )
-                    )
-                }
+                // Venue facts fill in when missing (an upcoming match becoming a
+                // played one learns where it happened) but never overwrite.
+                val updated = existing.copy(
+                    teamSets = if (fillResult) seedTeamSets else existing.teamSets,
+                    opponentSets = if (fillResult) seedOppSets else existing.opponentSets,
+                    setScores = existing.setScores ?: seedSetScores,
+                    home = existing.home ?: seedHome,
+                    neutral = existing.neutral || seedNeutral,
+                    venue = existing.venue.ifBlank { seedVenue },
+                    city = existing.city.ifBlank { seedCity }
+                )
+                if (updated != existing) dao.updateMatch(updated)
             }
 
             if (existing != null && matchId in matchesWithLines) continue

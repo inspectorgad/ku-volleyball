@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-07-26T19:41:32Z",
+ "generatedAt": "2026-07-26T23:41:23Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -174,6 +174,8 @@
    "teamSets": 3,
    "opponentSets": 2,
    "setScores": "19-25, 25-18, 24-26, 25-20, 15-4",
+   "venue": "Pinnacle Bank Arena",
+   "city": "Lincoln, NE",
    "lines": [
     {
      "player": "Katie Dalton",
@@ -340,7 +342,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-08-25",
@@ -349,6 +352,8 @@
    "teamSets": 2,
    "opponentSets": 3,
    "setScores": "22-25, 26-24, 25-16, 28-30, 12-15",
+   "venue": "Sanford Pentagon",
+   "city": "Sioux Falls, SD",
    "lines": [
     {
      "player": "Katie Dalton",
@@ -485,7 +490,9 @@
      "re": 2,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-08-29",
@@ -494,6 +501,8 @@
    "teamSets": 2,
    "opponentSets": 3,
    "setScores": "16-25, 25-18, 18-25, 28-26, 10-15",
+   "venue": "Kohl Center",
+   "city": "Madison, WI",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -690,7 +699,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-08-31",
@@ -699,6 +710,8 @@
    "teamSets": 2,
    "opponentSets": 3,
    "setScores": "17-25, 21-25, 25-21, 27-25, 12-15",
+   "venue": "Kohl Center",
+   "city": "Madison, WI",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -880,7 +893,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-09-03",
@@ -889,6 +904,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "25-18, 25-20, 25-27, 25-14",
+   "venue": "Holloway Gymnasium",
+   "city": "West Lafayette, IN",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -1055,7 +1072,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-09-04",
@@ -1064,6 +1083,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "25-17, 25-18, 22-25, 25-14",
+   "venue": "Holloway Gymnasium",
+   "city": "West Lafayette, IN",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -1200,7 +1221,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-09-05",
@@ -1209,6 +1232,8 @@
    "teamSets": 2,
    "opponentSets": 3,
    "setScores": "16-25, 25-19, 18-25, 25-21, 11-15",
+   "venue": "Holloway Gymnasium",
+   "city": "West Lafayette, IN",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -1360,7 +1385,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-09-11",
@@ -1369,6 +1396,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "26-24, 25-16, 25-20",
+   "venue": "Sanford Coyote Sports Center",
+   "city": "Vermillion, SD",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -1535,7 +1564,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-09-12",
@@ -1544,6 +1575,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-21, 25-16, 25-14",
+   "venue": "Sanford Coyote Sports Center",
+   "city": "Vermillion, SD",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -1710,7 +1743,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-09-13",
@@ -1719,6 +1754,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-16, 25-16, 25-14",
+   "venue": "Sanford Coyote Sports Center",
+   "city": "Vermillion, SD",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -1870,7 +1907,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-09-16",
@@ -1879,6 +1918,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "28-26, 25-14, 25-16",
+   "venue": "Charles Koch Arena",
+   "city": "Wichita, KS",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -2030,7 +2071,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-09-20",
@@ -2039,6 +2081,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-18, 25-19, 25-16",
+   "venue": "Baxter Arena",
+   "city": "Omaha, NE",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -2235,7 +2279,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-09-21",
@@ -2244,6 +2289,8 @@
    "teamSets": 0,
    "opponentSets": 3,
    "setScores": "24-26, 18-25, 22-25",
+   "venue": "",
+   "city": "",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -2425,7 +2472,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-09-21",
@@ -2434,6 +2482,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "26-28, 25-22, 25-23, 25-20",
+   "venue": "",
+   "city": "",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -2600,7 +2650,9 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2025-09-26",
@@ -2609,6 +2661,8 @@
    "teamSets": 2,
    "opponentSets": 3,
    "setScores": "30-28, 21-25, 25-22, 20-25, 11-15",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -2790,7 +2844,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-09-28",
@@ -2799,6 +2854,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-15, 25-22, 25-19",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -2950,7 +3007,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-10-01",
@@ -2959,6 +3017,8 @@
    "teamSets": 1,
    "opponentSets": 3,
    "setScores": "15-25, 23-25, 25-23, 13-25",
+   "venue": "Ed and Rae Schollmaier Arena",
+   "city": "Fort Worth, TX",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -3155,7 +3215,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-10-03",
@@ -3164,6 +3225,8 @@
    "teamSets": 3,
    "opponentSets": 2,
    "setScores": "19-25, 25-19, 25-13, 25-27, 15-13",
+   "venue": "Ferrell Center",
+   "city": "Waco, TX",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -3330,7 +3393,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-10-08",
@@ -3339,6 +3403,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-12, 25-16, 25-18",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -3490,7 +3556,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-10-10",
@@ -3499,6 +3566,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "21-25, 25-18, 25-20, 25-19",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -3635,7 +3704,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-10-16",
@@ -3644,6 +3714,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-14, 25-23, 25-16",
+   "venue": "Fertitta Center",
+   "city": "Houston, TX",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -3810,7 +3882,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-10-22",
@@ -3819,6 +3892,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "28-26, 25-16, 25-22",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -3955,7 +4030,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-10-24",
@@ -3964,6 +4040,8 @@
    "teamSets": 2,
    "opponentSets": 3,
    "setScores": "25-14, 17-25, 25-18, 23-25, 8-15",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -4100,7 +4178,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-10-30",
@@ -4109,6 +4188,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "25-22, 25-17, 22-25, 25-18",
+   "venue": "Fifth Third Arena",
+   "city": "Cincinnati, OH",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -4260,7 +4341,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-11-01",
@@ -4269,6 +4351,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-16, 25-18, 25-17",
+   "venue": "WVU Coliseum",
+   "city": "Morgantown, WV",
    "lines": [
     {
      "player": "Katie Dalton",
@@ -4405,7 +4489,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-11-06",
@@ -4414,6 +4499,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "25-20, 25-15, 26-28, 25-19",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Katie Dalton",
@@ -4550,7 +4637,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-11-08",
@@ -4559,6 +4647,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-15, 25-19, 25-22",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Katie Dalton",
@@ -4695,7 +4785,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-11-15",
@@ -4704,6 +4795,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-22, 25-20, 26-24",
+   "venue": "",
+   "city": "",
    "lines": [
     {
      "player": "Katie Dalton",
@@ -4885,7 +4978,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-11-19",
@@ -4894,6 +4988,8 @@
    "teamSets": 0,
    "opponentSets": 3,
    "setScores": "20-25, 21-25, 22-25",
+   "venue": "Jon M. Huntsman Center",
+   "city": "Salt Lake City, UT",
    "lines": [
     {
      "player": "Katie Dalton",
@@ -5075,7 +5171,8 @@
      "re": 1,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-11-21",
@@ -5084,6 +5181,8 @@
    "teamSets": 0,
    "opponentSets": 3,
    "setScores": "17-25, 18-25, 20-25",
+   "venue": "Smith Fieldhouse",
+   "city": "Provo, UT",
    "lines": [
     {
      "player": "Aurora Papac",
@@ -5280,7 +5379,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-11-26",
@@ -5289,6 +5389,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "25-23, 25-16, 15-25, 26-24",
+   "venue": "James H. Hilton Coliseum",
+   "city": "Ames, IA",
    "lines": [
     {
      "player": "Jovana Zelenovic",
@@ -5425,7 +5527,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2025-11-29",
@@ -5434,6 +5537,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "21-25, 25-22, 25-22, 25-20",
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Katie Dalton",
@@ -5585,7 +5690,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-12-04",
@@ -5594,6 +5700,8 @@
    "teamSets": 3,
    "opponentSets": 0,
    "setScores": "25-20, 25-15, 25-18",
+   "venue": "Horejsi Family Athletics Center",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Ellie Moore",
@@ -5880,7 +5988,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-12-05",
@@ -5889,6 +5998,8 @@
    "teamSets": 3,
    "opponentSets": 1,
    "setScores": "25-17, 25-22, 22-25, 27-25",
+   "venue": "Horejsi Family Athletics Center",
+   "city": "Lawrence, KS",
    "lines": [
     {
      "player": "Ellie Moore",
@@ -6175,7 +6286,8 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": true
   },
   {
    "date": "2025-12-12",
@@ -6184,6 +6296,8 @@
    "teamSets": 0,
    "opponentSets": 3,
    "setScores": "12-25, 11-25, 12-25",
+   "venue": "",
+   "city": "",
    "lines": [
     {
      "player": "Ellie Moore",
@@ -6470,57 +6584,68 @@
      "re": 0,
      "bhe": 0
     }
-   ]
+   ],
+   "home": false
   },
   {
    "date": "2026-08-22",
    "opponent": "Creighton (Exh.)",
-   "season": "2026"
+   "season": "2026",
+   "home": true
   },
   {
    "date": "2026-08-28",
    "opponent": "Pittsburgh",
-   "season": "2026"
+   "season": "2026",
+   "home": false
   },
   {
    "date": "2026-08-30",
    "opponent": "Stanford",
-   "season": "2026"
+   "season": "2026",
+   "home": true
   },
   {
    "date": "2026-09-03",
    "opponent": "Lipscomb",
-   "season": "2026"
+   "season": "2026",
+   "home": false
   },
   {
    "date": "2026-09-04",
    "opponent": "Florida State",
-   "season": "2026"
+   "season": "2026",
+   "home": true
   },
   {
    "date": "2026-09-08",
    "opponent": "Wichita State",
-   "season": "2026"
+   "season": "2026",
+   "home": true
   },
   {
    "date": "2026-09-11",
    "opponent": "South Dakota State",
-   "season": "2026"
+   "season": "2026",
+   "home": true
   },
   {
    "date": "2026-09-13",
    "opponent": "Tulsa",
-   "season": "2026"
+   "season": "2026",
+   "home": true
   },
   {
    "date": "2026-09-15",
    "opponent": "Wichita State",
-   "season": "2026"
+   "season": "2026",
+   "home": false
   },
   {
    "date": "2026-09-18",
    "opponent": "Ole Miss",
-   "season": "2026"
+   "season": "2026",
+   "home": true
   }
  ],
  "standings": [

@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 @Database(
     entities = [Player::class, Match::class, StatLine::class,
         ConferenceStanding::class, PollEntry::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -49,13 +49,24 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        // v3 -> v4: home/away/neutral and the venue it was decided from.
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE matches ADD COLUMN home INTEGER")
+                db.execSQL("ALTER TABLE matches ADD COLUMN neutral INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE matches ADD COLUMN venue TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE matches ADD COLUMN city TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     JayhawksDatabase::class.java,
                     "ku_volleyball.db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build().also { instance = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                    .build().also { instance = it }
             }
     }
 }
