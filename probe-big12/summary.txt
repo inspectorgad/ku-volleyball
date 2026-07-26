@@ -1,0 +1,23 @@
+GET https://ncaa-api.henrygd.me/standings/volleyball-women/d1 -> 500 (20 chars)
+GET https://ncaa-api.henrygd.me/rankings/volleyball-women/d1/avca-rankings -> 200 (2262 chars)
+  avca-rankings keys: sport, title, updated, page, pages, data
+  avca-rankings row count: 25
+  avca-rankings first row: {"RANK":"1","TEAM":"Texas A&M (61)","TOTAL POINTS":"1525","RECORD":"29-4","PREVIOUS":"6"}
+  avca-rankings title: "AVCA Rankings"
+  avca-rankings updated: "Through Games DEC. 21, 2025"
+  avca-rankings page: 1
+  avca-rankings sport: "Women's Volleyball"
+GET https://ncaa-api.henrygd.me/rankings/volleyball-women/d1/ncaa-womens-volleyball-rpi -> 200 (49607 chars)
+  ncaa-womens-volleyball-rpi keys: sport, title, updated, page, pages, data
+  ncaa-womens-volleyball-rpi row count: 348
+  ncaa-womens-volleyball-rpi first row: {"Rank":"1","School":"Nebraska","Record":"33-1","Conf":"Big Ten","Road":"12-0","Neutral":"3-0","Home":"18-1","Non-Div I":"0-0","Prev":"1"}
+  ncaa-womens-volleyball-rpi title: "NCAA Women's Volleyball RPI"
+  ncaa-womens-volleyball-rpi updated: "Through Games Dec. 21 2025"
+  ncaa-womens-volleyball-rpi page: 1
+  ncaa-womens-volleyball-rpi sport: "Women's Volleyball"
+GET https://ncaa-api.henrygd.me/scoreboard/volleyball-women/d1/2025/10/16 -> 200 (28654 chars)
+  2025-10-16: 38 matches | big-12 teams tagged: 6 | big12-vs-big12: 3 | ranked entries: 7
+  2025-10-16 big-12 teams: Arizona St., BYU, Houston, Iowa St., Kansas, West Virginia
+GET https://ncaa-api.henrygd.me/scoreboard/volleyball-women/d1/2025/11/15 -> 200 (75349 chars)
+  2025-11-15: 101 matches | big-12 teams tagged: 8 | big12-vs-big12: 4 | ranked entries: 9
+  2025-11-15 big-12 teams: Arizona St., Baylor, Colorado, Houston, Iowa St., Kansas, Kansas St., TCU
