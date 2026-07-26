@@ -1,7 +1,14 @@
-// Scrapes KU Women's Volleyball data from two sources:
+// Scrapes KU Women's Volleyball data from three sources:
 //  1. NCAA API (ncaa-api.henrygd.me, JSON wrapper around ncaa.com) — match
-//     discovery via the daily scoreboard, then per-match box scores.
-//  2. kuathletics.com (Sidearm) via headless Chromium — current roster and
+//     discovery via the daily scoreboard, then per-match box scores. The same
+//     sweep also yields every Big 12 game (each team carries a conference
+//     tag), which is what the Big 12 standings are computed from.
+//  2. NCAA API rankings — AVCA coaches top 25 and NCAA RPI. Both are
+//     current-snapshot endpoints (no per-season history), so each nightly run
+//     captures the latest and update-seed.py keys it by season.
+//     Note: /standings/volleyball-women/d1 returns HTTP 500 for this sport,
+//     which is why conference records are computed rather than fetched.
+//  3. kuathletics.com (Sidearm) via headless Chromium — current roster and
 //     upcoming schedule (which the NCAA scoreboard only shows day-of).
 // Runs in GitHub Actions where outbound network is open. Incremental: an
 // index in scraped/ku-index.json records scanned dates and finished games so
@@ -12,13 +19,27 @@ import fs from 'fs';
 const API = 'https://ncaa-api.henrygd.me';
 const SEASONS = (process.env.SEASONS || '2026').trim().split(/\s+/);
 const TEAM_SEO = 'kansas';
+const CONFERENCE_SEO = 'big-12';
+// Bump to force a one-time full re-sweep when the sweep starts capturing
+// something new (the scannedDates cache would otherwise skip old dates).
+const INDEX_VERSION = 2;
 
 fs.mkdirSync('scraped', { recursive: true });
 
 const INDEX_PATH = 'scraped/ku-index.json';
 const index = fs.existsSync(INDEX_PATH)
   ? JSON.parse(fs.readFileSync(INDEX_PATH, 'utf8'))
-  : { scannedDates: {}, games: {} };
+  : { indexVersion: INDEX_VERSION, scannedDates: {}, games: {}, big12Games: {} };
+
+index.games ??= {};
+index.big12Games ??= {};
+if ((index.indexVersion ?? 1) < INDEX_VERSION) {
+  console.log(
+    `index v${index.indexVersion ?? 1} < v${INDEX_VERSION}: clearing ${Object.keys(index.scannedDates ?? {}).length} scanned dates for a one-time full re-sweep`
+  );
+  index.scannedDates = {};
+  index.indexVersion = INDEX_VERSION;
+}
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -60,6 +81,32 @@ for (const season of SEASONS) {
     for (const wrap of data.games || []) {
       const g = wrap.game || wrap;
       const sides = [g.home, g.away];
+
+      // Big 12 capture: any game with at least one conference team. Conference
+      // games (both sides tagged) drive conference records; the rest still
+      // count toward each team's overall record. Membership comes from the
+      // tags themselves, never a hardcoded list, so realignment can't stale it.
+      const confTags = (s) => (s?.conferences ?? []).map((c) => c.conferenceSeo);
+      const homeInConf = confTags(g.home).includes(CONFERENCE_SEO);
+      const awayInConf = confTags(g.away).includes(CONFERENCE_SEO);
+      if ((homeInConf || awayInConf) && g.gameState === 'final') {
+        const side = (s, inConf) => ({
+          name: s?.names?.short ?? '',
+          seo: s?.names?.seo ?? '',
+          score: Number(s?.score ?? 0),
+          winner: Boolean(s?.winner),
+          rank: s?.rank ? Number(s.rank) : null,
+          inConference: inConf,
+        });
+        index.big12Games[g.gameID] = {
+          date,
+          season: date.slice(0, 4),
+          home: side(g.home, homeInConf),
+          away: side(g.away, awayInConf),
+          conferenceGame: homeInConf && awayInConf,
+        };
+      }
+
       if (!sides.some((s) => s?.names?.seo === TEAM_SEO)) continue;
       const existing = index.games[g.gameID];
       if (existing?.final && existing?.boxscored) continue;
@@ -73,6 +120,24 @@ for (const season of SEASONS) {
       console.log(`found KU game ${g.gameID} on ${date}: ${g.away?.names?.short} at ${g.home?.names?.short} (${g.gameState})`);
     }
     index.scannedDates[date] = true;
+  }
+}
+console.log(`big12 games captured: ${Object.keys(index.big12Games).length}`);
+
+// --- 1b. Rankings snapshots (best effort; never fail the run) ---------------
+// Both endpoints serve only the CURRENT poll/RPI — no per-season history — so
+// each run overwrites its snapshot and update-seed.py keys it by the season in
+// the "Through Games ..." label.
+for (const [name, path] of [
+  ['avca', 'rankings/volleyball-women/d1/avca-rankings'],
+  ['rpi', 'rankings/volleyball-women/d1/ncaa-womens-volleyball-rpi'],
+]) {
+  try {
+    const data = await getJson(`${API}/${path}`);
+    fs.writeFileSync(`scraped/rankings-${name}.json`, JSON.stringify(data, null, 1));
+    console.log(`rankings ${name}: ${data.data?.length ?? 0} rows (${data.updated ?? 'no date'})`);
+  } catch (e) {
+    console.log(`rankings ${name} failed (non-fatal): ${e.message}`);
   }
 }
 

@@ -12,6 +12,7 @@ the app's Seeder merge is what protects user edits on-device.
 import glob
 import json
 import os
+import re
 from datetime import datetime, timezone
 
 TEAM_SEO = "kansas"
@@ -170,6 +171,128 @@ for entry in load_json("scraped/upcoming.json", []):
         "season": date[:4],
     }
 
+# --- Big 12 standings, computed from the scoreboard sweep -------------------
+# /standings/volleyball-women/d1 returns HTTP 500 for this sport, so conference
+# records are derived from the Big 12 games the sweep already collects. This
+# also means any season can be rebuilt retroactively, which a live standings
+# endpoint could not do.
+def norm_team(name):
+    """Canonical key for cross-source name matching ('Iowa State'/'Iowa St.')."""
+    n = re.sub(r"\s*\(\d+\)\s*$", "", name or "").lower()  # strip poll votes
+    n = n.replace(".", "")
+    n = re.sub(r"\bstate\b", "st", n)
+    return re.sub(r"\s+", " ", n).strip()
+
+
+index = load_json("scraped/ku-index.json", {})
+records = {}  # (season, key) -> record dict
+for game in index.get("big12Games", {}).values():
+    season = game.get("season") or game.get("date", "")[:4]
+    conf_game = bool(game.get("conferenceGame"))
+    for side in ("home", "away"):
+        s = game.get(side) or {}
+        if not s.get("inConference") or not s.get("name"):
+            continue  # non-conference opponents get no standings row
+        rec = records.setdefault(
+            (season, norm_team(s["name"])),
+            {
+                "season": season,
+                "team": s["name"],
+                "seo": s.get("seo", ""),
+                "confW": 0, "confL": 0, "overallW": 0, "overallL": 0,
+                "_rankDate": "", "nationalRank": None,
+            },
+        )
+        won = bool(s.get("winner"))
+        rec["overallW" if won else "overallL"] += 1
+        if conf_game:
+            rec["confW" if won else "confL"] += 1
+        # Keep the most recent rank the scoreboard reported that season.
+        if s.get("rank") and game.get("date", "") >= rec["_rankDate"]:
+            rec["_rankDate"] = game["date"]
+            rec["nationalRank"] = s["rank"]
+
+# --- Rankings snapshots (AVCA poll + RPI) -----------------------------------
+# Both endpoints serve only the current poll, so each is keyed by the season in
+# its "Through Games ..." label.
+def snapshot_season(payload):
+    m = re.search(r"(20\d{2})", payload.get("updated", "") or "")
+    return m.group(1) if m else None
+
+
+polls = []
+avca = load_json("scraped/rankings-avca.json", {})
+rpi = load_json("scraped/rankings-rpi.json", {})
+
+rpi_season = snapshot_season(rpi)
+rpi_by_team = {}
+for row in rpi.get("data", []):
+    if (row.get("Conf") or "") == "Big 12":
+        rpi_by_team[norm_team(row.get("School", ""))] = row
+
+# RPI carries each team's official overall record — fold in the RPI rank and
+# cross-check our computed record against it (a warning, never a failure: the
+# snapshot and our sweep can legitimately sit a game apart mid-season).
+for (season, key), rec in records.items():
+    row = rpi_by_team.get(key)
+    if not row or season != rpi_season:
+        continue
+    rec["rpiRank"] = int(row["Rank"]) if str(row.get("Rank", "")).isdigit() else None
+    official = (row.get("Record") or "").strip()
+    ours = f"{rec['overallW']}-{rec['overallL']}"
+    if official and official != ours:
+        print(f"  cross-check: {rec['team']} computed {ours} vs RPI {official}")
+
+avca_season = snapshot_season(avca)
+if avca.get("data") and avca_season:
+    b12_keys = {k for (s, k) in records if s == avca_season}
+    rows = []
+    for row in avca["data"]:
+        label = str(row.get("RANK", "")).strip()  # can be a tie, e.g. "T-22."
+        digits = re.search(r"\d+", label)
+        team = re.sub(r"\s*\(\d+\)\s*$", "", row.get("TEAM", "")).strip()
+        votes = re.search(r"\((\d+)\)\s*$", row.get("TEAM", "") or "")
+        rows.append({
+            "rank": int(digits.group()) if digits else 0,
+            "rankLabel": label.rstrip("."),
+            "team": team,
+            "record": (row.get("RECORD") or "").strip(),
+            "points": (row.get("TOTAL POINTS") or "").strip(),
+            "previous": (row.get("PREVIOUS") or "").strip(),
+            "firstPlaceVotes": int(votes.group(1)) if votes else 0,
+            "big12": norm_team(team) in b12_keys,
+        })
+    polls.append({
+        "season": avca_season,
+        "name": "AVCA Coaches Poll",
+        "updated": (avca.get("updated") or "").strip(),
+        "rows": rows,
+    })
+    print(
+        f"  AVCA poll {avca_season}: {len(rows)} teams, "
+        f"{sum(1 for r in rows if r['big12'])} from the Big 12"
+    )
+
+# Sorted by conference win %, then conference wins, then overall win % — NOT
+# official Big 12 tiebreakers (those use head-to-head); the UI says as much.
+def standing_sort(rec):
+    conf_games = rec["confW"] + rec["confL"]
+    overall = rec["overallW"] + rec["overallL"]
+    return (
+        -(rec["confW"] / conf_games if conf_games else 0),
+        -rec["confW"],
+        -(rec["overallW"] / overall if overall else 0),
+        rec["team"],
+    )
+
+
+standings = []
+for rec in sorted(records.values(), key=standing_sort):
+    standings.append({k: v for k, v in rec.items() if not k.startswith("_")})
+if standings:
+    seasons = sorted({r["season"] for r in standings})
+    print(f"standings computed for seasons {', '.join(seasons)}: {len(standings)} team rows")
+
 seed = {
     "formatVersion": 1,
     "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -177,6 +300,12 @@ seed = {
     "players": sorted(players.values(), key=lambda p: p["name"]),
     "matches": [matches[k] for k in sorted(matches)],
 }
+# Additive only: formatVersion stays 1 so already-installed APKs (which reject
+# anything newer) keep syncing, and older seeds without these keys stay valid.
+if standings:
+    seed["standings"] = standings
+if polls:
+    seed["polls"] = polls
 
 os.makedirs(os.path.dirname(SEED_PATH), exist_ok=True)
 
