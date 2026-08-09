@@ -55,7 +55,11 @@ jobs:
 
       # Publish the APK to a rolling "latest-apk" release for one-tap phone
       # download:
-      # https://github.com/inspectorgad/ku-volleyball/releases/latest/download/app-debug.apk
+      # https://github.com/inspectorgad/ku-volleyball/releases/latest/download/ku-volleyball.apk
+      #
+      # The assets are renamed off Gradle's generic app-debug.apk /
+      # app-release.aab: the Diamonds app publishes its own build under exactly
+      # those names, so downloading both left two indistinguishable files.
       - name: Publish APK to rolling release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -65,9 +69,10 @@ jobs:
               --repo "$GITHUB_REPOSITORY" \
               --target "$GITHUB_SHA" \
               --title "KU Volleyball - latest build" \
-              --notes "Rolling release: always carries the newest APK with current season data. Download app-debug.apk below and install it on your Android device." \
+              --notes "Rolling release: always carries the newest APK with current season data. Download ku-volleyball.apk below and install it on your Android device." \
               --latest
-          gh release upload latest-apk app/build/outputs/apk/debug/app-debug.apk \
+          cp app/build/outputs/apk/debug/app-debug.apk ku-volleyball.apk
+          gh release upload latest-apk ku-volleyball.apk \
             --repo "$GITHUB_REPOSITORY" --clobber
           # The parsed season data rides along so the app can sync itself
           # without an APK reinstall.
@@ -76,5 +81,12 @@ jobs:
             --repo "$GITHUB_REPOSITORY" --clobber
           # Play Store bundle: download this and upload it to the Play
           # Console (internal testing) whenever the app code changes.
-          gh release upload latest-apk app/build/outputs/bundle/release/app-release.aab \
+          cp app/build/outputs/bundle/release/app-release.aab ku-volleyball.aab
+          gh release upload latest-apk ku-volleyball.aab \
             --repo "$GITHUB_REPOSITORY" --clobber
+          # Drop the pre-rename assets so the old ambiguous names cannot linger
+          # on the release. A no-op once they are gone.
+          for old in app-debug.apk app-release.aab; do
+            gh release delete-asset latest-apk "$old" \
+              --repo "$GITHUB_REPOSITORY" --yes 2>/dev/null || true
+          done

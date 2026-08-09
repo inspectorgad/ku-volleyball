@@ -5,9 +5,9 @@ Internal testing distributes the app through the Play Store itself to up to
 never interfere, and updates install automatically.
 
 CI already produces the signed Play bundle. Every build attaches
-`app-release.aab` to the rolling release:
+`ku-volleyball.aab` to the rolling release:
 
-    https://github.com/inspectorgad/ku-volleyball/releases/latest/download/app-release.aab
+    https://github.com/inspectorgad/ku-volleyball/releases/latest/download/ku-volleyball.aab
 
 ## One-time setup (about 30 minutes, $25)
 
@@ -29,7 +29,7 @@ CI already produces the signed Play bundle. Every build attaches
 
 4. **Set up internal testing**: Testing → **Internal testing** →
    **Create new release**.
-   - Upload `app-release.aab` (downloaded from the link above).
+   - Upload `ku-volleyball.aab` (downloaded from the link above).
    - Release name/notes: anything (e.g. "2025 season baked in").
    - Click **Next**, resolve any warnings, then **Save and publish** —
      internal testing releases go live in minutes, no review.
@@ -52,7 +52,7 @@ CI already produces the signed Play bundle. Every build attaches
 ## Updating the app later
 
 Season *data* updates never need a new upload — the app syncs stats itself.
-Only app *code* changes need one: download the newest `app-release.aab`
+Only app *code* changes need one: download the newest `ku-volleyball.aab`
 from the release link and upload it as a new internal-testing release
 (two minutes). CI stamps each build with an increasing `versionCode`
 (the workflow run number), so a newer AAB always uploads cleanly.

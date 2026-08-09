@@ -35,7 +35,7 @@ All data is stored locally on the device in a Room (SQLite) database.
    and merges it — gap-filling only, never overwriting user-entered data.
 
 Install the latest build directly on a phone:
-`https://github.com/inspectorgad/ku-volleyball/releases/latest/download/app-debug.apk`
+`https://github.com/inspectorgad/ku-volleyball/releases/latest/download/ku-volleyball.apk`
 
 ## Tech
 
