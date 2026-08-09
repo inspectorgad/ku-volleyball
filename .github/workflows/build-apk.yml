@@ -64,13 +64,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          NOTES="Rolling release: always carries the newest APK with current season data. Download ku-volleyball.apk below and install it on your Android device."
           gh release view latest-apk --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1 || \
             gh release create latest-apk \
               --repo "$GITHUB_REPOSITORY" \
               --target "$GITHUB_SHA" \
               --title "KU Volleyball - latest build" \
-              --notes "Rolling release: always carries the newest APK with current season data. Download ku-volleyball.apk below and install it on your Android device." \
+              --notes "$NOTES" \
               --latest
+          # Rewrite the notes every run: --notes above only applies when the
+          # release is first created, so a rename would otherwise leave the
+          # page telling people to download a file that no longer exists.
+          gh release edit latest-apk --repo "$GITHUB_REPOSITORY" --notes "$NOTES"
           cp app/build/outputs/apk/debug/app-debug.apk ku-volleyball.apk
           gh release upload latest-apk ku-volleyball.apk \
             --repo "$GITHUB_REPOSITORY" --clobber
