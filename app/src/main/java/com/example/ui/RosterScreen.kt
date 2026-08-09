@@ -155,9 +155,10 @@ private fun PlayerCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
-                if (player.position.isNotBlank()) {
+                val details = listOf(player.position, player.height).filter { it.isNotBlank() }
+                if (details.isNotEmpty()) {
                     Text(
-                        player.position,
+                        details.joinToString(" · "),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -206,6 +207,7 @@ fun PlayerDialog(
     var name by remember { mutableStateOf(player?.name ?: "") }
     var number by remember { mutableStateOf(player?.jerseyNumber ?: "") }
     var position by remember { mutableStateOf(player?.position ?: "") }
+    var height by remember { mutableStateOf(player?.height ?: "") }
     var active by remember { mutableStateOf(player?.active ?: true) }
 
     AlertDialog(
@@ -234,6 +236,13 @@ fun PlayerDialog(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
+                OutlinedTextField(
+                    value = height,
+                    onValueChange = { height = it },
+                    label = { Text("Height (e.g. 6-1)") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         "On current roster",
@@ -254,6 +263,7 @@ fun PlayerDialog(
                             name = name.trim(),
                             jerseyNumber = number.trim(),
                             position = position.trim(),
+                            height = height.trim(),
                             active = active
                         )
                     )
@@ -324,6 +334,18 @@ fun PlayerDetailScreen(
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(12.dp)) {
+                        val details = listOf(
+                            player.position,
+                            player.height.takeIf { it.isNotBlank() }?.let { "$it tall" } ?: ""
+                        ).filter { it.isNotBlank() }
+                        if (details.isNotEmpty()) {
+                            Text(
+                                details.joinToString(" · "),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
                         Text(
                             "Stats by Season",
                             style = MaterialTheme.typography.titleSmall,

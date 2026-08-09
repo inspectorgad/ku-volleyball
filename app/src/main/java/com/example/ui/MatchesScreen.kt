@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,8 +47,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.Match
+import com.example.data.MatchTeamStats
+import com.example.data.OpponentStatLine
 import com.example.data.Player
 import com.example.data.StatLine
+import com.example.stats.aggregate
 import com.example.stats.summarize
 
 @Composable
@@ -308,6 +313,8 @@ fun MatchDetailScreen(
     match: Match,
     players: List<Player>,
     statLines: List<StatLine>,
+    opponentStatLines: List<OpponentStatLine>,
+    matchTeamStats: List<MatchTeamStats>,
     onSaveMatch: (Match) -> Unit,
     onDeleteMatch: (Match) -> Unit,
     onSaveStatLine: (StatLine) -> Unit,
@@ -320,6 +327,12 @@ fun MatchDetailScreen(
 
     val matchLines = statLines.filter { it.matchId == match.id }
     val linesByPlayer = matchLines.associateBy { it.playerId }
+
+    // Kills first: on a volleyball box score that is the line everyone reads.
+    val oppLines = opponentStatLines
+        .filter { it.matchId == match.id }
+        .sortedWith(compareByDescending<OpponentStatLine> { it.kills }.thenBy { it.playerName })
+    val teamTotals = matchTeamStats.filter { it.matchId == match.id }.associateBy { it.opponent }
 
     Scaffold(
         topBar = {
@@ -389,6 +402,76 @@ fun MatchDetailScreen(
                         }
                         ResultText(match)
                     }
+                }
+            }
+
+            // Team totals come from the box score rather than the sum of the
+            // lines below: the NCAA charges some reception errors to the team.
+            if (teamTotals.isNotEmpty()) {
+                item {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                "Team Stats",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            StatsTable(
+                                rows = listOfNotNull(
+                                    teamTotals[false]?.let { "Kansas" to aggregate(listOf(it)) },
+                                    teamTotals[true]?.let { match.opponent to aggregate(listOf(it)) }
+                                ),
+                                labelWidth = 104
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (oppLines.isNotEmpty()) {
+                item {
+                    Text(
+                        "${match.opponent} Box Score",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+                items(oppLines, key = { it.id }) { line ->
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            JerseyBadge(line.jerseyNumber)
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(start = 12.dp)
+                            ) {
+                                Text(
+                                    listOf(line.playerName, line.position)
+                                        .filter { it.isNotBlank() }.joinToString(" · "),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Text(
+                                    summarize(line),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+                item {
+                    Text(
+                        "Kansas",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
                 }
             }
 

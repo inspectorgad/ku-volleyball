@@ -82,4 +82,27 @@ interface JayhawksDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPollEntries(rows: List<PollEntry>)
+
+    // Opposing box scores and both sides' team totals. Scraper-owned like the
+    // standings above, so a sync replaces a match's rows rather than gap-filling.
+    @Query("SELECT * FROM opponent_stat_lines")
+    fun observeOpponentStatLines(): Flow<List<OpponentStatLine>>
+
+    @Query("SELECT * FROM opponent_stat_lines")
+    suspend fun opponentStatLinesOnce(): List<OpponentStatLine>
+
+    @Query("DELETE FROM opponent_stat_lines WHERE matchId = :matchId")
+    suspend fun deleteOpponentStatLinesForMatch(matchId: Long)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertOpponentStatLines(rows: List<OpponentStatLine>)
+
+    @Query("SELECT * FROM match_team_stats")
+    fun observeMatchTeamStats(): Flow<List<MatchTeamStats>>
+
+    @Query("SELECT * FROM match_team_stats")
+    suspend fun matchTeamStatsOnce(): List<MatchTeamStats>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertMatchTeamStats(rows: List<MatchTeamStats>)
 }

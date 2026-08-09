@@ -1,6 +1,6 @@
 package com.example.stats
 
-import com.example.data.StatLine
+import com.example.data.VolleyballLine
 import java.util.Locale
 
 /**
@@ -43,8 +43,12 @@ data class VolleyballTotals(
         if (setsPlayed == 0) 0.0 else value / setsPlayed
 }
 
-/** Sums a set of stat lines into one totals row. */
-fun aggregate(lines: Collection<StatLine>): VolleyballTotals = VolleyballTotals(
+/**
+ * Sums a set of stat lines into one totals row. Works for Kansas lines,
+ * opposing lines, and stored team totals alike — [matches] is simply the number
+ * of rows summed, so it counts matches for per-player or per-opponent rollups.
+ */
+fun aggregate(lines: Collection<VolleyballLine>): VolleyballTotals = VolleyballTotals(
     matches = lines.size,
     setsPlayed = lines.sumOf { it.setsPlayed },
     kills = lines.sumOf { it.kills },
@@ -72,7 +76,7 @@ fun formatAverage(value: Double): String {
 fun formatPerSet(value: Double): String = String.format(Locale.US, "%.2f", value)
 
 /** Short human summary of a single match line, e.g. "15 K (.250), 10 D, 2 SA, 5 BLK". */
-fun summarize(line: StatLine): String {
+fun summarize(line: VolleyballLine): String {
     val parts = mutableListOf<String>()
     if (line.kills > 0 || line.attackAttempts > 0) {
         val pct = if (line.attackAttempts == 0) 0.0

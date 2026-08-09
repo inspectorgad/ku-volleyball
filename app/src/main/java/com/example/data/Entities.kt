@@ -48,12 +48,36 @@ data class PollEntry(
     val updated: String = ""
 )
 
+/**
+ * The twelve counting stats a volleyball box score records, shared by Kansas
+ * lines, opposing lines, and team totals so all three aggregate and format
+ * through the same code in `com.example.stats`.
+ */
+interface VolleyballLine {
+    val setsPlayed: Int
+    val kills: Int
+    val attackErrors: Int
+    val attackAttempts: Int
+    val assists: Int
+    val serviceAces: Int
+    val serviceErrors: Int
+    val digs: Int
+    val blockSolos: Int
+    val blockAssists: Int
+    val receptionErrors: Int
+    val ballHandlingErrors: Int
+}
+
 @Entity(tableName = "players")
 data class Player(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val jerseyNumber: String = "",
     val position: String = "",
+    // Roster convention, e.g. "6-1". Empty when unknown: only kuathletics.com
+    // publishes height and it lists the current roster only, so former players
+    // keep whatever height was recorded while they were on it.
+    val height: String = "",
     // On the current roster. Maintained by the nightly roster scrape; former
     // players keep their stats but are shown in a separate roster section.
     val active: Boolean = true
@@ -121,4 +145,71 @@ data class StatLine(
     val blockAssists: Int = 0,
     val receptionErrors: Int = 0,
     val ballHandlingErrors: Int = 0
+) : VolleyballLine
+
+/**
+ * One opposing player's line in a single match.
+ *
+ * Opponents are deliberately *not* rows in [Player]: names collide across teams,
+ * and the box scores only ever cover their games against Kansas, so there is no
+ * season to aggregate them into and nothing for a KU leaderboard to rank. Number
+ * and position are denormalized here for the same reason. Like standings, this
+ * is scraper-owned derived data with no user-entered fields, so a sync replaces
+ * a match's rows wholesale.
+ */
+@Entity(
+    tableName = "opponent_stat_lines",
+    foreignKeys = [
+        ForeignKey(
+            entity = Match::class,
+            parentColumns = ["id"],
+            childColumns = ["matchId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index(value = ["matchId", "playerName"], unique = true)]
 )
+data class OpponentStatLine(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val matchId: Long,
+    val playerName: String,
+    val jerseyNumber: String = "",
+    val position: String = "",
+    val setsPlayed: Int = 0,
+    val kills: Int = 0,
+    val attackErrors: Int = 0,
+    val attackAttempts: Int = 0,
+    val assists: Int = 0,
+    val serviceAces: Int = 0,
+    val serviceErrors: Int = 0,
+    val digs: Int = 0,
+    val blockSolos: Int = 0,
+    val blockAssists: Int = 0,
+    val receptionErrors: Int = 0,
+    val ballHandlingErrors: Int = 0
+) : VolleyballLine
+
+/**
+ * A match's official team totals for one side. Recorded rather than summed from
+ * the player lines because reception errors do not always reconcile: the NCAA
+ * charges some to the team instead of to a player, so summing under-reports them.
+ * Every other stat does add up. Scraper-owned, replaced on sync.
+ */
+@Entity(tableName = "match_team_stats", primaryKeys = ["matchId", "opponent"])
+data class MatchTeamStats(
+    val matchId: Long,
+    /** false = Kansas, true = the opponent. */
+    val opponent: Boolean,
+    val setsPlayed: Int = 0,
+    val kills: Int = 0,
+    val attackErrors: Int = 0,
+    val attackAttempts: Int = 0,
+    val assists: Int = 0,
+    val serviceAces: Int = 0,
+    val serviceErrors: Int = 0,
+    val digs: Int = 0,
+    val blockSolos: Int = 0,
+    val blockAssists: Int = 0,
+    val receptionErrors: Int = 0,
+    val ballHandlingErrors: Int = 0
+) : VolleyballLine

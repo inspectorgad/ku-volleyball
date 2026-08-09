@@ -183,23 +183,43 @@ try {
     return text;
   }
 
-  // Roster: lines run "Jersey Number\n<num>\n<name>\nPosition\n<pos>\n..."
+  // Roster: each player is a block that opens with "Jersey Number\n<num>\n<name>"
+  // and then lists label/value pairs — "Position", "Academic Year", "Height",
+  // "Hometown" — in an order Sidearm is free to change. So rather than counting
+  // offsets (which broke as soon as Height was wanted), scan the block for the
+  // labels we care about until the next player's block starts.
   const rosterText = await pageText('https://kuathletics.com/sports/womens-volleyball/roster');
   fs.writeFileSync('scraped/roster-page.txt', rosterText);
   const rosterLines = rosterText.split('\n').map((l) => l.trim());
+
+  // Sidearm renders heights as `6' 1''`; store the roster convention `6-1`.
+  const normalizeHeight = (raw) => {
+    const m = (raw || '').match(/(\d)\s*'\s*(\d{1,2})?/);
+    return m ? `${m[1]}-${m[2] ?? 0}` : '';
+  };
+
   const roster = [];
   for (let i = 0; i < rosterLines.length; i++) {
     if (rosterLines[i] !== 'Jersey Number') continue;
     const number = rosterLines[i + 1] || '';
     const name = rosterLines[i + 2] || '';
-    let position = '';
-    if (rosterLines[i + 3] === 'Position') position = (rosterLines[i + 4] || '').trim();
-    if (/^\d{1,2}$/.test(number) && /^[A-Za-z'.-]+( [A-Za-z'.-]+)+$/.test(name)) {
-      roster.push({ name, jerseyNumber: number, position: position.replace(/\s+$/, '') });
+    if (!/^\d{1,2}$/.test(number) || !/^[A-Za-z'.-]+( [A-Za-z'.-]+)+$/.test(name)) continue;
+    const fields = {};
+    for (let j = i + 3; j < rosterLines.length && rosterLines[j] !== 'Jersey Number'; j++) {
+      if (['Position', 'Height'].includes(rosterLines[j])) {
+        fields[rosterLines[j]] = (rosterLines[j + 1] || '').trim();
+      }
     }
+    roster.push({
+      name,
+      jerseyNumber: number,
+      position: (fields.Position || '').trim(),
+      height: normalizeHeight(fields.Height),
+    });
   }
   fs.writeFileSync('scraped/roster.json', JSON.stringify(roster, null, 1));
-  console.log(`roster: ${roster.length} players`);
+  const withHeight = roster.filter((p) => p.height).length;
+  console.log(`roster: ${roster.length} players (${withHeight} with height)`);
 
   // Upcoming matches from the site-wide scoreboard rotator:
   // "Upcoming Event: Women's Volleyball versus X on August 22, 2026 at 1 p.m. CT"

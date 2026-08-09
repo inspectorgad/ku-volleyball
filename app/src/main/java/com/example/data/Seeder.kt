@@ -61,6 +61,7 @@ object Seeder {
                 val name = p.getString("name")
                 val jersey = p.optString("jerseyNumber", "")
                 val position = p.optString("position", "")
+                val height = p.optString("height", "")
                 val active = p.optBoolean("active", true)
                 val existing = existingByKey[name.lowercase()]
                 if (existing == null) {
@@ -69,17 +70,19 @@ object Seeder {
                             name = name,
                             jerseyNumber = jersey,
                             position = position,
+                            height = height,
                             active = active
                         )
                     )
                 } else {
-                    // Roster facts (name casing, number, position, current-roster
-                    // status) are scraper-owned and refreshed on every sync; blank
-                    // seed values never erase what's already there.
+                    // Roster facts (name casing, number, position, height,
+                    // current-roster status) are scraper-owned and refreshed on
+                    // every sync; blank seed values never erase what's there.
                     val updated = existing.copy(
                         name = name,
                         jerseyNumber = jersey.ifBlank { existing.jerseyNumber },
                         position = position.ifBlank { existing.position },
+                        height = height.ifBlank { existing.height },
                         active = active
                     )
                     if (updated != existing) dao.updatePlayer(updated)
@@ -141,6 +144,11 @@ object Seeder {
                 if (updated != existing) dao.updateMatch(updated)
             }
 
+            // Opponent lines and team totals are merged before the KU stat-line
+            // guard below: a match whose KU lines are already recorded still
+            // needs its opposing box score the first time one shows up.
+            mergeOpponentBox(m, matchId, dao)
+
             if (existing != null && matchId in matchesWithLines) continue
             val lines = m.optJSONArray("lines") ?: continue
             for (j in 0 until lines.length()) {
@@ -169,6 +177,65 @@ object Seeder {
 
         mergeStandings(root, dao)
     }
+
+    /**
+     * The opposing side of one match's box score, plus both teams' official
+     * totals. Like the standings below this is scraper-owned with no
+     * user-entered fields, so a match's rows are replaced outright — that way a
+     * corrected box score actually corrects, and a player scratched from a
+     * revised line-up disappears instead of lingering. A match whose seed
+     * carries no opponent data is left exactly as it is.
+     */
+    private suspend fun mergeOpponentBox(m: JSONObject, matchId: Long, dao: JayhawksDao) {
+        m.optJSONArray("opponentLines")?.takeIf { it.length() > 0 }?.let { arr ->
+            val rows = (0 until arr.length()).map { j ->
+                val l = arr.getJSONObject(j)
+                OpponentStatLine(
+                    matchId = matchId,
+                    playerName = l.getString("player"),
+                    jerseyNumber = l.optString("jerseyNumber"),
+                    position = l.optString("position"),
+                    setsPlayed = l.optInt("sp"),
+                    kills = l.optInt("k"),
+                    attackErrors = l.optInt("e"),
+                    attackAttempts = l.optInt("ta"),
+                    assists = l.optInt("a"),
+                    serviceAces = l.optInt("sa"),
+                    serviceErrors = l.optInt("se"),
+                    digs = l.optInt("d"),
+                    blockSolos = l.optInt("bs"),
+                    blockAssists = l.optInt("ba"),
+                    receptionErrors = l.optInt("re"),
+                    ballHandlingErrors = l.optInt("bhe")
+                )
+            }
+            dao.deleteOpponentStatLinesForMatch(matchId)
+            dao.insertOpponentStatLines(rows)
+        }
+
+        val totals = listOfNotNull(
+            m.optJSONObject("teamStats")?.let { teamStats(it, matchId, opponent = false) },
+            m.optJSONObject("opponentStats")?.let { teamStats(it, matchId, opponent = true) }
+        )
+        if (totals.isNotEmpty()) dao.upsertMatchTeamStats(totals)
+    }
+
+    private fun teamStats(o: JSONObject, matchId: Long, opponent: Boolean) = MatchTeamStats(
+        matchId = matchId,
+        opponent = opponent,
+        setsPlayed = o.optInt("sp"),
+        kills = o.optInt("k"),
+        attackErrors = o.optInt("e"),
+        attackAttempts = o.optInt("ta"),
+        assists = o.optInt("a"),
+        serviceAces = o.optInt("sa"),
+        serviceErrors = o.optInt("se"),
+        digs = o.optInt("d"),
+        blockSolos = o.optInt("bs"),
+        blockAssists = o.optInt("ba"),
+        receptionErrors = o.optInt("re"),
+        ballHandlingErrors = o.optInt("bhe")
+    )
 
     /**
      * Big 12 standings and poll snapshots are scraper-derived and change after

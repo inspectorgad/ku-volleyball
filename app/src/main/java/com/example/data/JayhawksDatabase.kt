@@ -9,8 +9,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Player::class, Match::class, StatLine::class,
-        ConferenceStanding::class, PollEntry::class],
-    version = 4,
+        ConferenceStanding::class, PollEntry::class,
+        OpponentStatLine::class, MatchTeamStats::class],
+    version = 5,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -59,13 +60,50 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        // v4 -> v5: player heights, plus the opposing side of each box score —
+        // their player lines and both teams' official totals.
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE players ADD COLUMN height TEXT NOT NULL DEFAULT ''")
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS opponent_stat_lines (
+                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        matchId INTEGER NOT NULL, playerName TEXT NOT NULL,
+                        jerseyNumber TEXT NOT NULL, position TEXT NOT NULL,
+                        setsPlayed INTEGER NOT NULL, kills INTEGER NOT NULL,
+                        attackErrors INTEGER NOT NULL, attackAttempts INTEGER NOT NULL,
+                        assists INTEGER NOT NULL, serviceAces INTEGER NOT NULL,
+                        serviceErrors INTEGER NOT NULL, digs INTEGER NOT NULL,
+                        blockSolos INTEGER NOT NULL, blockAssists INTEGER NOT NULL,
+                        receptionErrors INTEGER NOT NULL, ballHandlingErrors INTEGER NOT NULL,
+                        FOREIGN KEY(matchId) REFERENCES matches(id) ON DELETE CASCADE)"""
+                )
+                db.execSQL(
+                    """CREATE UNIQUE INDEX IF NOT EXISTS
+                        index_opponent_stat_lines_matchId_playerName
+                        ON opponent_stat_lines (matchId, playerName)"""
+                )
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS match_team_stats (
+                        matchId INTEGER NOT NULL, opponent INTEGER NOT NULL,
+                        setsPlayed INTEGER NOT NULL, kills INTEGER NOT NULL,
+                        attackErrors INTEGER NOT NULL, attackAttempts INTEGER NOT NULL,
+                        assists INTEGER NOT NULL, serviceAces INTEGER NOT NULL,
+                        serviceErrors INTEGER NOT NULL, digs INTEGER NOT NULL,
+                        blockSolos INTEGER NOT NULL, blockAssists INTEGER NOT NULL,
+                        receptionErrors INTEGER NOT NULL, ballHandlingErrors INTEGER NOT NULL,
+                        PRIMARY KEY(matchId, opponent))"""
+                )
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     JayhawksDatabase::class.java,
                     "ku_volleyball.db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                     .build().also { instance = it }
             }
     }

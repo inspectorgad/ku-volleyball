@@ -40,22 +40,45 @@ matches = {}  # (date, opponent.lower()) -> match dict
 
 # Sources capitalize names inconsistently (e.g. "McCarthy" vs "Mccarthy"),
 # so players are keyed case-insensitively; the roster's spelling wins.
-def add_player(name, jersey, position, prefer=False):
+# Height only ever comes from the roster page, so box scores pass it as "".
+def add_player(name, jersey, position, height="", prefer=False):
     if not name:
         return
     existing = players.get(name.lower())
     if existing is None:
-        players[name.lower()] = {"name": name, "jerseyNumber": jersey, "position": position}
+        players[name.lower()] = {
+            "name": name, "jerseyNumber": jersey, "position": position, "height": height
+        }
     elif prefer:
         existing["name"] = name
         if jersey:
             existing["jerseyNumber"] = jersey
         if position:
             existing["position"] = position
+        if height:
+            existing["height"] = height
 
 
 def canonical_name(name):
     return players[name.lower()]["name"]
+
+
+# The twelve counting stats the app stores, in both per-player and per-team form.
+def stat_line(src):
+    return {
+        "sp": to_int(src.get("gamesPlayed")),
+        "k": to_int(src.get("kills")),
+        "e": to_int(src.get("attackErrors")),
+        "ta": to_int(src.get("attackAttempts")),
+        "a": to_int(src.get("assists")),
+        "sa": to_int(src.get("serviceAces")),
+        "se": to_int(src.get("serviceErrors")),
+        "d": to_int(src.get("digs")),
+        "bs": to_int(src.get("blockSolos")),
+        "ba": to_int(src.get("blockAssists")),
+        "re": to_int(src.get("receptionErrors")),
+        "bhe": to_int(src.get("ballHandlingErrors")),
+    }
 
 
 # --- Finished matches from NCAA box scores ---------------------------------
@@ -101,32 +124,39 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         # venue decides instead; _kuDesignatedHome only helps spot neutrals.
         "_kuDesignatedHome": ku_home,
         "lines": [],
+        "opponentLines": [],
     }
 
     ku_team_id = to_int(ku.get("teamId"))
     for tb in (data.get("box") or {}).get("teamBoxscore") or []:
-        if to_int(tb.get("teamId")) != ku_team_id:
-            continue
+        is_ku = to_int(tb.get("teamId")) == ku_team_id
+        # Team totals are recorded, not summed from the player lines: every stat
+        # does add up except reception errors, which the NCAA may charge to the
+        # team rather than a player (38 such rows across the 2025 season).
+        side_totals = stat_line(tb.get("teamStats") or {})
+        if is_ku:
+            match["teamStats"] = side_totals
+        else:
+            match["opponentStats"] = side_totals
         for p in tb.get("playerStats") or []:
             if not p.get("participated"):
                 continue
             name = f"{p.get('firstName', '').strip()} {p.get('lastName', '').strip()}".strip()
-            add_player(name, str(p.get("number") or ""), p.get("position") or "")
-            match["lines"].append({
-                "player": name,
-                "sp": to_int(p.get("gamesPlayed")),
-                "k": to_int(p.get("kills")),
-                "e": to_int(p.get("attackErrors")),
-                "ta": to_int(p.get("attackAttempts")),
-                "a": to_int(p.get("assists")),
-                "sa": to_int(p.get("serviceAces")),
-                "se": to_int(p.get("serviceErrors")),
-                "d": to_int(p.get("digs")),
-                "bs": to_int(p.get("blockSolos")),
-                "ba": to_int(p.get("blockAssists")),
-                "re": to_int(p.get("receptionErrors")),
-                "bhe": to_int(p.get("ballHandlingErrors")),
-            })
+            line = stat_line(p)
+            if is_ku:
+                add_player(name, str(p.get("number") or ""), p.get("position") or "")
+                match["lines"].append({"player": name, **line})
+            else:
+                # Opponent players are stored inline on the match rather than in
+                # the players list: names collide across teams, and we only ever
+                # see their games against KU, so there is no season to aggregate
+                # them into. Number/position are denormalized for the same reason.
+                match["opponentLines"].append({
+                    "player": name,
+                    "jerseyNumber": str(p.get("number") or ""),
+                    "position": p.get("position") or "",
+                    **line,
+                })
 
     matches[(match["date"], match["opponent"].lower())] = match
 
@@ -139,6 +169,7 @@ for entry in load_json("scraped/roster.json", []):
         name,
         str(entry.get("jerseyNumber") or ""),
         (entry.get("position") or "").strip(),
+        (entry.get("height") or "").strip(),
         prefer=True,
     )
 
@@ -146,17 +177,21 @@ for entry in load_json("scraped/roster.json", []):
 # not mass-retire the team, so with an implausibly small roster the previous
 # seed's flags are carried forward instead.
 previous_seed = load_json(SEED_PATH, {})
-previous_active = {
-    (p.get("name") or "").lower(): p.get("active", True)
-    for p in previous_seed.get("players", [])
+previous_players = {
+    (p.get("name") or "").lower(): p for p in previous_seed.get("players", [])
 }
 roster_keys = {n.lower() for n in roster_names}
 roster_valid = len(roster_keys) >= 8
 for key, player in players.items():
+    previous = previous_players.get(key, {})
     if roster_valid:
         player["active"] = key in roster_keys
     else:
-        player["active"] = previous_active.get(key, True)
+        player["active"] = previous.get("active", True)
+    # Only the roster page carries height, and it lists current players only, so
+    # a player who leaves the roster keeps the height we already knew.
+    if not player.get("height"):
+        player["height"] = previous.get("height", "")
 
 # Stat lines were recorded with whatever casing the box score used; align
 # them with the canonical player names so the app can match them up.
@@ -352,6 +387,12 @@ for rec in sorted(records.values(), key=standing_sort):
 if standings:
     seasons = sorted({r["season"] for r in standings})
     print(f"standings computed for seasons {', '.join(seasons)}: {len(standings)} team rows")
+
+opp_lines = sum(len(m.get("opponentLines") or []) for m in matches.values())
+opp_matches = sum(1 for m in matches.values() if m.get("opponentLines"))
+heights = sum(1 for p in players.values() if p.get("height"))
+print(f"opponent box scores: {opp_matches} matches, {opp_lines} player lines")
+print(f"heights: {heights}/{len(players)} players")
 
 seed = {
     "formatVersion": 1,

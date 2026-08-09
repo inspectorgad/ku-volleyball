@@ -8,6 +8,7 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Leaderboard
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -30,7 +31,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.JayhawksViewModel
 
 enum class Tab(val label: String) {
-    Roster("Roster"), Matches("Matches"), Leaders("Leaders"), Big12("Big 12")
+    Roster("Roster"), Matches("Matches"), Leaders("Leaders"),
+    Opponents("Opponents"), Big12("Big 12")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,11 +42,14 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     // Detail overlays: at most one is open at a time; back closes it.
     var openPlayerId by rememberSaveable { mutableStateOf<Long?>(null) }
     var openMatchId by rememberSaveable { mutableStateOf<Long?>(null) }
+    var openOpponent by rememberSaveable { mutableStateOf<String?>(null) }
 
     val players by viewModel.players.collectAsStateWithLifecycle()
     val matches by viewModel.matches.collectAsStateWithLifecycle()
     val statLines by viewModel.statLines.collectAsStateWithLifecycle()
     val standings by viewModel.standings.collectAsStateWithLifecycle()
+    val opponentStatLines by viewModel.opponentStatLines.collectAsStateWithLifecycle()
+    val matchTeamStats by viewModel.matchTeamStats.collectAsStateWithLifecycle()
     val pollEntries by viewModel.pollEntries.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val dataUpdatedAt by viewModel.dataUpdatedAt.collectAsStateWithLifecycle()
@@ -54,10 +59,11 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
         viewModel.syncMessages.collect { snackbarHostState.showSnackbar(it) }
     }
 
-    val showingDetail = openPlayerId != null || openMatchId != null
+    val showingDetail = openPlayerId != null || openMatchId != null || openOpponent != null
     BackHandler(enabled = showingDetail) {
         openPlayerId = null
         openMatchId = null
+        openOpponent = null
     }
 
     val openPlayer = openPlayerId?.let { id -> players.firstOrNull { it.id == id } }
@@ -80,6 +86,8 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
             match = openMatch,
             players = players,
             statLines = statLines,
+            opponentStatLines = opponentStatLines,
+            matchTeamStats = matchTeamStats,
             onSaveMatch = { viewModel.saveMatch(it) },
             onDeleteMatch = {
                 viewModel.deleteMatch(it)
@@ -88,6 +96,14 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
             onSaveStatLine = viewModel::saveStatLine,
             onDeleteStatLine = viewModel::deleteStatLine,
             onBack = { openMatchId = null }
+        )
+
+        openOpponent != null -> OpponentDetailScreen(
+            opponentName = openOpponent!!,
+            matches = matches,
+            opponentStatLines = opponentStatLines,
+            matchTeamStats = matchTeamStats,
+            onBack = { openOpponent = null }
         )
 
         else -> Scaffold(
@@ -104,6 +120,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                                         Tab.Roster -> Icons.Default.Groups
                                         Tab.Matches -> Icons.AutoMirrored.Filled.List
                                         Tab.Leaders -> Icons.Default.EmojiEvents
+                                        Tab.Opponents -> Icons.Default.Shield
                                         Tab.Big12 -> Icons.Default.Leaderboard
                                     },
                                     contentDescription = tab.label
@@ -142,6 +159,12 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                         matches = matches,
                         statLines = statLines,
                         dataUpdatedAt = dataUpdatedAt
+                    )
+
+                    Tab.Opponents -> OpponentsScreen(
+                        matches = matches,
+                        matchTeamStats = matchTeamStats,
+                        onOpenOpponent = { openOpponent = it }
                     )
 
                     Tab.Big12 -> StandingsScreen(

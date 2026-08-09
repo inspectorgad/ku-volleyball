@@ -176,6 +176,17 @@
       <table id="matches"></table>
     </section>
   </div>
+  <div class="grid two-col" id="opp-wrap" hidden>
+    <section class="card scroll">
+      <h2>Opponents <span class="muted">— versus Kansas only, click a row for their box score</span></h2>
+      <table id="opponents"></table>
+    </section>
+    <section class="card scroll" id="opp-detail">
+      <h2 id="opp-name">Opponent detail</h2>
+      <div class="sub" id="opp-sub">Select an opponent to see how their players did against KU.</div>
+      <table id="opp-log"></table>
+    </section>
+  </div>
   <footer id="foot"></footer>
 </main>
 <div id="tooltip" role="status"></div>
@@ -258,6 +269,7 @@ function render() {
   renderPlayerTable(results, lines);
   renderMatchTable(results);
   renderDetail(lines);
+  renderOpponents(results);
   renderBig12();
   document.getElementById("chart-season").textContent = season === "All" ? "· all seasons" : "· " + season;
   document.getElementById("foot").textContent =
@@ -429,8 +441,16 @@ function renderLeaders(results, lines) {
   }
 }
 
+// Height sorts on inches so 5-11 lands below 6-0 rather than above it.
+const heightOf = name => SEED.players.find(p => p.name === name)?.height ?? "";
+const heightInches = h => {
+  const m = /^(\d+)-(\d+)$/.exec(h ?? "");
+  return m ? Number(m[1]) * 12 + Number(m[2]) : 0;
+};
+
 const COLS = [
-  ["Player", p => p.name], ["MP", p => p.mp], ["SP", p => p.sp], ["K", p => p.k],
+  ["Player", p => p.name], ["Ht", p => heightInches(heightOf(p.name))],
+  ["MP", p => p.mp], ["SP", p => p.sp], ["K", p => p.k],
   ["K/S", p => p.sp ? p.k / p.sp : 0], ["PCT", p => p.pct], ["A", p => p.a],
   ["SA", p => p.sa], ["D", p => p.d], ["BLK", p => p.blk],
 ];
@@ -461,7 +481,7 @@ function renderPlayerTable(results, lines) {
     r.tabIndex = 0;
     const info = roster.get(p.name);
     r.insertCell().textContent = (info?.jerseyNumber ? "#" + info.jerseyNumber + " " : "") + p.name;
-    for (const v of [p.mp, p.sp, p.k, p.sp ? fmt2(p.k / p.sp) : "—", fmtPct(p.pct), p.a, p.sa, p.d, p.blk]) {
+    for (const v of [info?.height || "—", p.mp, p.sp, p.k, p.sp ? fmt2(p.k / p.sp) : "—", fmtPct(p.pct), p.a, p.sa, p.d, p.blk]) {
       r.insertCell().textContent = String(v);
     }
     const open = () => showDetail(p.name);
@@ -490,6 +510,7 @@ function renderDetail(lines) {
   const t = totals(mine);
   const bits = [];
   if (info?.position) bits.push(info.position);
+  if (info?.height) bits.push(info.height);
   if (info && info.active === false) bits.push("former player");
   bits.push(season === "All" ? "career" : season + " season");
   bits.push(mine.length
@@ -543,6 +564,114 @@ function renderMatchTable(results) {
     r.insertCell().appendChild(tag);
     r.insertCell().textContent = `${m.teamSets}–${m.opponentSets}`;
     const sc = r.insertCell(); sc.textContent = m.setScores ?? ""; sc.style.textAlign = "left"; sc.style.color = "var(--ink-2)";
+  }
+}
+
+// --- Opponents ---------------------------------------------------------------
+// Every figure here is versus Kansas: these box scores are KU's own matches, so
+// an opponent's row is what they did against us, not their season. Optional keys
+// — a season-data.json from before opponent capture just hides the section.
+let openOpponent = null;
+
+// Team totals come from the box score's own team line rather than the sum of the
+// player lines: the NCAA charges some reception errors to the team, not a player.
+const teamLine = (m, opp) => (opp ? m.opponentStats : m.teamStats) ?? null;
+
+function sumStats(rows) {
+  const t = { sp: 0, k: 0, e: 0, ta: 0, a: 0, sa: 0, se: 0, d: 0, bs: 0, ba: 0 };
+  for (const r of rows) for (const key of Object.keys(t)) t[key] += r[key] ?? 0;
+  t.pct = t.ta ? (t.k - t.e) / t.ta : 0;
+  t.blk = t.bs + t.ba;
+  return t;
+}
+
+function renderOpponents(results) {
+  const wrap = document.getElementById("opp-wrap");
+  const withBox = results.filter(m => (m.opponentLines ?? []).length);
+  wrap.hidden = withBox.length === 0;
+  if (wrap.hidden) return;
+
+  const byName = new Map();
+  for (const m of withBox) {
+    if (!byName.has(m.opponent)) byName.set(m.opponent, []);
+    byName.get(m.opponent).push(m);
+  }
+
+  const t = document.getElementById("opponents");
+  t.replaceChildren();
+  const head = t.createTHead().insertRow();
+  for (const h of ["Opponent", "Rec vs KU", "K", "PCT", "A", "D", "BLK"]) {
+    head.appendChild(el("th", null, h));
+  }
+  const body = t.createTBody();
+  for (const name of [...byName.keys()].sort()) {
+    const ms = byName.get(name);
+    // Stated from their side, so the column reads as the opponent's record.
+    const w = ms.filter(m => m.opponentSets > m.teamSets).length;
+    const s = sumStats(ms.map(m => teamLine(m, true)).filter(Boolean));
+    const r = body.insertRow();
+    r.tabIndex = 0;
+    const first = r.insertCell();
+    first.textContent = name;
+    first.style.textAlign = "left";
+    for (const v of [`${w}–${ms.length - w}`, s.k, fmtPct(s.pct), s.a, s.d, s.blk]) {
+      r.insertCell().textContent = String(v);
+    }
+    const open = () => { openOpponent = name; renderOpponentDetail(results); };
+    r.addEventListener("click", open);
+    r.addEventListener("keydown", ev => { if (ev.key === "Enter") open(); });
+  }
+  renderOpponentDetail(results);
+}
+
+function renderOpponentDetail(results) {
+  const nameEl = document.getElementById("opp-name");
+  const subEl = document.getElementById("opp-sub");
+  const log = document.getElementById("opp-log");
+  log.replaceChildren();
+
+  const ms = results.filter(m => m.opponent === openOpponent && (m.opponentLines ?? []).length);
+  if (!openOpponent || !ms.length) {
+    nameEl.textContent = "Opponent detail";
+    subEl.textContent = "Select an opponent to see how their players did against KU.";
+    return;
+  }
+
+  // One row per opposing player across every meeting in this season slice.
+  const byPlayer = new Map();
+  for (const m of ms) {
+    for (const l of m.opponentLines) {
+      const cur = byPlayer.get(l.player) ?? { info: l, rows: [] };
+      cur.rows.push(l);
+      byPlayer.set(l.player, cur);
+    }
+  }
+
+  const theirs = sumStats(ms.map(m => teamLine(m, true)).filter(Boolean));
+  const ours = sumStats(ms.map(m => teamLine(m, false)).filter(Boolean));
+  nameEl.textContent = openOpponent;
+  subEl.textContent =
+    `${ms.length} ${ms.length === 1 ? "meeting" : "meetings"} · ` +
+    `${openOpponent} ${fmtPct(theirs.pct)} on ${theirs.ta} attempts · ` +
+    `Kansas ${fmtPct(ours.pct)} on ${ours.ta}`;
+
+  const head = log.createTHead().insertRow();
+  for (const h of ["Player", "SP", "K", "PCT", "A", "SA", "D", "BLK"]) {
+    head.appendChild(el("th", null, h));
+  }
+  const body = log.createTBody();
+  const rows = [...byPlayer.values()]
+    .map(v => ({ info: v.info, t: sumStats(v.rows) }))
+    .sort((a, b) => b.t.k - a.t.k);
+  for (const { info, t } of rows) {
+    const r = body.insertRow();
+    const first = r.insertCell();
+    first.textContent = (info.jerseyNumber ? "#" + info.jerseyNumber + " " : "") + info.player +
+      (info.position ? ` (${info.position})` : "");
+    first.style.textAlign = "left";
+    for (const v of [t.sp, t.k, fmtPct(t.pct), t.a, t.sa, t.d, t.blk]) {
+      r.insertCell().textContent = String(v);
+    }
   }
 }
 
