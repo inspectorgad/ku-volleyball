@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-08-07T10:04:17Z",
+ "generatedAt": "2026-08-09T09:43:02Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -6588,12 +6588,6 @@
    "home": false
   },
   {
-   "date": "2026-08-08",
-   "opponent": "Crimson & Blue Intrasquad",
-   "season": "2026",
-   "home": true
-  },
-  {
    "date": "2026-08-15",
    "opponent": "Alumni Match",
    "season": "2026",
@@ -6646,6 +6640,12 @@
    "opponent": "Tulsa",
    "season": "2026",
    "home": true
+  },
+  {
+   "date": "2026-09-15",
+   "opponent": "Wichita State",
+   "season": "2026",
+   "home": false
   }
  ],
  "standings": [
