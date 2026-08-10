@@ -12,6 +12,10 @@ on:
       - 'scrape-trigger.txt'
       - 'scripts/scrape-ku-volleyball.mjs'
       - 'scripts/update-seed.py'
+      # A roster URL or parser change should verify itself on the spot rather
+      # than wait for the next nightly cron.
+      - 'scripts/opponent-sites.json'
+      - 'scripts/roster-parser.mjs'
       - '.github/workflows/scrape-data.yml'
 
 permissions:
