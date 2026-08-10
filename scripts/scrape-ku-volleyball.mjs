@@ -295,29 +295,51 @@ try {
   // ship the page with every view empty until one is chosen, so each toggle is
   // clicked in turn and the caller re-parses after. Any click that fails is
   // ignored: this is an attempt to coax a stubborn page, not a required step.
+  // Returns the toggles it managed to click, so a miss can report whether this
+  // even had anything to work with.
   async function clickViewToggles(page) {
+    const clicked = [];
     for (const label of ['Table View', 'List View', 'Card View']) {
       try {
         const button = page.getByText(label, { exact: false }).first();
-        if (await button.count()) await button.click({ timeout: 3_000 });
+        if (await button.count()) {
+          await button.click({ timeout: 3_000 });
+          clicked.push(label);
+        }
       } catch {
         /* toggle absent or not clickable — nothing to coax */
       }
     }
+    return clicked;
   }
 
   async function rosterFromPage(url) {
     const page = await context.newPage();
-    // Everything the page fetches as JSON, kept for the schools whose roster
-    // never becomes text. Bounded so a chatty site cannot exhaust memory.
+    // The JSON a page fetches, kept for the schools whose roster never becomes
+    // text. Only the school's own requests: an athletics page fires dozens of
+    // advertising bid requests, all of them JSON, and on Texas Tech they filled
+    // the whole budget before the roster was ever requested. A path naming a
+    // roster is kept whatever the host, since some schools serve their data from
+    // a separate domain.
+    const siteDomain = new URL(url).hostname.split('.').slice(-2).join('.');
+    const worthKeeping = (u) => {
+      try {
+        const { hostname, pathname } = new URL(u);
+        return hostname.endsWith(siteDomain) || /roster|athlete|player/i.test(pathname);
+      } catch {
+        return false;
+      }
+    };
     const payloads = [];
     const jsonUrls = [];
     page.on('response', async (res) => {
       try {
-        if (payloads.length >= 40) return;
+        if (payloads.length >= 60) return;
         if (!/json/i.test(res.headers()['content-type'] || '')) return;
-        payloads.push(await res.json());
-        jsonUrls.push(res.url());
+        if (!worthKeeping(res.url())) return;
+        const body = await res.json();
+        payloads.push(body);
+        jsonUrls.push(`${res.url()} (${JSON.stringify(body).length} bytes)`);
       } catch {
         /* redirected, aborted, or not really JSON — nothing to keep */
       }
@@ -326,6 +348,7 @@ try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 });
       let text = '';
       let players = [];
+      let toggles = [];
       for (let attempt = 0; attempt < 12; attempt++) {
         await page.waitForTimeout(1_500);
         await page.evaluate(() => window.scrollBy(0, 1400));
@@ -336,7 +359,7 @@ try {
         // headers — with no rows in it, and the rows arrive only once a view is
         // selected. Clicking the toggles is harmless on the sites that need no
         // help, since a page without them simply has nothing to click.
-        if (attempt === 3) await clickViewToggles(page);
+        if (attempt === 3) toggles = await clickViewToggles(page);
       }
       if (players.length < 8) {
         // No roster in the text. Fall back to the data the page was handed:
@@ -357,7 +380,7 @@ try {
       // renders no roster leaves nothing in it to diagnose from, so the markup
       // is kept alongside for the misses.
       const html = await page.content();
-      return { text, players, html, jsonUrls };
+      return { text, players, html, jsonUrls, toggles };
     } finally {
       await page.close();
     }
@@ -393,7 +416,7 @@ try {
       // Some roster tables render well after domcontentloaded, so keep
       // scrolling and re-reading until the parser finds players. Using the
       // parse as the readiness signal avoids guessing at a per-site selector.
-      const { text, players, html, jsonUrls } = await rosterFromPage(url);
+      const { text, players, html, jsonUrls, toggles } = await rosterFromPage(url);
       const miss = `scraped/roster-miss-${key.replace(/\s+/g, '-')}`;
       // A volleyball roster is ~13-20 players. Anything under this floor means
       // we matched stray page furniture rather than the roster - Arizona St.'s
@@ -408,9 +431,8 @@ try {
         failed.push(`${displayName} (parsed ${players.length}, below the ${MIN_ROSTER} floor; page saved)`);
         // The JSON the page fetched is the shortest route to where the roster
         // actually lives, so the URLs go in the log rather than into a file.
-        if (jsonUrls?.length) {
-          console.log(`  ${displayName} fetched JSON from:\n    ${jsonUrls.join('\n    ')}`);
-        }
+        console.log(`  ${displayName} view toggles clicked: ${toggles?.join(', ') || 'none found'}`);
+        console.log(`  ${displayName} fetched its own JSON from:\n    ${jsonUrls?.join('\n    ') || '(none)'}`);
         continue;
       }
       rosters[key] = {
