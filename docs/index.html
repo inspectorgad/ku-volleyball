@@ -644,7 +644,7 @@ function renderScouting() {
 
 // Mirrors norm_team() in update-seed.py so names match across sources.
 const normTeam = name => (name ?? "")
-  .replace(/\s*\(\d+\)\s*$/, "")
+  .replace(/\s*\((?:\d+|exh\.?|exhibition)\)\s*$/i, "")
   .toLowerCase()
   .replace(/\./g, "")
   .replace(/\bstate\b/g, "st")

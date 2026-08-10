@@ -41,9 +41,12 @@ index.opponentGames ??= {};
 // only for the current season, since that is the only one anybody asks about,
 // and it keeps this off the already-swept historical dates.
 const CURRENT_SEASON = SEASONS.map(Number).sort().at(-1);
+// Mirrors norm_team() in update-seed.py. Strips the poll-vote count the NCAA
+// appends and the "(Exh.)" kuathletics adds to exhibitions — the latter is why
+// the season opener against Creighton matched nothing on the first run.
 const normTeamName = (name) =>
   (name || '')
-    .replace(/\s*\(\d+\)\s*$/, '')
+    .replace(/\s*\((?:\d+|exh\.?|exhibition)\)\s*$/i, '')
     .toLowerCase()
     .replace(/\./g, '')
     .replace(/\bstate\b/g, 'st')
@@ -291,24 +294,14 @@ try {
   const sites = JSON.parse(fs.readFileSync('scripts/opponent-sites.json', 'utf8'));
   const siteMap = { ...sites.verified, ...sites.unverified };
 
-  // Mirrors norm_team() in update-seed.py.
-  const normTeam = (name) =>
-    (name || '')
-      .replace(/\s*\(\d+\)\s*$/, '')
-      .toLowerCase()
-      .replace(/\./g, '')
-      .replace(/\bstate\b/g, 'st')
-      .replace(/\s+/g, ' ')
-      .trim();
-
   const wanted = new Map();
-  for (const u of uniqueUpcoming) wanted.set(normTeam(u.opponent), u.opponent);
+  for (const u of uniqueUpcoming) wanted.set(normTeamName(u.opponent), u.opponent);
   for (const g of Object.values(index.big12Games)) {
     for (const side of [g.home, g.away]) {
-      if (side.inConference) wanted.set(normTeam(side.name), side.name);
+      if (side.inConference) wanted.set(normTeamName(side.name), side.name);
     }
   }
-  wanted.delete(normTeam('Kansas')); // already scraped above
+  wanted.delete(normTeamName('Kansas')); // already scraped above
 
   const ROSTERS_PATH = 'scraped/opponent-rosters.json';
   const previous = fs.existsSync(ROSTERS_PATH)
@@ -327,7 +320,12 @@ try {
     try {
       const text = await pageText(url);
       const players = parseRoster(text);
-      if (!players.length) { failed.push(`${displayName} (parsed 0)`); continue; }
+      if (!players.length) {
+        // Keep the page so the layout can be added without a separate probe.
+        fs.writeFileSync(`scraped/roster-miss-${key.replace(/\s+/g, '-')}.txt`, text);
+        failed.push(`${displayName} (parsed 0, page saved)`);
+        continue;
+      }
       rosters[key] = {
         team: displayName,
         url,

@@ -256,7 +256,8 @@ if played:
 # endpoint could not do.
 def norm_team(name):
     """Canonical key for cross-source name matching ('Iowa State'/'Iowa St.')."""
-    n = re.sub(r"\s*\(\d+\)\s*$", "", name or "").lower()  # strip poll votes
+    # Strips the NCAA's poll-vote count and kuathletics' "(Exh.)" suffix.
+    n = re.sub(r"\s*\((?:\d+|[Ee]xh\.?|[Ee]xhibition)\)\s*$", "", name or "").lower()
     n = n.replace(".", "")
     n = re.sub(r"\bstate\b", "st", n)
     return re.sub(r"\s+", " ", n).strip()
