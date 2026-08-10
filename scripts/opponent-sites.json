@@ -6,10 +6,11 @@
     "(kuathletics.com, uhcougars.com, goshockers.com), so this map is written",
     "by hand and verified by the scrape log rather than guessed at runtime.",
     "",
-    "'verified' entries were confirmed to load and parse. 'unverified' ones are",
-    "best guesses for Big 12 schools Kansas has not faced yet this season; the",
-    "nightly log names any that fail so they can be corrected. A team missing",
-    "A team missing from this map is skipped, never an error. ucf's URL returns 404 - the correct path still needs finding, and until then the nightly log names it every run."
+    "The path is not uniform either: most schools use /sports/womens-volleyball/,",
+    "but UCF uses /sports/volleyball/. Guessing the domain is not enough - each",
+    "entry has to be confirmed against the log.",
+    "",
+    "A team missing from this map is skipped, never an error."
   ],
   "verified": {
     "arizona": "https://arizonawildcats.com/sports/womens-volleyball/roster",
@@ -32,11 +33,10 @@
     "tcu": "https://gofrogs.com/sports/womens-volleyball/roster",
     "texas tech": "https://texastech.com/sports/womens-volleyball/roster",
     "tulsa": "https://tulsahurricane.com/sports/womens-volleyball/roster",
+    "ucf": "https://ucfknights.com/sports/volleyball/roster",
     "utah": "https://utahutes.com/sports/womens-volleyball/roster",
     "west virginia": "https://wvusports.com/sports/womens-volleyball/roster",
     "wichita st": "https://goshockers.com/sports/womens-volleyball/roster"
   },
-  "unverified": {
-    "ucf": "https://ucfknights.com/sports/womens-volleyball/roster"
-  }
+  "unverified": {}
 }
