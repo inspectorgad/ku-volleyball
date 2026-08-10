@@ -291,6 +291,21 @@ try {
   // Rosters barely move once a season starts, so this refreshes weekly rather
   // than nightly — except for a team we have never fetched, which is pulled on
   // the first run that needs it.
+  // Sidearm offers the same roster as a table, a list and cards. Some schools
+  // ship the page with every view empty until one is chosen, so each toggle is
+  // clicked in turn and the caller re-parses after. Any click that fails is
+  // ignored: this is an attempt to coax a stubborn page, not a required step.
+  async function clickViewToggles(page) {
+    for (const label of ['Table View', 'List View', 'Card View']) {
+      try {
+        const button = page.getByText(label, { exact: false }).first();
+        if (await button.count()) await button.click({ timeout: 3_000 });
+      } catch {
+        /* toggle absent or not clickable — nothing to coax */
+      }
+    }
+  }
+
   async function rosterFromPage(url) {
     const page = await context.newPage();
     try {
@@ -303,8 +318,18 @@ try {
         text = await page.evaluate(() => (document.body ? document.body.innerText : ''));
         players = parseRoster(text);
         if (players.length >= 8) break;
+        // Texas Tech renders the roster shell — the view toggles and the column
+        // headers — with no rows in it, and the rows only arrive once a view is
+        // selected. Clicking the toggles is harmless on the sites that need no
+        // help, since a page without them simply has nothing to click.
+        if (attempt === 3) await clickViewToggles(page);
       }
-      return { text, players };
+      // The rendered text is what the parser sees, but a page that renders no
+      // roster at all leaves nothing in it to diagnose from. The markup usually
+      // still carries the data (an embedded JSON blob, an API path), so it is
+      // kept alongside for the misses.
+      const html = await page.content();
+      return { text, players, html };
     } finally {
       await page.close();
     }
@@ -340,14 +365,18 @@ try {
       // Some roster tables render well after domcontentloaded, so keep
       // scrolling and re-reading until the parser finds players. Using the
       // parse as the readiness signal avoids guessing at a per-site selector.
-      const { text, players } = await rosterFromPage(url);
+      const { text, players, html } = await rosterFromPage(url);
+      const miss = `scraped/roster-miss-${key.replace(/\s+/g, '-')}`;
       // A volleyball roster is ~13-20 players. Anything under this floor means
       // we matched stray page furniture rather than the roster - Arizona St.'s
       // scoreboard yields a single phantom "San Diego" - and a partial roster
       // is worse than none, so it is refused and the page kept for diagnosis.
       const MIN_ROSTER = 8;
       if (players.length < MIN_ROSTER) {
-        fs.writeFileSync(`scraped/roster-miss-${key.replace(/\s+/g, '-')}.txt`, text);
+        fs.writeFileSync(`${miss}.txt`, text);
+        // Capped because a school's markup can run to megabytes, and the part
+        // that identifies where the data really comes from is near the top.
+        fs.writeFileSync(`${miss}.html`, html.slice(0, 500_000));
         failed.push(`${displayName} (parsed ${players.length}, below the ${MIN_ROSTER} floor; page saved)`);
         continue;
       }
@@ -358,12 +387,22 @@ try {
         players,
       };
       fetched++;
-      fs.rmSync(`scraped/roster-miss-${key.replace(/\s+/g, '-')}.txt`, { force: true });
+      fs.rmSync(`${miss}.txt`, { force: true });
+      fs.rmSync(`${miss}.html`, { force: true });
       console.log(`  roster ${displayName}: ${players.length} players ` +
         `(${players.filter((p) => p.height).length} with height)`);
     } catch (e) {
       failed.push(`${displayName} (${e.message.split('\n')[0]})`);
     }
+  }
+  // A team that failed once and parses now keeps its stale miss page around,
+  // because the weekly refresh skips it and so never reaches the cleanup above.
+  // Sweeping every stored team means the saved pages are only the open cases.
+  for (const [key, stored] of Object.entries(rosters)) {
+    if (!stored?.players?.length) continue;
+    const miss = `scraped/roster-miss-${key.replace(/\s+/g, '-')}`;
+    fs.rmSync(`${miss}.txt`, { force: true });
+    fs.rmSync(`${miss}.html`, { force: true });
   }
   fs.writeFileSync(ROSTERS_PATH, JSON.stringify(rosters, null, 1));
   console.log(`opponent rosters: ${Object.keys(rosters).length} teams stored, ${fetched} refreshed this run`);
