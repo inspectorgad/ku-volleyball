@@ -230,10 +230,22 @@ fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 1));
 // Best-effort: NCAA data alone keeps results flowing if Sidearm blocks us.
 try {
   const browser = await chromium.launch();
+  // Setting userAgent alone leaves the Client Hints headers untouched, so we
+  // were announcing two different identities: a UA string claiming Chrome 126
+  // while sec-ch-ua said HeadlessChrome 131. Both are now derived from the
+  // browser actually running, so they agree and neither goes stale when
+  // Playwright updates Chromium.
+  const major = /^(\d+)/.exec(browser.version())?.[1] ?? '131';
   const context = await browser.newContext({
     userAgent:
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
+      `(KHTML, like Gecko) Chrome/${major}.0.0.0 Safari/537.36`,
     viewport: { width: 1400, height: 2400 },
+    extraHTTPHeaders: {
+      'sec-ch-ua': `"Chromium";v="${major}", "Google Chrome";v="${major}", "Not_A Brand";v="24"`,
+      'sec-ch-ua-mobile': '?0',
+      'sec-ch-ua-platform': '"Windows"',
+    },
   });
 
   async function pageText(url) {
