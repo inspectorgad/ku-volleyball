@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-08-10T01:55:32Z",
+ "generatedAt": "2026-08-10T02:04:26Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -9618,7 +9618,8 @@
      "bs": 1,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-10"
     },
     {
      "player": "Ava Ledebuhr",
@@ -9635,7 +9636,8 @@
      "bs": 0,
      "ba": 0,
      "re": 1,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-8"
     },
     {
      "player": "Gretchen Sigman",
@@ -9754,7 +9756,8 @@
      "bs": 0,
      "ba": 1,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-1"
     },
     {
      "player": "Elliott Mickelberry",
@@ -9771,7 +9774,8 @@
      "bs": 0,
      "ba": 5,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-2"
     }
    ],
    "opponentStats": {
@@ -10726,7 +10730,8 @@
      "bs": 0,
      "ba": 1,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-10"
     },
     {
      "player": "Ava Ledebuhr",
@@ -10743,7 +10748,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-8"
     },
     {
      "player": "Sydney Nolan",
@@ -10760,7 +10766,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-4"
     },
     {
      "player": "Carly Glendinning",
@@ -10879,7 +10886,8 @@
      "bs": 0,
      "ba": 1,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-2"
     }
    ],
    "teamStats": {
@@ -11929,7 +11937,8 @@
      "bs": 0,
      "ba": 1,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-3"
     },
     {
      "player": "Alex Bower",
@@ -11946,7 +11955,8 @@
      "bs": 2,
      "ba": 1,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-11"
     },
     {
      "player": "Hannah Billeter",
@@ -11997,7 +12007,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-2"
     },
     {
      "player": "Brielle Kemavor",
@@ -12014,7 +12025,8 @@
      "bs": 1,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-5"
     },
     {
      "player": "Suli Davis",
@@ -12048,7 +12060,8 @@
      "bs": 0,
      "ba": 1,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-2"
     },
     {
      "player": "Elena Wallace",
@@ -15326,6 +15339,234 @@
      "jerseyNumber": "37",
      "position": "OH",
      "height": "6-1"
+    }
+   ]
+  },
+  {
+   "team": "BYU",
+   "fetchedAt": "2026-08-10T02:03:45.383Z",
+   "players": [
+    {
+     "player": "Kate Prior",
+     "jerseyNumber": "1",
+     "position": "Middle Blocker/Opposite Hitter",
+     "height": "6-4"
+    },
+    {
+     "player": "Elli Mortensen",
+     "jerseyNumber": "2",
+     "position": "Outside Hitter",
+     "height": "6-2"
+    },
+    {
+     "player": "Kaylee Tingey",
+     "jerseyNumber": "3",
+     "position": "Libero",
+     "height": "5-8"
+    },
+    {
+     "player": "Brooke Hardy",
+     "jerseyNumber": "4",
+     "position": "Middle Blocker",
+     "height": "6-0"
+    },
+    {
+     "player": "Lulu Po'uha",
+     "jerseyNumber": "5",
+     "position": "Libero",
+     "height": "5-8"
+    },
+    {
+     "player": "Rachel Jepsen",
+     "jerseyNumber": "6",
+     "position": "Middle Blocker",
+     "height": "6-4"
+    },
+    {
+     "player": "Alex Bower",
+     "jerseyNumber": "7",
+     "position": "Setter",
+     "height": "5-11"
+    },
+    {
+     "player": "Anna Blamires",
+     "jerseyNumber": "8",
+     "position": "Opposite Hitter",
+     "height": "6-2"
+    },
+    {
+     "player": "Grace Fredrick",
+     "jerseyNumber": "9",
+     "position": "Setter",
+     "height": "5-11"
+    },
+    {
+     "player": "Emma Barbero",
+     "jerseyNumber": "10",
+     "position": "Libero",
+     "height": "5-7"
+    },
+    {
+     "player": "Addie Benson",
+     "jerseyNumber": "11",
+     "position": "Outside Hitter",
+     "height": "6-2"
+    },
+    {
+     "player": "Claire Little Chambers",
+     "jerseyNumber": "12",
+     "position": "Outside Hitter",
+     "height": "6-3"
+    },
+    {
+     "player": "Dimitra Nanou",
+     "jerseyNumber": "15",
+     "position": "Outside Hitter",
+     "height": "6-0"
+    },
+    {
+     "player": "Kelli Jo Burgess",
+     "jerseyNumber": "17",
+     "position": "Middle Blocker",
+     "height": "6-2"
+    },
+    {
+     "player": "Abby Hoybjerg",
+     "jerseyNumber": "18",
+     "position": "Middle Blocker",
+     "height": "6-2"
+    },
+    {
+     "player": "Kaylie Kofe",
+     "jerseyNumber": "20",
+     "position": "Setter",
+     "height": "5-8"
+    },
+    {
+     "player": "Kylie Buttars",
+     "jerseyNumber": "21",
+     "position": "Outside Hitter",
+     "height": "6-1"
+    },
+    {
+     "player": "Sophia Callahan",
+     "jerseyNumber": "22",
+     "position": "Outside Hitter",
+     "height": "6-2"
+    },
+    {
+     "player": "Brielle Kemavor",
+     "jerseyNumber": "24",
+     "position": "Middle Blocker",
+     "height": "6-5"
+    }
+   ]
+  },
+  {
+   "team": "Cincinnati",
+   "fetchedAt": "2026-08-10T02:03:47.930Z",
+   "players": [
+    {
+     "player": "Andi Spies",
+     "jerseyNumber": "0",
+     "position": "S",
+     "height": "5-10"
+    },
+    {
+     "player": "Ava Ledebuhr",
+     "jerseyNumber": "1",
+     "position": "L/DS",
+     "height": "5-8"
+    },
+    {
+     "player": "Sydney Nolan",
+     "jerseyNumber": "2",
+     "position": "OH",
+     "height": "6-4"
+    },
+    {
+     "player": "Lily Rolfes",
+     "jerseyNumber": "3",
+     "position": "S",
+     "height": "5-9"
+    },
+    {
+     "player": "Audrey Rome",
+     "jerseyNumber": "4",
+     "position": "MB",
+     "height": "6-3"
+    },
+    {
+     "player": "Lilian Entenmann",
+     "jerseyNumber": "5",
+     "position": "MB",
+     "height": "6-1"
+    },
+    {
+     "player": "Kate Lijic",
+     "jerseyNumber": "6",
+     "position": "S",
+     "height": "6-0"
+    },
+    {
+     "player": "Andrea Simovski",
+     "jerseyNumber": "7",
+     "position": "OH",
+     "height": "6-1"
+    },
+    {
+     "player": "Ligia Williams",
+     "jerseyNumber": "8",
+     "position": "MB",
+     "height": "5-11"
+    },
+    {
+     "player": "Kayla Hostetler",
+     "jerseyNumber": "9",
+     "position": "L/DS",
+     "height": "5-6"
+    },
+    {
+     "player": "Nina Scrucca",
+     "jerseyNumber": "11",
+     "position": "OPP",
+     "height": "6-0"
+    },
+    {
+     "player": "Malayna Boyles",
+     "jerseyNumber": "12",
+     "position": "OH",
+     "height": "6-1"
+    },
+    {
+     "player": "Kayla Edginton",
+     "jerseyNumber": "13",
+     "position": "RS/OH",
+     "height": "6-2"
+    },
+    {
+     "player": "Julia Horan",
+     "jerseyNumber": "14",
+     "position": "MB",
+     "height": "6-2"
+    },
+    {
+     "player": "Elliott Mickelberry",
+     "jerseyNumber": "15",
+     "position": "MB",
+     "height": "6-2"
+    },
+    {
+     "player": "Izzy Busignani",
+     "jerseyNumber": "16",
+     "position": "OH",
+     "height": "6-1"
+    },
+    {
+     "player": "Viktoria Ninova",
+     "jerseyNumber": "21",
+     "position": "L",
+     "height": "5-8"
     }
    ]
   },
