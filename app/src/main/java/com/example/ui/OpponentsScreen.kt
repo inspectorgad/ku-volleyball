@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.Match
 import com.example.data.MatchTeamStats
+import com.example.data.OpponentRosterEntry
 import com.example.data.OpponentStatLine
 import com.example.stats.VolleyballTotals
 import com.example.stats.aggregate
@@ -178,6 +179,7 @@ fun OpponentDetailScreen(
     matches: List<Match>,
     opponentStatLines: List<OpponentStatLine>,
     matchTeamStats: List<MatchTeamStats>,
+    opponentRoster: List<OpponentRosterEntry>,
     onBack: () -> Unit
 ) {
     val theirMatches = matches
@@ -188,6 +190,10 @@ fun OpponentDetailScreen(
     val stats = matchTeamStats.filter { it.matchId in ids }
 
     // One row per opposing player across every meeting with Kansas.
+    val heightByName = opponentRoster
+        .filter { it.team.equals(opponentName, true) && it.height.isNotBlank() }
+        .associate { it.playerName.lowercase() to it.height }
+
     val byPlayer = lines.groupBy { it.playerName }
         .map { (name, rows) ->
             Triple(name, rows.first(), aggregate(rows))
@@ -304,8 +310,15 @@ fun OpponentDetailScreen(
                                     .padding(start = 12.dp)
                             ) {
                                 Text(
-                                    listOf(name, sample.position)
-                                        .filter { it.isNotBlank() }.joinToString(" · "),
+                                    listOf(
+                                        name,
+                                        sample.position,
+                                        // Height comes from the roster scrape; a
+                                        // box score never carries it.
+                                        sample.height.ifBlank {
+                                            heightByName[name.lowercase()] ?: ""
+                                        }
+                                    ).filter { it.isNotBlank() }.joinToString(" · "),
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold
                                 )

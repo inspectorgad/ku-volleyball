@@ -176,6 +176,11 @@
       <table id="matches"></table>
     </section>
   </div>
+  <section class="card scroll" id="scout-wrap" hidden>
+    <h2>Scouting the next opponents <span class="muted">— published rosters, before the match</span></h2>
+    <div class="sub" id="scout-sub"></div>
+    <div id="scout"></div>
+  </section>
   <div class="grid two-col" id="opp-wrap" hidden>
     <section class="card scroll">
       <h2>Opponents <span class="muted">— versus Kansas only, click a row for their box score</span></h2>
@@ -270,6 +275,7 @@ function render() {
   renderMatchTable(results);
   renderDetail(lines);
   renderOpponents(results);
+  renderScouting();
   renderBig12();
   document.getElementById("chart-season").textContent = season === "All" ? "· all seasons" : "· " + season;
   document.getElementById("foot").textContent =
@@ -567,6 +573,84 @@ function renderMatchTable(results) {
   }
 }
 
+// --- Scouting: rosters for matches not yet played -----------------------------
+// The NCAA publishes no roster endpoint, so these come from each opponent's own
+// athletics site. Season stats appear alongside once that opponent has played.
+function renderScouting() {
+  const wrap = document.getElementById("scout-wrap");
+  // Deliberately ignores the season chips: those scope Kansas' own history,
+  // whereas "who do we play next" always looks forward from today.
+  const upcoming = SEED.matches
+    .filter(m => m.teamSets == null)
+    .sort((a, b) => (a.date < b.date ? -1 : 1));
+  const rosters = SEED.opponentRosters ?? [];
+  const form = new Map((SEED.opponentForm ?? []).map(f => [normTeam(f.team), f]));
+  const host = document.getElementById("scout");
+  host.replaceChildren();
+
+  // Only teams actually on the schedule, in the order they are played.
+  const seen = new Set();
+  const next = [];
+  for (const m of upcoming) {
+    const key = normTeam(m.opponent);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const roster = rosters.find(r => normTeam(r.team) === key);
+    if (roster) next.push({ match: m, roster, form: form.get(key) });
+  }
+  wrap.hidden = next.length === 0;
+  if (wrap.hidden) return;
+
+  document.getElementById("scout-sub").textContent =
+    `${next.length} of the next opponents have a published roster available.`;
+
+  for (const { match, roster, form: f } of next.slice(0, 4)) {
+    const h = el("h3", null, `${siteWord(match)} ${roster.team}`);
+    h.style.margin = "18px 0 2px";
+    host.appendChild(h);
+    const when = el("div", "sub", match.date + (f ? ` · ${f.matches} matches played this season` : " · no matches played yet"));
+    host.appendChild(when);
+
+    const t = el("table");
+    const head = t.createTHead().insertRow();
+    for (const c of ["#", "Player", "Pos", "Ht", f ? "K" : "", f ? "PCT" : "", f ? "D" : ""].filter(Boolean)) {
+      const th = head.appendChild(el("th", null, c));
+      // The name column is left-aligned, so its header has to be too.
+      if (c === "Player") th.style.textAlign = "left";
+    }
+    const body = t.createTBody();
+    const byName = new Map((f?.players ?? []).map(p => [p.player.toLowerCase(), p]));
+    const rows = [...roster.players].sort(
+      (a, b) => (Number(a.jerseyNumber) || 99) - (Number(b.jerseyNumber) || 99));
+    for (const p of rows) {
+      const r = body.insertRow();
+      r.insertCell().textContent = p.jerseyNumber || "—";
+      const nameCell = r.insertCell();
+      nameCell.textContent = p.player;
+      nameCell.style.textAlign = "left";
+      r.insertCell().textContent = p.position || "—";
+      r.insertCell().textContent = p.height || "—";
+      if (f) {
+        const s = byName.get(p.player.toLowerCase());
+        const pct = s && s.ta ? (s.k - s.e) / s.ta : null;
+        r.insertCell().textContent = s ? s.k : "—";
+        r.insertCell().textContent = pct === null ? "—" : fmtPct(pct);
+        r.insertCell().textContent = s ? s.d : "—";
+      }
+    }
+    host.appendChild(t);
+  }
+}
+
+// Mirrors norm_team() in update-seed.py so names match across sources.
+const normTeam = name => (name ?? "")
+  .replace(/\s*\(\d+\)\s*$/, "")
+  .toLowerCase()
+  .replace(/\./g, "")
+  .replace(/\bstate\b/g, "st")
+  .replace(/\s+/g, " ")
+  .trim();
+
 // --- Opponents ---------------------------------------------------------------
 // Every figure here is versus Kansas: these box scores are KU's own matches, so
 // an opponent's row is what they did against us, not their season. Optional keys
@@ -656,7 +740,7 @@ function renderOpponentDetail(results) {
     `Kansas ${fmtPct(ours.pct)} on ${ours.ta}`;
 
   const head = log.createTHead().insertRow();
-  for (const h of ["Player", "SP", "K", "PCT", "A", "SA", "D", "BLK"]) {
+  for (const h of ["Player", "Ht", "SP", "K", "PCT", "A", "SA", "D", "BLK"]) {
     head.appendChild(el("th", null, h));
   }
   const body = log.createTBody();
@@ -669,7 +753,7 @@ function renderOpponentDetail(results) {
     first.textContent = (info.jerseyNumber ? "#" + info.jerseyNumber + " " : "") + info.player +
       (info.position ? ` (${info.position})` : "");
     first.style.textAlign = "left";
-    for (const v of [t.sp, t.k, fmtPct(t.pct), t.a, t.sa, t.d, t.blk]) {
+    for (const v of [info.height || "—", t.sp, t.k, fmtPct(t.pct), t.a, t.sa, t.d, t.blk]) {
       r.insertCell().textContent = String(v);
     }
   }

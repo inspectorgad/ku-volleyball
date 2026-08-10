@@ -175,6 +175,53 @@ data class OpponentStatLine(
     val playerName: String,
     val jerseyNumber: String = "",
     val position: String = "",
+    // From the opponent's roster page, joined by name — box scores omit height.
+    val height: String = "",
+    override val setsPlayed: Int = 0,
+    override val kills: Int = 0,
+    override val attackErrors: Int = 0,
+    override val attackAttempts: Int = 0,
+    override val assists: Int = 0,
+    override val serviceAces: Int = 0,
+    override val serviceErrors: Int = 0,
+    override val digs: Int = 0,
+    override val blockSolos: Int = 0,
+    override val blockAssists: Int = 0,
+    override val receptionErrors: Int = 0,
+    override val ballHandlingErrors: Int = 0
+) : VolleyballLine
+
+/**
+ * One player on an opposing team's published roster, scraped from that school's
+ * own athletics site. This is the only source of an opponent's line-up *before*
+ * they have played anyone — the NCAA API has no roster endpoint — and the only
+ * source of opposing players' heights, which box scores omit entirely.
+ *
+ * Keyed by team name rather than an id because that is all the schedule gives
+ * us. Scraper-owned, so a sync replaces a team's roster wholesale.
+ */
+@Entity(tableName = "opponent_roster", primaryKeys = ["team", "playerName"])
+data class OpponentRosterEntry(
+    val team: String,
+    val playerName: String,
+    val jerseyNumber: String = "",
+    val position: String = "",
+    val height: String = ""
+)
+
+/**
+ * A scheduled opponent's season-to-date production, aggregated from the box
+ * scores of their *other* matches — the nightly scoreboard sweep already sees
+ * every D1 game, so their season costs nothing extra to follow. Empty until
+ * they have played once, which is the gap [OpponentRosterEntry] covers.
+ */
+@Entity(tableName = "opponent_season_stats", primaryKeys = ["team", "playerName"])
+data class OpponentSeasonStat(
+    val team: String,
+    val playerName: String,
+    val jerseyNumber: String = "",
+    val position: String = "",
+    val matchesPlayed: Int = 0,
     override val setsPlayed: Int = 0,
     override val kills: Int = 0,
     override val attackErrors: Int = 0,

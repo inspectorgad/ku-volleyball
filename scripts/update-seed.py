@@ -394,6 +394,100 @@ heights = sum(1 for p in players.values() if p.get("height"))
 print(f"opponent box scores: {opp_matches} matches, {opp_lines} player lines")
 print(f"heights: {heights}/{len(players)} players")
 
+# --- Opponent rosters -------------------------------------------------------
+# From each school's own athletics site, so a scheduled opponent's line-up is
+# available before they have played anyone. Also the only source of opposing
+# players' heights: the NCAA box score carries name, number and position only.
+opponent_rosters = []
+for key, entry in sorted(load_json("scraped/opponent-rosters.json", {}).items()):
+    roster = [
+        {
+            "player": p.get("name", "").strip(),
+            "jerseyNumber": str(p.get("jerseyNumber") or ""),
+            "position": (p.get("position") or "").strip(),
+            "height": (p.get("height") or "").strip(),
+        }
+        for p in entry.get("players", [])
+        if p.get("name")
+    ]
+    if roster:
+        opponent_rosters.append({
+            "team": entry.get("team", key),
+            "fetchedAt": entry.get("fetchedAt", ""),
+            "players": roster,
+        })
+
+# Heights recorded on the roster carry over onto the box-score lines we already
+# store, matched by name within the same team.
+height_by_team = {
+    norm_team(r["team"]): {p["player"].lower(): p["height"] for p in r["players"] if p["height"]}
+    for r in opponent_rosters
+}
+backfilled = 0
+for m in matches.values():
+    heights_for_opponent = height_by_team.get(norm_team(m.get("opponent", "")), {})
+    for line in m.get("opponentLines") or []:
+        height = heights_for_opponent.get(line["player"].lower())
+        if height:
+            line["height"] = height
+            backfilled += 1
+
+roster_players = sum(len(r["players"]) for r in opponent_rosters)
+print(f"opponent rosters: {len(opponent_rosters)} teams, {roster_players} players")
+print(f"  heights applied to {backfilled} opposing box-score lines")
+
+# --- Scheduled opponents' season form ---------------------------------------
+# Box scores from a scheduled opponent's *other* matches, so the app can show
+# how they have been playing before Kansas faces them. Empty before their first
+# match of the season, which is exactly the gap the roster scrape above covers.
+STAT_KEYS = ["sp", "k", "e", "ta", "a", "sa", "se", "d", "bs", "ba", "re", "bhe"]
+form = {}  # norm team -> {"team":..., "matches": set, "players": {name: totals}}
+for path in sorted(glob.glob("scraped/ncaa-opp-*.json")):
+    data = load_json(path, None)
+    if not data:
+        continue
+    box = data.get("box") or {}
+    teams = {str(t.get("teamId")): t for t in box.get("teams") or []}
+    for tb in box.get("teamBoxscore") or []:
+        team = teams.get(str(tb.get("teamId"))) or {}
+        name = team.get("nameShort") or team.get("nameFull") or ""
+        key = norm_team(name)
+        if not key:
+            continue
+        rec = form.setdefault(key, {"team": name, "matches": set(), "players": {}})
+        rec["matches"].add(data.get("gameId"))
+        for p in tb.get("playerStats") or []:
+            if not p.get("participated"):
+                continue
+            player = f"{p.get('firstName','').strip()} {p.get('lastName','').strip()}".strip()
+            if not player:
+                continue
+            totals = rec["players"].setdefault(
+                player,
+                {"player": player, "jerseyNumber": str(p.get("number") or ""),
+                 "position": p.get("position") or "", "mp": 0,
+                 **{k: 0 for k in STAT_KEYS}},
+            )
+            totals["mp"] += 1
+            for k, v in stat_line(p).items():
+                totals[k] += v
+
+# Only teams Kansas is actually scheduled to face - the sweep can pick up others.
+scheduled = {norm_team(m["opponent"]) for m in matches.values() if "teamSets" not in m}
+opponent_form = [
+    {
+        "team": rec["team"],
+        "matches": len(rec["matches"]),
+        "players": sorted(rec["players"].values(), key=lambda p: -p["k"]),
+    }
+    for key, rec in sorted(form.items())
+    if key in scheduled
+]
+if opponent_form:
+    print(f"opponent form: {len(opponent_form)} scheduled teams with season stats")
+else:
+    print("opponent form: none yet (no scheduled opponent has played this season)")
+
 seed = {
     "formatVersion": 1,
     "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -407,6 +501,10 @@ if standings:
     seed["standings"] = standings
 if polls:
     seed["polls"] = polls
+if opponent_rosters:
+    seed["opponentRosters"] = opponent_rosters
+if opponent_form:
+    seed["opponentForm"] = opponent_form
 
 os.makedirs(os.path.dirname(SEED_PATH), exist_ok=True)
 

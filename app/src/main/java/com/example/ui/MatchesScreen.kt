@@ -48,6 +48,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.Match
 import com.example.data.MatchTeamStats
+import com.example.data.OpponentRosterEntry
+import com.example.data.OpponentSeasonStat
 import com.example.data.OpponentStatLine
 import com.example.data.Player
 import com.example.data.StatLine
@@ -315,6 +317,8 @@ fun MatchDetailScreen(
     statLines: List<StatLine>,
     opponentStatLines: List<OpponentStatLine>,
     matchTeamStats: List<MatchTeamStats>,
+    opponentRoster: List<OpponentRosterEntry>,
+    opponentSeasonStats: List<OpponentSeasonStat>,
     onSaveMatch: (Match) -> Unit,
     onDeleteMatch: (Match) -> Unit,
     onSaveStatLine: (StatLine) -> Unit,
@@ -405,6 +409,66 @@ fun MatchDetailScreen(
                 }
             }
 
+            // Before the match: the opponent's published roster, and how they
+            // have played so far this season if they have played at all. This is
+            // the whole point of scraping their site — the NCAA has no roster
+            // endpoint, so nothing else can show a line-up in advance.
+            if (match.teamSets == null) {
+                val roster = opponentRoster.filter { it.team.equals(match.opponent, true) }
+                val form = opponentSeasonStats
+                    .filter { it.team.equals(match.opponent, true) }
+                    .associateBy { it.playerName.lowercase() }
+                if (roster.isEmpty()) {
+                    item {
+                        EmptyState(
+                            title = "No roster yet for ${match.opponent}",
+                            subtitle = "Rosters are pulled from each school's own site and " +
+                                "refresh weekly. Pull down to sync."
+                        )
+                    }
+                } else {
+                    item {
+                        Text(
+                            "${match.opponent} Roster",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
+                    }
+                    items(roster.sortedBy { it.jerseyNumber.toIntOrNull() ?: 99 },
+                        key = { it.playerName }) { p ->
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Row(
+                                modifier = Modifier.padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                JerseyBadge(p.jerseyNumber)
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(start = 12.dp)
+                                ) {
+                                    Text(
+                                        p.playerName,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Text(
+                                        listOfNotNull(
+                                            p.position.takeIf { it.isNotBlank() },
+                                            p.height.takeIf { it.isNotBlank() },
+                                            form[p.playerName.lowercase()]?.let { summarize(it) }
+                                        ).joinToString(" · ").ifBlank { "No details published" },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             // Team totals come from the box score rather than the sum of the
             // lines below: the NCAA charges some reception errors to the team.
             if (teamTotals.isNotEmpty()) {
@@ -451,7 +515,7 @@ fun MatchDetailScreen(
                                     .padding(start = 12.dp)
                             ) {
                                 Text(
-                                    listOf(line.playerName, line.position)
+                                    listOf(line.playerName, line.position, line.height)
                                         .filter { it.isNotBlank() }.joinToString(" · "),
                                     style = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.SemiBold

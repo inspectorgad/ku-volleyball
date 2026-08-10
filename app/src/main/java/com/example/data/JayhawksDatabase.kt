@@ -10,8 +10,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 @Database(
     entities = [Player::class, Match::class, StatLine::class,
         ConferenceStanding::class, PollEntry::class,
-        OpponentStatLine::class, MatchTeamStats::class],
-    version = 5,
+        OpponentStatLine::class, MatchTeamStats::class,
+        OpponentRosterEntry::class, OpponentSeasonStat::class],
+    version = 6,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -97,14 +98,46 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        // v5 -> v6: opponents' published rosters (the only source of their
+        // heights, and of a line-up before they have played) and a scheduled
+        // opponent's season-to-date production.
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE opponent_stat_lines ADD COLUMN height TEXT NOT NULL DEFAULT ''"
+                )
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS opponent_roster (
+                        team TEXT NOT NULL, playerName TEXT NOT NULL,
+                        jerseyNumber TEXT NOT NULL, position TEXT NOT NULL,
+                        height TEXT NOT NULL,
+                        PRIMARY KEY(team, playerName))"""
+                )
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS opponent_season_stats (
+                        team TEXT NOT NULL, playerName TEXT NOT NULL,
+                        jerseyNumber TEXT NOT NULL, position TEXT NOT NULL,
+                        matchesPlayed INTEGER NOT NULL, setsPlayed INTEGER NOT NULL,
+                        kills INTEGER NOT NULL, attackErrors INTEGER NOT NULL,
+                        attackAttempts INTEGER NOT NULL, assists INTEGER NOT NULL,
+                        serviceAces INTEGER NOT NULL, serviceErrors INTEGER NOT NULL,
+                        digs INTEGER NOT NULL, blockSolos INTEGER NOT NULL,
+                        blockAssists INTEGER NOT NULL, receptionErrors INTEGER NOT NULL,
+                        ballHandlingErrors INTEGER NOT NULL,
+                        PRIMARY KEY(team, playerName))"""
+                )
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     JayhawksDatabase::class.java,
                     "ku_volleyball.db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
-                    .build().also { instance = it }
+                ).addMigrations(
+                    MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6
+                ).build().also { instance = it }
             }
     }
 }

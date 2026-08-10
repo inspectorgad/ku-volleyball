@@ -15,6 +15,7 @@
 // nightly runs only touch new dates.
 import { chromium } from 'playwright';
 import fs from 'fs';
+import { parseRoster } from './roster-parser.mjs';
 
 const API = 'https://ncaa-api.henrygd.me';
 const SEASONS = (process.env.SEASONS || '2026').trim().split(/\s+/);
@@ -33,6 +34,31 @@ const index = fs.existsSync(INDEX_PATH)
 
 index.games ??= {};
 index.big12Games ??= {};
+index.opponentGames ??= {};
+
+// Teams Kansas is scheduled to face but has not played yet. Their matches are
+// captured so the app can show how an upcoming opponent has been playing —
+// only for the current season, since that is the only one anybody asks about,
+// and it keeps this off the already-swept historical dates.
+const CURRENT_SEASON = SEASONS.map(Number).sort().at(-1);
+const normTeamName = (name) =>
+  (name || '')
+    .replace(/\s*\(\d+\)\s*$/, '')
+    .toLowerCase()
+    .replace(/\./g, '')
+    .replace(/\bstate\b/g, 'st')
+    .replace(/\s+/g, ' ')
+    .trim();
+const upcomingOpponents = new Set(
+  (() => {
+    try {
+      return JSON.parse(fs.readFileSync('scraped/upcoming.json', 'utf8'))
+        .map((u) => normTeamName(u.opponent));
+    } catch {
+      return [];
+    }
+  })()
+);
 if ((index.indexVersion ?? 1) < INDEX_VERSION) {
   console.log(
     `index v${index.indexVersion ?? 1} < v${INDEX_VERSION}: clearing ${Object.keys(index.scannedDates ?? {}).length} scanned dates for a one-time full re-sweep`
@@ -107,6 +133,20 @@ for (const season of SEASONS) {
         };
       }
 
+      // Scheduled-opponent capture: the sweep already has every D1 game for the
+      // date, so their season costs nothing extra to spot.
+      if (Number(date.slice(0, 4)) === CURRENT_SEASON && g.gameState === 'final') {
+        const facing = sides.filter((s) => upcomingOpponents.has(normTeamName(s?.names?.short)));
+        if (facing.length) {
+          index.opponentGames[g.gameID] ??= {
+            date,
+            season: date.slice(0, 4),
+            teams: facing.map((s) => s?.names?.short),
+            boxscored: false,
+          };
+        }
+      }
+
       if (!sides.some((s) => s?.names?.seo === TEAM_SEO)) continue;
       const existing = index.games[g.gameID];
       if (existing?.final && existing?.boxscored) continue;
@@ -158,6 +198,29 @@ for (const [gameId, meta] of Object.entries(index.games)) {
   }
 }
 
+// --- 2b. Box scores for scheduled opponents' own matches -------------------
+// Only the boxscore call here: the contest wrapper adds nothing we use for a
+// team we are not playing in that game, and it halves the request count.
+let oppCaptured = 0;
+for (const [gameId, meta] of Object.entries(index.opponentGames)) {
+  if (meta.boxscored) continue;
+  try {
+    const box = await getJson(`${API}/game/${gameId}/boxscore`);
+    fs.writeFileSync(
+      `scraped/ncaa-opp-${gameId}.json`,
+      JSON.stringify({ gameId, date: meta.date, season: meta.season, box }, null, 1)
+    );
+    meta.boxscored = true;
+    oppCaptured++;
+  } catch (e) {
+    console.log(`opponent boxscore ${gameId}: ${e.message}`);
+  }
+}
+console.log(
+  `scheduled-opponent games: ${Object.keys(index.opponentGames).length} known, ` +
+  `${oppCaptured} box scores captured this run`
+);
+
 fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 1));
 
 // --- 3. kuathletics.com: current roster + upcoming schedule ----------------
@@ -183,40 +246,11 @@ try {
     return text;
   }
 
-  // Roster: each player is a block that opens with "Jersey Number\n<num>\n<name>"
-  // and then lists label/value pairs — "Position", "Academic Year", "Height",
-  // "Hometown" — in an order Sidearm is free to change. So rather than counting
-  // offsets (which broke as soon as Height was wanted), scan the block for the
-  // labels we care about until the next player's block starts.
+  // Roster parsing lives in roster-parser.mjs because opponents' sites use the
+  // same handful of layouts; Kansas is just the first of them.
   const rosterText = await pageText('https://kuathletics.com/sports/womens-volleyball/roster');
   fs.writeFileSync('scraped/roster-page.txt', rosterText);
-  const rosterLines = rosterText.split('\n').map((l) => l.trim());
-
-  // Sidearm renders heights as `6' 1''`; store the roster convention `6-1`.
-  const normalizeHeight = (raw) => {
-    const m = (raw || '').match(/(\d)\s*'\s*(\d{1,2})?/);
-    return m ? `${m[1]}-${m[2] ?? 0}` : '';
-  };
-
-  const roster = [];
-  for (let i = 0; i < rosterLines.length; i++) {
-    if (rosterLines[i] !== 'Jersey Number') continue;
-    const number = rosterLines[i + 1] || '';
-    const name = rosterLines[i + 2] || '';
-    if (!/^\d{1,2}$/.test(number) || !/^[A-Za-z'.-]+( [A-Za-z'.-]+)+$/.test(name)) continue;
-    const fields = {};
-    for (let j = i + 3; j < rosterLines.length && rosterLines[j] !== 'Jersey Number'; j++) {
-      if (['Position', 'Height'].includes(rosterLines[j])) {
-        fields[rosterLines[j]] = (rosterLines[j + 1] || '').trim();
-      }
-    }
-    roster.push({
-      name,
-      jerseyNumber: number,
-      position: (fields.Position || '').trim(),
-      height: normalizeHeight(fields.Height),
-    });
-  }
+  const roster = parseRoster(rosterText);
   fs.writeFileSync('scraped/roster.json', JSON.stringify(roster, null, 1));
   const withHeight = roster.filter((p) => p.height).length;
   console.log(`roster: ${roster.length} players (${withHeight} with height)`);
@@ -245,6 +279,72 @@ try {
   });
   fs.writeFileSync('scraped/upcoming.json', JSON.stringify(uniqueUpcoming, null, 1));
   console.log(`upcoming: ${uniqueUpcoming.length} matches`);
+
+  // --- 3b. Opponent rosters -----------------------------------------------
+  // The NCAA has no roster endpoint (probed: every candidate 404s or 422s), so
+  // an opponent's line-up before they have played anyone comes from their own
+  // athletics site. Scraped for the teams on Kansas' schedule plus the Big 12.
+  //
+  // Rosters barely move once a season starts, so this refreshes weekly rather
+  // than nightly — except for a team we have never fetched, which is pulled on
+  // the first run that needs it.
+  const sites = JSON.parse(fs.readFileSync('scripts/opponent-sites.json', 'utf8'));
+  const siteMap = { ...sites.verified, ...sites.unverified };
+
+  // Mirrors norm_team() in update-seed.py.
+  const normTeam = (name) =>
+    (name || '')
+      .replace(/\s*\(\d+\)\s*$/, '')
+      .toLowerCase()
+      .replace(/\./g, '')
+      .replace(/\bstate\b/g, 'st')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  const wanted = new Map();
+  for (const u of uniqueUpcoming) wanted.set(normTeam(u.opponent), u.opponent);
+  for (const g of Object.values(index.big12Games)) {
+    for (const side of [g.home, g.away]) {
+      if (side.inConference) wanted.set(normTeam(side.name), side.name);
+    }
+  }
+  wanted.delete(normTeam('Kansas')); // already scraped above
+
+  const ROSTERS_PATH = 'scraped/opponent-rosters.json';
+  const previous = fs.existsSync(ROSTERS_PATH)
+    ? JSON.parse(fs.readFileSync(ROSTERS_PATH, 'utf8'))
+    : {};
+  const weekAgo = new Date(Date.now() - 7 * 86_400_000).toISOString();
+
+  const rosters = { ...previous };
+  const unmapped = [];
+  const failed = [];
+  let fetched = 0;
+  for (const [key, displayName] of [...wanted].sort()) {
+    const url = siteMap[key];
+    if (!url) { unmapped.push(displayName); continue; }
+    if (previous[key]?.fetchedAt > weekAgo && previous[key]?.players?.length) continue;
+    try {
+      const text = await pageText(url);
+      const players = parseRoster(text);
+      if (!players.length) { failed.push(`${displayName} (parsed 0)`); continue; }
+      rosters[key] = {
+        team: displayName,
+        url,
+        fetchedAt: new Date().toISOString(),
+        players,
+      };
+      fetched++;
+      console.log(`  roster ${displayName}: ${players.length} players ` +
+        `(${players.filter((p) => p.height).length} with height)`);
+    } catch (e) {
+      failed.push(`${displayName} (${e.message.split('\n')[0]})`);
+    }
+  }
+  fs.writeFileSync(ROSTERS_PATH, JSON.stringify(rosters, null, 1));
+  console.log(`opponent rosters: ${Object.keys(rosters).length} teams stored, ${fetched} refreshed this run`);
+  if (unmapped.length) console.log(`  no roster URL mapped for: ${unmapped.join(', ')}`);
+  if (failed.length) console.log(`  failed: ${failed.join(', ')}`);
 
   await browser.close();
 } catch (e) {

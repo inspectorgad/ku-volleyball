@@ -169,6 +169,73 @@ class OpponentMergeTest {
     }
 
     @Test
+    fun `opponent rosters merge and replace per team`() = runTest {
+        val withRoster = JSONObject(
+            """
+            {"players": [], "matches": [],
+             "opponentRosters": [
+               {"team": "Pittsburgh", "players": [
+                 {"player": "Maaike Heilig", "jerseyNumber": "2", "position": "MB", "height": "6-4"},
+                 {"player": "Izzy Masten", "jerseyNumber": "7", "position": "L/DS", "height": "5-8"}]},
+               {"team": "Stanford", "players": [
+                 {"player": "Sarah Hickman", "jerseyNumber": "1", "position": "OPP", "height": "6-5"}]}
+             ]}
+            """
+        )
+        Seeder.merge(withRoster, db.dao())
+        assertEquals(3, db.dao().opponentRosterOnce().size)
+        assertEquals("6-4", db.dao().opponentRosterOnce()
+            .single { it.playerName == "Maaike Heilig" }.height)
+
+        // A player who leaves the roster has to actually disappear, and the
+        // other team's roster must not be touched.
+        Seeder.merge(
+            JSONObject(
+                """
+                {"players": [], "matches": [],
+                 "opponentRosters": [{"team": "Pittsburgh", "players": [
+                   {"player": "Izzy Masten", "jerseyNumber": "7", "position": "L", "height": "5-8"}]}]}
+                """
+            ),
+            db.dao()
+        )
+        val roster = db.dao().opponentRosterOnce()
+        assertEquals(listOf("Izzy Masten", "Sarah Hickman"), roster.map { it.playerName }.sorted())
+        assertEquals("L", roster.single { it.team == "Pittsburgh" }.position)
+    }
+
+    @Test
+    fun `a seed without rosters leaves the stored ones alone`() = runTest {
+        Seeder.merge(
+            JSONObject(
+                """{"players": [], "matches": [], "opponentRosters": [
+                   {"team": "Tulsa", "players": [
+                     {"player": "Lexi Dahl", "jerseyNumber": "1", "position": "S", "height": "5-7"}]}]}"""
+            ),
+            db.dao()
+        )
+        Seeder.merge(JSONObject("""{"players": [], "matches": []}"""), db.dao())
+        assertEquals(1, db.dao().opponentRosterOnce().size)
+    }
+
+    @Test
+    fun `opposing box-score lines carry the height the roster supplied`() = runTest {
+        Seeder.merge(seed(), db.dao())
+        // seed() has no heights on its opponent lines; update-seed.py adds them
+        // from the roster, so a line that carries one must survive the merge.
+        val withHeight = seed().apply {
+            getJSONArray("matches").getJSONObject(0)
+                .getJSONArray("opponentLines").getJSONObject(0)
+                .put("height", "5-9")
+        }
+        Seeder.merge(withHeight, db.dao())
+        assertEquals(
+            "5-9",
+            db.dao().opponentStatLinesOnce().single { it.playerName == "Hailee Mack" }.height
+        )
+    }
+
+    @Test
     fun `height is stored and a blank height never erases a known one`() = runTest {
         Seeder.merge(seed(), db.dao())
         assertEquals("6-1", db.dao().playersOnce().single().height)

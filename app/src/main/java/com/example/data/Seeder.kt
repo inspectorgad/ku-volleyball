@@ -176,6 +176,75 @@ object Seeder {
         }
 
         mergeStandings(root, dao)
+        mergeOpponentRosters(root, dao)
+    }
+
+    /**
+     * Opponents' published rosters and season form, replaced per team for the
+     * same reason the standings are: scraper-owned, nothing user-entered, and a
+     * player who leaves the roster has to actually disappear. A seed without
+     * these keys leaves whatever is stored alone.
+     */
+    private suspend fun mergeOpponentRosters(root: JSONObject, dao: JayhawksDao) {
+        root.optJSONArray("opponentRosters")?.let { teams ->
+            for (i in 0 until teams.length()) {
+                val t = teams.getJSONObject(i)
+                val team = t.optString("team").takeIf { it.isNotBlank() } ?: continue
+                val players = t.optJSONArray("players") ?: continue
+                val rows = (0 until players.length()).mapNotNull { j ->
+                    val p = players.getJSONObject(j)
+                    val name = p.optString("player").takeIf { it.isNotBlank() }
+                    name?.let {
+                        OpponentRosterEntry(
+                            team = team,
+                            playerName = it,
+                            jerseyNumber = p.optString("jerseyNumber"),
+                            position = p.optString("position"),
+                            height = p.optString("height")
+                        )
+                    }
+                }
+                if (rows.isEmpty()) continue
+                dao.deleteOpponentRosterForTeam(team)
+                dao.insertOpponentRoster(rows)
+            }
+        }
+
+        root.optJSONArray("opponentForm")?.let { teams ->
+            for (i in 0 until teams.length()) {
+                val t = teams.getJSONObject(i)
+                val team = t.optString("team").takeIf { it.isNotBlank() } ?: continue
+                val players = t.optJSONArray("players") ?: continue
+                val rows = (0 until players.length()).mapNotNull { j ->
+                    val p = players.getJSONObject(j)
+                    val name = p.optString("player").takeIf { it.isNotBlank() }
+                    name?.let {
+                        OpponentSeasonStat(
+                            team = team,
+                            playerName = it,
+                            jerseyNumber = p.optString("jerseyNumber"),
+                            position = p.optString("position"),
+                            matchesPlayed = p.optInt("mp"),
+                            setsPlayed = p.optInt("sp"),
+                            kills = p.optInt("k"),
+                            attackErrors = p.optInt("e"),
+                            attackAttempts = p.optInt("ta"),
+                            assists = p.optInt("a"),
+                            serviceAces = p.optInt("sa"),
+                            serviceErrors = p.optInt("se"),
+                            digs = p.optInt("d"),
+                            blockSolos = p.optInt("bs"),
+                            blockAssists = p.optInt("ba"),
+                            receptionErrors = p.optInt("re"),
+                            ballHandlingErrors = p.optInt("bhe")
+                        )
+                    }
+                }
+                if (rows.isEmpty()) continue
+                dao.deleteOpponentSeasonStatsForTeam(team)
+                dao.insertOpponentSeasonStats(rows)
+            }
+        }
     }
 
     /**
@@ -195,6 +264,7 @@ object Seeder {
                     playerName = l.getString("player"),
                     jerseyNumber = l.optString("jerseyNumber"),
                     position = l.optString("position"),
+                    height = l.optString("height"),
                     setsPlayed = l.optInt("sp"),
                     kills = l.optInt("k"),
                     attackErrors = l.optInt("e"),
