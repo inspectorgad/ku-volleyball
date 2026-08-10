@@ -28,14 +28,18 @@ export function normalizeHeight(raw) {
 
 const NAME = /^[A-Za-z'.-]+(?: [A-Za-z'.’-]+)+$/;
 const isName = (s) => NAME.test((s || '').trim());
-const isNumber = (s) => /^\d{1,2}$/.test((s || '').trim());
+// UCF prints "#1" rather than "1"; the hash is decoration, not part of the number.
+const isNumber = (s) => /^#?\d{1,2}$/.test((s || '').trim());
+const numberOf = (s) => (s || '').trim().replace(/^#/, '');
 
 // Spelled-out positions ("Middle Blocker") and the abbreviations ("MB", "L/DS").
 const POSITION = /^(?:[A-Z]{1,3}(?:\/[A-Z]{1,3})?|(?:Outside|Middle|Defensive|Right|Left)\s+\w+|Setter|Libero|Opposite|Pin)$/i;
 
-function titleCase(s) {
-  return s.replace(/\S+/g, (w) =>
-    w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+// Cards often print names in caps. Fold those to title case, but leave a name
+// that already carries its own capitalisation alone - McMillan, DeMaria.
+function tidyName(s) {
+  if (s !== s.toUpperCase()) return s;
+  return s.replace(/\S+/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 }
 
 /** Sidearm's labelled blocks: scan each player's block for the labels we want. */
@@ -55,7 +59,7 @@ function parseLabelled(lines) {
     }
     roster.push({
       name: name.trim(),
-      jerseyNumber: number.trim(),
+      jerseyNumber: numberOf(number),
       position: (fields.position || '').trim(),
       height: normalizeHeight(fields.height),
     });
@@ -73,15 +77,18 @@ function parseCards(lines) {
   for (let i = 0; i + 3 < lines.length; i++) {
     if (!isNumber(lines[i])) continue;
     const window = lines.slice(i + 1, i + 4);
-    // The name is upper-case in this layout, which is what separates a real
-    // card from three unrelated lines that happen to sit next to each other.
-    const name = window.find((l) => isName(l) && l === l.toUpperCase());
+    // Requiring all three - a person's name, a volleyball position and a
+    // height, on three distinct lines - is what separates a real card from
+    // unrelated lines that happen to sit together. Case is not a reliable
+    // signal: Stanford shouts the name, UCF does not.
+    const name = window.find(isName);
     const position = window.find((l) => l !== name && POSITION.test(l));
-    const height = window.map(normalizeHeight).find(Boolean);
+    const height = window.filter((l) => l !== name && l !== position)
+      .map(normalizeHeight).find(Boolean);
     if (!name || !position || !height) continue;
     roster.push({
-      name: titleCase(name),
-      jerseyNumber: lines[i].trim(),
+      name: tidyName(name),
+      jerseyNumber: numberOf(lines[i]),
       position: position.trim(),
       height,
     });
@@ -104,7 +111,7 @@ function parseHeader(lines) {
     if (!name) continue;
     roster.push({
       name: name.trim(),
-      jerseyNumber: lines[i + 1].trim(),
+      jerseyNumber: numberOf(lines[i + 1]),
       position,
       height,
     });
@@ -134,7 +141,7 @@ function parseTable(lines) {
     if (!position) continue;
     roster.push({
       name: name.trim(),
-      jerseyNumber: lines[i].replace(/\t+$/, '').trim(),
+      jerseyNumber: numberOf(lines[i].replace(/\t+$/, '')),
       position,
       height: heightCell,
     });

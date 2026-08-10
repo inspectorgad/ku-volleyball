@@ -341,10 +341,14 @@ try {
       // scrolling and re-reading until the parser finds players. Using the
       // parse as the readiness signal avoids guessing at a per-site selector.
       const { text, players } = await rosterFromPage(url);
-      if (!players.length) {
-        // Keep the page so the layout can be added without a separate probe.
+      // A volleyball roster is ~13-20 players. Anything under this floor means
+      // we matched stray page furniture rather than the roster - Arizona St.'s
+      // scoreboard yields a single phantom "San Diego" - and a partial roster
+      // is worse than none, so it is refused and the page kept for diagnosis.
+      const MIN_ROSTER = 8;
+      if (players.length < MIN_ROSTER) {
         fs.writeFileSync(`scraped/roster-miss-${key.replace(/\s+/g, '-')}.txt`, text);
-        failed.push(`${displayName} (parsed 0, page saved)`);
+        failed.push(`${displayName} (parsed ${players.length}, below the ${MIN_ROSTER} floor; page saved)`);
         continue;
       }
       rosters[key] = {
@@ -354,6 +358,7 @@ try {
         players,
       };
       fetched++;
+      fs.rmSync(`scraped/roster-miss-${key.replace(/\s+/g, '-')}.txt`, { force: true });
       console.log(`  roster ${displayName}: ${players.length} players ` +
         `(${players.filter((p) => p.height).length} with height)`);
     } catch (e) {
