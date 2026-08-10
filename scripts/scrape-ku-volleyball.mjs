@@ -15,7 +15,7 @@
 // nightly runs only touch new dates.
 import { chromium } from 'playwright';
 import fs from 'fs';
-import { parseRoster } from './roster-parser.mjs';
+import { parseRoster, playersFromJson } from './roster-parser.mjs';
 
 const API = 'https://ncaa-api.henrygd.me';
 const SEASONS = (process.env.SEASONS || '2026').trim().split(/\s+/);
@@ -308,6 +308,20 @@ try {
 
   async function rosterFromPage(url) {
     const page = await context.newPage();
+    // Everything the page fetches as JSON, kept for the schools whose roster
+    // never becomes text. Bounded so a chatty site cannot exhaust memory.
+    const payloads = [];
+    const jsonUrls = [];
+    page.on('response', async (res) => {
+      try {
+        if (payloads.length >= 40) return;
+        if (!/json/i.test(res.headers()['content-type'] || '')) return;
+        payloads.push(await res.json());
+        jsonUrls.push(res.url());
+      } catch {
+        /* redirected, aborted, or not really JSON — nothing to keep */
+      }
+    });
     try {
       await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 });
       let text = '';
@@ -319,17 +333,31 @@ try {
         players = parseRoster(text);
         if (players.length >= 8) break;
         // Texas Tech renders the roster shell — the view toggles and the column
-        // headers — with no rows in it, and the rows only arrive once a view is
+        // headers — with no rows in it, and the rows arrive only once a view is
         // selected. Clicking the toggles is harmless on the sites that need no
         // help, since a page without them simply has nothing to click.
         if (attempt === 3) await clickViewToggles(page);
       }
-      // The rendered text is what the parser sees, but a page that renders no
-      // roster at all leaves nothing in it to diagnose from. The markup usually
-      // still carries the data (an embedded JSON blob, an API path), so it is
-      // kept alongside for the misses.
+      if (players.length < 8) {
+        // No roster in the text. Fall back to the data the page was handed:
+        // what it fetched over the wire, plus the state blob a Nuxt or Next
+        // site hydrates from, which is inline rather than fetched.
+        const inline = await page.evaluate(() => {
+          try {
+            const state = window.__NUXT__ ?? window.__NEXT_DATA__ ?? null;
+            return state ? JSON.parse(JSON.stringify(state)) : null;
+          } catch {
+            return null; // circular or function-valued state
+          }
+        });
+        const fromJson = playersFromJson([...payloads, inline].filter(Boolean));
+        if (fromJson.length > players.length) players = fromJson;
+      }
+      // The rendered text is what the parser normally sees, but a page that
+      // renders no roster leaves nothing in it to diagnose from, so the markup
+      // is kept alongside for the misses.
       const html = await page.content();
-      return { text, players, html };
+      return { text, players, html, jsonUrls };
     } finally {
       await page.close();
     }
@@ -365,7 +393,7 @@ try {
       // Some roster tables render well after domcontentloaded, so keep
       // scrolling and re-reading until the parser finds players. Using the
       // parse as the readiness signal avoids guessing at a per-site selector.
-      const { text, players, html } = await rosterFromPage(url);
+      const { text, players, html, jsonUrls } = await rosterFromPage(url);
       const miss = `scraped/roster-miss-${key.replace(/\s+/g, '-')}`;
       // A volleyball roster is ~13-20 players. Anything under this floor means
       // we matched stray page furniture rather than the roster - Arizona St.'s
@@ -378,6 +406,11 @@ try {
         // that identifies where the data really comes from is near the top.
         fs.writeFileSync(`${miss}.html`, html.slice(0, 500_000));
         failed.push(`${displayName} (parsed ${players.length}, below the ${MIN_ROSTER} floor; page saved)`);
+        // The JSON the page fetched is the shortest route to where the roster
+        // actually lives, so the URLs go in the log rather than into a file.
+        if (jsonUrls?.length) {
+          console.log(`  ${displayName} fetched JSON from:\n    ${jsonUrls.join('\n    ')}`);
+        }
         continue;
       }
       rosters[key] = {
