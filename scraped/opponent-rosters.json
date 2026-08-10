@@ -2,7 +2,7 @@
  "pittsburgh": {
   "team": "Pittsburgh",
   "url": "https://pittsburghpanthers.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-01-01T00:00:00Z",
+  "fetchedAt": "2026-08-10T01:48:18.167Z",
   "players": [
    {
     "name": "Maaike Heilig",
@@ -99,7 +99,7 @@
  "stanford": {
   "team": "Stanford",
   "url": "https://gostanford.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-01-01T00:00:00Z",
+  "fetchedAt": "2026-08-10T01:48:44.537Z",
   "players": [
    {
     "name": "Sarah Hickman",
@@ -214,7 +214,7 @@
  "wichita st": {
   "team": "Wichita State",
   "url": "https://goshockers.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-01-01T00:00:00Z",
+  "fetchedAt": "2026-08-10T01:50:17.365Z",
   "players": [
    {
     "name": "Janaya Weitkemper",
@@ -444,7 +444,7 @@
  "lipscomb": {
   "team": "Lipscomb",
   "url": "https://lipscombsports.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-01-01T00:00:00Z",
+  "fetchedAt": "2026-08-10T01:48:04.917Z",
   "players": [
    {
     "name": "Luca Bredenberg",
@@ -535,7 +535,7 @@
  "florida st": {
   "team": "Florida State",
   "url": "https://seminoles.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-01-01T00:00:00Z",
+  "fetchedAt": "2026-08-10T01:47:06.281Z",
   "players": [
    {
     "name": "Payton Whalen",
@@ -650,7 +650,7 @@
  "south dakota st": {
   "team": "South Dakota State",
   "url": "https://gojacks.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-01-01T00:00:00Z",
+  "fetchedAt": "2026-08-10T01:48:31.715Z",
   "players": [
    {
     "name": "Kennedey Whitford",
@@ -753,7 +753,7 @@
  "tulsa": {
   "team": "Tulsa",
   "url": "https://tulsahurricane.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-01-01T00:00:00Z",
+  "fetchedAt": "2026-08-10T01:49:24.927Z",
   "players": [
    {
     "name": "Lexi Dahl",
@@ -856,7 +856,7 @@
  "iowa st": {
   "team": "Iowa St.",
   "url": "https://cyclones.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-01-01T00:00:00Z",
+  "fetchedAt": "2026-08-10T01:47:37.604Z",
   "players": [
    {
     "name": "Pam McCune",
@@ -971,6 +971,830 @@
     "jerseyNumber": "30",
     "position": "OH",
     "height": "5-10"
+   }
+  ]
+ },
+ "arizona": {
+  "team": "Arizona",
+  "url": "https://arizonawildcats.com/sports/womens-volleyball/roster",
+  "fetchedAt": "2026-08-10T01:45:59.696Z",
+  "players": [
+   {
+    "name": "Maria Olga Siapani",
+    "jerseyNumber": "1",
+    "position": "Setter",
+    "height": "5-8"
+   },
+   {
+    "name": "Renee Jones",
+    "jerseyNumber": "2",
+    "position": "Opposite",
+    "height": "6-5"
+   },
+   {
+    "name": "Maya Flemister",
+    "jerseyNumber": "4",
+    "position": "Middle Blocker",
+    "height": "6-3"
+   },
+   {
+    "name": "Harmony Sample",
+    "jerseyNumber": "7",
+    "position": "Setter",
+    "height": "5-11"
+   },
+   {
+    "name": "Kristen Dear",
+    "jerseyNumber": "8",
+    "position": "Middle Blocker",
+    "height": "6-1"
+   },
+   {
+    "name": "Britt Carlson",
+    "jerseyNumber": "10",
+    "position": "Opposite",
+    "height": "6-4"
+   },
+   {
+    "name": "Carlie Cisneros",
+    "jerseyNumber": "12",
+    "position": "Outside Hitter",
+    "height": "6-0"
+   },
+   {
+    "name": "Kennedy Osunsanmi",
+    "jerseyNumber": "14",
+    "position": "Opposite",
+    "height": "6-3"
+   },
+   {
+    "name": "Destiny Ndam-Simpson",
+    "jerseyNumber": "18",
+    "position": "Outside Hitter",
+    "height": "6-0"
+   },
+   {
+    "name": "Hayden Reeder",
+    "jerseyNumber": "21",
+    "position": "Outside Hitter",
+    "height": "6-1"
+   },
+   {
+    "name": "Journey Tucker",
+    "jerseyNumber": "22",
+    "position": "Middle Blocker",
+    "height": "6-2"
+   },
+   {
+    "name": "Marina Vosloo",
+    "jerseyNumber": "23",
+    "position": "Middle Blocker",
+    "height": "6-1"
+   },
+   {
+    "name": "Payton Woods",
+    "jerseyNumber": "31",
+    "position": "Outside Hitter",
+    "height": "6-1"
+   }
+  ]
+ },
+ "baylor": {
+  "team": "Baylor",
+  "url": "https://baylorbears.com/sports/womens-volleyball/roster",
+  "fetchedAt": "2026-08-10T01:46:13.215Z",
+  "players": [
+   {
+    "name": "Harley Greek",
+    "jerseyNumber": "1",
+    "position": "S",
+    "height": "6-0"
+   },
+   {
+    "name": "Bailey Warren",
+    "jerseyNumber": "2",
+    "position": "OH",
+    "height": "5-10"
+   },
+   {
+    "name": "Taylor Crain",
+    "jerseyNumber": "3",
+    "position": "DS/L",
+    "height": "5-6"
+   },
+   {
+    "name": "Lacy Tinnell",
+    "jerseyNumber": "5",
+    "position": "MB",
+    "height": "6-4"
+   },
+   {
+    "name": "Ksenia Rakhmanchik",
+    "jerseyNumber": "6",
+    "position": "OH",
+    "height": "6-0"
+   },
+   {
+    "name": "Victoria Davis",
+    "jerseyNumber": "7",
+    "position": "MB",
+    "height": "6-2"
+   },
+   {
+    "name": "Abby Schoene",
+    "jerseyNumber": "8",
+    "position": "S",
+    "height": "5-11"
+   },
+   {
+    "name": "Mya Hemmer",
+    "jerseyNumber": "9",
+    "position": "MB",
+    "height": "6-1"
+   },
+   {
+    "name": "Nadiya Johnson",
+    "jerseyNumber": "10",
+    "position": "OH",
+    "height": "6-2"
+   },
+   {
+    "name": "Isabela Haggard",
+    "jerseyNumber": "12",
+    "position": "S",
+    "height": ""
+   },
+   {
+    "name": "Grace Carroll",
+    "jerseyNumber": "16",
+    "position": "OPP",
+    "height": "6-5"
+   },
+   {
+    "name": "MJ McCurdy",
+    "jerseyNumber": "17",
+    "position": "OH",
+    "height": "6-2"
+   },
+   {
+    "name": "Anastasiia Nikolnikova",
+    "jerseyNumber": "21",
+    "position": "MB",
+    "height": "6-5"
+   },
+   {
+    "name": "Morgan Madison",
+    "jerseyNumber": "22",
+    "position": "L/DS",
+    "height": "5-6"
+   },
+   {
+    "name": "Tehani Ulufatu",
+    "jerseyNumber": "26",
+    "position": "L/DS",
+    "height": "5-5"
+   },
+   {
+    "name": "Jules Hernandez",
+    "jerseyNumber": "33",
+    "position": "L",
+    "height": "5-6"
+   },
+   {
+    "name": "Halle Bills",
+    "jerseyNumber": "37",
+    "position": "OH",
+    "height": "6-1"
+   }
+  ]
+ },
+ "colorado": {
+  "team": "Colorado",
+  "url": "https://cubuffs.com/sports/womens-volleyball/roster",
+  "fetchedAt": "2026-08-10T01:46:52.493Z",
+  "players": [
+   {
+    "name": "Jenna Ylivainio",
+    "jerseyNumber": "2",
+    "position": "S",
+    "height": "6-0"
+   },
+   {
+    "name": "Audrey Asleson",
+    "jerseyNumber": "4",
+    "position": "S",
+    "height": "6-0"
+   },
+   {
+    "name": "Elle Richardson",
+    "jerseyNumber": "5",
+    "position": "S",
+    "height": "5-11"
+   },
+   {
+    "name": "Dumebi Okoye",
+    "jerseyNumber": "6",
+    "position": "PIN",
+    "height": "6-2"
+   },
+   {
+    "name": "Avery Bolles",
+    "jerseyNumber": "9",
+    "position": "DS/L",
+    "height": "5-9"
+   },
+   {
+    "name": "Sydney Jordan",
+    "jerseyNumber": "10",
+    "position": "PIN",
+    "height": "6-3"
+   },
+   {
+    "name": "Kensley Hennessy",
+    "jerseyNumber": "12",
+    "position": "MB",
+    "height": "6-1"
+   },
+   {
+    "name": "Katie Salonga",
+    "jerseyNumber": "13",
+    "position": "DS/L/S",
+    "height": "5-6"
+   },
+   {
+    "name": "Nikki Ott",
+    "jerseyNumber": "14",
+    "position": "DS/L",
+    "height": "5-7"
+   },
+   {
+    "name": "Gwen Schiff",
+    "jerseyNumber": "15",
+    "position": "PIN",
+    "height": "6-1"
+   },
+   {
+    "name": "Peyton Neal",
+    "jerseyNumber": "20",
+    "position": "DS/L",
+    "height": "5-9"
+   },
+   {
+    "name": "Lily Dwinell",
+    "jerseyNumber": "21",
+    "position": "PIN",
+    "height": "6-3"
+   },
+   {
+    "name": "Cayla Payne",
+    "jerseyNumber": "33",
+    "position": "MB",
+    "height": "6-4"
+   }
+  ]
+ },
+ "houston": {
+  "team": "Houston",
+  "url": "https://uhcougars.com/sports/womens-volleyball/roster",
+  "fetchedAt": "2026-08-10T01:47:19.591Z",
+  "players": [
+   {
+    "name": "Alyssa Gonzales",
+    "jerseyNumber": "1",
+    "position": "OH",
+    "height": "6-1"
+   },
+   {
+    "name": "Olivia Stringer",
+    "jerseyNumber": "2",
+    "position": "OH",
+    "height": "6-0"
+   },
+   {
+    "name": "Alexis Roberson",
+    "jerseyNumber": "3",
+    "position": "MB",
+    "height": "6-3"
+   },
+   {
+    "name": "Kamille Gibson",
+    "jerseyNumber": "4",
+    "position": "OH",
+    "height": "6-1"
+   },
+   {
+    "name": "Lily Barron",
+    "jerseyNumber": "5",
+    "position": "OH",
+    "height": "6-2"
+   },
+   {
+    "name": "Kalei Edson",
+    "jerseyNumber": "6",
+    "position": "S",
+    "height": "5-10"
+   },
+   {
+    "name": "Kaitlyn Evans",
+    "jerseyNumber": "8",
+    "position": "MB",
+    "height": "5-11"
+   },
+   {
+    "name": "Shannon Dworaczyk",
+    "jerseyNumber": "9",
+    "position": "S",
+    "height": "5-9"
+   },
+   {
+    "name": "Aidan Conner",
+    "jerseyNumber": "10",
+    "position": "MB",
+    "height": "6-3"
+   },
+   {
+    "name": "Sydney Jones",
+    "jerseyNumber": "11",
+    "position": "OH",
+    "height": "6-2"
+   },
+   {
+    "name": "Leah Robinson",
+    "jerseyNumber": "13",
+    "position": "OH",
+    "height": "6-2"
+   },
+   {
+    "name": "Cali Reece",
+    "jerseyNumber": "15",
+    "position": "L",
+    "height": "5-6"
+   },
+   {
+    "name": "Mattie Casale",
+    "jerseyNumber": "19",
+    "position": "L",
+    "height": "5-7"
+   },
+   {
+    "name": "Noemi Despaigne",
+    "jerseyNumber": "21",
+    "position": "OH",
+    "height": "6-0"
+   },
+   {
+    "name": "Harmoni Dobbins",
+    "jerseyNumber": "22",
+    "position": "MB",
+    "height": "6-3"
+   },
+   {
+    "name": "Gillian Pitts",
+    "jerseyNumber": "24",
+    "position": "L",
+    "height": "5-9"
+   },
+   {
+    "name": "Ava Wilkerson",
+    "jerseyNumber": "25",
+    "position": "MB",
+    "height": "6-4"
+   },
+   {
+    "name": "Tara Greenberry",
+    "jerseyNumber": "34",
+    "position": "OH",
+    "height": "6-2"
+   }
+  ]
+ },
+ "kansas st": {
+  "team": "Kansas St.",
+  "url": "https://kstatesports.com/sports/womens-volleyball/roster",
+  "fetchedAt": "2026-08-10T01:47:51.307Z",
+  "players": [
+   {
+    "name": "Fuka Sekita",
+    "jerseyNumber": "0",
+    "position": "L",
+    "height": "5-1"
+   },
+   {
+    "name": "Caleigh Ponn",
+    "jerseyNumber": "1",
+    "position": "L",
+    "height": "5-6"
+   },
+   {
+    "name": "Sydney Maue",
+    "jerseyNumber": "2",
+    "position": "PIN",
+    "height": "6-1"
+   },
+   {
+    "name": "Alex Klukvin",
+    "jerseyNumber": "3",
+    "position": "L",
+    "height": "5-7"
+   },
+   {
+    "name": "Reagan Fox",
+    "jerseyNumber": "4",
+    "position": "PIN",
+    "height": "6-2"
+   },
+   {
+    "name": "Avery Stones",
+    "jerseyNumber": "5",
+    "position": "PIN",
+    "height": "6-2"
+   },
+   {
+    "name": "Camdyn Stucky",
+    "jerseyNumber": "8",
+    "position": "S",
+    "height": "6-3"
+   },
+   {
+    "name": "Chandler Carter",
+    "jerseyNumber": "9",
+    "position": "L",
+    "height": "5-7"
+   },
+   {
+    "name": "Skylar Brady",
+    "jerseyNumber": "11",
+    "position": "PIN",
+    "height": "6-1"
+   },
+   {
+    "name": "Emerson Van Lannen",
+    "jerseyNumber": "13",
+    "position": "S",
+    "height": "5-11"
+   },
+   {
+    "name": "Addison Massey",
+    "jerseyNumber": "15",
+    "position": "PIN",
+    "height": "6-1"
+   },
+   {
+    "name": "Cadence Lundgren",
+    "jerseyNumber": "16",
+    "position": "MB",
+    "height": "6-4"
+   },
+   {
+    "name": "Reese Resmer",
+    "jerseyNumber": "21",
+    "position": "MB",
+    "height": "6-0"
+   },
+   {
+    "name": "Lauren Latham",
+    "jerseyNumber": "23",
+    "position": "S",
+    "height": "5-9"
+   },
+   {
+    "name": "Ellah Derrer",
+    "jerseyNumber": "27",
+    "position": "MB",
+    "height": "6-4"
+   },
+   {
+    "name": "Tatum Tindall",
+    "jerseyNumber": "30",
+    "position": "PIN/MB",
+    "height": "6-1"
+   }
+  ]
+ },
+ "tcu": {
+  "team": "TCU",
+  "url": "https://gofrogs.com/sports/womens-volleyball/roster",
+  "fetchedAt": "2026-08-10T01:48:58.105Z",
+  "players": [
+   {
+    "name": "Alice Volpe",
+    "jerseyNumber": "0",
+    "position": "DS/L",
+    "height": "5-6"
+   },
+   {
+    "name": "Evan Hendrix",
+    "jerseyNumber": "2",
+    "position": "OH",
+    "height": "5-9"
+   },
+   {
+    "name": "Addy Horner",
+    "jerseyNumber": "3",
+    "position": "S",
+    "height": "6-3"
+   },
+   {
+    "name": "Jalyn Gibson",
+    "jerseyNumber": "5",
+    "position": "OH",
+    "height": "6-2"
+   },
+   {
+    "name": "Reese Wilburn",
+    "jerseyNumber": "6",
+    "position": "S",
+    "height": "5-5"
+   },
+   {
+    "name": "Reese Robins",
+    "jerseyNumber": "7",
+    "position": "OPP/MB",
+    "height": "6-5"
+   },
+   {
+    "name": "Mia Lee",
+    "jerseyNumber": "8",
+    "position": "MB",
+    "height": "6-0"
+   },
+   {
+    "name": "Lauren Murphy",
+    "jerseyNumber": "9",
+    "position": "OH",
+    "height": "6-4"
+   },
+   {
+    "name": "Kinsley Young",
+    "jerseyNumber": "10",
+    "position": "MB",
+    "height": "6-3"
+   },
+   {
+    "name": "Becca Kelley",
+    "jerseyNumber": "11",
+    "position": "OH",
+    "height": "6-3"
+   },
+   {
+    "name": "Molly McCarthy",
+    "jerseyNumber": "13",
+    "position": "DS/L",
+    "height": "5-11"
+   },
+   {
+    "name": "Josie Valgus",
+    "jerseyNumber": "14",
+    "position": "S",
+    "height": "5-11"
+   },
+   {
+    "name": "Jaylen Clark",
+    "jerseyNumber": "16",
+    "position": "DS/L",
+    "height": "5-7"
+   },
+   {
+    "name": "Rosemary Archer",
+    "jerseyNumber": "17",
+    "position": "S",
+    "height": "6-0"
+   },
+   {
+    "name": "McKenzie Berg",
+    "jerseyNumber": "19",
+    "position": "OH",
+    "height": "6-2"
+   },
+   {
+    "name": "Blaykli Bobik",
+    "jerseyNumber": "20",
+    "position": "OH/OPP",
+    "height": "6-1"
+   },
+   {
+    "name": "Morgan Holloman",
+    "jerseyNumber": "21",
+    "position": "MB",
+    "height": "6-2"
+   }
+  ]
+ },
+ "utah": {
+  "team": "Utah",
+  "url": "https://utahutes.com/sports/womens-volleyball/roster",
+  "fetchedAt": "2026-08-10T01:49:50.831Z",
+  "players": [
+   {
+    "name": "Princess Atamah",
+    "jerseyNumber": "13",
+    "position": "MB",
+    "height": "6-1"
+   },
+   {
+    "name": "Levani Falatea",
+    "jerseyNumber": "10",
+    "position": "OH/L/DS",
+    "height": "5-9"
+   },
+   {
+    "name": "Katelynn Field",
+    "jerseyNumber": "12",
+    "position": "MB",
+    "height": "6-5"
+   },
+   {
+    "name": "Kamryn Gibadlo",
+    "jerseyNumber": "18",
+    "position": "OH",
+    "height": "6-1"
+   },
+   {
+    "name": "Langley Griffin",
+    "jerseyNumber": "15",
+    "position": "OH",
+    "height": "6-0"
+   },
+   {
+    "name": "Sierra Grizzle",
+    "jerseyNumber": "8",
+    "position": "L",
+    "height": "5-7"
+   },
+   {
+    "name": "Allie Grossenbach",
+    "jerseyNumber": "17",
+    "position": "OPP",
+    "height": "6-0"
+   },
+   {
+    "name": "Suttyn Harris",
+    "jerseyNumber": "5",
+    "position": "OH",
+    "height": "5-11"
+   },
+   {
+    "name": "Loryn Helgesen",
+    "jerseyNumber": "4",
+    "position": "OPP",
+    "height": "6-2"
+   },
+   {
+    "name": "DyBorrah Johnson",
+    "jerseyNumber": "7",
+    "position": "MB",
+    "height": "6-1"
+   },
+   {
+    "name": "Isabelle Marco",
+    "jerseyNumber": "3",
+    "position": "S",
+    "height": "5-10"
+   },
+   {
+    "name": "Lana Mijacic",
+    "jerseyNumber": "1",
+    "position": "MB",
+    "height": "6-3"
+   },
+   {
+    "name": "Isabella Mogridge",
+    "jerseyNumber": "2",
+    "position": "S",
+    "height": "5-11"
+   },
+   {
+    "name": "Grace Moss",
+    "jerseyNumber": "9",
+    "position": "L/DS",
+    "height": "5-5"
+   },
+   {
+    "name": "Olga Musial",
+    "jerseyNumber": "14",
+    "position": "OH/OPP",
+    "height": "6-2"
+   },
+   {
+    "name": "McKenna Payne",
+    "jerseyNumber": "11",
+    "position": "UU",
+    "height": "5-7"
+   },
+   {
+    "name": "Ashley West",
+    "jerseyNumber": "6",
+    "position": "OH/OPP",
+    "height": "6-4"
+   },
+   {
+    "name": "Devyn Wiest",
+    "jerseyNumber": "16",
+    "position": "OH",
+    "height": "6-3"
+   }
+  ]
+ },
+ "west virginia": {
+  "team": "West Virginia",
+  "url": "https://wvusports.com/sports/womens-volleyball/roster",
+  "fetchedAt": "2026-08-10T01:50:04.344Z",
+  "players": [
+   {
+    "name": "Lauren Duncan",
+    "jerseyNumber": "0",
+    "position": "S",
+    "height": "5-9"
+   },
+   {
+    "name": "Tally Grissom",
+    "jerseyNumber": "1",
+    "position": "DS/L",
+    "height": "5-10"
+   },
+   {
+    "name": "Anna Barr",
+    "jerseyNumber": "2",
+    "position": "RS",
+    "height": "6-1"
+   },
+   {
+    "name": "Eily Painter",
+    "jerseyNumber": "4",
+    "position": "DS/L",
+    "height": "5-4"
+   },
+   {
+    "name": "Alexis Finnvold",
+    "jerseyNumber": "5",
+    "position": "S",
+    "height": "5-11"
+   },
+   {
+    "name": "Saar Bertels",
+    "jerseyNumber": "6",
+    "position": "OH",
+    "height": "6-1"
+   },
+   {
+    "name": "Mirjam Kask",
+    "jerseyNumber": "7",
+    "position": "MB",
+    "height": "6-1"
+   },
+   {
+    "name": "Cami Huff",
+    "jerseyNumber": "8",
+    "position": "MB",
+    "height": "6-2"
+   },
+   {
+    "name": "Nina Horning",
+    "jerseyNumber": "13",
+    "position": "OH",
+    "height": "6-4"
+   },
+   {
+    "name": "Sophia Fallah",
+    "jerseyNumber": "15",
+    "position": "MB",
+    "height": "6-2"
+   },
+   {
+    "name": "Trinity Sheridan",
+    "jerseyNumber": "18",
+    "position": "OPP",
+    "height": "5-11"
+   },
+   {
+    "name": "Reagan Turk",
+    "jerseyNumber": "19",
+    "position": "DS/L",
+    "height": "5-7"
+   },
+   {
+    "name": "Macie Smith",
+    "jerseyNumber": "20",
+    "position": "OH/RS",
+    "height": "6-1"
+   },
+   {
+    "name": "Nula Anderson",
+    "jerseyNumber": "21",
+    "position": "OH",
+    "height": "6-2"
+   },
+   {
+    "name": "Maddy McGath",
+    "jerseyNumber": "22",
+    "position": "MB",
+    "height": "6-2"
+   },
+   {
+    "name": "Cassie Bruns",
+    "jerseyNumber": "23",
+    "position": "DS/L",
+    "height": "5-5"
    }
   ]
  }
