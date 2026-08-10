@@ -291,6 +291,25 @@ try {
   // Rosters barely move once a season starts, so this refreshes weekly rather
   // than nightly — except for a team we have never fetched, which is pulled on
   // the first run that needs it.
+  async function rosterFromPage(url) {
+    const page = await context.newPage();
+    try {
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+      let text = '';
+      let players = [];
+      for (let attempt = 0; attempt < 12; attempt++) {
+        await page.waitForTimeout(1_500);
+        await page.evaluate(() => window.scrollBy(0, 1400));
+        text = await page.evaluate(() => (document.body ? document.body.innerText : ''));
+        players = parseRoster(text);
+        if (players.length >= 8) break;
+      }
+      return { text, players };
+    } finally {
+      await page.close();
+    }
+  }
+
   const sites = JSON.parse(fs.readFileSync('scripts/opponent-sites.json', 'utf8'));
   const siteMap = { ...sites.verified, ...sites.unverified };
 
@@ -318,8 +337,10 @@ try {
     if (!url) { unmapped.push(displayName); continue; }
     if (previous[key]?.fetchedAt > weekAgo && previous[key]?.players?.length) continue;
     try {
-      const text = await pageText(url);
-      const players = parseRoster(text);
+      // Some roster tables render well after domcontentloaded, so keep
+      // scrolling and re-reading until the parser finds players. Using the
+      // parse as the readiness signal avoids guessing at a per-site selector.
+      const { text, players } = await rosterFromPage(url);
       if (!players.length) {
         // Keep the page so the layout can be added without a separate probe.
         fs.writeFileSync(`scraped/roster-miss-${key.replace(/\s+/g, '-')}.txt`, text);

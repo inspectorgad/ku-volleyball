@@ -63,19 +63,22 @@ function parseLabelled(lines) {
   return roster;
 }
 
-/** Unlabelled cards: number, position, NAME IN CAPS, then height. */
+/**
+ * Unlabelled cards: a number, then the name, position and height in some order
+ * — Stanford lists position first, Cincinnati the name — so the three lines
+ * after the number are identified by what they look like rather than by place.
+ */
 function parseCards(lines) {
   const roster = [];
   for (let i = 0; i + 3 < lines.length; i++) {
     if (!isNumber(lines[i])) continue;
-    const position = lines[i + 1];
-    const name = lines[i + 2];
-    const heightLine = lines[i + 3];
-    // The name line is upper-case here, which is what separates a real card
-    // from three unrelated lines that happen to sit together.
-    if (!POSITION.test(position) || !isName(name) || name !== name.toUpperCase()) continue;
-    const height = normalizeHeight(heightLine);
-    if (!height) continue;
+    const window = lines.slice(i + 1, i + 4);
+    // The name is upper-case in this layout, which is what separates a real
+    // card from three unrelated lines that happen to sit next to each other.
+    const name = window.find((l) => isName(l) && l === l.toUpperCase());
+    const position = window.find((l) => l !== name && POSITION.test(l));
+    const height = window.map(normalizeHeight).find(Boolean);
+    if (!name || !position || !height) continue;
     roster.push({
       name: titleCase(name),
       jerseyNumber: lines[i].trim(),
@@ -110,12 +113,42 @@ function parseHeader(lines) {
 }
 
 /**
+ * A tab-separated table: the number and name on their own lines, then one line
+ * carrying position, height, class and hometown. Heights here are already
+ * written "6-4", with no quote marks, so they need their own match.
+ */
+function parseTable(lines) {
+  const roster = [];
+  const PLAIN_HEIGHT = /^([4-7])-(\d{1,2})$/;
+  for (let i = 0; i + 2 < lines.length; i++) {
+    if (!isNumber(lines[i].replace(/\t+$/, ''))) continue;
+    const name = lines[i + 1];
+    if (!isName(name)) continue;
+    const cells = lines[i + 2].split('\t').map((c) => c.trim()).filter(Boolean);
+    const heightCell = cells.find((c) => {
+      const m = PLAIN_HEIGHT.exec(c);
+      return m && Number(m[2]) <= 11;
+    });
+    if (!heightCell) continue;
+    const position = cells[cells.indexOf(heightCell) - 1] ?? '';
+    if (!position) continue;
+    roster.push({
+      name: name.trim(),
+      jerseyNumber: lines[i].replace(/\t+$/, '').trim(),
+      position,
+      height: heightCell,
+    });
+  }
+  return roster;
+}
+
+/**
  * Best-effort roster from a page's innerText. Returns [] when nothing parses,
  * which callers treat as "no roster available" rather than an error.
  */
 export function parseRoster(pageText) {
   const lines = (pageText || '').split('\n').map((l) => l.trim());
-  const shapes = [parseLabelled, parseCards, parseHeader];
+  const shapes = [parseLabelled, parseCards, parseHeader, parseTable];
   let best = [];
   for (const shape of shapes) {
     let players = [];

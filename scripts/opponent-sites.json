@@ -9,34 +9,34 @@
     "'verified' entries were confirmed to load and parse. 'unverified' ones are",
     "best guesses for Big 12 schools Kansas has not faced yet this season; the",
     "nightly log names any that fail so they can be corrected. A team missing",
-    "from this map is skipped, never an error."
+    "A team missing from this map is skipped, never an error. ucf's URL returns 404 - the correct path still needs finding, and until then the nightly log names it every run."
   ],
   "verified": {
-    "kansas": "https://kuathletics.com/sports/womens-volleyball/roster",
-    "pittsburgh": "https://pittsburghpanthers.com/sports/womens-volleyball/roster",
-    "stanford": "https://gostanford.com/sports/womens-volleyball/roster",
-    "wichita st": "https://goshockers.com/sports/womens-volleyball/roster",
-    "creighton": "https://gocreighton.com/sports/womens-volleyball/roster",
-    "lipscomb": "https://lipscombsports.com/sports/womens-volleyball/roster",
-    "florida st": "https://seminoles.com/sports/womens-volleyball/roster",
-    "south dakota st": "https://gojacks.com/sports/womens-volleyball/roster",
-    "tulsa": "https://tulsahurricane.com/sports/womens-volleyball/roster",
-    "iowa st": "https://cyclones.com/sports/womens-volleyball/roster"
-  },
-  "unverified": {
     "arizona": "https://arizonawildcats.com/sports/womens-volleyball/roster",
     "arizona st": "https://thesundevils.com/sports/womens-volleyball/roster",
     "baylor": "https://baylorbears.com/sports/womens-volleyball/roster",
     "byu": "https://byucougars.com/sports/womens-volleyball/roster",
     "cincinnati": "https://gobearcats.com/sports/womens-volleyball/roster",
     "colorado": "https://cubuffs.com/sports/womens-volleyball/roster",
+    "creighton": "https://gocreighton.com/sports/womens-volleyball/roster",
+    "florida st": "https://seminoles.com/sports/womens-volleyball/roster",
     "houston": "https://uhcougars.com/sports/womens-volleyball/roster",
+    "iowa st": "https://cyclones.com/sports/womens-volleyball/roster",
+    "kansas": "https://kuathletics.com/sports/womens-volleyball/roster",
     "kansas st": "https://kstatesports.com/sports/womens-volleyball/roster",
+    "lipscomb": "https://lipscombsports.com/sports/womens-volleyball/roster",
     "oklahoma st": "https://okstate.com/sports/womens-volleyball/roster",
+    "pittsburgh": "https://pittsburghpanthers.com/sports/womens-volleyball/roster",
+    "south dakota st": "https://gojacks.com/sports/womens-volleyball/roster",
+    "stanford": "https://gostanford.com/sports/womens-volleyball/roster",
     "tcu": "https://gofrogs.com/sports/womens-volleyball/roster",
     "texas tech": "https://texastech.com/sports/womens-volleyball/roster",
-    "ucf": "https://ucfknights.com/sports/womens-volleyball/roster",
+    "tulsa": "https://tulsahurricane.com/sports/womens-volleyball/roster",
     "utah": "https://utahutes.com/sports/womens-volleyball/roster",
-    "west virginia": "https://wvusports.com/sports/womens-volleyball/roster"
+    "west virginia": "https://wvusports.com/sports/womens-volleyball/roster",
+    "wichita st": "https://goshockers.com/sports/womens-volleyball/roster"
+  },
+  "unverified": {
+    "ucf": "https://ucfknights.com/sports/womens-volleyball/roster"
   }
 }
