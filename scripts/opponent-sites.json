@@ -10,7 +10,16 @@
     "but UCF uses /sports/volleyball/. Guessing the domain is not enough - each",
     "entry has to be confirmed against the log.",
     "",
-    "A team missing from this map is skipped, never an error."
+    "A team missing from this map is skipped, never an error.",
+    "",
+    "Arizona St. and Texas Tech are mapped correctly but yield no roster, and",
+    "the cause is on their side rather than in the parser. Their servers never",
+    "send the data: Texas Tech's Nuxt payload for the roster route comes back",
+    "at 56 bytes, and Arizona St. requests only icons and image zones. Ruled",
+    "out across four runs - the URL, the parser, rows hidden behind the view",
+    "toggles (there are none), a JSON fetch we were not capturing, and a",
+    "user-agent contradicting its own Client Hints headers. Their pages are",
+    "saved as scraped/roster-miss-*.html for whoever picks this up next."
   ],
   "verified": {
     "arizona": "https://arizonawildcats.com/sports/womens-volleyball/roster",
