@@ -299,15 +299,28 @@ def snapshot_season(payload):
     return m.group(1) if m else None
 
 
-polls = []
+# The column names are not stable. The in-season poll labels the team column
+# TEAM and carries RECORD and PREVIOUS; the preseason poll labels it SCHOOL and
+# ships neither, since nobody has a record yet. The RPI endpoint uses School.
+# Matching on the name ignoring case and spacing survives all three, and a
+# missing column reads as absent rather than as an empty team name.
+def col(row, *names):
+    flat = {re.sub(r"[^a-z]", "", k.lower()): v for k, v in row.items()}
+    for name in names:
+        value = flat.get(re.sub(r"[^a-z]", "", name.lower()))
+        if value not in (None, ""):
+            return str(value).strip()
+    return ""
+
+
 avca = load_json("scraped/rankings-avca.json", {})
 rpi = load_json("scraped/rankings-rpi.json", {})
 
 rpi_season = snapshot_season(rpi)
 rpi_by_team = {}
 for row in rpi.get("data", []):
-    if (row.get("Conf") or "") == "Big 12":
-        rpi_by_team[norm_team(row.get("School", ""))] = row
+    if col(row, "Conf", "Conference") == "Big 12":
+        rpi_by_team[norm_team(col(row, "School", "Team"))] = row
 
 # RPI carries each team's official overall record — fold in the RPI rank and
 # cross-check our computed record against it (a warning, never a failure: the
@@ -316,58 +329,81 @@ for (season, key), rec in records.items():
     row = rpi_by_team.get(key)
     if not row or season != rpi_season:
         continue
-    rec["rpiRank"] = int(row["Rank"]) if str(row.get("Rank", "")).isdigit() else None
-    official = (row.get("Record") or "").strip()
+    rpi_rank = col(row, "Rank")
+    rec["rpiRank"] = int(rpi_rank) if rpi_rank.isdigit() else None
+    official = col(row, "Record")
     ours = f"{rec['overallW']}-{rec['overallL']}"
     if official and official != ours:
         print(f"  cross-check: {rec['team']} computed {ours} vs RPI {official}")
 
+# Polls accumulate: each snapshot covers one season, and the endpoint only ever
+# serves the current one, so last season's final poll has to be carried forward
+# or it is lost the day the new preseason poll appears. Losing it is not cosmetic
+# - the poll is what keeps a season's national ranks honest (see below).
+polls_by_season = {p["season"]: p for p in previous_seed.get("polls", [])}
+
 avca_season = snapshot_season(avca)
 if avca.get("data") and avca_season:
-    b12_keys = {k for (s, k) in records if s == avca_season}
+    # Membership comes from every season we hold, not just the poll's own. A
+    # preseason poll arrives before a single conference game has been played, so
+    # scoping this to the poll's season flagged the whole Big 12 as non-members.
+    # The cost is that a departing school keeps its flag until its last season
+    # ages out of the data, which is the lesser error of the two.
+    b12_keys = {k for (_s, k) in records}
     rows = []
     for row in avca["data"]:
-        label = str(row.get("RANK", "")).strip()  # can be a tie, e.g. "T-22."
+        label = col(row, "RANK")  # can be a tie, e.g. "T-22."
         digits = re.search(r"\d+", label)
-        team = re.sub(r"\s*\(\d+\)\s*$", "", row.get("TEAM", "")).strip()
-        votes = re.search(r"\((\d+)\)\s*$", row.get("TEAM", "") or "")
+        school = col(row, "SCHOOL", "TEAM")
+        team = re.sub(r"\s*\(\d+\)\s*$", "", school).strip()
+        votes = re.search(r"\((\d+)\)\s*$", school)
         rows.append({
             "rank": int(digits.group()) if digits else 0,
             "rankLabel": label.rstrip("."),
             "team": team,
-            "record": (row.get("RECORD") or "").strip(),
-            "points": (row.get("TOTAL POINTS") or "").strip(),
-            "previous": (row.get("PREVIOUS") or "").strip(),
+            "record": col(row, "RECORD"),
+            "points": col(row, "TOTAL POINTS"),
+            "previous": col(row, "PREVIOUS", "PREVIOUS RANK"),
             "firstPlaceVotes": int(votes.group(1)) if votes else 0,
             "big12": norm_team(team) in b12_keys,
         })
-    polls.append({
-        "season": avca_season,
-        "name": "AVCA Coaches Poll",
-        "updated": (avca.get("updated") or "").strip(),
-        "rows": rows,
-    })
+    named = sum(1 for r in rows if r["team"])
+    if named < len(rows):
+        # Refuse a poll we clearly failed to read rather than storing blank rows
+        # for the app to display.
+        print(f"  WARNING: AVCA poll {avca_season}: only {named}/{len(rows)} "
+              f"rows carried a team name; keeping the previous poll instead")
+    else:
+        polls_by_season[avca_season] = {
+            "season": avca_season,
+            "name": "AVCA Coaches Poll",
+            "updated": (avca.get("updated") or "").strip(),
+            "rows": rows,
+        }
+        print(
+            f"  AVCA poll {avca_season}: {len(rows)} teams, "
+            f"{sum(1 for r in rows if r['big12'])} from the Big 12"
+        )
 
-    # The poll is the authoritative ranking. The scoreboard's per-game rank is
-    # only "the rank this team carried in that game", so a team that fell out
-    # of the top 25 would otherwise keep a stale number forever (Utah looked
-    # like a final #23 while actually finishing unranked). Where we hold a poll
-    # for the season, it decides: absent from the poll means unranked.
-    poll_rank = {norm_team(r["team"]): r["rank"] for r in rows}
-    restated = 0
+polls = [polls_by_season[s] for s in sorted(polls_by_season)]
+
+# The poll is the authoritative ranking. The scoreboard's per-game rank is only
+# "the rank this team carried in that game", so a team that fell out of the top
+# 25 would otherwise keep a stale number forever (Utah looked like a final #23
+# while actually finishing unranked). Each season is restated from its own poll:
+# absent from that poll means unranked.
+restated = 0
+for poll in polls:
+    poll_rank = {norm_team(r["team"]): r["rank"] for r in poll["rows"]}
     for (season, key), rec in records.items():
-        if season != avca_season:
+        if season != poll["season"]:
             continue
         fresh = poll_rank.get(key)
         if fresh != rec["nationalRank"]:
             restated += 1
         rec["nationalRank"] = fresh
-    if restated:
-        print(f"  national ranks restated from the poll for {restated} teams")
-    print(
-        f"  AVCA poll {avca_season}: {len(rows)} teams, "
-        f"{sum(1 for r in rows if r['big12'])} from the Big 12"
-    )
+if restated:
+    print(f"  national ranks restated from the poll for {restated} teams")
 
 # Sorted by conference win %, then conference wins, then overall win % — NOT
 # official Big 12 tiebreakers (those use head-to-head); the UI says as much.
