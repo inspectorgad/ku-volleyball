@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-08-16T09:31:41Z",
+ "generatedAt": "2026-08-17T09:46:58Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -6549,7 +6549,8 @@
      "bs": 0,
      "ba": 0,
      "re": 1,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-5"
     },
     {
      "player": "Avery Scoggins",
@@ -15416,91 +15417,115 @@
  "opponentRosters": [
   {
    "team": "Arizona",
-   "fetchedAt": "2026-08-10T01:45:59.696Z",
+   "fetchedAt": "2026-08-17T09:45:31.421Z",
    "players": [
     {
      "player": "Maria Olga Siapani",
      "jerseyNumber": "1",
-     "position": "Setter",
+     "position": "S",
      "height": "5-8"
     },
     {
      "player": "Renee Jones",
      "jerseyNumber": "2",
-     "position": "Opposite",
+     "position": "OPP",
      "height": "6-5"
+    },
+    {
+     "player": "Brenna Ginder",
+     "jerseyNumber": "3",
+     "position": "L/DS",
+     "height": "5-5"
     },
     {
      "player": "Maya Flemister",
      "jerseyNumber": "4",
-     "position": "Middle Blocker",
+     "position": "MB",
      "height": "6-3"
+    },
+    {
+     "player": "Gigi Whann",
+     "jerseyNumber": "5",
+     "position": "L/DS",
+     "height": "5-8"
     },
     {
      "player": "Harmony Sample",
      "jerseyNumber": "7",
-     "position": "Setter",
+     "position": "S",
      "height": "5-11"
     },
     {
      "player": "Kristen Dear",
      "jerseyNumber": "8",
-     "position": "Middle Blocker",
+     "position": "MB",
      "height": "6-1"
     },
     {
      "player": "Britt Carlson",
      "jerseyNumber": "10",
-     "position": "Opposite",
+     "position": "OPP",
      "height": "6-4"
     },
     {
      "player": "Carlie Cisneros",
      "jerseyNumber": "12",
-     "position": "Outside Hitter",
+     "position": "OH",
      "height": "6-0"
     },
     {
      "player": "Kennedy Osunsanmi",
      "jerseyNumber": "14",
-     "position": "Opposite",
+     "position": "OPP",
      "height": "6-3"
+    },
+    {
+     "player": "Shea Davis",
+     "jerseyNumber": "16",
+     "position": "L/DS",
+     "height": "5-5"
     },
     {
      "player": "Destiny Ndam-Simpson",
      "jerseyNumber": "18",
-     "position": "Outside Hitter",
+     "position": "OH",
      "height": "6-0"
+    },
+    {
+     "player": "Brookelyn Hatton",
+     "jerseyNumber": "19",
+     "position": "L/DS",
+     "height": "5-4"
     },
     {
      "player": "Hayden Reeder",
      "jerseyNumber": "21",
-     "position": "Outside Hitter",
+     "position": "OH",
      "height": "6-1"
     },
     {
      "player": "Journey Tucker",
      "jerseyNumber": "22",
-     "position": "Middle Blocker",
+     "position": "MB",
      "height": "6-2"
     },
     {
      "player": "Marina Vosloo",
      "jerseyNumber": "23",
-     "position": "Middle Blocker",
+     "position": "MB",
      "height": "6-1"
     },
     {
      "player": "Payton Woods",
      "jerseyNumber": "31",
-     "position": "Outside Hitter",
+     "position": "OH",
      "height": "6-1"
     }
    ]
   },
   {
    "team": "Baylor",
-   "fetchedAt": "2026-08-10T01:46:13.215Z",
+   "fetchedAt": "2026-08-17T09:45:35.071Z",
    "players": [
     {
      "player": "Harley Greek",
@@ -15560,7 +15585,7 @@
      "player": "Isabela Haggard",
      "jerseyNumber": "12",
      "position": "S",
-     "height": ""
+     "height": "5-11"
     },
     {
      "player": "Grace Carroll",
@@ -15608,7 +15633,7 @@
   },
   {
    "team": "BYU",
-   "fetchedAt": "2026-08-10T02:03:45.383Z",
+   "fetchedAt": "2026-08-17T09:45:37.625Z",
    "players": [
     {
      "player": "Kate Prior",
@@ -15728,7 +15753,7 @@
   },
   {
    "team": "Cincinnati",
-   "fetchedAt": "2026-08-10T02:03:47.930Z",
+   "fetchedAt": "2026-08-17T09:45:40.343Z",
    "players": [
     {
      "player": "Andi Spies",
@@ -15836,7 +15861,7 @@
   },
   {
    "team": "Colorado",
-   "fetchedAt": "2026-08-10T01:46:52.493Z",
+   "fetchedAt": "2026-08-17T09:45:43.473Z",
    "players": [
     {
      "player": "Jenna Ylivainio",
@@ -15920,7 +15945,7 @@
   },
   {
    "team": "Creighton (Exh.)",
-   "fetchedAt": "2026-08-10T01:55:06.564Z",
+   "fetchedAt": "2026-08-17T09:45:46.973Z",
    "players": [
     {
      "player": "Trinity Shadd-Ceres",
@@ -16028,7 +16053,7 @@
   },
   {
    "team": "Florida State",
-   "fetchedAt": "2026-08-10T01:47:06.281Z",
+   "fetchedAt": "2026-08-17T09:45:50.079Z",
    "players": [
     {
      "player": "Payton Whalen",
@@ -16142,7 +16167,7 @@
   },
   {
    "team": "Houston",
-   "fetchedAt": "2026-08-10T01:47:19.591Z",
+   "fetchedAt": "2026-08-17T09:45:53.454Z",
    "players": [
     {
      "player": "Alyssa Gonzales",
@@ -16256,7 +16281,7 @@
   },
   {
    "team": "Iowa St.",
-   "fetchedAt": "2026-08-10T01:47:37.604Z",
+   "fetchedAt": "2026-08-17T09:45:56.095Z",
    "players": [
     {
      "player": "Pam McCune",
@@ -16376,7 +16401,7 @@
   },
   {
    "team": "Kansas St.",
-   "fetchedAt": "2026-08-10T01:47:51.307Z",
+   "fetchedAt": "2026-08-17T09:45:59.558Z",
    "players": [
     {
      "player": "Fuka Sekita",
@@ -16478,7 +16503,7 @@
   },
   {
    "team": "Lipscomb",
-   "fetchedAt": "2026-08-10T01:48:04.917Z",
+   "fetchedAt": "2026-08-17T09:46:03.180Z",
    "players": [
     {
      "player": "Luca Bredenberg",
@@ -16520,7 +16545,7 @@
      "player": "Charlotte Routh",
      "jerseyNumber": "9",
      "position": "MB",
-     "height": ""
+     "height": "6-0"
     },
     {
      "player": "Kelsey Schenck",
@@ -16538,7 +16563,7 @@
      "player": "Makenna Kirlin",
      "jerseyNumber": "13",
      "position": "S",
-     "height": ""
+     "height": "5-7"
     },
     {
      "player": "Allison Barrick",
@@ -16549,14 +16574,14 @@
     {
      "player": "Grace Jones",
      "jerseyNumber": "15",
-     "position": "L/DS",
-     "height": ""
+     "position": "DS/L",
+     "height": "5-6"
     },
     {
      "player": "Madyson McCarthy",
      "jerseyNumber": "17",
      "position": "OH/RS",
-     "height": ""
+     "height": "5-11"
     },
     {
      "player": "Ella Durham",
@@ -16568,7 +16593,7 @@
   },
   {
    "team": "Pittsburgh",
-   "fetchedAt": "2026-08-10T01:48:18.167Z",
+   "fetchedAt": "2026-08-17T09:46:06.382Z",
    "players": [
     {
      "player": "Maaike Heilig",
@@ -16664,7 +16689,7 @@
   },
   {
    "team": "South Dakota State",
-   "fetchedAt": "2026-08-10T01:48:31.715Z",
+   "fetchedAt": "2026-08-17T09:46:10.356Z",
    "players": [
     {
      "player": "Kennedey Whitford",
@@ -16766,7 +16791,7 @@
   },
   {
    "team": "Stanford",
-   "fetchedAt": "2026-08-10T01:48:44.537Z",
+   "fetchedAt": "2026-08-17T09:46:13.057Z",
    "players": [
     {
      "player": "Sarah Hickman",
@@ -16880,7 +16905,7 @@
   },
   {
    "team": "TCU",
-   "fetchedAt": "2026-08-10T01:48:58.105Z",
+   "fetchedAt": "2026-08-17T09:46:16.513Z",
    "players": [
     {
      "player": "Alice Volpe",
@@ -16988,7 +17013,7 @@
   },
   {
    "team": "Tulsa",
-   "fetchedAt": "2026-08-10T01:49:24.927Z",
+   "fetchedAt": "2026-08-17T09:46:48.837Z",
    "players": [
     {
      "player": "Lexi Dahl",
@@ -17029,7 +17054,7 @@
     {
      "player": "Kylee McCoy",
      "jerseyNumber": "8",
-     "position": "OH",
+     "position": "MB",
      "height": "6-1"
     },
     {
@@ -17073,6 +17098,12 @@
      "jerseyNumber": "16",
      "position": "S",
      "height": "5-9"
+    },
+    {
+     "player": "Kat Cooper",
+     "jerseyNumber": "17",
+     "position": "MB",
+     "height": "6-1"
     },
     {
      "player": "Emma Blaine",
@@ -17198,7 +17229,7 @@
   },
   {
    "team": "Utah",
-   "fetchedAt": "2026-08-10T01:49:50.831Z",
+   "fetchedAt": "2026-08-17T09:46:52.250Z",
    "players": [
     {
      "player": "Princess Atamah",
@@ -17312,7 +17343,7 @@
   },
   {
    "team": "West Virginia",
-   "fetchedAt": "2026-08-10T01:50:04.344Z",
+   "fetchedAt": "2026-08-17T09:46:55.714Z",
    "players": [
     {
      "player": "Lauren Duncan",
@@ -17414,7 +17445,7 @@
   },
   {
    "team": "Wichita State",
-   "fetchedAt": "2026-08-10T01:50:17.365Z",
+   "fetchedAt": "2026-08-17T09:46:58.332Z",
    "players": [
     {
      "player": "Janaya Weitkemper",
