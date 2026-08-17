@@ -2,7 +2,7 @@
  "pittsburgh": {
   "team": "Pittsburgh",
   "url": "https://pittsburghpanthers.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:48:18.167Z",
+  "fetchedAt": "2026-08-17T09:46:06.382Z",
   "players": [
    {
     "name": "Maaike Heilig",
@@ -99,7 +99,7 @@
  "stanford": {
   "team": "Stanford",
   "url": "https://gostanford.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:48:44.537Z",
+  "fetchedAt": "2026-08-17T09:46:13.057Z",
   "players": [
    {
     "name": "Sarah Hickman",
@@ -214,7 +214,7 @@
  "wichita st": {
   "team": "Wichita State",
   "url": "https://goshockers.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:50:17.365Z",
+  "fetchedAt": "2026-08-17T09:46:58.332Z",
   "players": [
    {
     "name": "Janaya Weitkemper",
@@ -335,7 +335,7 @@
  "creighton": {
   "team": "Creighton (Exh.)",
   "url": "https://gocreighton.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:55:06.564Z",
+  "fetchedAt": "2026-08-17T09:45:46.973Z",
   "players": [
    {
     "name": "Trinity Shadd-Ceres",
@@ -444,7 +444,7 @@
  "lipscomb": {
   "team": "Lipscomb",
   "url": "https://lipscombsports.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:48:04.917Z",
+  "fetchedAt": "2026-08-17T09:46:03.180Z",
   "players": [
    {
     "name": "Luca Bredenberg",
@@ -486,7 +486,7 @@
     "name": "Charlotte Routh",
     "jerseyNumber": "9",
     "position": "MB",
-    "height": ""
+    "height": "6-0"
    },
    {
     "name": "Kelsey Schenck",
@@ -504,7 +504,7 @@
     "name": "Makenna Kirlin",
     "jerseyNumber": "13",
     "position": "S",
-    "height": ""
+    "height": "5-7"
    },
    {
     "name": "Allison Barrick",
@@ -515,14 +515,14 @@
    {
     "name": "Grace Jones",
     "jerseyNumber": "15",
-    "position": "L/DS",
-    "height": ""
+    "position": "DS/L",
+    "height": "5-6"
    },
    {
     "name": "Madyson McCarthy",
     "jerseyNumber": "17",
     "position": "OH/RS",
-    "height": ""
+    "height": "5-11"
    },
    {
     "name": "Ella Durham",
@@ -535,7 +535,7 @@
  "florida st": {
   "team": "Florida State",
   "url": "https://seminoles.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:47:06.281Z",
+  "fetchedAt": "2026-08-17T09:45:50.079Z",
   "players": [
    {
     "name": "Payton Whalen",
@@ -650,7 +650,7 @@
  "south dakota st": {
   "team": "South Dakota State",
   "url": "https://gojacks.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:48:31.715Z",
+  "fetchedAt": "2026-08-17T09:46:10.356Z",
   "players": [
    {
     "name": "Kennedey Whitford",
@@ -753,7 +753,7 @@
  "tulsa": {
   "team": "Tulsa",
   "url": "https://tulsahurricane.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:49:24.927Z",
+  "fetchedAt": "2026-08-17T09:46:48.837Z",
   "players": [
    {
     "name": "Lexi Dahl",
@@ -794,7 +794,7 @@
    {
     "name": "Kylee McCoy",
     "jerseyNumber": "8",
-    "position": "OH",
+    "position": "MB",
     "height": "6-1"
    },
    {
@@ -840,6 +840,12 @@
     "height": "5-9"
    },
    {
+    "name": "Kat Cooper",
+    "jerseyNumber": "17",
+    "position": "MB",
+    "height": "6-1"
+   },
+   {
     "name": "Emma Blaine",
     "jerseyNumber": "18",
     "position": "OPP",
@@ -856,7 +862,7 @@
  "iowa st": {
   "team": "Iowa St.",
   "url": "https://cyclones.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:47:37.604Z",
+  "fetchedAt": "2026-08-17T09:45:56.095Z",
   "players": [
    {
     "name": "Pam McCune",
@@ -977,84 +983,108 @@
  "arizona": {
   "team": "Arizona",
   "url": "https://arizonawildcats.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:45:59.696Z",
+  "fetchedAt": "2026-08-17T09:45:31.421Z",
   "players": [
    {
     "name": "Maria Olga Siapani",
     "jerseyNumber": "1",
-    "position": "Setter",
+    "position": "S",
     "height": "5-8"
    },
    {
     "name": "Renee Jones",
     "jerseyNumber": "2",
-    "position": "Opposite",
+    "position": "OPP",
     "height": "6-5"
+   },
+   {
+    "name": "Brenna Ginder",
+    "jerseyNumber": "3",
+    "position": "L/DS",
+    "height": "5-5"
    },
    {
     "name": "Maya Flemister",
     "jerseyNumber": "4",
-    "position": "Middle Blocker",
+    "position": "MB",
     "height": "6-3"
+   },
+   {
+    "name": "Gigi Whann",
+    "jerseyNumber": "5",
+    "position": "L/DS",
+    "height": "5-8"
    },
    {
     "name": "Harmony Sample",
     "jerseyNumber": "7",
-    "position": "Setter",
+    "position": "S",
     "height": "5-11"
    },
    {
     "name": "Kristen Dear",
     "jerseyNumber": "8",
-    "position": "Middle Blocker",
+    "position": "MB",
     "height": "6-1"
    },
    {
     "name": "Britt Carlson",
     "jerseyNumber": "10",
-    "position": "Opposite",
+    "position": "OPP",
     "height": "6-4"
    },
    {
     "name": "Carlie Cisneros",
     "jerseyNumber": "12",
-    "position": "Outside Hitter",
+    "position": "OH",
     "height": "6-0"
    },
    {
     "name": "Kennedy Osunsanmi",
     "jerseyNumber": "14",
-    "position": "Opposite",
+    "position": "OPP",
     "height": "6-3"
+   },
+   {
+    "name": "Shea Davis",
+    "jerseyNumber": "16",
+    "position": "L/DS",
+    "height": "5-5"
    },
    {
     "name": "Destiny Ndam-Simpson",
     "jerseyNumber": "18",
-    "position": "Outside Hitter",
+    "position": "OH",
     "height": "6-0"
+   },
+   {
+    "name": "Brookelyn Hatton",
+    "jerseyNumber": "19",
+    "position": "L/DS",
+    "height": "5-4"
    },
    {
     "name": "Hayden Reeder",
     "jerseyNumber": "21",
-    "position": "Outside Hitter",
+    "position": "OH",
     "height": "6-1"
    },
    {
     "name": "Journey Tucker",
     "jerseyNumber": "22",
-    "position": "Middle Blocker",
+    "position": "MB",
     "height": "6-2"
    },
    {
     "name": "Marina Vosloo",
     "jerseyNumber": "23",
-    "position": "Middle Blocker",
+    "position": "MB",
     "height": "6-1"
    },
    {
     "name": "Payton Woods",
     "jerseyNumber": "31",
-    "position": "Outside Hitter",
+    "position": "OH",
     "height": "6-1"
    }
   ]
@@ -1062,7 +1092,7 @@
  "baylor": {
   "team": "Baylor",
   "url": "https://baylorbears.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:46:13.215Z",
+  "fetchedAt": "2026-08-17T09:45:35.071Z",
   "players": [
    {
     "name": "Harley Greek",
@@ -1122,7 +1152,7 @@
     "name": "Isabela Haggard",
     "jerseyNumber": "12",
     "position": "S",
-    "height": ""
+    "height": "5-11"
    },
    {
     "name": "Grace Carroll",
@@ -1171,7 +1201,7 @@
  "colorado": {
   "team": "Colorado",
   "url": "https://cubuffs.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:46:52.493Z",
+  "fetchedAt": "2026-08-17T09:45:43.473Z",
   "players": [
    {
     "name": "Jenna Ylivainio",
@@ -1256,7 +1286,7 @@
  "houston": {
   "team": "Houston",
   "url": "https://uhcougars.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:47:19.591Z",
+  "fetchedAt": "2026-08-17T09:45:53.454Z",
   "players": [
    {
     "name": "Alyssa Gonzales",
@@ -1371,7 +1401,7 @@
  "kansas st": {
   "team": "Kansas St.",
   "url": "https://kstatesports.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:47:51.307Z",
+  "fetchedAt": "2026-08-17T09:45:59.558Z",
   "players": [
    {
     "name": "Fuka Sekita",
@@ -1474,7 +1504,7 @@
  "tcu": {
   "team": "TCU",
   "url": "https://gofrogs.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:48:58.105Z",
+  "fetchedAt": "2026-08-17T09:46:16.513Z",
   "players": [
    {
     "name": "Alice Volpe",
@@ -1583,7 +1613,7 @@
  "utah": {
   "team": "Utah",
   "url": "https://utahutes.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:49:50.831Z",
+  "fetchedAt": "2026-08-17T09:46:52.250Z",
   "players": [
    {
     "name": "Princess Atamah",
@@ -1698,7 +1728,7 @@
  "west virginia": {
   "team": "West Virginia",
   "url": "https://wvusports.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T01:50:04.344Z",
+  "fetchedAt": "2026-08-17T09:46:55.714Z",
   "players": [
    {
     "name": "Lauren Duncan",
@@ -1801,7 +1831,7 @@
  "byu": {
   "team": "BYU",
   "url": "https://byucougars.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T02:03:45.383Z",
+  "fetchedAt": "2026-08-17T09:45:37.625Z",
   "players": [
    {
     "name": "Kate Prior",
@@ -1922,7 +1952,7 @@
  "cincinnati": {
   "team": "Cincinnati",
   "url": "https://gobearcats.com/sports/womens-volleyball/roster",
-  "fetchedAt": "2026-08-10T02:03:47.930Z",
+  "fetchedAt": "2026-08-17T09:45:40.343Z",
   "players": [
    {
     "name": "Andi Spies",
