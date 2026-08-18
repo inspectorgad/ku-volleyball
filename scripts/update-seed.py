@@ -545,13 +545,31 @@ if opponent_form:
 
 os.makedirs(os.path.dirname(SEED_PATH), exist_ok=True)
 
-# Skip the write when nothing but the timestamp would change, so the nightly
-# job doesn't commit (and rebuild the APK) on quiet days.
+# Skip the write when nothing but a timestamp would change, so the nightly job
+# doesn't commit (and rebuild and republish the APK) on quiet days.
+#
+# Two timestamps have to be ignored, not one. Each roster carries the moment it
+# was fetched, and the weekly refresh rewrites that even when the school's page
+# is unchanged - which republished the whole app for two altered timestamps and
+# nothing else. Nothing reads the seed's copy of fetchedAt (the scraper decides
+# refresh timing from scraped/opponent-rosters.json), so it is informational
+# only and cannot on its own justify a build.
+def without_timestamps(seed_obj):
+    trimmed = {k: v for k, v in seed_obj.items() if k != "generatedAt"}
+    rosters = trimmed.get("opponentRosters")
+    if isinstance(rosters, list):
+        trimmed["opponentRosters"] = [
+            {k: v for k, v in r.items() if k != "fetchedAt"} if isinstance(r, dict) else r
+            for r in rosters
+        ]
+    return trimmed
+
+
 previous = load_json(SEED_PATH, {})
-current_cmp = {k: v for k, v in seed.items() if k != "generatedAt"}
-previous_cmp = {k: v for k, v in previous.items() if k != "generatedAt"}
+current_cmp = without_timestamps(seed)
+previous_cmp = without_timestamps(previous)
 if current_cmp == previous_cmp:
-    print("seed.json unchanged (ignoring timestamp); not rewriting")
+    print("seed.json unchanged (ignoring timestamps); not rewriting")
 else:
     with open(SEED_PATH, "w") as f:
         json.dump(seed, f, indent=1)
