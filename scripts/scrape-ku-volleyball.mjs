@@ -390,8 +390,18 @@ try {
       }
       // The rendered text is what the parser normally sees, but a page that
       // renders no roster leaves nothing in it to diagnose from, so the markup
-      // is kept alongside for the misses.
-      const html = await page.content();
+      // is kept alongside - for the misses only, since that is the only case
+      // that uses it, and it is the one call here with no timeout of its own.
+      // page.content() takes no timeout option, so it is raced against one: a
+      // wedged renderer on a page we already failed to parse must not be able
+      // to stall the whole nightly run.
+      let html = '';
+      if (players.length < 8) {
+        html = await Promise.race([
+          page.content().catch(() => ''),
+          new Promise((resolve) => setTimeout(() => resolve(''), 20_000)),
+        ]);
+      }
       return { text, players, html, jsonUrls, toggles };
     } finally {
       await page.close();

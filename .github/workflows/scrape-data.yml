@@ -25,6 +25,11 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    # A hanging opponent site once held this job for 25 minutes with no output
+    # and no data. With no limit it would have run to GitHub's 6-hour default,
+    # burning the runner and skipping the night in silence. A normal run takes
+    # about two minutes, so 20 is generous - and failing loudly beats hanging.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
