@@ -218,6 +218,41 @@ for entry in load_json("scraped/upcoming.json", []):
         "home": bool(entry.get("home")),
     }
 
+# A fixture we already knew about is kept even when this scrape did not see it.
+# kuathletics renders its schedule rows progressively, and a capture taken a beat
+# early returns a short list: one run silently dropped Wichita State on Sept 15
+# and Ole Miss on Sept 18, both still weeks away. Rebuilding the seed from that
+# run deleted them outright, so the dashboard and every fresh install lost two
+# real fixtures.
+#
+# Only future, result-less matches are carried, and only for a season the scrape
+# actually reported, so this cannot resurrect anything from a season that has
+# been dropped deliberately. A cancelled match lingering until someone notices is
+# a far smaller error than a real one vanishing without trace.
+seasons_seen = {m["season"] for m in matches.values()}
+carried = []
+for match in previous_seed.get("matches", []):
+    date = match.get("date", "")
+    opponent = (match.get("opponent") or "").strip()
+    if not date or not opponent or date < today:
+        continue
+    # A played match comes from the NCAA sweep, not the schedule page, so it is
+    # never a candidate. It carries a set score and box-score lines; today's
+    # match is dated today and so survives the date filter above, which is why
+    # this is checked on the data rather than on the date alone.
+    if match.get("teamSets") is not None or match.get("lines"):
+        continue
+    if match.get("season") not in seasons_seen:
+        continue
+    key = (date, opponent.lower())
+    if key in matches:
+        continue
+    matches[key] = match
+    carried.append(f"{date} {opponent}")
+if carried:
+    print(f"  carried forward {len(carried)} fixture(s) this scrape did not "
+          f"report: {', '.join(carried)}")
+
 # --- Home / away / neutral for played matches -------------------------------
 # KU's home floor is in Lawrence, so the venue city is the one dependable
 # signal. Everything else is a road or neutral game.

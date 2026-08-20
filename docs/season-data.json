@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-08-20T09:39:07Z",
+ "generatedAt": "2026-08-18T09:38:00Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -14715,6 +14715,18 @@
   {
    "date": "2026-09-13",
    "opponent": "Tulsa",
+   "season": "2026",
+   "home": true
+  },
+  {
+   "date": "2026-09-15",
+   "opponent": "Wichita State",
+   "season": "2026",
+   "home": false
+  },
+  {
+   "date": "2026-09-18",
+   "opponent": "Ole Miss",
    "season": "2026",
    "home": true
   }
