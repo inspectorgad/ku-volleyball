@@ -100,7 +100,7 @@ fun MatchesScreen(
                                 }
                                 Text(
                                     "${match.date} · ${match.season}" +
-                                        (match.city.takeIf { it.isNotBlank() && match.home != true }
+                                        (match.city.takeIf { it.isNotBlank() && (match.neutral || match.home != true) }
                                             ?.let { " · $it" } ?: "") +
                                         if (lineCount > 0) " · $lineCount player${if (lineCount == 1) "" else "s"}" else "",
                                     style = MaterialTheme.typography.bodySmall,
@@ -156,8 +156,13 @@ private fun LocationBadge(match: Match) {
         match.home == false -> "A" to "Away"
         else -> return
     }
+    // Tinted on the strength of the badge, not the raw flag: a neutral-site
+    // match can still carry home = true, because a sync fills a match's facts in
+    // but never overwrites them, and the designated home team of an early-season
+    // event was recorded as playing at home before its venue was known.
+    val atHome = !match.neutral && match.home == true
     Surface(
-        color = if (match.home == true) MaterialTheme.colorScheme.primaryContainer
+        color = if (atHome) MaterialTheme.colorScheme.primaryContainer
         else MaterialTheme.colorScheme.surfaceVariant,
         shape = RoundedCornerShape(4.dp),
         modifier = Modifier.padding(start = 6.dp)
@@ -169,7 +174,7 @@ private fun LocationBadge(match: Match) {
                 .padding(horizontal = 5.dp, vertical = 1.dp),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            color = if (match.home == true) MaterialTheme.colorScheme.onPrimaryContainer
+            color = if (atHome) MaterialTheme.colorScheme.onPrimaryContainer
             else MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
