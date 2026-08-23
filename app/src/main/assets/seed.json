@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-08-18T09:38:00Z",
+ "generatedAt": "2026-08-23T09:32:13Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -14671,12 +14671,6 @@
    "home": false
   },
   {
-   "date": "2026-08-22",
-   "opponent": "Creighton (Exh.)",
-   "season": "2026",
-   "home": true
-  },
-  {
    "date": "2026-08-28",
    "opponent": "Pittsburgh",
    "season": "2026",
@@ -14896,6 +14890,16 @@
    "overallL": 20,
    "nationalRank": null,
    "rpiRank": 163
+  },
+  {
+   "season": "2026",
+   "team": "Arizona St.",
+   "seo": "arizona-st",
+   "confW": 0,
+   "confL": 0,
+   "overallW": 1,
+   "overallL": 0,
+   "nationalRank": 12
   }
  ],
  "polls": [
