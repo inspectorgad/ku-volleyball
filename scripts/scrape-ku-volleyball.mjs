@@ -270,19 +270,57 @@ try {
   const withHeight = roster.filter((p) => p.height).length;
   console.log(`roster: ${roster.length} players (${withHeight} with height)`);
 
-  // Upcoming matches from the site-wide scoreboard rotator:
-  // "Upcoming Event: Women's Volleyball versus X on August 22, 2026 at 1 p.m. CT"
   const schedText = await pageText('https://kuathletics.com/sports/womens-volleyball/schedule');
   fs.writeFileSync('scraped/schedule-page.txt', schedText);
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
     'August', 'September', 'October', 'November', 'December'];
   const upcoming = [];
+
+  // Source 1 - the site-wide scoreboard rotator's accessibility labels:
+  // "Upcoming Event: Women's Volleyball versus X on August 22, 2026 at 1 p.m. CT"
+  // Authoritative (it states the year outright) but it only labels the next few
+  // weeks, which is why this alone showed three weeks of a four-month season.
   const re = /Upcoming Event: Women's Volleyball (versus|at) (.+?) on ([A-Z][a-z]+) (\d{1,2}), (\d{4})/g;
   for (const m of schedText.matchAll(re)) {
     const month = months.indexOf(m[3]) + 1;
     if (month === 0) continue;
     const date = `${m[5]}-${String(month).padStart(2, '0')}-${String(m[4]).padStart(2, '0')}`;
     upcoming.push({ date, opponent: m[2].trim(), home: m[1] === 'versus' });
+  }
+
+  // Source 2 - the schedule table's own rows, which cover the whole season.
+  // Each row puts the side and opponent BEFORE its date:
+  //     at / Texas Tech / United Supermarkets Arena / Lubbock, Texas /
+  //     TV: ESPN+ / Sep 27 / (Sun) / 1 p.m. CT / Live Stats
+  // "vs" or "at" gives home or away directly. The date carries no year, so it
+  // comes from the page title ("2026 Women's Volleyball Schedule"): a season
+  // runs August to December, so a January-to-July month belongs to the year
+  // after the one named.
+  const seasonYear = Number(/\b(20\d{2})\b/.exec(schedText)?.[1]) || new Date().getUTCFullYear();
+  const SHORT = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2})$/;
+  const schedLines = schedText.split('\n').map((l) => l.trim());
+  for (let i = 0; i < schedLines.length; i++) {
+    if (schedLines[i] !== 'vs' && schedLines[i] !== 'at') continue;
+    let j = i + 1;
+    while (j < schedLines.length && !schedLines[j]) j++;
+    const opponent = (schedLines[j] || '').trim();
+    if (!opponent) continue;
+    // The date follows within the venue/TV block; a bounded look-ahead keeps a
+    // row without one from adopting the next row's date.
+    let found = null;
+    for (let k = j + 1; k < Math.min(j + 14, schedLines.length); k++) {
+      const m = SHORT.exec(schedLines[k]);
+      if (m) { found = m; break; }
+    }
+    if (!found) continue;
+    const month = months.findIndex((name) => name.startsWith(found[1])) + 1;
+    if (month === 0) continue;
+    const year = month >= 8 ? seasonYear : seasonYear + 1;
+    upcoming.push({
+      date: `${year}-${String(month).padStart(2, '0')}-${String(found[2]).padStart(2, '0')}`,
+      opponent,
+      home: schedLines[i] === 'vs',
+    });
   }
   // De-dup (the rotator repeats on every page view)
   const seen = new Set();
