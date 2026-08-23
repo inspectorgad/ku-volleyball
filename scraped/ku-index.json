@@ -146,7 +146,8 @@
   "2026-08-19": true,
   "2026-08-20": true,
   "2026-08-21": true,
-  "2026-08-22": true
+  "2026-08-22": true,
+  "2026-08-23": true
  },
  "games": {
   "6479442": {
@@ -7113,6 +7114,27 @@
     "winner": true,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6639890": {
+   "date": "2026-08-22",
+   "season": "2026",
+   "home": {
+    "name": "Texas",
+    "seo": "texas",
+    "score": 1,
+    "winner": false,
+    "rank": 2,
+    "inConference": false
+   },
+   "away": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 12,
+    "inConference": true
    },
    "conferenceGame": false
   }
