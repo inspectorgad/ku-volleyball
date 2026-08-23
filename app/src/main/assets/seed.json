@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-08-23T22:29:00Z",
+ "generatedAt": "2026-08-23T22:43:15Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -14674,169 +14674,222 @@
    "date": "2026-08-28",
    "opponent": "Pittsburgh",
    "season": "2026",
-   "home": false
+   "home": false,
+   "city": "Pittsburgh, PA"
   },
   {
    "date": "2026-08-30",
    "opponent": "Stanford",
    "season": "2026",
-   "home": true
+   "home": false,
+   "city": "Pittsburgh, PA",
+   "neutral": true
   },
   {
    "date": "2026-09-03",
    "opponent": "Lipscomb",
    "season": "2026",
-   "home": false
+   "home": false,
+   "city": "Nashville, TN"
   },
   {
    "date": "2026-09-04",
    "opponent": "Florida State",
    "season": "2026",
-   "home": true
+   "home": false,
+   "city": "Nashville, TN",
+   "neutral": true
   },
   {
    "date": "2026-09-08",
    "opponent": "Wichita State",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-09-11",
    "opponent": "South Dakota State",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-09-13",
    "opponent": "Tulsa",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-09-15",
    "opponent": "Wichita State",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "Charles Koch Arena",
+   "city": "Wichita, KS"
   },
   {
    "date": "2026-09-18",
    "opponent": "Ole Miss",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-09-20",
    "opponent": "Grand Canyon",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-09-25",
    "opponent": "Houston",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-09-27",
    "opponent": "Texas Tech",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "United Supermarkets Arena",
+   "city": "Lubbock, TX"
   },
   {
    "date": "2026-10-01",
    "opponent": "Utah",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-10-02",
    "opponent": "BYU",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-10-11",
    "opponent": "UCF",
    "season": "2026",
-   "home": false
+   "home": false,
+   "city": "Orlando, FL"
   },
   {
    "date": "2026-10-15",
    "opponent": "Kansas State",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "Morgan Family Arena",
+   "city": "Manhattan, KS"
   },
   {
    "date": "2026-10-18",
    "opponent": "Arizona State",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Allen Fieldhouse",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-10-23",
    "opponent": "TCU",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "Schollmaier Arena",
+   "city": "Fort Worth, TX"
   },
   {
    "date": "2026-10-25",
    "opponent": "Baylor",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "Ferrell Center",
+   "city": "Waco, TX"
   },
   {
    "date": "2026-10-30",
    "opponent": "Kansas State",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Allen Fieldhouse",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-11-01",
    "opponent": "Iowa State",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "Hilton Coliseum",
+   "city": "Ames, IA"
   },
   {
    "date": "2026-11-05",
    "opponent": "Baylor",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-11-08",
    "opponent": "Cincinnati",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-11-12",
    "opponent": "Colorado",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "CU Events Center",
+   "city": "Boulder, CO"
   },
   {
    "date": "2026-11-15",
    "opponent": "TCU",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-11-20",
    "opponent": "West Virginia",
    "season": "2026",
-   "home": true
+   "home": true,
+   "venue": "Horejsi Family Volleyball Arena",
+   "city": "Lawrence, KS"
   },
   {
    "date": "2026-11-25",
    "opponent": "Arizona",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "McKale Center",
+   "city": "Tucson, AZ"
   },
   {
    "date": "2026-11-27",
    "opponent": "Arizona State",
    "season": "2026",
-   "home": false
+   "home": false,
+   "venue": "Desert Financial Arena",
+   "city": "Tempe, AZ"
   }
  ],
  "standings": [

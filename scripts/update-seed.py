@@ -210,13 +210,24 @@ for entry in load_json("scraped/upcoming.json", []):
     key = (date, opponent.lower())
     if key in matches:
         continue
-    matches[key] = {
+    fixture = {
         "date": date,
         "opponent": opponent,
         "season": date[:4],
         # kuathletics writes "versus" for home and "at" for road games.
         "home": bool(entry.get("home")),
     }
+    for field in ("venue", "city"):
+        if entry.get(field):
+            fixture[field] = entry[field]
+    # "versus" only means KU is the designated home team, which at an early-season
+    # event is a neutral floor: KU is listed "vs Stanford" for a match played in
+    # Pittsburgh. Where the schedule gave a city, hand the flag to the
+    # home/away/neutral pass below so the venue decides. Without a city there is
+    # nothing to decide from, so "versus" is left to stand for home on its own.
+    if fixture.get("city"):
+        fixture["_kuDesignatedHome"] = fixture["home"]
+    matches[key] = fixture
 
 # A fixture we already knew about is kept even when this scrape did not see it.
 # kuathletics renders its schedule rows progressively, and a capture taken a beat
@@ -269,7 +280,7 @@ for m in matches.values():
 
 for m in matches.values():
     if "_kuDesignatedHome" not in m:
-        continue  # upcoming match: home already came from kuathletics
+        continue  # nothing to decide from: no venue was recorded for this match
     designated = m.pop("_kuDesignatedHome")
     at_home = m.get("city") == HOME_CITY
     tournament = len(venue_opponents.get((m["season"], m.get("venue")), ())) > 1

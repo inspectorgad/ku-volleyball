@@ -72,6 +72,34 @@ if ((index.indexVersion ?? 1) < INDEX_VERSION) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// kuathletics writes cities in AP style ("Lawrence, Kan."); the NCAA box scores
+// the played matches come from use postal codes ("Lawrence, KS"). The seed
+// decides home from neutral by comparing a match's city against KU's, so the two
+// have to agree. States AP never abbreviates are already their own key.
+const POSTAL_STATE = {
+  'Ala.': 'AL', 'Alaska': 'AK', 'Ariz.': 'AZ', 'Ark.': 'AR', 'Calif.': 'CA',
+  'Colo.': 'CO', 'Conn.': 'CT', 'D.C.': 'DC', 'Del.': 'DE', 'Fla.': 'FL',
+  'Ga.': 'GA', 'Hawaii': 'HI', 'Idaho': 'ID', 'Ill.': 'IL', 'Ind.': 'IN',
+  'Iowa': 'IA', 'Kan.': 'KS', 'Ky.': 'KY', 'La.': 'LA', 'Maine': 'ME',
+  'Md.': 'MD', 'Mass.': 'MA', 'Mich.': 'MI', 'Minn.': 'MN', 'Miss.': 'MS',
+  'Mo.': 'MO', 'Mont.': 'MT', 'N.C.': 'NC', 'N.D.': 'ND', 'N.H.': 'NH',
+  'N.J.': 'NJ', 'N.M.': 'NM', 'N.Y.': 'NY', 'Neb.': 'NE', 'Nev.': 'NV',
+  'Ohio': 'OH', 'Okla.': 'OK', 'Ore.': 'OR', 'Pa.': 'PA', 'R.I.': 'RI',
+  'S.C.': 'SC', 'S.D.': 'SD', 'Tenn.': 'TN', 'Texas': 'TX', 'Utah': 'UT',
+  'Va.': 'VA', 'Vt.': 'VT', 'W.Va.': 'WV', 'Wash.': 'WA', 'Wis.': 'WI',
+  'Wyo.': 'WY',
+};
+
+function postalCity(text) {
+  const cut = text.lastIndexOf(',');
+  if (cut < 0) return text;
+  const place = text.slice(0, cut).trim();
+  const state = text.slice(cut + 1).trim();
+  // An unmapped state is left alone rather than guessed at, so a change in how
+  // the site writes them shows up as an unmatched city, not a wrong one.
+  return `${place}, ${POSTAL_STATE[state] || state}`;
+}
+
 async function getJson(url) {
   const resp = await fetch(url, { headers: { accept: 'application/json' } });
   await sleep(400); // public instance is limited to 5 req/s
@@ -298,6 +326,8 @@ try {
   // after the one named.
   const seasonYear = Number(/\b(20\d{2})\b/.exec(schedText)?.[1]) || new Date().getUTCFullYear();
   const SHORT = /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2})$/;
+  // "Lawrence, Kan." / "Lubbock, Texas" - a place, then a state, and nothing else.
+  const CITY = /^[A-Z][A-Za-z.'\- ]*, ?[A-Z][A-Za-z.]*\.?$/;
   const schedLines = schedText.split('\n').map((l) => l.trim());
   for (let i = 0; i < schedLines.length; i++) {
     if (schedLines[i] !== 'vs' && schedLines[i] !== 'at') continue;
@@ -308,28 +338,47 @@ try {
     // The date follows within the venue/TV block; a bounded look-ahead keeps a
     // row without one from adopting the next row's date.
     let found = null;
+    let dateAt = -1;
     for (let k = j + 1; k < Math.min(j + 14, schedLines.length); k++) {
       const m = SHORT.exec(schedLines[k]);
-      if (m) { found = m; break; }
+      if (m) { found = m; dateAt = k; break; }
     }
     if (!found) continue;
     const month = months.findIndex((name) => name.startsWith(found[1])) + 1;
     if (month === 0) continue;
     const year = month >= 8 ? seasonYear : seasonYear + 1;
+    // Between the opponent and the date sits the location: an optional venue
+    // name, then the city, then an optional broadcast note. Conference road
+    // games name the arena; the early-season events often give only the city.
+    const between = [];
+    for (let k = j + 1; k < dateAt; k++) {
+      const line = schedLines[k];
+      if (line && !line.startsWith('TV:')) between.push(line);
+    }
+    const cityAt = between.findIndex((line) => CITY.test(line));
     upcoming.push({
       date: `${year}-${String(month).padStart(2, '0')}-${String(found[2]).padStart(2, '0')}`,
       opponent,
       home: schedLines[i] === 'vs',
+      // Postal state codes, to match the city form the NCAA box scores use for
+      // played matches - the seed decides home/neutral by comparing the two.
+      city: cityAt >= 0 ? postalCity(between[cityAt]) : null,
+      venue: cityAt > 0 ? between[cityAt - 1] : null,
     });
   }
-  // De-dup (the rotator repeats on every page view)
-  const seen = new Set();
-  const uniqueUpcoming = upcoming.filter((u) => {
+  // De-dup (the rotator repeats on every page view). The two sources describe
+  // the same fixture differently: the rotator states the year outright but names
+  // no location, the table gives a location but has to infer the year. So the
+  // first sighting sets the date and the side, and either may fill in the venue.
+  const byKey = new Map();
+  for (const u of upcoming) {
     const k = `${u.date}|${u.opponent}`;
-    if (seen.has(k)) return false;
-    seen.add(k);
-    return true;
-  });
+    const prev = byKey.get(k);
+    if (!prev) { byKey.set(k, u); continue; }
+    if (!prev.city && u.city) prev.city = u.city;
+    if (!prev.venue && u.venue) prev.venue = u.venue;
+  }
+  const uniqueUpcoming = [...byKey.values()];
   fs.writeFileSync('scraped/upcoming.json', JSON.stringify(uniqueUpcoming, null, 1));
   console.log(`upcoming: ${uniqueUpcoming.length} matches`);
 
