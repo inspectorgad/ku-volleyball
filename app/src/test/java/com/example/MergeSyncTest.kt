@@ -107,6 +107,27 @@ class MergeSyncTest {
         }
 
     @Test
+    fun `merge leaves the spare ticket's guest alone`() = runTest {
+        val dao = db.dao()
+        Seeder.merge(seedJson(), dao)
+        val match = dao.matchesOnce().single()
+        dao.updateMatch(match.copy(guest = "Dana Delta"))
+
+        // The feed knows nothing about the guest, so every later sync has to
+        // leave the column as the user left it - including one that arrives with
+        // new facts for the same match.
+        val withVenue = seedJson().apply {
+            getJSONArray("matches").getJSONObject(0)
+                .put("venue", "UW Field House")
+                .put("city", "Madison, WI")
+        }
+        Seeder.merge(withVenue, dao)
+        val synced = dao.matchesOnce().single()
+        assertEquals("Dana Delta", synced.guest)
+        assertEquals("UW Field House", synced.venue)
+    }
+
+    @Test
     fun `merge never adds lines to a match that already has any`() = runTest {
         val dao = db.dao()
         Seeder.merge(seedJson(), dao)

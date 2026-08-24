@@ -102,7 +102,11 @@ data class Match(
     val home: Boolean? = null,
     val neutral: Boolean = false,
     val venue: String = "",
-    val city: String = ""
+    val city: String = "",
+    // Who is taking the spare ticket for this match. Typed in by hand and owned
+    // by this device alone - it is not in the feed and never will be, so a sync
+    // has to leave it alone. Empty means nobody is down for it yet.
+    val guest: String = ""
 ) {
     /** Standard notation: "vs" for home and neutral games, "at" on the road. */
     val versus: String get() = if (home == false && !neutral) "at" else "vs"

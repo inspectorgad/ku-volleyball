@@ -113,6 +113,16 @@ fun MatchesScreen(
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
+                                // Only shown once someone is down for the spare
+                                // ticket, so the matches still going begging are
+                                // the ones with nothing on this line.
+                                match.guest.takeIf { it.isNotBlank() }?.let {
+                                    Text(
+                                        "Ticket: $it",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
                             }
                             ResultText(match)
                         }
@@ -215,6 +225,7 @@ fun MatchDialog(
     var teamSets by remember { mutableStateOf(match?.teamSets?.toString() ?: "") }
     var oppSets by remember { mutableStateOf(match?.opponentSets?.toString() ?: "") }
     var setScores by remember { mutableStateOf(match?.setScores ?: "") }
+    var guest by remember { mutableStateOf(match?.guest ?: "") }
     // Home / Away / Neutral, defaulting to whatever the match already says.
     var site by remember {
         mutableStateOf(
@@ -277,6 +288,13 @@ fun MatchDialog(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
+                OutlinedTextField(
+                    value = guest,
+                    onValueChange = { guest = it },
+                    label = { Text("Going with me (spare ticket)") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf("Home", "Away", "Neutral").forEach { option ->
                         FilterChip(
@@ -292,9 +310,12 @@ fun MatchDialog(
             Button(
                 enabled = dateValid && opponent.isNotBlank() && season.isNotBlank(),
                 onClick = {
-                    onSave(
-                        Match(
-                            id = match?.id ?: 0,
+                    // Copied from the match being edited rather than rebuilt
+                    // field by field, so anything this form does not ask about -
+                    // the venue and city a sync filled in - survives an edit
+                    // instead of being quietly dropped.
+                    val edited = (match ?: Match(date = date, opponent = opponent, season = season))
+                        .copy(
                             date = date,
                             opponent = opponent.trim(),
                             season = season.trim(),
@@ -303,10 +324,9 @@ fun MatchDialog(
                             setScores = setScores.trim().ifBlank { null },
                             home = site == "Home",
                             neutral = site == "Neutral",
-                            venue = match?.venue ?: "",
-                            city = match?.city ?: ""
+                            guest = guest.trim()
                         )
-                    )
+                    onSave(edited)
                 }
             ) { Text("Save") }
         },
@@ -403,6 +423,15 @@ fun MatchDetailScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
+                            Text(
+                                match.guest.takeIf { it.isNotBlank() }
+                                    ?.let { "Spare ticket: $it" }
+                                    ?: "Spare ticket unclaimed — tap Edit to name someone.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = if (match.guest.isBlank())
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                else MaterialTheme.colorScheme.primary
+                            )
                             Text(
                                 "Tap a player below to enter their stat line.",
                                 style = MaterialTheme.typography.bodySmall,

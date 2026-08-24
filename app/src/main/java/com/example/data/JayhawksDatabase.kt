@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         ConferenceStanding::class, PollEntry::class,
         OpponentStatLine::class, MatchTeamStats::class,
         OpponentRosterEntry::class, OpponentSeasonStat::class],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -129,6 +129,15 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        // v6 -> v7: who is taking the spare ticket for a match. The first column
+        // on this table the user owns outright rather than the scrape, so it is
+        // also the first that a sync must be careful not to overwrite.
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE matches ADD COLUMN guest TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
@@ -136,7 +145,8 @@ abstract class JayhawksDatabase : RoomDatabase() {
                     JayhawksDatabase::class.java,
                     "ku_volleyball.db"
                 ).addMigrations(
-                    MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6
+                    MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6,
+                    MIGRATION_6_7
                 ).build().also { instance = it }
             }
     }
