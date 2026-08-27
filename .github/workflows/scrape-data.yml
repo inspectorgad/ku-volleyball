@@ -3,8 +3,15 @@ name: Scrape KU volleyball data
 on:
   workflow_dispatch:
   # Nightly at 09:00 UTC (4 AM Central) — after even late matches are final.
+  # The 13:00 entry is a backstop, not a second collection: GitHub drops
+  # scheduled runs under load and says nothing when it does, so on 2026-08-27
+  # both this repo's 09:00 run and the Diamonds one simply never queued. A
+  # missed night is invisible to every check we have, because nothing ran to
+  # fail. A second attempt costs one no-op run: the scrape is idempotent and the
+  # seed is only rewritten when the data actually differs.
   schedule:
     - cron: '0 9 * * *'
+    - cron: '0 13 * * *'
   push:
     branches:
       - main
