@@ -59,6 +59,17 @@ def add_player(name, jersey, position, height="", prefer=False):
             existing["height"] = height
 
 
+def strip_rank(name):
+    """Drops the national rank kuathletics prefixes onto a ranked opponent.
+
+    "#4 Pittsburgh" is not a team name and changes week to week, so stored
+    verbatim it forks one fixture into a fresh row on every poll - which is
+    exactly what happened to Pittsburgh and Stanford the morning the 2026
+    preseason poll landed.
+    """
+    return re.sub(r"^#\d+\s+", "", (name or "").strip())
+
+
 def canonical_name(name):
     return players[name.lower()]["name"]
 
@@ -204,7 +215,7 @@ played_dates = {key[0] for key in matches}
 today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 for entry in load_json("scraped/upcoming.json", []):
     date = entry.get("date", "")
-    opponent = (entry.get("opponent") or "").strip()
+    opponent = strip_rank(entry.get("opponent"))
     if not date or not opponent or date < today:
         continue
     key = (date, opponent.lower())
@@ -244,7 +255,10 @@ seasons_seen = {m["season"] for m in matches.values()}
 carried = []
 for match in previous_seed.get("matches", []):
     date = match.get("date", "")
-    opponent = (match.get("opponent") or "").strip()
+    # Stripped here too, so a rank that a previous run stored into the seed
+    # collapses onto the clean fixture instead of being carried forward beside
+    # it for the rest of the season.
+    opponent = strip_rank(match.get("opponent"))
     if not date or not opponent or date < today:
         continue
     # A played match comes from the NCAA sweep, not the schedule page, so it is
@@ -258,7 +272,7 @@ for match in previous_seed.get("matches", []):
     key = (date, opponent.lower())
     if key in matches:
         continue
-    matches[key] = match
+    matches[key] = {**match, "opponent": opponent}
     carried.append(f"{date} {opponent}")
 if carried:
     print(f"  carried forward {len(carried)} fixture(s) this scrape did not "
@@ -303,7 +317,7 @@ if played:
 def norm_team(name):
     """Canonical key for cross-source name matching ('Iowa State'/'Iowa St.')."""
     # Strips the NCAA's poll-vote count and kuathletics' "(Exh.)" suffix.
-    n = re.sub(r"\s*\((?:\d+|[Ee]xh\.?|[Ee]xhibition)\)\s*$", "", name or "").lower()
+    n = re.sub(r"\s*\((?:\d+|[Ee]xh\.?|[Ee]xhibition)\)\s*$", "", strip_rank(name)).lower()
     n = n.replace(".", "")
     n = re.sub(r"\bstate\b", "st", n)
     return re.sub(r"\s+", " ", n).strip()

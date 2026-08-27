@@ -41,11 +41,18 @@ index.opponentGames ??= {};
 // only for the current season, since that is the only one anybody asks about,
 // and it keeps this off the already-swept historical dates.
 const CURRENT_SEASON = SEASONS.map(Number).sort().at(-1);
+// kuathletics prefixes a ranked opponent with its national rank ("#4
+// Pittsburgh"), which is not part of the team's name and changes week to week.
+// Stored verbatim it forks one fixture into a new row on every poll: Pittsburgh
+// on Aug 28 and Stanford on Aug 30 each appeared twice the morning the preseason
+// poll landed, once ranked and once not.
+const stripRank = (name) => (name || '').replace(/^#\d+\s+/, '').trim();
+
 // Mirrors norm_team() in update-seed.py. Strips the poll-vote count the NCAA
 // appends and the "(Exh.)" kuathletics adds to exhibitions — the latter is why
 // the season opener against Creighton matched nothing on the first run.
 const normTeamName = (name) =>
-  (name || '')
+  stripRank(name)
     .replace(/\s*\((?:\d+|exh\.?|exhibition)\)\s*$/i, '')
     .toLowerCase()
     .replace(/\./g, '')
@@ -313,7 +320,7 @@ try {
     const month = months.indexOf(m[3]) + 1;
     if (month === 0) continue;
     const date = `${m[5]}-${String(month).padStart(2, '0')}-${String(m[4]).padStart(2, '0')}`;
-    upcoming.push({ date, opponent: m[2].trim(), home: m[1] === 'versus' });
+    upcoming.push({ date, opponent: stripRank(m[2]), home: m[1] === 'versus' });
   }
 
   // Source 2 - the schedule table's own rows, which cover the whole season.
@@ -333,7 +340,7 @@ try {
     if (schedLines[i] !== 'vs' && schedLines[i] !== 'at') continue;
     let j = i + 1;
     while (j < schedLines.length && !schedLines[j]) j++;
-    const opponent = (schedLines[j] || '').trim();
+    const opponent = stripRank(schedLines[j]);
     if (!opponent) continue;
     // The date follows within the venue/TV block; a bounded look-ahead keeps a
     // row without one from adopting the next row's date.
