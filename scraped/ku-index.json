@@ -7129,6 +7129,27 @@
    },
    "conferenceGame": false
   },
+  "6626717": {
+   "date": "2026-08-28",
+   "season": "2026",
+   "home": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "UIW",
+    "seo": "uiw",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626875": {
    "date": "2026-08-28",
    "season": "2026",
@@ -7174,6 +7195,14 @@
  },
  "indexVersion": 2,
  "opponentGames": {
+  "6626717": {
+   "date": "2026-08-28",
+   "season": "2026",
+   "teams": [
+    "Houston"
+   ],
+   "boxscored": true
+  },
   "6626875": {
    "date": "2026-08-28",
    "season": "2026",
