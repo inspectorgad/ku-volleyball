@@ -151,7 +151,8 @@
   "2026-08-24": true,
   "2026-08-25": true,
   "2026-08-26": true,
-  "2026-08-27": true
+  "2026-08-27": true,
+  "2026-08-28": true
  },
  "games": {
   "6479442": {
@@ -398,6 +399,13 @@
    "home": "Nebraska",
    "away": "Kansas",
    "boxscored": true
+  },
+  "6625717": {
+   "date": "2026-08-28",
+   "final": false,
+   "home": "Pittsburgh",
+   "away": "Kansas",
+   "boxscored": false
   }
  },
  "big12Games": {
@@ -7121,6 +7129,27 @@
    },
    "conferenceGame": false
   },
+  "6626875": {
+   "date": "2026-08-28",
+   "season": "2026",
+   "home": {
+    "name": "Florida St.",
+    "seo": "florida-st",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 24,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6639890": {
    "date": "2026-08-22",
    "season": "2026",
@@ -7145,6 +7174,23 @@
  },
  "indexVersion": 2,
  "opponentGames": {
+  "6626875": {
+   "date": "2026-08-28",
+   "season": "2026",
+   "teams": [
+    "Florida St.",
+    "BYU"
+   ],
+   "boxscored": true
+  },
+  "6627569": {
+   "date": "2026-08-28",
+   "season": "2026",
+   "teams": [
+    "Grand Canyon"
+   ],
+   "boxscored": true
+  },
   "6639888": {
    "date": "2026-08-23",
    "season": "2026",
