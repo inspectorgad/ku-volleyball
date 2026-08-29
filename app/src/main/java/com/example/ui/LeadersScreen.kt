@@ -194,6 +194,10 @@ fun LeadersScreen(
                         }
                 )
             }
+
+            // Under the boards, same as on the Serving screen: a reference is
+            // looked up after something on the way down raised the question.
+            item { StatGlossaryCard(modifier = Modifier.padding(top = 8.dp)) }
         }
     }
 }
