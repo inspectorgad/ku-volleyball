@@ -409,6 +409,10 @@ fun PlayerDetailScreen(
                     }
                 }
             }
+
+            // Below the match log, as on Leaders and Serving. The stats table at
+            // the top is seventeen abbreviations wide and this is what they mean.
+            item { StatGlossaryCard(modifier = Modifier.padding(top = 8.dp)) }
         }
     }
 
