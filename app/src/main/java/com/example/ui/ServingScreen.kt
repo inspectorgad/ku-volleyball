@@ -180,6 +180,12 @@ fun ServingScreen(
                             )
                         } else {
                             ServingTable(servers)
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                TOOLTIP_HINT,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     }
                 }
@@ -251,7 +257,9 @@ private fun ServingTable(rows: List<Pair<Player, com.example.stats.VolleyballTot
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             ServingCell("", width = 108.dp, header = true)
-            SERVING_COLUMNS.forEach { ServingCell(it, width = cellWidth, header = true) }
+            SERVING_COLUMNS.forEach { column ->
+                StatTooltip(column) { ServingCell(column, width = cellWidth, header = true) }
+            }
         }
         HorizontalDivider()
         rows.forEach { (player, t) ->

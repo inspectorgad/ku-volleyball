@@ -202,11 +202,15 @@ fun LeadersScreen(
 fun LeaderCard(title: String, entries: List<Pair<String, String>>) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                title,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
+            // "Hitting % (min 24 TA)" carries a qualifier the glossary has no
+            // entry for, so look up the bare term before the parenthesis.
+            StatTooltip(title.substringBefore(" (").trim()) {
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
             if (entries.isEmpty()) {
                 Text(

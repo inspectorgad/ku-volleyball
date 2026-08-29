@@ -8,8 +8,10 @@ import com.example.stats.servingProgress
 import com.example.stats.formatPerSet
 import com.example.stats.summarize
 import com.example.ui.STAT_COLUMNS
+import com.example.ui.STAT_GLOSSARY
 import com.example.ui.statValues
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VolleyballStatsTest {
@@ -189,6 +191,30 @@ class VolleyballStatsTest {
             statValues(aggregate(listOf(line(setsPlayed = 4, kills = 9, serviceErrors = 3)))).size
         )
         assertEquals("SRV", STAT_COLUMNS[STAT_COLUMNS.indexOf("SE") + 1])
+    }
+
+    @Test
+    fun `every stat column has a definition`() {
+        // A heading with no glossary entry renders with no tooltip and gives no
+        // hint that it is missing one, so the gap would only ever be found by
+        // someone long-pressing it and getting nothing.
+        val undefined = STAT_COLUMNS.filterNot { STAT_GLOSSARY.containsKey(it) }
+        assertEquals(emptyList<String>(), undefined)
+    }
+
+    @Test
+    fun `definitions read as sentences rather than restating the abbreviation`() {
+        STAT_GLOSSARY.forEach { (term, explanation) ->
+            assertTrue("$term has an empty definition", explanation.isNotBlank())
+            assertTrue(
+                "$term's definition should end in a full stop: $explanation",
+                explanation.trimEnd().endsWith(".")
+            )
+            assertTrue(
+                "$term's definition is too terse to explain anything: $explanation",
+                explanation.length > term.length + 12
+            )
+        }
     }
 
     @Test
