@@ -32,6 +32,21 @@ data class VolleyballTotals(
         get() = if (attackAttempts == 0) 0.0
         else (kills - attackErrors).toDouble() / attackAttempts
 
+    /** Aces won less serves missed. Negative when a server gives away more than they take. */
+    val serveDifferential: Int get() = serviceAces - serviceErrors
+
+    /**
+     * Serving efficiency, as net aces per set.
+     *
+     * Deliberately not the textbook (aces - errors) / attempts: an NCAA
+     * volleyball box score publishes aces and errors but never the number of
+     * serves attempted, so that denominator does not exist in any source we
+     * have. Sets played is the one honest denominator available, and it does
+     * the job a rate is for - comparing a server who plays every set against
+     * one who plays three.
+     */
+    val servingEfficiency: Double get() = perSet(serveDifferential.toDouble())
+
     val killsPerSet: Double get() = perSet(kills.toDouble())
     val assistsPerSet: Double get() = perSet(assists.toDouble())
     val digsPerSet: Double get() = perSet(digs.toDouble())

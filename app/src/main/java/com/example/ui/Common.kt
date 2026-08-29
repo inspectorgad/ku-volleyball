@@ -27,8 +27,11 @@ import com.example.stats.VolleyballTotals
 import com.example.stats.formatAverage
 import com.example.stats.formatPerSet
 
+// SRV is serving efficiency: net aces per set, so it sits beside the SA and SE
+// counts it is derived from. These two lists are positional - a column added to
+// one must be added to the other at the same index.
 val STAT_COLUMNS = listOf(
-    "MP", "SP", "K", "K/S", "E", "TA", "PCT", "A", "SA", "SE",
+    "MP", "SP", "K", "K/S", "E", "TA", "PCT", "A", "SA", "SE", "SRV",
     "D", "D/S", "BS", "BA", "BLK", "PTS"
 )
 
@@ -36,7 +39,8 @@ fun statValues(t: VolleyballTotals): List<String> = listOf(
     t.matches.toString(), t.setsPlayed.toString(), t.kills.toString(),
     formatPerSet(t.killsPerSet), t.attackErrors.toString(), t.attackAttempts.toString(),
     formatAverage(t.hittingPercentage), t.assists.toString(), t.serviceAces.toString(),
-    t.serviceErrors.toString(), t.digs.toString(), formatPerSet(t.digsPerSet),
+    t.serviceErrors.toString(), formatPerSet(t.servingEfficiency),
+    t.digs.toString(), formatPerSet(t.digsPerSet),
     t.blockSolos.toString(), t.blockAssists.toString(), t.totalBlocks.toString(),
     formatPerSet(t.points)
 )

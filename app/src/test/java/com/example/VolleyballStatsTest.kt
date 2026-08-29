@@ -5,6 +5,8 @@ import com.example.stats.aggregate
 import com.example.stats.formatAverage
 import com.example.stats.formatPerSet
 import com.example.stats.summarize
+import com.example.ui.STAT_COLUMNS
+import com.example.ui.statValues
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -95,6 +97,43 @@ class VolleyballStatsTest {
         assertEquals(11.0, totals.assistsPerSet, 1e-9)
         assertEquals(0.5, totals.acesPerSet, 1e-9)
         assertEquals("2.50", formatPerSet(totals.killsPerSet))
+    }
+
+    @Test
+    fun `serving efficiency is net aces per set and goes negative`() {
+        // A server who misses more than they win reads below zero: that is the
+        // whole point of the column, so it must not be clamped or made absolute.
+        val costly = aggregate(listOf(line(setsPlayed = 4, serviceAces = 1, serviceErrors = 5)))
+        assertEquals(-4, costly.serveDifferential)
+        assertEquals(-1.0, costly.servingEfficiency, 1e-9)
+
+        val earning = aggregate(listOf(line(setsPlayed = 4, serviceAces = 6, serviceErrors = 2)))
+        assertEquals(4, earning.serveDifferential)
+        assertEquals(1.0, earning.servingEfficiency, 1e-9)
+
+        // Same net, half the sets. The rate separates them where the raw
+        // differential cannot, which is the reason it is a per-set figure.
+        val efficient = aggregate(listOf(line(setsPlayed = 2, serviceAces = 6, serviceErrors = 2)))
+        assertEquals(earning.serveDifferential, efficient.serveDifferential)
+        assertEquals(2.0, efficient.servingEfficiency, 1e-9)
+    }
+
+    @Test
+    fun `a player who never served reads zero rather than dividing by zero`() {
+        assertEquals(0.0, aggregate(listOf(line(setsPlayed = 3))).servingEfficiency, 0.0)
+        assertEquals(0.0, aggregate(emptyList()).servingEfficiency, 0.0)
+    }
+
+    @Test
+    fun `every stat column has a matching value`() {
+        // STAT_COLUMNS and statValues are positional: if they ever drift, every
+        // cell after the gap silently sits under the wrong heading.
+        assertEquals(STAT_COLUMNS.size, statValues(aggregate(emptyList())).size)
+        assertEquals(
+            STAT_COLUMNS.size,
+            statValues(aggregate(listOf(line(setsPlayed = 4, kills = 9, serviceErrors = 3)))).size
+        )
+        assertEquals("SRV", STAT_COLUMNS[STAT_COLUMNS.indexOf("SE") + 1])
     }
 
     @Test
