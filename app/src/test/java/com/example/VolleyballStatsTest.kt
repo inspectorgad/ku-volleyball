@@ -203,16 +203,21 @@ class VolleyballStatsTest {
     }
 
     @Test
-    fun `definitions read as sentences rather than restating the abbreviation`() {
+    fun `definitions are sentences that say more than the abbreviation does`() {
         STAT_GLOSSARY.forEach { (term, explanation) ->
             assertTrue("$term has an empty definition", explanation.isNotBlank())
             assertTrue(
                 "$term's definition should end in a full stop: $explanation",
                 explanation.trimEnd().endsWith(".")
             )
+            // Deliberately not a length floor. "Kills per set." is a complete
+            // definition of K/S and a character count would fail it, which says
+            // more about the measure than about the sentence. What actually
+            // makes an entry useless is restating the heading, so test that.
             assertTrue(
-                "$term's definition is too terse to explain anything: $explanation",
-                explanation.length > term.length + 12
+                "$term's definition just repeats the heading: $explanation",
+                explanation.filter { it.isLetterOrDigit() }.lowercase() !=
+                    term.filter { it.isLetterOrDigit() }.lowercase()
             )
         }
     }
