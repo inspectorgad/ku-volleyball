@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -50,50 +53,99 @@ fun statValues(t: VolleyballTotals): List<String> = listOf(
     formatPerSet(t.points)
 )
 
+/** The serving table's headings. Public so a test can hold the glossary to them. */
+val SERVING_COLUMNS = listOf("SP", "SA", "SE", "NET", "SRV", "SA/S", "SE/S")
+
+/**
+ * One stat, explained once.
+ *
+ * [aliases] are other headings that mean the same thing — a leaderboard card says
+ * "Service Aces" where a table says "SA" — so the sentence is written in one place
+ * and both look it up.
+ */
+data class StatDefinition(
+    val term: String,
+    val meaning: String,
+    val aliases: List<String> = emptyList()
+)
+
 /**
  * What each abbreviation means, in the plainest words that are still true.
  *
- * Keyed by the exact heading text so a table can look up whatever it is about to
- * draw. Leaderboard titles are in here too, since "Service Aces" needs the same
- * explaining as "SA" and there is no reason to write it twice.
+ * Ordered for reading rather than by table position: the serving trio sits with SA
+ * and SE it comes from. This is the list the glossary card draws, so a stat added
+ * here explains itself everywhere at once.
+ *
+ * Every sentence leads with the longhand name, which is why the card shows no
+ * separate alias column - "PCT: Hitting percentage: ..." already answers someone
+ * who arrived from the "Hitting %" leaderboard.
  */
-val STAT_GLOSSARY: Map<String, String> = mapOf(
-    "MP" to "Matches played.",
-    "SP" to "Sets played. A match is three to five sets.",
-    "K" to "Kills. An attack that ends the rally and wins the point.",
-    "K/S" to "Kills per set.",
-    "E" to "Attack errors. An attack that ends the rally for the other side — out, " +
-        "into the net, or blocked straight down.",
-    "TA" to "Total attacks. Every attack swing taken, kills and errors included.",
-    "PCT" to "Hitting percentage: (kills − errors) ÷ total attacks. .300 is excellent, " +
-        ".000 means as many errors as kills, and it can go negative.",
-    "A" to "Assists. The pass that sets up a kill — almost always the setter's.",
-    "SA" to "Service aces. A serve the receiving team cannot play, winning the point outright.",
-    "SE" to "Service errors. A serve that misses: into the net, long, wide, or a foot fault.",
-    "SRV" to "Serving efficiency: net aces per set, (aces − errors) ÷ sets played. A box " +
-        "score never publishes serve attempts, so sets is the denominator. Below zero " +
-        "means the serving cost more than it won, where most servers sit.",
-    "NET" to "Aces minus errors. The raw serving ledger, before dividing by sets.",
-    "SA/S" to "Service aces per set.",
-    "SE/S" to "Service errors per set.",
-    "D" to "Digs. Keeping an attacked ball off the floor.",
-    "D/S" to "Digs per set.",
-    "BS" to "Block solos. A block that ends the rally, made by one blocker.",
-    "BA" to "Block assists. A block that ends the rally, shared by two or three blockers.",
-    "BLK" to "Total blocks: solos plus assists.",
-    "PTS" to "Points, scored NCAA-style: a kill, an ace and a solo block count one each, " +
-        "and a block assist counts a half.",
-    // Leaderboard card titles, same terms in longhand.
-    "Kills" to "An attack that ends the rally and wins the point.",
-    "Assists" to "The pass that sets up a kill — almost always the setter's.",
-    "Service Aces" to "A serve the receiving team cannot play, winning the point outright.",
-    "Service Errors" to "A serve that misses: into the net, long, wide, or a foot fault.",
-    "Digs" to "Keeping an attacked ball off the floor.",
-    "Total Blocks" to "Block solos plus block assists.",
-    "Points" to "A kill, an ace and a solo block count one each; a block assist counts a half.",
-    "Hitting %" to "(kills − errors) ÷ total attacks. .300 is excellent, .000 means as many " +
-        "errors as kills, and it can go negative."
+val STAT_DEFINITIONS: List<StatDefinition> = listOf(
+    StatDefinition("MP", "Matches played."),
+    StatDefinition("SP", "Sets played. A match is three to five sets."),
+    StatDefinition(
+        "K", "Kills. An attack that ends the rally and wins the point.",
+        listOf("Kills")
+    ),
+    StatDefinition("K/S", "Kills per set."),
+    StatDefinition(
+        "E",
+        "Attack errors. An attack that ends the rally for the other side — out, " +
+            "into the net, or blocked straight down."
+    ),
+    StatDefinition("TA", "Total attacks. Every attack swing taken, kills and errors included."),
+    StatDefinition(
+        "PCT",
+        "Hitting percentage: (kills − errors) ÷ total attacks. .300 is excellent, " +
+            ".000 means as many errors as kills, and it can go negative.",
+        listOf("Hitting %")
+    ),
+    StatDefinition(
+        "A", "Assists. The pass that sets up a kill — almost always the setter's.",
+        listOf("Assists")
+    ),
+    StatDefinition(
+        "SA",
+        "Service aces. A serve the receiving team cannot play, winning the point outright.",
+        listOf("Service Aces")
+    ),
+    StatDefinition(
+        "SE",
+        "Service errors. A serve that misses: into the net, long, wide, or a foot fault.",
+        listOf("Service Errors")
+    ),
+    StatDefinition(
+        "SRV",
+        "Serving efficiency: net aces per set, (aces − errors) ÷ sets played. A box " +
+            "score never publishes serve attempts, so sets is the denominator. Below zero " +
+            "means the serving cost more than it won, where most servers sit."
+    ),
+    StatDefinition("NET", "Aces minus errors. The raw serving ledger, before dividing by sets."),
+    StatDefinition("SA/S", "Service aces per set."),
+    StatDefinition("SE/S", "Service errors per set."),
+    StatDefinition("D", "Digs. Keeping an attacked ball off the floor.", listOf("Digs")),
+    StatDefinition("D/S", "Digs per set."),
+    StatDefinition("BS", "Block solos. A block that ends the rally, made by one blocker."),
+    StatDefinition(
+        "BA",
+        "Block assists. A block that ends the rally, shared by two or three blockers."
+    ),
+    StatDefinition("BLK", "Total blocks: solos plus assists.", listOf("Total Blocks")),
+    StatDefinition(
+        "PTS",
+        "Points, scored NCAA-style: a kill, an ace and a solo block count one each, " +
+            "and a block assist counts a half.",
+        listOf("Points")
+    )
 )
+
+/** Every heading that can be looked up - abbreviations and longhand alike. */
+val STAT_GLOSSARY: Map<String, String> = buildMap {
+    STAT_DEFINITIONS.forEach { definition ->
+        put(definition.term, definition.meaning)
+        definition.aliases.forEach { put(it, definition.meaning) }
+    }
+}
 
 /** Tooltips are invisible until touched, so tables say out loud that they are there. */
 const val TOOLTIP_HINT = "Press and hold a heading to see what it means."
@@ -118,6 +170,43 @@ fun StatTooltip(term: String, content: @Composable () -> Unit) {
         state = rememberTooltipState()
     ) {
         content()
+    }
+}
+
+/**
+ * The whole glossary, spelled out.
+ *
+ * A tooltip only answers a question you already knew to ask, and only one at a
+ * time. This is the same sentences laid out to be read straight through, for
+ * anyone who would rather scroll a list than long-press twenty headings.
+ */
+@Composable
+fun StatGlossaryCard(modifier: Modifier = Modifier) {
+    Card(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                "What the stats mean",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            STAT_DEFINITIONS.forEach { definition ->
+                Row(modifier = Modifier.padding(vertical = 3.dp)) {
+                    Text(
+                        definition.term,
+                        modifier = Modifier.width(52.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        definition.meaning,
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
     }
 }
 

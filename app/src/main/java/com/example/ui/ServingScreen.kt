@@ -238,14 +238,16 @@ fun ServingScreen(
                     }
                 }
             }
+
+            // Last thing on the screen, where a reference belongs: it is looked up,
+            // not read on the way past.
+            item { StatGlossaryCard(modifier = Modifier.padding(top = 8.dp)) }
         }
     }
 }
 
 /** Reads "+4" / "-14" / "0", so a net figure never has to be squinted at. */
 private fun withSign(value: Int): String = if (value > 0) "+$value" else value.toString()
-
-private val SERVING_COLUMNS = listOf("SP", "SA", "SE", "NET", "SRV", "SA/S", "SE/S")
 
 @Composable
 private fun ServingTable(rows: List<Pair<Player, com.example.stats.VolleyballTotals>>) {

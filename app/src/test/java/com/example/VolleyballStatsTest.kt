@@ -7,7 +7,9 @@ import com.example.stats.formatAverage
 import com.example.stats.servingProgress
 import com.example.stats.formatPerSet
 import com.example.stats.summarize
+import com.example.ui.SERVING_COLUMNS
 import com.example.ui.STAT_COLUMNS
+import com.example.ui.STAT_DEFINITIONS
 import com.example.ui.STAT_GLOSSARY
 import com.example.ui.statValues
 import org.junit.Assert.assertEquals
@@ -198,8 +200,47 @@ class VolleyballStatsTest {
         // A heading with no glossary entry renders with no tooltip and gives no
         // hint that it is missing one, so the gap would only ever be found by
         // someone long-pressing it and getting nothing.
-        val undefined = STAT_COLUMNS.filterNot { STAT_GLOSSARY.containsKey(it) }
+        val undefined = (STAT_COLUMNS + SERVING_COLUMNS).distinct()
+            .filterNot { STAT_GLOSSARY.containsKey(it) }
         assertEquals(emptyList<String>(), undefined)
+    }
+
+    @Test
+    fun `the glossary card lists every column the tables draw`() {
+        // The card is built from STAT_DEFINITIONS while tooltips go through the
+        // derived map, so an entry reachable only as an alias would explain itself
+        // on long-press and then be missing from the list at the bottom of the
+        // Serving screen - the one place someone goes to read them all.
+        val listed = STAT_DEFINITIONS.map { it.term }.toSet()
+        val drawn = (STAT_COLUMNS + SERVING_COLUMNS).distinct()
+        assertEquals(emptyList<String>(), drawn.filterNot { it in listed })
+    }
+
+    @Test
+    fun `leaderboard titles resolve to the same sentence as their abbreviation`() {
+        // Spelled out here rather than read off LeadersScreen, so renaming a card
+        // there without adding the alias fails instead of quietly losing a tooltip.
+        val longhand = mapOf(
+            "Kills" to "K", "Assists" to "A", "Service Aces" to "SA",
+            "Service Errors" to "SE", "Digs" to "D", "Total Blocks" to "BLK",
+            "Points" to "PTS", "Hitting %" to "PCT"
+        )
+        longhand.forEach { (title, abbreviation) ->
+            assertEquals(
+                "$title should mean exactly what $abbreviation means",
+                STAT_GLOSSARY[abbreviation],
+                STAT_GLOSSARY[title]
+            )
+        }
+    }
+
+    @Test
+    fun `no heading is defined twice`() {
+        // Aliases and terms share one namespace in the derived map, so a collision
+        // would silently drop whichever was built first.
+        val headings = STAT_DEFINITIONS.flatMap { listOf(it.term) + it.aliases }
+        assertEquals(headings.size, headings.distinct().size)
+        assertEquals(headings.size, STAT_GLOSSARY.size)
     }
 
     @Test
