@@ -149,10 +149,15 @@ fun LeadersScreen(
                 )
             }
 
+            // Every board here ranks most-first, which for service errors means
+            // the player who missed the most serves tops it. That is what was
+            // asked for and it reads naturally beside the aces it is paid for -
+            // the two together are the whole of a server's ledger.
             val countingCategories = listOf<Pair<String, (VolleyballTotals) -> Int>>(
                 "Kills" to { it.kills },
                 "Assists" to { it.assists },
                 "Service Aces" to { it.serviceAces },
+                "Service Errors" to { it.serviceErrors },
                 "Digs" to { it.digs },
                 "Total Blocks" to { it.totalBlocks }
             )
