@@ -1,8 +1,10 @@
 package com.example
 
 import com.example.data.StatLine
+import com.example.stats.ServingMatch
 import com.example.stats.aggregate
 import com.example.stats.formatAverage
+import com.example.stats.servingProgress
 import com.example.stats.formatPerSet
 import com.example.stats.summarize
 import com.example.ui.STAT_COLUMNS
@@ -122,6 +124,59 @@ class VolleyballStatsTest {
     fun `a player who never served reads zero rather than dividing by zero`() {
         assertEquals(0.0, aggregate(listOf(line(setsPlayed = 3))).servingEfficiency, 0.0)
         assertEquals(0.0, aggregate(emptyList()).servingEfficiency, 0.0)
+    }
+
+    @Test
+    fun `serving progress carries totals forward match by match`() {
+        val season = servingProgress(
+            listOf(
+                ServingMatch("2026-08-28", "Pittsburgh", setsPlayed = 4, aces = 3, errors = 17),
+                ServingMatch("2026-08-30", "Stanford", setsPlayed = 5, aces = 8, errors = 6),
+                ServingMatch("2026-09-03", "Lipscomb", setsPlayed = 3, aces = 5, errors = 4)
+            )
+        )
+        assertEquals(3, season.size)
+
+        // Each row is where the season stood once that match was over.
+        assertEquals(3, season[0].cumulativeAces)
+        assertEquals(-14, season[0].cumulativeDifferential)
+        assertEquals(-3.5, season[0].cumulativeEfficiency, 1e-9)
+
+        assertEquals(11, season[1].cumulativeAces)
+        assertEquals(23, season[1].cumulativeErrors)
+        assertEquals(9, season[1].cumulativeSets)
+        assertEquals(-12, season[1].cumulativeDifferential)
+
+        // The single match stands apart from the running figure: Stanford was
+        // +2 on its own while the season was still deep underwater.
+        assertEquals(2, season[1].differential)
+
+        assertEquals(-11, season[2].cumulativeDifferential)
+        assertEquals(12, season[2].cumulativeSets)
+    }
+
+    @Test
+    fun `serving progress sorts by date rather than trusting the caller`() {
+        // A caller handing over newest-first would otherwise get a series that
+        // looks plausible and runs backwards.
+        val shuffled = servingProgress(
+            listOf(
+                ServingMatch("2026-09-03", "Lipscomb", setsPlayed = 3, aces = 5, errors = 4),
+                ServingMatch("2026-08-28", "Pittsburgh", setsPlayed = 4, aces = 3, errors = 17)
+            )
+        )
+        assertEquals("2026-08-28", shuffled.first().match.date)
+        assertEquals(3, shuffled.first().cumulativeAces)
+        assertEquals(8, shuffled.last().cumulativeAces)
+    }
+
+    @Test
+    fun `serving progress of an empty season is empty, not a divide by zero`() {
+        assertEquals(emptyList<Any>(), servingProgress(emptyList()))
+        val scoreless = servingProgress(
+            listOf(ServingMatch("2026-08-28", "Pittsburgh", setsPlayed = 0, aces = 0, errors = 0))
+        )
+        assertEquals(0.0, scoreless.single().cumulativeEfficiency, 0.0)
     }
 
     @Test

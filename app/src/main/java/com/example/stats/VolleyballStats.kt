@@ -59,6 +59,60 @@ data class VolleyballTotals(
 }
 
 /**
+ * One match's serving, reduced to what a running total needs. Deliberately not
+ * a Room entity: the cumulative arithmetic is worth testing on its own, and it
+ * has no business knowing how a match is stored.
+ *
+ * [setsPlayed] is the length of the match in sets, not a sum over players. A
+ * team serves as one unit through a five-set match, so five is the denominator
+ * its rate belongs over; summing each player's sets would count the same match
+ * six times and make the team look six times better at serving than it is.
+ */
+data class ServingMatch(
+    val date: String,
+    val opponent: String,
+    val setsPlayed: Int,
+    val aces: Int,
+    val errors: Int
+)
+
+/** A match's serving alongside the season-to-date figures through that match. */
+data class ServingProgressPoint(
+    val match: ServingMatch,
+    val cumulativeAces: Int,
+    val cumulativeErrors: Int,
+    val cumulativeSets: Int
+) {
+    val differential: Int get() = match.aces - match.errors
+    val cumulativeDifferential: Int get() = cumulativeAces - cumulativeErrors
+
+    /** Season-to-date serving efficiency: net aces per set, through this match. */
+    val cumulativeEfficiency: Double
+        get() = if (cumulativeSets == 0) 0.0
+        else cumulativeDifferential.toDouble() / cumulativeSets
+}
+
+/**
+ * Walks the season in date order, carrying the running serving totals forward.
+ *
+ * The point of a cumulative view is that each row answers "where did the season
+ * stand after this match", so the input is sorted here rather than trusted to
+ * arrive that way - a caller passing matches newest-first would otherwise get a
+ * plausible-looking series running backwards.
+ */
+fun servingProgress(matches: List<ServingMatch>): List<ServingProgressPoint> {
+    var aces = 0
+    var errors = 0
+    var sets = 0
+    return matches.sortedBy { it.date }.map { m ->
+        aces += m.aces
+        errors += m.errors
+        sets += m.setsPlayed
+        ServingProgressPoint(m, aces, errors, sets)
+    }
+}
+
+/**
  * Sums a set of stat lines into one totals row. Works for Kansas lines,
  * opposing lines, and stored team totals alike — [matches] is simply the number
  * of rows summed, so it counts matches for per-player or per-opponent rollups.
