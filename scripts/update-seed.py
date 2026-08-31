@@ -278,6 +278,46 @@ if carried:
     print(f"  carried forward {len(carried)} fixture(s) this scrape did not "
           f"report: {', '.join(carried)}")
 
+# --- Where a played match was played, when the box score does not say --------
+# The NCAA box score is authoritative on what happened. It is not always
+# authoritative on where: both Opening Spike Classic contests came back with an
+# empty location object. A played match is rebuilt from the box score alone, so
+# the venue and city the schedule table had already recorded were overwritten
+# with blanks - and with them the only evidence that Stanford, on a Pittsburgh
+# floor, was a neutral game rather than a road trip to Palo Alto. The match read
+# as "at Stanford" in the app.
+#
+# kuathletics drops a row from its schedule table once the match is played, so
+# the previous seed is the only place that location still exists. Facts fill in
+# and are never overwritten, which is the rule everywhere else in this pipeline;
+# a blank is not a correction.
+previous_by_key = {
+    (m.get("date", ""), (m.get("opponent") or "").lower()): m
+    for m in previous_seed.get("matches", [])
+}
+relocated = []
+for key, m in matches.items():
+    if m.get("venue") or m.get("city"):
+        continue
+    was = previous_by_key.get(key)
+    if not was or not (was.get("venue") or was.get("city")):
+        continue
+    for field in ("venue", "city"):
+        if was.get(field):
+            m[field] = was[field]
+    # "vs" in the schedule table means KU was the designated home team, and that
+    # is what separates a neutral floor from a road game. The flag itself is
+    # consumed when the seed is written, but its conclusion survives: a row that
+    # came out home or neutral was designated home, an away row was not. Taking
+    # it from here rather than from the box score is deliberate - the NCAA still
+    # names one side the home team at a neutral event, which is exactly why this
+    # pipeline does not decide the site from that flag.
+    m["_kuDesignatedHome"] = bool(was.get("home") or was.get("neutral"))
+    relocated.append(f"{m['date']} {m['opponent']}")
+if relocated:
+    print(f"  location carried forward for {len(relocated)} played match(es) the "
+          f"box score left blank: {', '.join(relocated)}")
+
 # --- Home / away / neutral for played matches -------------------------------
 # KU's home floor is in Lawrence, so the venue city is the one dependable
 # signal. Everything else is a road or neutral game.

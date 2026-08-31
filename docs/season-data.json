@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-08-31T10:36:13Z",
+ "generatedAt": "2026-08-31T10:39:32Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -14678,7 +14678,7 @@
    "opponentSets": 3,
    "setScores": "17-25, 25-14, 23-25, 20-25",
    "venue": "",
-   "city": "",
+   "city": "Pittsburgh, PA",
    "lines": [
     {
      "player": "Reese Messer",
@@ -15072,7 +15072,7 @@
    "opponentSets": 3,
    "setScores": "25-27, 22-25, 25-14, 21-25",
    "venue": "",
-   "city": "",
+   "city": "Pittsburgh, PA",
    "lines": [
     {
      "player": "Reese Messer",
@@ -15405,7 +15405,8 @@
     "re": 6,
     "bhe": 0
    },
-   "home": false
+   "home": false,
+   "neutral": true
   },
   {
    "date": "2026-09-03",
