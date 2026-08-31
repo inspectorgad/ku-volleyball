@@ -2,16 +2,35 @@ name: Scrape KU volleyball data
 
 on:
   workflow_dispatch:
-  # Nightly at 09:00 UTC (4 AM Central) — after even late matches are final.
-  # The 13:00 entry is a backstop, not a second collection: GitHub drops
-  # scheduled runs under load and says nothing when it does, so on 2026-08-27
-  # both this repo's 09:00 run and the Diamonds one simply never queued. A
-  # missed night is invisible to every check we have, because nothing ran to
-  # fail. A second attempt costs one no-op run: the scrape is idempotent and the
-  # seed is only rewritten when the data actually differs.
+  # Every four hours, on the :37. Two things went wrong with one nightly run at
+  # 09:00 and a backstop at 13:00, and this addresses both.
+  #
+  # Delivery. GitHub's scheduler is best-effort: it drops runs under load (both
+  # this repo and the Diamonds one lost 09:00 outright on 2026-08-27) and it
+  # queues them late - all week it ran five to eight hours behind, and on
+  # 2026-08-31 the 09:00 entry had still not queued by 10:30. The top of the hour
+  # is the most congested minute there is, since it is what nearly every cron in
+  # the world asks for, so these now sit at :37. A dropped or slow entry costs
+  # four hours instead of a day.
+  #
+  # Coverage. Even delivered punctually, 09:00 and 13:00 only look at the
+  # morning. Stanford on 2026-08-30 was a Sunday afternoon match that finished
+  # around 20:00 UTC; both of that day's runs came before it, so the result sat
+  # uncollected for sixteen hours until someone noticed. Matches finish anywhere
+  # from 19:00 UTC (weekend afternoons) to 04:00 (weeknight evenings in Central
+  # time), which no two fixed times cover.
+  #
+  # Six runs a day is affordable: a run takes about two minutes, Actions is free
+  # on public repositories, the scrape is idempotent, the seed is only rewritten
+  # when the data actually differs, and the APK rebuild is dispatched only on a
+  # real change. A quiet run costs one scraped-data commit and nothing else.
   schedule:
-    - cron: '0 9 * * *'
-    - cron: '0 13 * * *'
+    - cron: '37 1 * * *'
+    - cron: '37 5 * * *'
+    - cron: '37 9 * * *'
+    - cron: '37 13 * * *'
+    - cron: '37 17 * * *'
+    - cron: '37 21 * * *'
   push:
     branches:
       - main
