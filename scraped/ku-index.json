@@ -156,7 +156,8 @@
   "2026-08-29": true,
   "2026-08-30": true,
   "2026-08-31": true,
-  "2026-09-01": true
+  "2026-09-01": true,
+  "2026-09-02": true
  },
  "games": {
   "6479442": {
@@ -7875,6 +7876,27 @@
    },
    "conferenceGame": false
   },
+  "6628526": {
+   "date": "2026-09-01",
+   "season": "2026",
+   "home": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Santa Clara",
+    "seo": "santa-clara",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6628592": {
    "date": "2026-08-29",
    "season": "2026",
@@ -8339,6 +8361,14 @@
   },
   "6628525": {
    "date": "2026-08-29",
+   "season": "2026",
+   "teams": [
+    "Cincinnati"
+   ],
+   "boxscored": true
+  },
+  "6628526": {
+   "date": "2026-09-01",
    "season": "2026",
    "teams": [
     "Cincinnati"
