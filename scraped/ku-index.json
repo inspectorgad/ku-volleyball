@@ -7884,6 +7884,27 @@
    },
    "conferenceGame": false
   },
+  "6628520": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "home": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Texas Southern",
+    "seo": "texas-southern",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6628525": {
    "date": "2026-08-29",
    "season": "2026",
@@ -8398,6 +8419,14 @@
   },
   "6628518": {
    "date": "2026-08-29",
+   "season": "2026",
+   "teams": [
+    "Houston"
+   ],
+   "boxscored": true
+  },
+  "6628520": {
+   "date": "2026-09-03",
    "season": "2026",
    "teams": [
     "Houston"
