@@ -157,7 +157,8 @@
   "2026-08-30": true,
   "2026-08-31": true,
   "2026-09-01": true,
-  "2026-09-02": true
+  "2026-09-02": true,
+  "2026-09-03": true
  },
  "games": {
   "6479442": {
@@ -418,6 +419,13 @@
    "home": "Stanford",
    "away": "Kansas",
    "boxscored": true
+  },
+  "6625722": {
+   "date": "2026-09-03",
+   "final": false,
+   "home": "Lipscomb",
+   "away": "Kansas",
+   "boxscored": false
   }
  },
  "big12Games": {
@@ -7372,6 +7380,27 @@
    },
    "conferenceGame": false
   },
+  "6626260": {
+   "date": "2026-09-02",
+   "season": "2026",
+   "home": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 3,
+    "winner": true,
+    "rank": 18,
+    "inConference": true
+   },
+   "away": {
+    "name": "SMU",
+    "seo": "smu",
+    "score": 2,
+    "winner": false,
+    "rank": 8,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626304": {
    "date": "2026-08-30",
    "season": "2026",
@@ -8086,6 +8115,14 @@
    ],
    "boxscored": true
   },
+  "6626260": {
+   "date": "2026-09-02",
+   "season": "2026",
+   "teams": [
+    "TCU"
+   ],
+   "boxscored": true
+  },
   "6626304": {
    "date": "2026-08-30",
    "season": "2026",
@@ -8263,6 +8300,14 @@
    ],
    "boxscored": true
   },
+  "6627694": {
+   "date": "2026-09-02",
+   "season": "2026",
+   "teams": [
+    "South Dakota St."
+   ],
+   "boxscored": true
+  },
   "6627963": {
    "date": "2026-08-30",
    "season": "2026",
@@ -8380,6 +8425,14 @@
    "season": "2026",
    "teams": [
     "TCU"
+   ],
+   "boxscored": true
+  },
+  "6637631": {
+   "date": "2026-09-02",
+   "season": "2026",
+   "teams": [
+    "Ole Miss"
    ],
    "boxscored": true
   },
