@@ -7556,6 +7556,27 @@
    },
    "conferenceGame": false
   },
+  "6626541": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "home": {
+    "name": "Fla. Atlantic",
+    "seo": "fla-atlantic",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6626545": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8363,6 +8384,14 @@
    ],
    "boxscored": true
   },
+  "6626436": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "teams": [
+    "South Dakota St."
+   ],
+   "boxscored": true
+  },
   "6626470": {
    "date": "2026-08-29",
    "season": "2026",
@@ -8376,6 +8405,14 @@
    "season": "2026",
    "teams": [
     "Wichita St."
+   ],
+   "boxscored": true
+  },
+  "6626541": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
    ],
    "boxscored": true
   },
