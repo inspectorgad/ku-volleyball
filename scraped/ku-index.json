@@ -158,7 +158,8 @@
   "2026-08-31": true,
   "2026-09-01": true,
   "2026-09-02": true,
-  "2026-09-03": true
+  "2026-09-03": true,
+  "2026-09-04": true
  },
  "games": {
   "6479442": {
@@ -422,8 +423,15 @@
   },
   "6625722": {
    "date": "2026-09-03",
-   "final": false,
+   "final": true,
    "home": "Lipscomb",
+   "away": "Kansas",
+   "boxscored": true
+  },
+  "6625725": {
+   "date": "2026-09-04",
+   "final": false,
+   "home": "Florida St.",
    "away": "Kansas",
    "boxscored": false
   }
@@ -7191,6 +7199,27 @@
    },
    "conferenceGame": false
   },
+  "6624507": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "home": {
+    "name": "UC Santa Barbara",
+    "seo": "uc-santa-barbara",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6624518": {
    "date": "2026-08-30",
    "season": "2026",
@@ -7207,6 +7236,27 @@
     "seo": "uc-santa-barbara",
     "score": 3,
     "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6624646": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "home": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Abilene Christian",
+    "seo": "abilene-christian",
+    "score": 2,
+    "winner": false,
     "rank": null,
     "inConference": false
    },
@@ -7275,6 +7325,27 @@
    },
    "conferenceGame": false
   },
+  "6625239": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "home": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Saint Mary's (CA)",
+    "seo": "st-marys-ca",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6625330": {
    "date": "2026-08-30",
    "season": "2026",
@@ -7293,6 +7364,27 @@
     "winner": false,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6625456": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "home": {
+    "name": "Colgate",
+    "seo": "colgate",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 7,
+    "inConference": true
    },
    "conferenceGame": false
   },
@@ -7338,6 +7430,27 @@
    },
    "conferenceGame": false
   },
+  "6625722": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "home": {
+    "name": "Lipscomb",
+    "seo": "lipscomb",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 16,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -7377,6 +7490,27 @@
     "winner": false,
     "rank": 21,
     "inConference": true
+   },
+   "conferenceGame": false
+  },
+  "6625820": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "home": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": 20,
+    "inConference": true
+   },
+   "away": {
+    "name": "North Texas",
+    "seo": "north-texas",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
    },
    "conferenceGame": false
   },
@@ -7587,6 +7721,27 @@
     "winner": true,
     "rank": 24,
     "inConference": true
+   },
+   "conferenceGame": false
+  },
+  "6626877": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "home": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 24,
+    "inConference": true
+   },
+   "away": {
+    "name": "Eastern Ill.",
+    "seo": "eastern-ill",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
    },
    "conferenceGame": false
   },
@@ -8008,11 +8163,27 @@
    ],
    "boxscored": true
   },
+  "6624507": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "teams": [
+    "Iowa St."
+   ],
+   "boxscored": true
+  },
   "6624518": {
    "date": "2026-08-30",
    "season": "2026",
    "teams": [
     "Arizona"
+   ],
+   "boxscored": true
+  },
+  "6624646": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "teams": [
+    "Houston"
    ],
    "boxscored": true
   },
@@ -8048,11 +8219,27 @@
    ],
    "boxscored": true
   },
+  "6625239": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "teams": [
+    "Texas Tech"
+   ],
+   "boxscored": true
+  },
   "6625330": {
    "date": "2026-08-30",
    "season": "2026",
    "teams": [
     "Baylor"
+   ],
+   "boxscored": true
+  },
+  "6625456": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "teams": [
+    "Arizona St."
    ],
    "boxscored": true
   },
@@ -8080,6 +8267,14 @@
    ],
    "boxscored": true
   },
+  "6625722": {
+   "date": "2026-09-03",
+   "season": "2026",
+   "teams": [
+    "Lipscomb"
+   ],
+   "boxscored": true
+  },
   "6625787": {
    "date": "2026-08-30",
    "season": "2026",
@@ -8098,6 +8293,14 @@
   },
   "6625819": {
    "date": "2026-08-30",
+   "season": "2026",
+   "teams": [
+    "Baylor"
+   ],
+   "boxscored": true
+  },
+  "6625820": {
+   "date": "2026-09-03",
    "season": "2026",
    "teams": [
     "Baylor"
@@ -8235,6 +8438,14 @@
   },
   "6626876": {
    "date": "2026-08-29",
+   "season": "2026",
+   "teams": [
+    "BYU"
+   ],
+   "boxscored": true
+  },
+  "6626877": {
+   "date": "2026-09-03",
    "season": "2026",
    "teams": [
     "BYU"
