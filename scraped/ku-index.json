@@ -430,10 +430,10 @@
   },
   "6625725": {
    "date": "2026-09-04",
-   "final": false,
+   "final": true,
    "home": "Florida St.",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -7451,6 +7451,27 @@
    },
    "conferenceGame": false
   },
+  "6625725": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "home": {
+    "name": "Florida St.",
+    "seo": "florida-st",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 16,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -7700,6 +7721,27 @@
     "winner": false,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6626849": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "home": {
+    "name": "Georgetown",
+    "seo": "georgetown",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
    },
    "conferenceGame": false
   },
@@ -8164,6 +8206,27 @@
     "inConference": true
    },
    "conferenceGame": false
+  },
+  "6640394": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "home": {
+    "name": "Louisville",
+    "seo": "louisville",
+    "score": 3,
+    "winner": true,
+    "rank": 6,
+    "inConference": false
+   },
+   "away": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 0,
+    "winner": false,
+    "rank": 18,
+    "inConference": true
+   },
+   "conferenceGame": false
   }
  },
  "indexVersion": 2,
@@ -8296,6 +8359,14 @@
    ],
    "boxscored": true
   },
+  "6625725": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "teams": [
+    "Florida St."
+   ],
+   "boxscored": true
+  },
   "6625787": {
    "date": "2026-08-30",
    "season": "2026",
@@ -8354,6 +8425,14 @@
   },
   "6626050": {
    "date": "2026-08-30",
+   "season": "2026",
+   "teams": [
+    "Tulsa"
+   ],
+   "boxscored": true
+  },
+  "6626051": {
+   "date": "2026-09-04",
    "season": "2026",
    "teams": [
     "Tulsa"
@@ -8458,6 +8537,14 @@
   },
   "6626848": {
    "date": "2026-08-30",
+   "season": "2026",
+   "teams": [
+    "UCF"
+   ],
+   "boxscored": true
+  },
+  "6626849": {
+   "date": "2026-09-04",
    "season": "2026",
    "teams": [
     "UCF"
@@ -8758,6 +8845,22 @@
    "season": "2026",
    "teams": [
     "Pittsburgh"
+   ],
+   "boxscored": true
+  },
+  "6640394": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "teams": [
+    "TCU"
+   ],
+   "boxscored": true
+  },
+  "6640631": {
+   "date": "2026-09-04",
+   "season": "2026",
+   "teams": [
+    "South Dakota St."
    ],
    "boxscored": true
   }
