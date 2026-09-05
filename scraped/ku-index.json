@@ -7557,6 +7557,27 @@
    },
    "conferenceGame": false
   },
+  "6625821": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 0,
+    "winner": false,
+    "rank": 20,
+    "inConference": true
+   },
+   "away": {
+    "name": "Florida",
+    "seo": "florida",
+    "score": 3,
+    "winner": true,
+    "rank": 17,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626260": {
    "date": "2026-09-02",
    "season": "2026",
@@ -7592,6 +7613,27 @@
    "away": {
     "name": "Denver",
     "seo": "denver",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6626384": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 7,
+    "inConference": true
+   },
+   "away": {
+    "name": "Villanova",
+    "seo": "villanova",
     "score": 0,
     "winner": false,
     "rank": null,
@@ -7659,6 +7701,27 @@
     "winner": false,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6626547": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "FGCU",
+    "seo": "fgcu",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
    },
    "conferenceGame": false
   },
@@ -8077,6 +8140,27 @@
     "seo": "texas-tech",
     "score": 0,
     "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
+  "6627818": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "Nevada",
+    "seo": "nevada",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 3,
+    "winner": true,
     "rank": null,
     "inConference": true
    },
@@ -8618,6 +8702,14 @@
    ],
    "boxscored": true
   },
+  "6625821": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Baylor"
+   ],
+   "boxscored": true
+  },
   "6625870": {
    "date": "2026-08-29",
    "season": "2026",
@@ -8682,6 +8774,14 @@
    ],
    "boxscored": true
   },
+  "6626384": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Arizona St."
+   ],
+   "boxscored": true
+  },
   "6626426": {
    "date": "2026-09-04",
    "season": "2026",
@@ -8724,6 +8824,14 @@
   },
   "6626545": {
    "date": "2026-08-28",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
+  "6626547": {
+   "date": "2026-09-05",
    "season": "2026",
    "teams": [
     "West Virginia"
@@ -8844,6 +8952,22 @@
    ],
    "boxscored": true
   },
+  "6627020": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Wichita St."
+   ],
+   "boxscored": true
+  },
+  "6627096": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "South Dakota St."
+   ],
+   "boxscored": true
+  },
   "6627255": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8953,6 +9077,14 @@
    "season": "2026",
    "teams": [
     "South Dakota St."
+   ],
+   "boxscored": true
+  },
+  "6627818": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Texas Tech"
    ],
    "boxscored": true
   },
