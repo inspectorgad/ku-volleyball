@@ -92,6 +92,56 @@ def stat_line(src):
     }
 
 
+# The roster, read early because the box-score loop needs it to tell KU's own
+# players from the other side's. It is read again below, where it is the
+# preferred source for number and position.
+ROSTER_NAMES = {
+    entry.get("name", "").strip().lower()
+    for entry in load_json("scraped/roster.json", [])
+    if entry.get("name", "").strip()
+}
+
+
+def ku_side(blocks, ku_team_id):
+    """Which box-score block is KU's, when the teamId cannot be trusted.
+
+    The NCAA labels each block with a teamId, and normally that is the end of
+    it. On 2026-09-04 against Florida State it was not: contest 6625725 came
+    back with the two player lists transposed, so the block stamped Kansas held
+    Florida State's eighteen players and vice versa. Everything downstream
+    believed it - the app credited KU's box score to eighteen Seminoles, added
+    them to the roster, and showed the team totals the wrong way round.
+
+    The roster settles it. A block whose names are on KU's roster is KU's,
+    whatever it is stamped with. This only overrides the label when the evidence
+    is one-sided: at least three roster names in the other block and a clear
+    margin over the labelled one. A thin or ambiguous match changes nothing,
+    which keeps older seasons - whose players have since left the roster - on
+    the teamId they were always read with.
+    """
+    labelled = [b for b in blocks if to_int(b.get("teamId")) == ku_team_id]
+    other = [b for b in blocks if to_int(b.get("teamId")) != ku_team_id]
+    if len(labelled) != 1 or len(other) != 1:
+        return labelled[0] if len(labelled) == 1 else None
+
+    def roster_hits(block):
+        names = {
+            f"{p.get('firstName', '').strip()} {p.get('lastName', '').strip()}".strip().lower()
+            for p in block.get("playerStats") or []
+        }
+        return len(names & ROSTER_NAMES)
+
+    ours, theirs = roster_hits(labelled[0]), roster_hits(other[0])
+    if theirs >= 3 and theirs - ours >= 2:
+        print(
+            f"  WARNING: box score teams are transposed upstream; taking the "
+            f"block labelled {other[0].get('teamId')} as KU's "
+            f"({theirs} roster names against {ours})"
+        )
+        return other[0]
+    return labelled[0]
+
+
 # --- Finished matches from NCAA box scores ---------------------------------
 for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
     data = load_json(path, None)
@@ -139,8 +189,10 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
     }
 
     ku_team_id = to_int(ku.get("teamId"))
-    for tb in (data.get("box") or {}).get("teamBoxscore") or []:
-        is_ku = to_int(tb.get("teamId")) == ku_team_id
+    blocks = (data.get("box") or {}).get("teamBoxscore") or []
+    ku_block = ku_side(blocks, ku_team_id)
+    for tb in blocks:
+        is_ku = tb is ku_block
         # Team totals are recorded, not summed from the player lines: every stat
         # does add up except reception errors, which the NCAA may charge to the
         # team rather than a player (38 such rows across the 2025 season).
