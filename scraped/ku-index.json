@@ -160,7 +160,8 @@
   "2026-09-02": true,
   "2026-09-03": true,
   "2026-09-04": true,
-  "2026-09-05": true
+  "2026-09-05": true,
+  "2026-09-06": true
  },
  "games": {
   "6479442": {
@@ -7179,6 +7180,27 @@
    },
    "conferenceGame": false
   },
+  "6624324": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Michigan",
+    "seo": "michigan",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6624351": {
    "date": "2026-08-28",
    "season": "2026",
@@ -7578,6 +7600,27 @@
    },
    "conferenceGame": false
   },
+  "6626052": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Tulsa",
+    "seo": "tulsa",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626260": {
    "date": "2026-09-02",
    "season": "2026",
@@ -7725,6 +7768,27 @@
    },
    "conferenceGame": false
   },
+  "6626681": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Long Beach St.",
+    "seo": "long-beach-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626699": {
    "date": "2026-08-28",
    "season": "2026",
@@ -7846,6 +7910,27 @@
     "seo": "ucf",
     "score": 3,
     "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
+  "6626850": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "Wake Forest",
+    "seo": "wake-forest",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 2,
+    "winner": false,
     "rank": null,
     "inConference": true
    },
@@ -8271,6 +8356,27 @@
    },
    "conferenceGame": false
   },
+  "6628226": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "home": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 3,
+    "winner": true,
+    "rank": 23,
+    "inConference": true
+   },
+   "away": {
+    "name": "New Mexico",
+    "seo": "new-mexico",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6628238": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8534,6 +8640,14 @@
    ],
    "boxscored": true
   },
+  "6624324": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Cincinnati"
+   ],
+   "boxscored": true
+  },
   "6624351": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8627,6 +8741,14 @@
    "season": "2026",
    "teams": [
     "Lipscomb"
+   ],
+   "boxscored": true
+  },
+  "6625559": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Ole Miss"
    ],
    "boxscored": true
   },
@@ -8750,6 +8872,15 @@
    ],
    "boxscored": true
   },
+  "6626052": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Arizona",
+    "Tulsa"
+   ],
+   "boxscored": true
+  },
   "6626260": {
    "date": "2026-09-02",
    "season": "2026",
@@ -8838,6 +8969,14 @@
    ],
    "boxscored": true
   },
+  "6626681": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Utah"
+   ],
+   "boxscored": true
+  },
   "6626699": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8880,6 +9019,14 @@
   },
   "6626849": {
    "date": "2026-09-04",
+   "season": "2026",
+   "teams": [
+    "UCF"
+   ],
+   "boxscored": true
+  },
+  "6626850": {
+   "date": "2026-09-05",
    "season": "2026",
    "teams": [
     "UCF"
@@ -9048,6 +9195,14 @@
    ],
    "boxscored": true
   },
+  "6627572": {
+   "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Grand Canyon"
+   ],
+   "boxscored": true
+  },
   "6627595": {
    "date": "2026-08-28",
    "season": "2026",
@@ -9138,6 +9293,14 @@
   },
   "6628225": {
    "date": "2026-08-29",
+   "season": "2026",
+   "teams": [
+    "Colorado"
+   ],
+   "boxscored": true
+  },
+  "6628226": {
+   "date": "2026-09-05",
    "season": "2026",
    "teams": [
     "Colorado"
