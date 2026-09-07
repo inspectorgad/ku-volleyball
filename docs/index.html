@@ -122,6 +122,10 @@
   }
   .lead-row .name button:hover { text-decoration: underline; }
   #status { color: var(--ink-3); padding: 40px 0; text-align: center; }
+  #serving-wrap { margin-bottom: 14px; }
+  #serving-wrap .sub { color: var(--ink-3); font-size: 13px; margin-top: 2px; }
+  #serving-sort { margin: 10px 0 12px; flex-wrap: wrap; }
+  #serving th { cursor: help; }
   svg text { fill: var(--ink-3); font-size: 11px; font-variant-numeric: tabular-nums; }
   @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
 </style>
@@ -166,6 +170,13 @@
       <table id="poll"></table>
     </section>
   </div>
+  <section class="card scroll" id="serving-wrap" hidden>
+    <h2>Serving <span class="muted" id="serving-note"></span></h2>
+    <div class="sub" id="serving-sub"></div>
+    <div class="filters" id="serving-sort" role="group" aria-label="Sort serving by"></div>
+    <table id="serving"></table>
+    <p class="fineprint" id="serving-fine"></p>
+  </section>
   <div class="grid two-col">
     <section class="card scroll">
       <h2>Player season stats <span class="muted">— click a column to sort, a row for the match log</span></h2>
@@ -206,6 +217,25 @@ const siteTitle = m => (m.neutral ? "Neutral site" : m.home === true ? "Home" : 
   + (m.city ? ` — ${m.city}` : "") + (m.venue ? ` (${m.venue})` : "");
 const fmtPct = v => { const s = (v < 0 ? "-" : "") + Math.abs(v).toFixed(3).replace(/^0/, ""); return s; };
 const fmt2 = v => v.toFixed(2);
+const fmtSigned = v => (v > 0 ? "+" + v : String(v));
+
+// The serving headings, explained once, as hover titles. Kept word-for-word in
+// step with STAT_DEFINITIONS in the app's Common.kt so the two never drift.
+const STAT_HELP = {
+  SA: "Service aces — a serve the receiving team could not return.",
+  SE: "Service errors — a serve out, into the net, or otherwise failed. A fault.",
+  NET: "Aces minus errors. The raw serving ledger, before dividing by sets.",
+  SRV: "Serving efficiency: net aces per set, (aces − errors) ÷ sets played. "
+    + "A box score never publishes serve attempts per player, so sets is the denominator. "
+    + "Below zero means the serving cost more than it won, where most servers sit.",
+  M: "Matches captured for this team so far this season.",
+  SP: "Sets played.",
+  ATT: "Serves taken. Published in a box score's team totals but never per player, "
+    + "which is why SRV divides by sets and SRV% can divide by this.",
+  "SRV%": "(aces − errors) ÷ serves taken. Nearly every team reads negative.",
+  "SE/S": "Service errors per set.",
+  "SA/S": "Service aces per set.",
+};
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
 
 let SEED = null;
@@ -277,6 +307,7 @@ function render() {
   renderOpponents(results);
   renderScouting();
   renderBig12();
+  renderServing();
   document.getElementById("chart-season").textContent = season === "All" ? "· all seasons" : "· " + season;
   document.getElementById("foot").textContent =
     `Data: official NCAA box scores + kuathletics.com · updated ${SEED.generatedAt ?? "—"} · refreshed nightly`;
@@ -454,11 +485,30 @@ const heightInches = h => {
   return m ? Number(m[1]) * 12 + Number(m[2]) : 0;
 };
 
+// Per-player serving efficiency: net aces per set. Matches the app's
+// VolleyballTotals.servingEfficiency so the two never disagree.
+const srvPerSet = p => p.sp ? (p.sa - p.se) / p.sp : 0;
+
+// [heading, sort value, cell text]. The cell text is part of the column so a new
+// column cannot be added to the header without also being added to the body —
+// they used to be two lists in the same order, which is a trap.
 const COLS = [
-  ["Player", p => p.name], ["Ht", p => heightInches(heightOf(p.name))],
-  ["MP", p => p.mp], ["SP", p => p.sp], ["K", p => p.k],
-  ["K/S", p => p.sp ? p.k / p.sp : 0], ["PCT", p => p.pct], ["A", p => p.a],
-  ["SA", p => p.sa], ["D", p => p.d], ["BLK", p => p.blk],
+  ["Player", p => p.name, (p, info) => (info?.jerseyNumber ? "#" + info.jerseyNumber + " " : "") + p.name],
+  ["Ht", p => heightInches(heightOf(p.name)), (p, info) => info?.height || "—"],
+  ["MP", p => p.mp],
+  ["SP", p => p.sp],
+  ["K", p => p.k],
+  ["K/S", p => p.sp ? p.k / p.sp : 0, p => p.sp ? fmt2(p.k / p.sp) : "—"],
+  ["PCT", p => p.pct, p => fmtPct(p.pct)],
+  ["A", p => p.a],
+  ["SA", p => p.sa],
+  ["SE", p => p.se],
+  ["NET", p => p.sa - p.se, p => fmtSigned(p.sa - p.se)],
+  // Per-player serving divides by sets, exactly as the app does: a box score
+  // publishes serve attempts for the team but never for a player.
+  ["SRV", p => srvPerSet(p), p => p.sp ? fmt2(srvPerSet(p)) : "—"],
+  ["D", p => p.d],
+  ["BLK", p => p.blk],
 ];
 
 function renderPlayerTable(results, lines) {
@@ -467,6 +517,7 @@ function renderPlayerTable(results, lines) {
   const head = t.createTHead().insertRow();
   for (const [h, sel] of COLS) {
     const th = el("th", null, h + (h === sortHeader() ? (sortDir < 0 ? " ▾" : " ▴") : ""));
+    if (STAT_HELP[h]) th.title = STAT_HELP[h]; // the app long-presses; here, hover
     th.onclick = () => {
       const key = h;
       if (sortHeader() === key) sortDir = -sortDir;
@@ -486,9 +537,8 @@ function renderPlayerTable(results, lines) {
     const r = body.insertRow();
     r.tabIndex = 0;
     const info = roster.get(p.name);
-    r.insertCell().textContent = (info?.jerseyNumber ? "#" + info.jerseyNumber + " " : "") + p.name;
-    for (const v of [info?.height || "—", p.mp, p.sp, p.k, p.sp ? fmt2(p.k / p.sp) : "—", fmtPct(p.pct), p.a, p.sa, p.d, p.blk]) {
-      r.insertCell().textContent = String(v);
+    for (const [, sel, fmt] of COLS) {
+      r.insertCell().textContent = String(fmt ? fmt(p, info) : sel(p, info));
     }
     const open = () => showDetail(p.name);
     r.addEventListener("click", open);
@@ -834,6 +884,84 @@ function renderBig12() {
     if (r.big12) name.appendChild(el("span", "b12chip", "Big 12"));
     tr.insertCell().textContent = r.record ?? "";
     tr.insertCell().textContent = r.points ?? "";
+  }
+}
+
+// --- League serving: the Big 12 and everyone the poll has ranked --------------
+// Cumulative season serving per team, from the same box scores the app reads.
+// Optional key: a feed without teamServing simply hides the section.
+const SERVING_SORTS = [
+  ["Most faults", (a, b) => b.serviceErrors - a.serviceErrors],
+  ["Faults per set", (a, b) => perSet(b, "serviceErrors") - perSet(a, "serviceErrors")],
+  ["Serving %", (a, b) => srvPct(b) - srvPct(a)],
+  ["Aces", (a, b) => b.serviceAces - a.serviceAces],
+];
+let servingSort = "Most faults";
+const perSet = (r, key) => (r.sets ? r[key] / r.sets : 0);
+// Team serving divides by serves taken — the textbook denominator, available
+// here because a box score does publish team serve attempts.
+const srvPct = r => (r.serveAttempts ? (r.serviceAces - r.serviceErrors) / r.serveAttempts : 0);
+
+function renderServing() {
+  const wrap = document.getElementById("serving-wrap");
+  const all = SEED.teamServing ?? [];
+  const seasons = [...new Set(all.map(r => r.season))].sort().reverse();
+  const pick = seasons.includes(season) ? season : seasons[0];
+  const rows = all.filter(r => r.season === pick);
+  if (!rows.length) { wrap.hidden = true; return; }
+  wrap.hidden = false;
+
+  document.getElementById("serving-note").textContent =
+    `— ${pick}` + (pick !== season ? " (latest available)" : "");
+  const ranked = rows.filter(r => r.pollRank).length;
+  const b12 = rows.filter(r => r.big12).length;
+  document.getElementById("serving-sub").textContent =
+    `Cumulative for ${rows.length} teams — ${b12} from the Big 12, ${ranked} ranked.`;
+
+  // Partial seasons are the honest caveat: a team with six matches captured will
+  // out-fault a team with four no matter how it serves, so say the range.
+  const counts = rows.map(r => r.matches);
+  const thinnest = Math.min(...counts), fullest = Math.max(...counts);
+  document.getElementById("serving-fine").textContent =
+    (thinnest === fullest
+      ? `${fullest} matches captured per team. `
+      : `Between ${thinnest} and ${fullest} matches captured per team, so compare the `
+        + `per-set and per-attempt rates rather than the raw totals. `)
+    + "SRV% is (aces − errors) ÷ serves taken; nearly every team reads negative. "
+    + "Hover a heading for what it means.";
+
+  const chips = document.getElementById("serving-sort");
+  chips.replaceChildren();
+  for (const [label] of SERVING_SORTS) {
+    const b = el("button", "chip", label);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(label === servingSort));
+    b.onclick = () => { servingSort = label; renderServing(); };
+    chips.appendChild(b);
+  }
+
+  const cmp = SERVING_SORTS.find(([l]) => l === servingSort)[1];
+  const sorted = [...rows].sort((a, b) => cmp(a, b) || a.team.localeCompare(b.team));
+
+  const t = document.getElementById("serving");
+  t.replaceChildren();
+  const head = t.createTHead().insertRow();
+  for (const h of ["Team", "M", "SP", "SA", "SE", "ATT", "SRV%", "SE/S", "SA/S"]) {
+    const th = el("th", null, h);
+    if (STAT_HELP[h]) th.title = STAT_HELP[h];
+    head.appendChild(th);
+  }
+  const body = t.createTBody();
+  for (const r of sorted) {
+    const tr = body.insertRow();
+    if (r.team === "Kansas") tr.className = "ku";
+    const name = tr.insertCell();
+    name.textContent = (r.pollRank ? `#${r.pollRank} ` : "") + r.team;
+    if (r.big12) name.appendChild(el("span", "b12chip", "Big 12"));
+    for (const v of [
+      r.matches, r.sets, r.serviceAces, r.serviceErrors, r.serveAttempts,
+      fmtPct(srvPct(r)), fmt2(perSet(r, "serviceErrors")), fmt2(perSet(r, "serviceAces")),
+    ]) tr.insertCell().textContent = String(v);
   }
 }
 
