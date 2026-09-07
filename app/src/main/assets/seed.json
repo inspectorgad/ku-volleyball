@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-07T06:37:46Z",
+ "generatedAt": "2026-09-07T10:43:35Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -17430,7 +17430,7 @@
  "opponentRosters": [
   {
    "team": "Arizona",
-   "fetchedAt": "2026-08-31T10:34:51.199Z",
+   "fetchedAt": "2026-09-07T10:42:19.839Z",
    "players": [
     {
      "player": "Maria Olga Siapani",
@@ -17538,7 +17538,7 @@
   },
   {
    "team": "Baylor",
-   "fetchedAt": "2026-08-31T10:34:54.429Z",
+   "fetchedAt": "2026-09-07T10:42:23.037Z",
    "players": [
     {
      "player": "Harley Greek",
@@ -17646,7 +17646,7 @@
   },
   {
    "team": "BYU",
-   "fetchedAt": "2026-08-31T10:34:56.833Z",
+   "fetchedAt": "2026-09-07T10:42:25.178Z",
    "players": [
     {
      "player": "Kate Prior",
@@ -17766,7 +17766,7 @@
   },
   {
    "team": "Cincinnati",
-   "fetchedAt": "2026-08-31T10:34:59.479Z",
+   "fetchedAt": "2026-09-07T10:42:27.728Z",
    "players": [
     {
      "player": "Andi Spies",
@@ -17874,7 +17874,7 @@
   },
   {
    "team": "Colorado",
-   "fetchedAt": "2026-08-31T10:35:02.540Z",
+   "fetchedAt": "2026-09-07T10:42:30.845Z",
    "players": [
     {
      "player": "Jenna Ylivainio",
@@ -17901,6 +17901,18 @@
      "height": "6-2"
     },
     {
+     "player": "Barbora Rakauskaite",
+     "jerseyNumber": "7",
+     "position": "MB",
+     "height": "6-3"
+    },
+    {
+     "player": "Ines Losada",
+     "jerseyNumber": "8",
+     "position": "PIN",
+     "height": "6-1"
+    },
+    {
      "player": "Avery Bolles",
      "jerseyNumber": "9",
      "position": "DS/L",
@@ -17911,6 +17923,12 @@
      "jerseyNumber": "10",
      "position": "PIN",
      "height": "6-3"
+    },
+    {
+     "player": "Ana Burilovic",
+     "jerseyNumber": "11",
+     "position": "PIN",
+     "height": "6-1"
     },
     {
      "player": "Kensley Hennessy",
@@ -17937,6 +17955,12 @@
      "height": "6-1"
     },
     {
+     "player": "Maria Splawska",
+     "jerseyNumber": "16",
+     "position": "MB",
+     "height": "6-3"
+    },
+    {
      "player": "Peyton Neal",
      "jerseyNumber": "20",
      "position": "DS/L",
@@ -17947,6 +17971,12 @@
      "jerseyNumber": "21",
      "position": "PIN",
      "height": "6-3"
+    },
+    {
+     "player": "Tinons Munar Galmes",
+     "jerseyNumber": "22",
+     "position": "DS/L",
+     "height": "5-7"
     },
     {
      "player": "Cayla Payne",
@@ -18180,7 +18210,7 @@
   },
   {
    "team": "Houston",
-   "fetchedAt": "2026-08-31T10:35:08.150Z",
+   "fetchedAt": "2026-09-07T10:42:34.100Z",
    "players": [
     {
      "player": "Alyssa Gonzales",
@@ -18287,14 +18317,14 @@
     {
      "player": "Tara Greenberry",
      "jerseyNumber": "34",
-     "position": "OH",
+     "position": "MB",
      "height": "6-2"
     }
    ]
   },
   {
    "team": "Iowa St.",
-   "fetchedAt": "2026-08-31T10:35:11.175Z",
+   "fetchedAt": "2026-09-07T10:42:36.791Z",
    "players": [
     {
      "player": "Pam McCune",
@@ -18414,7 +18444,7 @@
   },
   {
    "team": "Kansas St.",
-   "fetchedAt": "2026-08-31T10:35:14.267Z",
+   "fetchedAt": "2026-09-07T10:42:39.801Z",
    "players": [
     {
      "player": "Fuka Sekita",
@@ -18702,7 +18732,7 @@
   },
   {
    "team": "South Dakota State",
-   "fetchedAt": "2026-08-31T10:35:20.742Z",
+   "fetchedAt": "2026-09-07T10:42:43.179Z",
    "players": [
     {
      "player": "Kennedey Whitford",
@@ -18918,7 +18948,7 @@
   },
   {
    "team": "TCU",
-   "fetchedAt": "2026-08-31T10:35:24.338Z",
+   "fetchedAt": "2026-09-07T10:42:46.504Z",
    "players": [
     {
      "player": "Alice Volpe",
@@ -19026,7 +19056,7 @@
   },
   {
    "team": "Tulsa",
-   "fetchedAt": "2026-08-31T10:35:56.875Z",
+   "fetchedAt": "2026-09-07T10:43:18.717Z",
    "players": [
     {
      "player": "Lexi Dahl",
@@ -19242,7 +19272,7 @@
   },
   {
    "team": "Utah",
-   "fetchedAt": "2026-08-31T10:35:59.720Z",
+   "fetchedAt": "2026-09-07T10:43:21.566Z",
    "players": [
     {
      "player": "Princess Atamah",
@@ -19356,7 +19386,7 @@
   },
   {
    "team": "West Virginia",
-   "fetchedAt": "2026-08-31T10:36:02.824Z",
+   "fetchedAt": "2026-09-07T10:43:24.612Z",
    "players": [
     {
      "player": "Lauren Duncan",
@@ -19458,7 +19488,7 @@
   },
   {
    "team": "Wichita State",
-   "fetchedAt": "2026-08-31T10:36:05.444Z",
+   "fetchedAt": "2026-09-07T10:43:27.226Z",
    "players": [
     {
      "player": "Janaya Weitkemper",
