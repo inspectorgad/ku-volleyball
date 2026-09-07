@@ -161,7 +161,8 @@
   "2026-09-03": true,
   "2026-09-04": true,
   "2026-09-05": true,
-  "2026-09-06": true
+  "2026-09-06": true,
+  "2026-09-07": true
  },
  "games": {
   "6479442": {
@@ -8566,6 +8567,27 @@
    },
    "conferenceGame": false
   },
+  "6628321": {
+   "date": "2026-09-06",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Pittsburgh",
+    "seo": "pittsburgh",
+    "score": 3,
+    "winner": true,
+    "rank": 2,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6628328": {
    "date": "2026-08-29",
    "season": "2026",
@@ -9023,6 +9045,14 @@
    ],
    "boxscored": true
   },
+  "6626053": {
+   "date": "2026-09-06",
+   "season": "2026",
+   "teams": [
+    "Tulsa"
+   ],
+   "boxscored": true
+  },
   "6626260": {
    "date": "2026-09-02",
    "season": "2026",
@@ -9369,6 +9399,14 @@
    ],
    "boxscored": true
   },
+  "6627574": {
+   "date": "2026-09-06",
+   "season": "2026",
+   "teams": [
+    "Grand Canyon"
+   ],
+   "boxscored": true
+  },
   "6627595": {
    "date": "2026-08-28",
    "season": "2026",
@@ -9510,6 +9548,14 @@
    "season": "2026",
    "teams": [
     "TCU"
+   ],
+   "boxscored": true
+  },
+  "6628321": {
+   "date": "2026-09-06",
+   "season": "2026",
+   "teams": [
+    "Utah"
    ],
    "boxscored": true
   },
