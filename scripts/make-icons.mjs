@@ -5,33 +5,13 @@
 // Rasterizing goes through Chromium's canvas, which can encode webp, so the
 // existing .webp filenames stay put and no resource renames are needed.
 import { chromium } from 'playwright';
+import { KU_BLUE, WHITE, R, SW, SEAMS, circlePath, svgIcon } from './icon-art.mjs';
 import fs from 'fs';
 import path from 'path';
 
 const RES = process.argv[2] || '/workspace/ku-volleyball/app/src/main/res';
-const KU_BLUE = '#0051BA';
-const WHITE = '#FFFFFF';
 
-// --- Geometry ---------------------------------------------------------------
-const C = 54, R = 34, SW = 4, SPAN = 150, RF = 1.25, ROT = 30;
-// Endpoints pull in by half the stroke so round caps land exactly on the rim
-// instead of poking out as nubs.
-const RIM = (R - SW / 2) / R;
-const rad = (d) => (d * Math.PI) / 180;
-const pt = (a) => [
-  (C + R * RIM * Math.cos(rad(a))).toFixed(2),
-  (C + R * RIM * Math.sin(rad(a))).toFixed(2),
-];
-function seamPath(a1) {
-  const [x1, y1] = pt(a1), [x2, y2] = pt(a1 + SPAN), r = (R * RF).toFixed(2);
-  return `M${x1},${y1} A${r},${r} 0 0,0 ${x2},${y2}`;
-}
-const SEAMS = [0, 120, 240].map((k) => seamPath(90 + ROT + k));
-// Circle as two arcs, for VectorDrawable fills/clips.
-const circlePath = (r) =>
-  `M${C},${C - r} A${r},${r} 0 1,0 ${C},${C + r} A${r},${r} 0 1,0 ${C},${C - r}Z`;
-
-// --- Vector drawables -------------------------------------------------------
+// Geometry and the SVG mark live in icon-art.mjs, shared with make-web-icons.mjs.
 const seamPaths = (color) => SEAMS.map((d) =>
   `    <path
         android:pathData="${d}"
@@ -79,17 +59,7 @@ fs.writeFileSync(path.join(RES, 'drawable/ic_launcher_monochrome.xml'), monochro
 console.log('wrote 3 vector drawables');
 
 // --- Legacy raster ----------------------------------------------------------
-const svg = (shape) => {
-  const clip = shape === 'round'
-    ? `<circle cx="54" cy="54" r="54"/>`
-    : `<rect x="0" y="0" width="108" height="108" rx="20" ry="20"/>`;
-  const seams = SEAMS.map((d) =>
-    `<path d="${d}" fill="none" stroke="${KU_BLUE}" stroke-width="${SW}" stroke-linecap="round"/>`).join('');
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="108" height="108" viewBox="0 0 108 108">
-    <defs><clipPath id="m">${clip}</clipPath></defs>
-    <g clip-path="url(#m)"><rect width="108" height="108" fill="${KU_BLUE}"/></g>
-    <circle cx="54" cy="54" r="${R}" fill="${WHITE}"/>${seams}</svg>`;
-};
+const svg = (shape) => svgIcon(shape);
 
 const DENSITIES = { mdpi: 48, hdpi: 72, xhdpi: 96, xxhdpi: 144, xxxhdpi: 192 };
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });

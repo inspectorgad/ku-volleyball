@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KU Volleyball Dashboard</title>
+<meta name="description" content="Kansas Jayhawks women's volleyball — season stats, serving, Big 12 standings and the national poll.">
+<!-- Add to Home Screen. iOS reads apple-mobile-web-app-* and the touch icon
+     rather than the manifest, so both sets are here on purpose. -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0051BA">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="KU Volleyball">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
   :root {
     --ku-blue: #0051BA;
@@ -979,6 +990,14 @@ function showTip(cx, cy, title, val, sub) {
 function hideTip() { tip.style.display = "none"; }
 
 addEventListener("resize", () => { if (SEED) renderLine(slice().results); });
+
+// Offline support for a home-screen install. Registration failing is not worth
+// telling anyone about: the page works without it, which is the whole point of
+// the worker being network-first.
+if ("serviceWorker" in navigator) {
+  addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+
 load();
 </script>
 </body>
