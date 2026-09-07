@@ -226,6 +226,106 @@ class MergeSyncTest {
         assertEquals(12, herLines.sumOf { it.digs })
     }
 
+    // The Florida State match, 2026-09-04. The NCAA published that contest with
+    // its two sides crossed throughout, so the app recorded a 3-2 Kansas win
+    // when Kansas had lost 2-3, and the schedule's "Florida State" and the box
+    // score's "Florida St." were filed as two separate matches.
+    private fun floridaStateJson(): JSONObject = JSONObject(
+        """
+        {
+          "players": [{"name": "Ada Alpha", "jerseyNumber": "1", "position": "OH"}],
+          "matches": [
+            {"date": "2026-09-04", "opponent": "Florida St.", "season": "2026",
+             "teamSets": 2, "opponentSets": 3,
+             "setScores": "24-26, 25-21, 25-19, 26-28, 13-15"}
+          ]
+        }
+        """
+    )
+
+    @Test
+    fun `a stored result that mirrors the feed is a crossed box score and gets corrected`() =
+        runTest {
+            val dao = db.dao()
+            dao.insertMatch(
+                com.example.data.Match(
+                    date = "2026-09-04", opponent = "Florida St.", season = "2026",
+                    teamSets = 3, opponentSets = 2,
+                    setScores = "26-24, 21-25, 19-25, 28-26, 15-13"
+                )
+            )
+            Seeder.merge(floridaStateJson(), dao)
+            val match = dao.matchesOnce().single()
+            assertEquals(2, match.teamSets)
+            assertEquals(3, match.opponentSets)
+            assertEquals("24-26, 25-21, 25-19, 26-28, 13-15", match.setScores)
+        }
+
+    @Test
+    fun `a hand-edited result that is not a mirror still stands`() = runTest {
+        val dao = db.dao()
+        dao.insertMatch(
+            com.example.data.Match(
+                date = "2026-09-04", opponent = "Florida St.", season = "2026",
+                // Somebody watched three sets and typed what they saw. It is not
+                // the mirror of 2-3, so the sync has to leave it alone.
+                teamSets = 1, opponentSets = 2, setScores = "24-26, 25-21, 19-25"
+            )
+        )
+        Seeder.merge(floridaStateJson(), dao)
+        val match = dao.matchesOnce().single()
+        assertEquals(1, match.teamSets)
+        assertEquals(2, match.opponentSets)
+        assertEquals("24-26, 25-21, 19-25", match.setScores)
+    }
+
+    @Test
+    fun `the two spellings of one opponent are a single match, and the stub is dropped`() =
+        runTest {
+            val dao = db.dao()
+            // What a phone that synced on the day ended up holding: the played
+            // match from the box score, and the schedule's stub beside it.
+            dao.insertMatch(
+                com.example.data.Match(
+                    date = "2026-09-04", opponent = "Florida St.", season = "2026",
+                    teamSets = 2, opponentSets = 3
+                )
+            )
+            dao.insertMatch(
+                com.example.data.Match(
+                    date = "2026-09-04", opponent = "Florida State", season = "2026"
+                )
+            )
+            assertEquals(2, dao.matchesOnce().size)
+
+            Seeder.merge(floridaStateJson(), dao)
+            val match = dao.matchesOnce().single()
+            assertEquals("Florida St.", match.opponent)
+            assertEquals(2, match.teamSets)
+            assertEquals(3, match.opponentSets)
+        }
+
+    @Test
+    fun `a duplicate carrying stat lines is never dropped`() = runTest {
+        val dao = db.dao()
+        Seeder.merge(seedJson(), dao)
+        val seeded = dao.matchesOnce().single()
+        // Same date and team, and somebody has recorded stats against it. Two
+        // rows is wrong, but neither is safe to delete, so both survive.
+        val other = dao.insertMatch(
+            com.example.data.Match(date = "2025-08-29", opponent = "Wisconsin", season = "2025")
+        )
+        dao.upsertStatLine(
+            StatLine(
+                playerId = dao.playersOnce().single().id, matchId = other,
+                setsPlayed = 1, kills = 4
+            )
+        )
+        Seeder.merge(seedJson(), dao)
+        assertEquals(2, dao.matchesOnce().size)
+        assertEquals(seeded.id, dao.matchesOnce().first { it.teamSets != null }.id)
+    }
+
     @Test
     fun `unknown player in lines is skipped without error`() = runTest {
         val json = seedJson().apply {

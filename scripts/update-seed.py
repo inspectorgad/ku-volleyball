@@ -35,7 +35,7 @@ def to_int(value):
 
 
 players = {}  # name -> {name, jerseyNumber, position}
-matches = {}  # (date, opponent.lower()) -> match dict
+matches = {}  # match_key(date, opponent) -> match dict
 
 
 # Sources capitalize names inconsistently (e.g. "McCarthy" vs "Mccarthy"),
@@ -100,6 +100,45 @@ ROSTER_NAMES = {
     for entry in load_json("scraped/roster.json", [])
     if entry.get("name", "").strip()
 }
+
+
+def norm_team(name):
+    """Canonical key for cross-source name matching ('Iowa State'/'Iowa St.')."""
+    # Strips the NCAA's poll-vote count and kuathletics' "(Exh.)" suffix.
+    n = re.sub(r"\s*\((?:\d+|[Ee]xh\.?|[Ee]xhibition)\)\s*$", "", strip_rank(name)).lower()
+    n = n.replace(".", "")
+    n = re.sub(r"\bstate\b", "st", n)
+    return re.sub(r"\s+", " ", n).strip()
+
+
+def match_key(date, opponent):
+    """How a match is identified across sources.
+
+    The two sources spell schools differently - the NCAA box score says
+    "Florida St." where kuathletics' schedule says "Florida State" - so keying
+    on the raw name filed the same match twice. That is exactly what happened on
+    2026-09-04: the box score arrived while the fixture was still dated today,
+    and the seed published both the played match and an unplayed stub beside it.
+    The feed healed itself the next day when the fixture fell out of the
+    schedule, but an app that had already synced kept both rows for good,
+    because matches are never deleted.
+    """
+    return (date, norm_team(opponent))
+
+
+def team_points(mine, theirs):
+    """Points a side scored, from the two box-score team blocks.
+
+    A point comes from a kill, an ace, or an opponent's error. Blocks are not
+    added: a blocked attack is already charged to the other side as an attack
+    error, so counting both would double up. Net violations and the like are not
+    in a box score, so this runs a point or two under the true total - close
+    enough to tell the two linescore columns apart, which is all it is for.
+    """
+    return (
+        mine.get("k", 0) + mine.get("sa", 0)
+        + theirs.get("e", 0) + theirs.get("se", 0) + theirs.get("bhe", 0)
+    )
 
 
 _transposed_warned = set()
@@ -167,7 +206,18 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
     if contest.get("gameState") != "F":
         continue
 
-    ku_home = bool(ku.get("isHome"))
+    # Which block is KU's is settled from the roster before anything is read off
+    # the contest labels, because when those labels are crossed they are crossed
+    # throughout: the sets, the winner and the home flag are as wrong as the
+    # player lists were. Reading the score first and the roster second is what
+    # left the Florida State match recorded as a Kansas win.
+    ku_team_id = to_int(ku.get("teamId"))
+    blocks = (data.get("box") or {}).get("teamBoxscore") or []
+    ku_block = ku_side(blocks, ku_team_id)
+    crossed = ku_block is not None and to_int(ku_block.get("teamId")) != ku_team_id
+    ours_team, theirs_team = (opp, ku) if crossed else (ku, opp)
+
+    ku_home = bool(ours_team.get("isHome"))
     set_scores = []
     for ls in contest.get("linescores") or []:
         home, visit = to_int(ls.get("home")), to_int(ls.get("visit"))
@@ -183,8 +233,8 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         "date": data["date"],
         "opponent": opp.get("nameShort") or opp.get("nameFull") or "Unknown",
         "season": season,
-        "teamSets": to_int(ku.get("score")),
-        "opponentSets": to_int(opp.get("score")),
+        "teamSets": to_int(ours_team.get("score")),
+        "opponentSets": to_int(theirs_team.get("score")),
         "setScores": ", ".join(set_scores),
         "venue": (location.get("venue") or "").strip(),
         "city": city,
@@ -196,9 +246,6 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         "opponentLines": [],
     }
 
-    ku_team_id = to_int(ku.get("teamId"))
-    blocks = (data.get("box") or {}).get("teamBoxscore") or []
-    ku_block = ku_side(blocks, ku_team_id)
     for tb in blocks:
         is_ku = tb is ku_block
         # Team totals are recorded, not summed from the player lines: every stat
@@ -229,7 +276,32 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
                     **line,
                 })
 
-    matches[(match["date"], match["opponent"].lower())] = match
+    # Does the recorded result actually belong to the side whose box score we
+    # just filed? Each team's points are recoverable from the two team blocks,
+    # and the two linescore columns are far enough apart to say which column is
+    # ours. This is the check that would have caught the Florida State match on
+    # the day rather than three days later, so it runs on every match, not only
+    # on one the roster flagged.
+    ku_stats, opp_stats = match.get("teamStats"), match.get("opponentStats")
+    lines = contest.get("linescores") or []
+    if ku_stats and opp_stats and lines:
+        ours_pts = team_points(ku_stats, opp_stats)
+        home_total = sum(to_int(ls.get("home")) for ls in lines)
+        visit_total = sum(to_int(ls.get("visit")) for ls in lines)
+        chosen, other = (home_total, visit_total) if ku_home else (visit_total, home_total)
+        # Only speak up when the other column is clearly the better fit: a
+        # couple of points of slack is normal, being several points closer to
+        # the wrong column is not.
+        if abs(ours_pts - other) + 3 <= abs(ours_pts - chosen):
+            print(
+                f"  WARNING: {match['date']} {match['opponent']}: KU's box score "
+                f"scores {ours_pts} points but the column recorded as KU's totals "
+                f"{chosen} and the other totals {other}. Recorded "
+                f"{match['teamSets']}-{match['opponentSets']}; the sides may be "
+                f"crossed upstream."
+            )
+
+    matches[match_key(match["date"], match["opponent"])] = match
 
 # --- Current roster (preferred source for number/position) ------------------
 roster_names = set()
@@ -278,7 +350,7 @@ for entry in load_json("scraped/upcoming.json", []):
     opponent = strip_rank(entry.get("opponent"))
     if not date or not opponent or date < today:
         continue
-    key = (date, opponent.lower())
+    key = match_key(date, opponent)
     if key in matches:
         continue
     fixture = {
@@ -329,7 +401,7 @@ for match in previous_seed.get("matches", []):
         continue
     if match.get("season") not in seasons_seen:
         continue
-    key = (date, opponent.lower())
+    key = match_key(date, opponent)
     if key in matches:
         continue
     matches[key] = {**match, "opponent": opponent}
@@ -352,7 +424,7 @@ if carried:
 # and are never overwritten, which is the rule everywhere else in this pipeline;
 # a blank is not a correction.
 previous_by_key = {
-    (m.get("date", ""), (m.get("opponent") or "").lower()): m
+    match_key(m.get("date", ""), m.get("opponent") or ""): m
     for m in previous_seed.get("matches", [])
 }
 relocated = []
@@ -390,7 +462,7 @@ venue_opponents = {}
 for m in matches.values():
     venue = m.get("venue")
     if venue and m.get("city") != HOME_CITY:
-        venue_opponents.setdefault((m["season"], venue), set()).add(m["opponent"].lower())
+        venue_opponents.setdefault((m["season"], venue), set()).add(norm_team(m["opponent"]))
 
 for m in matches.values():
     if "_kuDesignatedHome" not in m:
@@ -414,13 +486,6 @@ if played:
 # records are derived from the Big 12 games the sweep already collects. This
 # also means any season can be rebuilt retroactively, which a live standings
 # endpoint could not do.
-def norm_team(name):
-    """Canonical key for cross-source name matching ('Iowa State'/'Iowa St.')."""
-    # Strips the NCAA's poll-vote count and kuathletics' "(Exh.)" suffix.
-    n = re.sub(r"\s*\((?:\d+|[Ee]xh\.?|[Ee]xhibition)\)\s*$", "", strip_rank(name)).lower()
-    n = n.replace(".", "")
-    n = re.sub(r"\bstate\b", "st", n)
-    return re.sub(r"\s+", " ", n).strip()
 
 
 index = load_json("scraped/ku-index.json", {})

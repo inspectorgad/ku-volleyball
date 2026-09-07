@@ -8,7 +8,8 @@ import org.json.JSONObject
  * gap-filling only — it never overwrites user-entered data:
  * - players are added if their name isn't already present
  * - matches are added if no match exists for that date + opponent
- * - an existing match gets seed results only if it has none
+ * - an existing match gets seed results only if it has none, or if what it has
+ *   is the exact mirror of the feed's — the signature of a crossed box score
  * - an existing match gets seed stat lines only if it has none
  *
  * This lets an updated APK (with fresh season data baked in) install over the
@@ -34,7 +35,24 @@ object Seeder {
         runCatching { merge(JSONObject(json), dao) }
     }
 
-    private fun matchKey(date: String, opponent: String) = "$date|${opponent.lowercase()}"
+    private fun matchKey(date: String, opponent: String) = "$date|${normTeam(opponent)}"
+
+    /**
+     * Mirrors norm_team() in scripts/update-seed.py.
+     *
+     * The two sources spell schools differently — the NCAA box score says
+     * "Florida St." where kuathletics' schedule says "Florida State" — so a raw
+     * lowercase name filed one match as two.
+     */
+    private fun normTeam(name: String): String =
+        name.trim()
+            .replace(Regex("^#\\d+\\s+"), "")
+            .replace(Regex("\\s*\\((?:\\d+|[Ee]xh\\.?|[Ee]xhibition)\\)\\s*$"), "")
+            .lowercase()
+            .replace(".", "")
+            .replace(Regex("\\bstate\\b"), "st")
+            .replace(Regex("\\s+"), " ")
+            .trim()
 
     /** Also used by [SeasonSync] for network-fetched season data. */
     suspend fun merge(root: JSONObject, dao: JayhawksDao) {
@@ -92,8 +110,36 @@ object Seeder {
 
         // Tournament weekends can put two matches on nearby dates, so matches
         // are keyed by date + opponent rather than date alone.
-        val matchesByKey = dao.matchesOnce().associateBy { matchKey(it.date, it.opponent) }
+        val storedMatches = dao.matchesOnce()
         val matchesWithLines = dao.statLinesOnce().map { it.matchId }.toSet()
+
+        // Before matchKey normalised the name, a sync that saw both spellings on
+        // the same day filed two rows for one match — which is what happened to
+        // Florida State on 2026-09-04, when the box score landed while the
+        // fixture was still dated today. The feed healed itself the next day;
+        // a device that had already synced did not, because matches are never
+        // deleted. So the leftover is dropped here, and only ever a row with no
+        // result, no stat lines and no opposing box score, sitting on a date and
+        // team another row already covers. Nothing a person entered by hand
+        // looks like that.
+        val withOpponentLines = dao.opponentStatLinesOnce().map { it.matchId }.toSet()
+        val redundant = storedMatches
+            .groupBy { matchKey(it.date, it.opponent) }
+            .values
+            .filter { it.size > 1 }
+            .flatMap { group ->
+                val bare = group.filter {
+                    it.teamSets == null && it.opponentSets == null &&
+                        it.id !in matchesWithLines && it.id !in withOpponentLines
+                }
+                // If every row in the group is bare, one of them still stays:
+                // the duplicate is the problem, not the fixture itself.
+                if (bare.size == group.size) bare.drop(1) else bare
+            }
+        redundant.forEach { dao.deleteMatch(it) }
+
+        val matchesByKey = (storedMatches - redundant.toSet())
+            .associateBy { matchKey(it.date, it.opponent) }
 
         val matches = root.optJSONArray("matches") ?: return
         for (i in 0 until matches.length()) {
@@ -130,12 +176,28 @@ object Seeder {
                 matchId = existing.id
                 val fillResult = existing.teamSets == null && existing.opponentSets == null &&
                     (seedTeamSets != null || seedOppSets != null)
+                // A stored result that is the exact mirror of the feed's was not
+                // typed by anybody — it is the signature of an upstream contest
+                // whose two sides were crossed. That is what put the Florida
+                // State match on every synced phone as a Kansas win: the NCAA
+                // had Kansas down as winning 3-2 when it lost 2-3. Fixing the
+                // feed could not fix those phones, because a result is
+                // otherwise never overwritten, and it should not be: the app
+                // lets people edit a score by hand. So only the mirror is
+                // corrected. An edit that is not a mirror still stands, which
+                // is what the merge has always promised.
+                val mirrored = !fillResult &&
+                    seedTeamSets != null && seedOppSets != null &&
+                    existing.teamSets == seedOppSets && existing.opponentSets == seedTeamSets &&
+                    seedTeamSets != seedOppSets
+                val takeSeedResult = fillResult || mirrored
                 // Venue facts fill in when missing (an upcoming match becoming a
                 // played one learns where it happened) but never overwrite.
                 val updated = existing.copy(
-                    teamSets = if (fillResult) seedTeamSets else existing.teamSets,
-                    opponentSets = if (fillResult) seedOppSets else existing.opponentSets,
-                    setScores = existing.setScores ?: seedSetScores,
+                    teamSets = if (takeSeedResult) seedTeamSets else existing.teamSets,
+                    opponentSets = if (takeSeedResult) seedOppSets else existing.opponentSets,
+                    setScores = if (mirrored) seedSetScores ?: existing.setScores
+                        else existing.setScores ?: seedSetScores,
                     home = existing.home ?: seedHome,
                     neutral = existing.neutral || seedNeutral,
                     venue = existing.venue.ifBlank { seedVenue },
