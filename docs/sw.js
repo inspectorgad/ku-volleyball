@@ -9,7 +9,9 @@
 // So: the page and the feed are network-first, cache-only as a fallback. Only
 // the icons and the manifest, which change about once a year, are cache-first.
 
-const VERSION = "v1";
+// Bumping this drops every previously cached response on activate, which is
+// how a stale feed already sitting in a phone's cache gets thrown away.
+const VERSION = "v2";
 const CACHE = `ku-volleyball-${VERSION}`;
 
 // Enough to open cold with no network. season-data.json is deliberately not
@@ -43,6 +45,17 @@ self.addEventListener("activate", (event) => {
         keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))
       ))
       .then(() => self.clients.claim())
+      // Taking control is not enough on the visit that installs this worker:
+      // the page on screen was already fetched and rendered by whatever came
+      // before, from a cache this worker had no say in. So it is reloaded once,
+      // now that requests go through here. This runs on activation, which
+      // happens once per worker version, so it cannot loop.
+      .then(() => self.clients.matchAll({ type: "window" }))
+      .then((clients) => clients.forEach((client) => {
+        // A client that refuses to navigate is not worth failing over.
+        try { client.navigate(client.url); } catch (e) { /* ignore */ }
+      }))
+      .catch(() => {})
   );
 });
 
@@ -68,10 +81,26 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Network-first for the page and the feed. A cached response is the answer
-  // only when the network could not produce one.
+  // "Network-first" was not first enough. A plain fetch still consults the
+  // browser's HTTP cache, and GitHub Pages serves everything with a max-age, so
+  // this handler could satisfy a request without a byte leaving the phone and
+  // still believe it had gone to the network. That is exactly how a corrected
+  // result stayed corrected everywhere except on the phone reading it: both the
+  // page and the feed came back minutes old from the phone's own cache.
+  //
+  // So the request is remade with cache: "reload", which bypasses that cache
+  // outright. It covers the page as well as the feed, because a stale page
+  // cannot be fixed by anything the page itself does — its code is the thing
+  // that is stale. A worker is the only part of this that updates promptly, so
+  // it has to be the part that insists.
+  //
+  // Rebuilt from the URL rather than copied: a navigation request cannot be
+  // passed to the Request constructor. Nothing here needs its headers.
+  const netRequest = new Request(url.href, { cache: "reload" });
+
+  // A cached response is the answer only when the network could not produce one.
   event.respondWith(
-    fetch(request)
+    fetch(netRequest)
       .then((resp) => {
         if (resp.ok) {
           const copy = resp.clone();

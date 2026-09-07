@@ -256,8 +256,14 @@ let sortKey = "K", sortDir = -1;
 
 async function load() {
   let resp;
-  try { resp = await fetch("season-data.json"); if (!resp.ok) throw 0; }
-  catch { try { resp = await fetch(RAW_URL); if (!resp.ok) throw 0; }
+  // no-cache revalidates with the server every time instead of trusting an
+  // age. GitHub Pages serves the feed with a max-age, so a plain fetch can
+  // hand back a copy minutes old from the browser's own cache — which is how a
+  // corrected result stayed corrected everywhere except on the phone reading
+  // it. Revalidation is cheap: unchanged data comes back as a 304.
+  const fresh = { cache: "no-cache" };
+  try { resp = await fetch("season-data.json", fresh); if (!resp.ok) throw 0; }
+  catch { try { resp = await fetch(RAW_URL, fresh); if (!resp.ok) throw 0; }
   catch { document.getElementById("status").textContent = "Couldn't load season data (offline?). Try again later."; return; } }
   SEED = await resp.json();
   const withResults = SEED.matches.filter(m => m.teamSets != null);
