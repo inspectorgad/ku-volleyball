@@ -370,6 +370,35 @@ object Seeder {
                 dao.insertPollEntries(entries)
             }
         }
+
+        // Cumulative team serving, grouped by season and replaced a season at a
+        // time - so a team that leaves the tracked set leaves the table with it
+        // rather than freezing at the totals it held when it dropped out.
+        root.optJSONArray("teamServing")?.let { arr ->
+            val bySeason = mutableMapOf<String, MutableList<TeamServing>>()
+            for (i in 0 until arr.length()) {
+                val r = arr.getJSONObject(i)
+                val season = r.optString("season").takeIf { it.isNotBlank() } ?: continue
+                val team = r.optString("team").takeIf { it.isNotBlank() } ?: continue
+                bySeason.getOrPut(season) { mutableListOf() }.add(
+                    TeamServing(
+                        season = season,
+                        team = team,
+                        matches = r.optInt("matches"),
+                        sets = r.optInt("sets"),
+                        serviceAces = r.optInt("serviceAces"),
+                        serviceErrors = r.optInt("serviceErrors"),
+                        serveAttempts = r.optInt("serveAttempts"),
+                        big12 = r.optBoolean("big12"),
+                        pollRank = if (r.has("pollRank")) r.optInt("pollRank") else null
+                    )
+                )
+            }
+            for ((season, rows) in bySeason) {
+                dao.deleteTeamServingForSeason(season)
+                dao.insertTeamServing(rows)
+            }
+        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.example
 
 import com.example.data.StatLine
+import com.example.data.TeamServing
 import com.example.stats.ServingMatch
 import com.example.stats.aggregate
 import com.example.stats.formatAverage
@@ -8,6 +9,7 @@ import com.example.stats.servingProgress
 import com.example.stats.formatPerSet
 import com.example.stats.summarize
 import com.example.ui.SERVING_COLUMNS
+import com.example.ui.SERVING_LEAGUE_COLUMNS
 import com.example.ui.STAT_COLUMNS
 import com.example.ui.STAT_DEFINITIONS
 import com.example.ui.STAT_GLOSSARY
@@ -196,11 +198,59 @@ class VolleyballStatsTest {
     }
 
     @Test
+    fun `team serving divides by serves taken, not by sets`() {
+        // The whole reason team serving is its own table: a team block publishes
+        // attempts, so the textbook measure is available where the per-player
+        // SRV has to make do with sets.
+        val row = TeamServing(
+            season = "2026", team = "Kansas", matches = 4, sets = 17,
+            serviceAces = 28, serviceErrors = 48, serveAttempts = 387
+        )
+        assertEquals(-20, row.net)
+        assertEquals(-20.0 / 387.0, row.servingPercentage, 1e-9)
+        assertEquals(48.0 / 17.0, row.errorsPerSet, 1e-9)
+        assertEquals(28.0 / 17.0, row.acesPerSet, 1e-9)
+        assertEquals(387.0 / 17.0, row.attemptsPerSet, 1e-9)
+        assertEquals("-.052", formatAverage(row.servingPercentage))
+    }
+
+    @Test
+    fun `a team with nothing captured yet divides by nothing`() {
+        val empty = TeamServing(season = "2026", team = "Oregon")
+        assertEquals(0.0, empty.servingPercentage, 0.0)
+        assertEquals(0.0, empty.errorsPerSet, 0.0)
+        assertEquals(0.0, empty.acesPerSet, 0.0)
+        assertEquals(0.0, empty.attemptsPerSet, 0.0)
+        assertEquals(0, empty.net)
+    }
+
+    @Test
+    fun `serving percentage separates teams a fault count would not`() {
+        // 30 faults on 400 serves is a different team from 30 on 150, and the
+        // raw total says they are the same. This is the reason the table is not
+        // just a faults column.
+        val busy = TeamServing(
+            season = "2026", team = "Busy", sets = 20,
+            serviceAces = 40, serviceErrors = 30, serveAttempts = 400
+        )
+        val wild = TeamServing(
+            season = "2026", team = "Wild", sets = 20,
+            serviceAces = 10, serviceErrors = 30, serveAttempts = 150
+        )
+        assertEquals(busy.serviceErrors, wild.serviceErrors)
+        assertTrue(
+            "the team earning more from the same faults must rank higher",
+            busy.servingPercentage > wild.servingPercentage
+        )
+        assertEquals(busy.errorsPerSet, wild.errorsPerSet, 1e-9)
+    }
+
+    @Test
     fun `every stat column has a definition`() {
         // A heading with no glossary entry renders with no tooltip and gives no
         // hint that it is missing one, so the gap would only ever be found by
         // someone long-pressing it and getting nothing.
-        val undefined = (STAT_COLUMNS + SERVING_COLUMNS).distinct()
+        val undefined = (STAT_COLUMNS + SERVING_COLUMNS + SERVING_LEAGUE_COLUMNS).distinct()
             .filterNot { STAT_GLOSSARY.containsKey(it) }
         assertEquals(emptyList<String>(), undefined)
     }
@@ -212,7 +262,7 @@ class VolleyballStatsTest {
         // on long-press and then be missing from the list at the bottom of the
         // Serving screen - the one place someone goes to read them all.
         val listed = STAT_DEFINITIONS.map { it.term }.toSet()
-        val drawn = (STAT_COLUMNS + SERVING_COLUMNS).distinct()
+        val drawn = (STAT_COLUMNS + SERVING_COLUMNS + SERVING_LEAGUE_COLUMNS).distinct()
         assertEquals(emptyList<String>(), drawn.filterNot { it in listed })
     }
 

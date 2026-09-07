@@ -49,6 +49,53 @@ data class PollEntry(
 )
 
 /**
+ * A team's cumulative serving for one season: every Big 12 side and everybody
+ * who has been in that season's poll, summed from the team totals of every
+ * match the scraper has captured.
+ *
+ * Derived data with no user-entered fields, so sync replaces it wholesale.
+ *
+ * [serveAttempts] is the reason this is its own table rather than a column on
+ * the standings: the team block of a box score publishes serves taken, which no
+ * player row does, so a team's serving can be judged on the textbook
+ * denominator instead of the per-set proxy the player screens have to use.
+ */
+@Entity(tableName = "team_serving", primaryKeys = ["season", "team"])
+data class TeamServing(
+    val season: String,
+    val team: String,
+    val matches: Int = 0,
+    val sets: Int = 0,
+    val serviceAces: Int = 0,
+    val serviceErrors: Int = 0,
+    val serveAttempts: Int = 0,
+    val big12: Boolean = false,
+    val pollRank: Int? = null
+) {
+    /** Aces minus errors: what the serving actually returned. */
+    val net: Int get() = serviceAces - serviceErrors
+
+    /**
+     * (aces − errors) ÷ serves taken. Nearly every team reads negative, which
+     * is the sport rather than a fault: a serve hard enough to trouble a ranked
+     * side is hard enough to miss.
+     */
+    val servingPercentage: Double
+        get() = if (serveAttempts == 0) 0.0 else net.toDouble() / serveAttempts
+
+    /** Serve faults per set, which is how the cost is usually quoted. */
+    val errorsPerSet: Double
+        get() = if (sets == 0) 0.0 else serviceErrors.toDouble() / sets
+
+    val acesPerSet: Double
+        get() = if (sets == 0) 0.0 else serviceAces.toDouble() / sets
+
+    /** Serves taken per set: the shape of a team's service load. */
+    val attemptsPerSet: Double
+        get() = if (sets == 0) 0.0 else serveAttempts.toDouble() / sets
+}
+
+/**
  * The twelve counting stats a volleyball box score records, shared by Kansas
  * lines, opposing lines, and team totals so all three aggregate and format
  * through the same code in `com.example.stats`.

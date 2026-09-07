@@ -102,6 +102,9 @@ ROSTER_NAMES = {
 }
 
 
+_transposed_warned = set()
+
+
 def ku_side(blocks, ku_team_id):
     """Which box-score block is KU's, when the teamId cannot be trusted.
 
@@ -133,11 +136,16 @@ def ku_side(blocks, ku_team_id):
 
     ours, theirs = roster_hits(labelled[0]), roster_hits(other[0])
     if theirs >= 3 and theirs - ours >= 2:
-        print(
-            f"  WARNING: box score teams are transposed upstream; taking the "
-            f"block labelled {other[0].get('teamId')} as KU's "
-            f"({theirs} roster names against {ours})"
-        )
+        # Said once per contest: the box scores are read twice, once for the
+        # match record and again for cumulative team serving.
+        stamp = str(other[0].get("teamId"))
+        if stamp not in _transposed_warned:
+            _transposed_warned.add(stamp)
+            print(
+                f"  WARNING: box score teams are transposed upstream; taking the "
+                f"block labelled {stamp} as KU's "
+                f"({theirs} roster names against {ours})"
+            )
         return other[0]
     return labelled[0]
 
@@ -677,6 +685,135 @@ if opponent_form:
 else:
     print("opponent form: none yet (no scheduled opponent has played this season)")
 
+# --- Cumulative team serving for the Big 12 and the poll ---------------------
+# Serve faults on their own flatter whoever has played least, so each row also
+# carries what it took to earn them: aces, attempts and sets. Attempts are the
+# honest denominator and the team block is the only place they exist - a player
+# row publishes aces and errors but never serves taken, which is why the app's
+# per-player SRV divides by sets instead. Here the real figure is available, so
+# the app can show both a serving percentage and errors per set.
+#
+# Read from teamStats rather than summed from the player rows: the totals are
+# recorded, and reception errors are sometimes charged to the team rather than
+# to anybody in particular.
+SERVE_TRACKED_SEASON = str(max(int(m["season"]) for m in matches.values()))
+
+
+def serving_blocks(path, data):
+    """Each team block in a capture, paired with the team it belongs to.
+
+    For a KU game the transposition guard decides which block is KU's, so a
+    contest the NCAA sent back the wrong way round is credited correctly. For
+    another team's game there is no roster to check against, so the teamId label
+    stands - the alternative is guessing, and a wrong guess here would silently
+    swap two teams' seasons.
+    """
+    box = data.get("box") or {}
+    blocks = box.get("teamBoxscore") or []
+    by_id = {str(t.get("teamId")): t for t in box.get("teams") or []}
+    names = {
+        str(b.get("teamId")): (by_id.get(str(b.get("teamId"))) or {}).get("nameShort")
+        or (by_id.get(str(b.get("teamId"))) or {}).get("nameFull")
+        or ""
+        for b in blocks
+    }
+    if "ncaa-game-" in path and len(blocks) == 2:
+        contests = (data.get("info") or {}).get("contests") or []
+        teams = (contests[0].get("teams") or []) if contests else []
+        ku = next((t for t in teams if t.get("seoname") == TEAM_SEO), None)
+        opp = next((t for t in teams if t.get("seoname") != TEAM_SEO), None)
+        if ku and opp:
+            ku_block = ku_side(blocks, to_int(ku.get("teamId")))
+            ku_name = ku.get("nameShort") or ku.get("nameFull") or ""
+            opp_name = opp.get("nameShort") or opp.get("nameFull") or ""
+            return [
+                (ku_name if b is ku_block else opp_name, b) for b in blocks
+            ]
+    return [(names.get(str(b.get("teamId")), ""), b) for b in blocks]
+
+
+serving = {}  # norm team -> totals
+for path in sorted(glob.glob("scraped/ncaa-opp-*.json") + glob.glob("scraped/ncaa-game-*.json")):
+    data = load_json(path, None)
+    if not data:
+        continue
+    season = str(data.get("season") or (data.get("date") or "")[:4])
+    if season != SERVE_TRACKED_SEASON:
+        continue
+    game_id = str(data.get("gameId") or path)
+    for name, block in serving_blocks(path, data):
+        key = norm_team(name)
+        if not key:
+            continue
+        rec = serving.setdefault(
+            key,
+            {"team": name, "_games": set(), "sets": 0, "sa": 0, "se": 0, "att": 0},
+        )
+        # A scheduled opponent's game can be captured as both ncaa-opp and
+        # ncaa-game (KU's own matches are in both queues), so count each contest
+        # once per team rather than once per file.
+        if game_id in rec["_games"]:
+            continue
+        rec["_games"].add(game_id)
+        stats = block.get("teamStats") or {}
+        rec["sets"] += to_int(stats.get("gamesPlayed"))
+        rec["sa"] += to_int(stats.get("serviceAces"))
+        rec["se"] += to_int(stats.get("serviceErrors"))
+        rec["att"] += to_int(stats.get("serveAttempts"))
+
+# Published for the Big 12 and for anybody who has been in this season's poll.
+# A team that has since dropped out keeps its row: it is still a team the app
+# has a full season for, and losing the row the week it falls to 26th would be
+# odd. The poll accumulates by season, so "has been ranked" is what we can
+# answer honestly.
+b12_serve = {norm_team(r["team"]) for r in standings if r["season"] == SERVE_TRACKED_SEASON}
+polled_serve = {
+    norm_team(row["team"])
+    for poll in polls
+    if poll["season"] == SERVE_TRACKED_SEASON
+    for row in poll["rows"]
+}
+poll_rank = {
+    norm_team(row["team"]): row["rank"]
+    for poll in polls
+    if poll["season"] == SERVE_TRACKED_SEASON
+    for row in poll["rows"]
+}
+team_serving = []
+for key in sorted(b12_serve | polled_serve):
+    rec = serving.get(key)
+    if not rec or not rec["_games"]:
+        continue
+    row = {
+        "team": rec["team"],
+        "season": SERVE_TRACKED_SEASON,
+        "matches": len(rec["_games"]),
+        "sets": rec["sets"],
+        "serviceAces": rec["sa"],
+        "serviceErrors": rec["se"],
+        "serveAttempts": rec["att"],
+        "big12": key in b12_serve,
+    }
+    if key in poll_rank:
+        row["pollRank"] = poll_rank[key]
+    team_serving.append(row)
+
+if team_serving:
+    wanted = b12_serve | polled_serve
+    missing = sorted(k for k in wanted if k not in serving or not serving[k]["_games"])
+    print(
+        f"team serving: {len(team_serving)} of {len(wanted)} tracked teams "
+        f"({sum(1 for r in team_serving if r['big12'])} Big 12, "
+        f"{sum(1 for r in team_serving if 'pollRank' in r)} ranked)"
+    )
+    if missing:
+        # Loud, because the usual cause is a name the poll and the NCAA spell
+        # differently rather than a team that has genuinely not played.
+        print(f"  WARNING: no serving data captured for: {', '.join(missing)}")
+    thin = [r["team"] for r in team_serving if r["matches"] < 3]
+    if thin:
+        print(f"  only one or two matches captured so far for: {', '.join(thin)}")
+
 seed = {
     "formatVersion": 1,
     "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -694,6 +831,8 @@ if opponent_rosters:
     seed["opponentRosters"] = opponent_rosters
 if opponent_form:
     seed["opponentForm"] = opponent_form
+if team_serving:
+    seed["teamServing"] = team_serving
 
 os.makedirs(os.path.dirname(SEED_PATH), exist_ok=True)
 

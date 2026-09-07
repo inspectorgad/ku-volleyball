@@ -54,6 +54,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     val opponentRoster by viewModel.opponentRoster.collectAsStateWithLifecycle()
     val opponentSeasonStats by viewModel.opponentSeasonStats.collectAsStateWithLifecycle()
     val pollEntries by viewModel.pollEntries.collectAsStateWithLifecycle()
+    val teamServing by viewModel.teamServing.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val dataUpdatedAt by viewModel.dataUpdatedAt.collectAsStateWithLifecycle()
 
@@ -182,7 +183,8 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
 
                     Tab.Big12 -> StandingsScreen(
                         standings = standings,
-                        pollEntries = pollEntries
+                        pollEntries = pollEntries,
+                        teamServing = teamServing
                     )
                 }
             }

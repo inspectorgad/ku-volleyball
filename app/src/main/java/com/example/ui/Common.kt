@@ -56,6 +56,9 @@ fun statValues(t: VolleyballTotals): List<String> = listOf(
 /** The serving table's headings. Public so a test can hold the glossary to them. */
 val SERVING_COLUMNS = listOf("SP", "SA", "SE", "NET", "SRV", "SA/S", "SE/S")
 
+/** The league serving table's headings on the Big 12 tab, likewise. */
+val SERVING_LEAGUE_COLUMNS = listOf("M", "SP", "SA", "SE", "ATT", "SRV%", "SE/S", "SA/S")
+
 /**
  * One stat, explained once.
  *
@@ -123,6 +126,18 @@ val STAT_DEFINITIONS: List<StatDefinition> = listOf(
     StatDefinition("NET", "Aces minus errors. The raw serving ledger, before dividing by sets."),
     StatDefinition("SA/S", "Service aces per set."),
     StatDefinition("SE/S", "Service errors per set."),
+    StatDefinition("M", "Matches captured for this team so far this season."),
+    StatDefinition(
+        "ATT",
+        "Serves taken. Published in a box score's team totals but never per " +
+            "player, which is why SRV divides by sets and SRV% can divide by this."
+    ),
+    StatDefinition(
+        "SRV%",
+        "Serving percentage: (aces − errors) ÷ serves taken. The textbook " +
+            "measure, available for a team because the team totals publish " +
+            "attempts. Nearly every team reads negative."
+    ),
     StatDefinition("D", "Digs. Keeping an attacked ball off the floor.", listOf("Digs")),
     StatDefinition("D/S", "Digs per set."),
     StatDefinition("BS", "Block solos. A block that ends the rally, made by one blocker."),

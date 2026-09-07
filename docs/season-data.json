@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-07T10:43:35Z",
+ "generatedAt": "2026-09-07T19:23:58Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -26615,6 +26615,307 @@
      "bhe": 0
     }
    ]
+  }
+ ],
+ "teamServing": [
+  {
+   "team": "Arizona",
+   "season": "2026",
+   "matches": 6,
+   "sets": 22,
+   "serviceAces": 36,
+   "serviceErrors": 44,
+   "serveAttempts": 489,
+   "big12": true
+  },
+  {
+   "team": "Arizona St.",
+   "season": "2026",
+   "matches": 6,
+   "sets": 19,
+   "serviceAces": 35,
+   "serviceErrors": 36,
+   "serveAttempts": 454,
+   "big12": true,
+   "pollRank": 7
+  },
+  {
+   "team": "Baylor",
+   "season": "2026",
+   "matches": 5,
+   "sets": 17,
+   "serviceAces": 22,
+   "serviceErrors": 43,
+   "serveAttempts": 395,
+   "big12": true,
+   "pollRank": 20
+  },
+  {
+   "team": "BYU",
+   "season": "2026",
+   "matches": 4,
+   "sets": 16,
+   "serviceAces": 25,
+   "serviceErrors": 44,
+   "serveAttempts": 347,
+   "big12": true,
+   "pollRank": 24
+  },
+  {
+   "team": "Cincinnati",
+   "season": "2026",
+   "matches": 6,
+   "sets": 20,
+   "serviceAces": 46,
+   "serviceErrors": 52,
+   "serveAttempts": 456,
+   "big12": true
+  },
+  {
+   "team": "Colorado",
+   "season": "2026",
+   "matches": 6,
+   "sets": 22,
+   "serviceAces": 39,
+   "serviceErrors": 46,
+   "serveAttempts": 503,
+   "big12": true,
+   "pollRank": 23
+  },
+  {
+   "team": "Creighton",
+   "season": "2026",
+   "matches": 2,
+   "sets": 10,
+   "serviceAces": 10,
+   "serviceErrors": 27,
+   "serveAttempts": 209,
+   "big12": false,
+   "pollRank": 10
+  },
+  {
+   "team": "Florida",
+   "season": "2026",
+   "matches": 1,
+   "sets": 2,
+   "serviceAces": 5,
+   "serviceErrors": 9,
+   "serveAttempts": 49,
+   "big12": false,
+   "pollRank": 17
+  },
+  {
+   "team": "Houston",
+   "season": "2026",
+   "matches": 5,
+   "sets": 19,
+   "serviceAces": 36,
+   "serviceErrors": 45,
+   "serveAttempts": 436,
+   "big12": true
+  },
+  {
+   "team": "Iowa St.",
+   "season": "2026",
+   "matches": 5,
+   "sets": 18,
+   "serviceAces": 27,
+   "serviceErrors": 54,
+   "serveAttempts": 428,
+   "big12": true
+  },
+  {
+   "team": "Kansas",
+   "season": "2026",
+   "matches": 4,
+   "sets": 17,
+   "serviceAces": 28,
+   "serviceErrors": 48,
+   "serveAttempts": 387,
+   "big12": true,
+   "pollRank": 16
+  },
+  {
+   "team": "Kansas St.",
+   "season": "2026",
+   "matches": 4,
+   "sets": 13,
+   "serviceAces": 26,
+   "serviceErrors": 24,
+   "serveAttempts": 318,
+   "big12": true
+  },
+  {
+   "team": "Kentucky",
+   "season": "2026",
+   "matches": 1,
+   "sets": 4,
+   "serviceAces": 5,
+   "serviceErrors": 9,
+   "serveAttempts": 74,
+   "big12": false,
+   "pollRank": 3
+  },
+  {
+   "team": "Louisville",
+   "season": "2026",
+   "matches": 1,
+   "sets": 3,
+   "serviceAces": 5,
+   "serviceErrors": 7,
+   "serveAttempts": 76,
+   "big12": false,
+   "pollRank": 6
+  },
+  {
+   "team": "Minnesota",
+   "season": "2026",
+   "matches": 1,
+   "sets": 3,
+   "serviceAces": 7,
+   "serviceErrors": 5,
+   "serveAttempts": 66,
+   "big12": false,
+   "pollRank": 11
+  },
+  {
+   "team": "Nebraska",
+   "season": "2026",
+   "matches": 1,
+   "sets": 3,
+   "serviceAces": 5,
+   "serviceErrors": 13,
+   "serveAttempts": 73,
+   "big12": false,
+   "pollRank": 1
+  },
+  {
+   "team": "Pittsburgh",
+   "season": "2026",
+   "matches": 5,
+   "sets": 19,
+   "serviceAces": 17,
+   "serviceErrors": 37,
+   "serveAttempts": 444,
+   "big12": false,
+   "pollRank": 2
+  },
+  {
+   "team": "Purdue",
+   "season": "2026",
+   "matches": 1,
+   "sets": 3,
+   "serviceAces": 1,
+   "serviceErrors": 6,
+   "serveAttempts": 66,
+   "big12": false,
+   "pollRank": 14
+  },
+  {
+   "team": "SMU",
+   "season": "2026",
+   "matches": 1,
+   "sets": 5,
+   "serviceAces": 6,
+   "serviceErrors": 14,
+   "serveAttempts": 104,
+   "big12": false,
+   "pollRank": 8
+  },
+  {
+   "team": "Stanford",
+   "season": "2026",
+   "matches": 2,
+   "sets": 8,
+   "serviceAces": 13,
+   "serviceErrors": 26,
+   "serveAttempts": 182,
+   "big12": false,
+   "pollRank": 4
+  },
+  {
+   "team": "TCU",
+   "season": "2026",
+   "matches": 5,
+   "sets": 17,
+   "serviceAces": 15,
+   "serviceErrors": 38,
+   "serveAttempts": 398,
+   "big12": true,
+   "pollRank": 18
+  },
+  {
+   "team": "Texas",
+   "season": "2026",
+   "matches": 2,
+   "sets": 7,
+   "serviceAces": 7,
+   "serviceErrors": 24,
+   "serveAttempts": 157,
+   "big12": false,
+   "pollRank": 9
+  },
+  {
+   "team": "Texas A&M",
+   "season": "2026",
+   "matches": 1,
+   "sets": 4,
+   "serviceAces": 6,
+   "serviceErrors": 8,
+   "serveAttempts": 89,
+   "big12": false,
+   "pollRank": 12
+  },
+  {
+   "team": "Texas Tech",
+   "season": "2026",
+   "matches": 5,
+   "sets": 21,
+   "serviceAces": 35,
+   "serviceErrors": 49,
+   "serveAttempts": 458,
+   "big12": true
+  },
+  {
+   "team": "UCF",
+   "season": "2026",
+   "matches": 6,
+   "sets": 22,
+   "serviceAces": 36,
+   "serviceErrors": 71,
+   "serveAttempts": 509,
+   "big12": true
+  },
+  {
+   "team": "Utah",
+   "season": "2026",
+   "matches": 6,
+   "sets": 21,
+   "serviceAces": 35,
+   "serviceErrors": 68,
+   "serveAttempts": 475,
+   "big12": true
+  },
+  {
+   "team": "West Virginia",
+   "season": "2026",
+   "matches": 4,
+   "sets": 18,
+   "serviceAces": 24,
+   "serviceErrors": 45,
+   "serveAttempts": 401,
+   "big12": true
+  },
+  {
+   "team": "Wisconsin",
+   "season": "2026",
+   "matches": 1,
+   "sets": 4,
+   "serviceAces": 8,
+   "serviceErrors": 7,
+   "serveAttempts": 86,
+   "big12": false,
+   "pollRank": 5
   }
  ]
 }

@@ -32,7 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.ConferenceStanding
 import com.example.data.PollEntry
+import com.example.data.TeamServing
 import com.example.stats.formatAverage
+import com.example.stats.formatPerSet
 
 private const val KU_SEO = "kansas"
 
@@ -40,6 +42,7 @@ private const val KU_SEO = "kansas"
 fun StandingsScreen(
     standings: List<ConferenceStanding>,
     pollEntries: List<PollEntry>,
+    teamServing: List<TeamServing> = emptyList(),
     modifier: Modifier = Modifier
 ) {
     val seasons = (standings.map { it.season } + pollEntries.map { it.season })
@@ -67,6 +70,8 @@ fun StandingsScreen(
                 .thenBy { it.team }
         )
     val poll = pollEntries.filter { it.season == season }.sortedBy { it.rank }
+    val serving = teamServing.filter { it.season == season }
+    var servingSort by rememberSaveable { mutableStateOf(ServingSort.Errors) }
 
     Column(modifier = modifier.fillMaxSize()) {
         if (seasons.size > 1) {
@@ -149,8 +154,173 @@ fun StandingsScreen(
                     }
                 }
             }
+
+            if (serving.isNotEmpty()) {
+                item {
+                    ServingLeagueCard(
+                        rows = serving,
+                        sort = servingSort,
+                        onSortChange = { servingSort = it }
+                    )
+                }
+            }
         }
     }
+}
+
+/** How the league serving table is ordered. The default is the question asked. */
+enum class ServingSort(val label: String) {
+    Errors("Most faults"),
+    ErrorsPerSet("Faults per set"),
+    Percentage("Serving %"),
+    Aces("Aces")
+}
+
+/**
+ * Cumulative serving for every Big 12 side and everybody who has been in this
+ * season's poll.
+ *
+ * Faults alone would rank whoever has played most, so the table carries what
+ * the faults bought and what they were risked on: aces, serves taken, and the
+ * two rates. Serving percentage is the textbook (aces − errors) ÷ attempts,
+ * available here because a team block publishes serves taken - the per-player
+ * SRV elsewhere in the app divides by sets precisely because a player row does
+ * not.
+ */
+@Composable
+private fun ServingLeagueCard(
+    rows: List<TeamServing>,
+    sort: ServingSort,
+    onSortChange: (ServingSort) -> Unit
+) {
+    val sorted = when (sort) {
+        ServingSort.Errors -> rows.sortedByDescending { it.serviceErrors }
+        ServingSort.ErrorsPerSet -> rows.sortedByDescending { it.errorsPerSet }
+        ServingSort.Percentage -> rows.sortedByDescending { it.servingPercentage }
+        ServingSort.Aces -> rows.sortedByDescending { it.serviceAces }
+    }
+    // A team with one match captured has a real rate on a thin sample, so the
+    // rows say how much is behind them rather than quietly ranking three sets
+    // against twenty.
+    val thinnest = rows.minOf { it.matches }
+    val fullest = rows.maxOf { it.matches }
+
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                "Serving — Big 12 and the poll",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                "${rows.size} teams · ${rows.count { it.big12 }} Big 12 · " +
+                    "${rows.count { it.pollRank != null }} ranked",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                ServingSort.entries.forEach { option ->
+                    FilterChip(
+                        selected = sort == option,
+                        onClick = { onSortChange(option) },
+                        label = { Text(option.label, fontSize = 11.sp) }
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            ServingLeagueTable(sorted)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                "SE is serve faults, SRV% is (aces − errors) ÷ serves taken — the real " +
+                    "denominator, which only the team totals publish. Nearly every team " +
+                    "reads negative; that is the sport, not a fault." +
+                    if (thinnest < fullest) {
+                        " Matches captured runs from $thinnest to $fullest, so read the " +
+                            "rates before the totals."
+                    } else "",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                TOOLTIP_HINT,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+private fun ServingLeagueTable(rows: List<TeamServing>) {
+    val cell = 46.dp
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            ServingLeagueCell("", width = 116.dp, header = true)
+            SERVING_LEAGUE_COLUMNS.forEach { column ->
+                StatTooltip(column) { ServingLeagueCell(column, cell, header = true) }
+            }
+        }
+        HorizontalDivider()
+        rows.forEach { row ->
+            val isKu = row.team.equals("Kansas", ignoreCase = true)
+            Row(
+                modifier = Modifier.padding(vertical = 2.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ServingLeagueCell(
+                    row.pollRank?.let { "#$it ${row.team}" } ?: row.team,
+                    width = 116.dp,
+                    header = true,
+                    align = TextAlign.Start,
+                    highlight = isKu
+                )
+                ServingLeagueCell(row.matches.toString(), cell, highlight = isKu)
+                ServingLeagueCell(row.sets.toString(), cell, highlight = isKu)
+                ServingLeagueCell(row.serviceAces.toString(), cell, highlight = isKu)
+                ServingLeagueCell(row.serviceErrors.toString(), cell, highlight = isKu)
+                ServingLeagueCell(row.serveAttempts.toString(), cell, highlight = isKu)
+                ServingLeagueCell(formatAverage(row.servingPercentage), cell, highlight = isKu)
+                ServingLeagueCell(formatPerSet(row.errorsPerSet), cell, highlight = isKu)
+                ServingLeagueCell(formatPerSet(row.acesPerSet), cell, highlight = isKu)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ServingLeagueCell(
+    text: String,
+    width: androidx.compose.ui.unit.Dp,
+    header: Boolean = false,
+    align: TextAlign = TextAlign.Center,
+    highlight: Boolean = false
+) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .width(width)
+            .padding(vertical = 4.dp),
+        fontSize = 12.sp,
+        fontWeight = if (header || highlight) FontWeight.Bold else FontWeight.Normal,
+        textAlign = align,
+        maxLines = 1,
+        color = when {
+            highlight -> MaterialTheme.colorScheme.primary
+            header -> MaterialTheme.colorScheme.onSurface
+            else -> MaterialTheme.colorScheme.onSurfaceVariant
+        }
+    )
 }
 
 private val COL_W = 44.dp

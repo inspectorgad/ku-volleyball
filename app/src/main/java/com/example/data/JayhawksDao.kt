@@ -83,6 +83,21 @@ interface JayhawksDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPollEntries(rows: List<PollEntry>)
 
+    @Query("SELECT * FROM team_serving")
+    fun observeTeamServing(): Flow<List<TeamServing>>
+
+    @Query("SELECT * FROM team_serving")
+    suspend fun teamServingOnce(): List<TeamServing>
+
+    // Replaced by season, like the standings, and for one extra reason: the
+    // tracked set is the Big 12 plus whoever has been ranked, so its shape
+    // changes as the poll churns.
+    @Query("DELETE FROM team_serving WHERE season = :season")
+    suspend fun deleteTeamServingForSeason(season: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTeamServing(rows: List<TeamServing>)
+
     // Opposing box scores and both sides' team totals. Scraper-owned like the
     // standings above, so a sync replaces a match's rows rather than gap-filling.
     @Query("SELECT * FROM opponent_stat_lines")

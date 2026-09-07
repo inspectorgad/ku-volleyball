@@ -23,7 +23,7 @@ const TEAM_SEO = 'kansas';
 const CONFERENCE_SEO = 'big-12';
 // Bump to force a one-time full re-sweep when the sweep starts capturing
 // something new (the scannedDates cache would otherwise skip old dates).
-const INDEX_VERSION = 2;
+const INDEX_VERSION = 3;
 
 fs.mkdirSync('scraped', { recursive: true });
 
@@ -69,6 +69,42 @@ const upcomingOpponents = new Set(
     }
   })()
 );
+// Teams whose whole season is worth capturing, not just their games against
+// Kansas: every Big 12 member and every team that has appeared in an AVCA poll
+// this season. Accumulated in the index rather than derived fresh, because a
+// team that drops out of the top 25 keeps the games already captured and a team
+// that climbs in needs the ones it played before anybody was watching.
+index.trackedTeams ??= [];
+const trackedTeams = new Set(index.trackedTeams);
+
+// Seeded from what is already on disk, so the set is complete before the sweep
+// starts rather than filling in as it goes. Both sources matter for that:
+// conference membership is only visible on a conference game and those are not
+// played until late September, and the poll is only read after the sweep. Learn
+// them afterwards and a Big 12 team's August non-conference games are never
+// spotted, because the scanned-date cache does not go back for them.
+for (const game of Object.values(index.big12Games ?? {})) {
+  for (const side of [game.home, game.away]) {
+    if (side?.inConference && side?.name) trackedTeams.add(normTeamName(side.name));
+  }
+}
+try {
+  const poll = JSON.parse(fs.readFileSync('scraped/rankings-avca.json', 'utf8'));
+  for (const row of poll.data || []) {
+    const team = normTeamName(row.SCHOOL || row.TEAM || '');
+    if (team) trackedTeams.add(team);
+  }
+} catch {
+  // No snapshot yet; the poll fetched below adds them and forces a re-sweep.
+}
+
+// A ceiling on new box scores per run. Widening the tracked set queues a
+// backfill of a few hundred games; fetched in one go that would push a
+// two-minute run past the job's twenty-minute timeout, and a timed-out run
+// commits nothing at all. The queue is durable and the runs are four hours
+// apart, so a backfill drains over a day and every run still ships its data.
+const MAX_NEW_BOXSCORES = Number(process.env.MAX_NEW_BOXSCORES || 80);
+
 if ((index.indexVersion ?? 1) < INDEX_VERSION) {
   console.log(
     `index v${index.indexVersion ?? 1} < v${INDEX_VERSION}: clearing ${Object.keys(index.scannedDates ?? {}).length} scanned dates for a one-time full re-sweep`
@@ -171,15 +207,29 @@ for (const season of SEASONS) {
         };
       }
 
-      // Scheduled-opponent capture: the sweep already has every D1 game for the
-      // date, so their season costs nothing extra to spot.
+      // Every Big 12 side seen in the sweep joins the tracked set. Membership
+      // comes from the conference tag, same as the standings, so realignment
+      // cannot stale it.
+      if (homeInConf) trackedTeams.add(normTeamName(g.home?.names?.short));
+      if (awayInConf) trackedTeams.add(normTeamName(g.away?.names?.short));
+
+      // Box-score capture for a team we are not playing that day. The sweep
+      // already has every D1 game for the date, so spotting the game is free;
+      // only the box score itself costs a request, and it is fetched once ever.
+      //
+      // Two reasons to want one: a scheduled opponent's form before Kansas
+      // faces them, and a tracked team's cumulative season. Both land in the
+      // same queue and the same files - one fetch serves both - and what gets
+      // published from them is decided in update-seed.py.
       if (Number(date.slice(0, 4)) === CURRENT_SEASON && g.gameState === 'final') {
         const facing = sides.filter((s) => upcomingOpponents.has(normTeamName(s?.names?.short)));
-        if (facing.length) {
+        const tracked = sides.filter((s) => trackedTeams.has(normTeamName(s?.names?.short)));
+        const wanted = facing.length ? facing : tracked;
+        if (wanted.length) {
           index.opponentGames[g.gameID] ??= {
             date,
             season: date.slice(0, 4),
-            teams: facing.map((s) => s?.names?.short),
+            teams: wanted.map((s) => s?.names?.short),
             boxscored: false,
           };
         }
@@ -214,10 +264,34 @@ for (const [name, path] of [
     const data = await getJson(`${API}/${path}`);
     fs.writeFileSync(`scraped/rankings-${name}.json`, JSON.stringify(data, null, 1));
     console.log(`rankings ${name}: ${data.data?.length ?? 0} rows (${data.updated ?? 'no date'})`);
+    if (name === 'avca') {
+      for (const row of data.data || []) {
+        const team = normTeamName(row.SCHOOL || row.TEAM || '');
+        if (team) trackedTeams.add(team);
+      }
+    }
   } catch (e) {
     console.log(`rankings ${name} failed (non-fatal): ${e.message}`);
   }
 }
+
+// The poll is read after the sweep, so a team that entered it this week was not
+// in the tracked set while this run scanned the dates - and the sweep only
+// rescans the last four days, so its earlier games would never be spotted. A
+// grown set therefore drops the scanned-date cache: the next run re-reads the
+// season's scoreboards (one cheap request per date) and queues the backlog.
+// Costs one full re-sweep per poll release, which is once a week.
+const grown = [...trackedTeams].filter((t) => !index.trackedTeams.includes(t));
+index.trackedTeams = [...trackedTeams].sort();
+if (grown.length) {
+  console.log(
+    `tracked teams +${grown.length} (${grown.join(', ')}); ` +
+    `clearing ${Object.keys(index.scannedDates).length} scanned dates so their ` +
+    `earlier games are found next run`
+  );
+  index.scannedDates = {};
+}
+console.log(`tracked teams: ${index.trackedTeams.length}`);
 
 // --- 2. Box scores for final games not yet captured ------------------------
 for (const [gameId, meta] of Object.entries(index.games)) {
@@ -240,8 +314,13 @@ for (const [gameId, meta] of Object.entries(index.games)) {
 // Only the boxscore call here: the contest wrapper adds nothing we use for a
 // team we are not playing in that game, and it halves the request count.
 let oppCaptured = 0;
+let oppPending = 0;
 for (const [gameId, meta] of Object.entries(index.opponentGames)) {
   if (meta.boxscored) continue;
+  if (oppCaptured >= MAX_NEW_BOXSCORES) {
+    oppPending++;
+    continue;
+  }
   try {
     const box = await getJson(`${API}/game/${gameId}/boxscore`);
     fs.writeFileSync(
@@ -255,8 +334,9 @@ for (const [gameId, meta] of Object.entries(index.opponentGames)) {
   }
 }
 console.log(
-  `scheduled-opponent games: ${Object.keys(index.opponentGames).length} known, ` +
-  `${oppCaptured} box scores captured this run`
+  `other teams' games: ${Object.keys(index.opponentGames).length} known, ` +
+  `${oppCaptured} box scores captured this run` +
+  (oppPending ? `, ${oppPending} left for the next run (cap ${MAX_NEW_BOXSCORES})` : '')
 );
 
 fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 1));

@@ -15,6 +15,7 @@ import com.example.data.PollEntry
 import com.example.data.SeasonSync
 import com.example.data.Seeder
 import com.example.data.StatLine
+import com.example.data.TeamServing
 import com.example.data.SyncResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,6 +85,9 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val pollEntries: StateFlow<List<PollEntry>> = dao.observePollEntries()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val teamServing: StateFlow<List<TeamServing>> = dao.observeTeamServing()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val opponentStatLines: StateFlow<List<OpponentStatLine>> = dao.observeOpponentStatLines()
