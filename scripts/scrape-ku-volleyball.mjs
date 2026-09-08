@@ -23,7 +23,14 @@ const TEAM_SEO = 'kansas';
 const CONFERENCE_SEO = 'big-12';
 // Bump to force a one-time full re-sweep when the sweep starts capturing
 // something new (the scannedDates cache would otherwise skip old dates).
-const INDEX_VERSION = 3;
+// v4 adds TEAM_ALIASES, which needs a re-sweep the usual path will not give it.
+// The tracked set does not grow when an alias lands - the name it folds onto
+// was already in it - so the "a new tracked team clears the scanned dates" rule
+// does not fire. Without that, Southern Cal keeps only the three games the
+// sweep happened to take because their opponent was tracked, and the rest of
+// their season stays on dates already marked scanned. Bumping this clears those
+// dates once so they are read again with the alias in place.
+const INDEX_VERSION = 4;
 
 fs.mkdirSync('scraped', { recursive: true });
 
@@ -51,14 +58,30 @@ const stripRank = (name) => (name || '').replace(/^#\d+\s+/, '').trim();
 // Mirrors norm_team() in update-seed.py. Strips the poll-vote count the NCAA
 // appends and the "(Exh.)" kuathletics adds to exhibitions — the latter is why
 // the season opener against Creighton matched nothing on the first run.
-const normTeamName = (name) =>
-  stripRank(name)
+//
+// TEAM_ALIASES covers schools the sources call different things where no rule
+// gets from one to the other. "State"/"St." is a rule and needs no entry.
+//
+// The AVCA poll ranked Southern Cal at #16 and the sweep captured nothing for
+// them all season: the tracked set learned the poll's "Southern Cal" and the
+// scoreboards never say that. Which spelling the NCAA uses could not be checked
+// from where this was written, so the plausible ones all fold onto the poll's
+// name. A wrong guess costs nothing; the seed's "no serving data captured for"
+// line is what says whether it worked.
+const TEAM_ALIASES = {
+  'southern california': 'southern cal',
+  usc: 'southern cal',
+};
+const normTeamName = (name) => {
+  const n = stripRank(name)
     .replace(/\s*\((?:\d+|exh\.?|exhibition)\)\s*$/i, '')
     .toLowerCase()
     .replace(/\./g, '')
     .replace(/\bstate\b/g, 'st')
     .replace(/\s+/g, ' ')
     .trim();
+  return TEAM_ALIASES[n] ?? n;
+};
 const upcomingOpponents = new Set(
   (() => {
     try {

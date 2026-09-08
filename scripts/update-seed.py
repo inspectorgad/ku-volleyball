@@ -102,13 +102,23 @@ ROSTER_NAMES = {
 }
 
 
+# Schools the sources call different things where no rule gets from one to the
+# other. Mirrors TEAM_ALIASES in scrape-ku-volleyball.mjs, which explains why
+# Southern Cal needs one.
+TEAM_ALIASES = {
+    "southern california": "southern cal",
+    "usc": "southern cal",
+}
+
+
 def norm_team(name):
     """Canonical key for cross-source name matching ('Iowa State'/'Iowa St.')."""
     # Strips the NCAA's poll-vote count and kuathletics' "(Exh.)" suffix.
     n = re.sub(r"\s*\((?:\d+|[Ee]xh\.?|[Ee]xhibition)\)\s*$", "", strip_rank(name)).lower()
     n = n.replace(".", "")
     n = re.sub(r"\bstate\b", "st", n)
-    return re.sub(r"\s+", " ", n).strip()
+    n = re.sub(r"\s+", " ", n).strip()
+    return TEAM_ALIASES.get(n, n)
 
 
 def match_key(date, opponent):
