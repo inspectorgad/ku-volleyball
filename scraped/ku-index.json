@@ -8786,7 +8786,7 @@
    "conferenceGame": false
   }
  },
- "indexVersion": 3,
+ "indexVersion": 4,
  "opponentGames": {
   "6624236": {
    "date": "2026-08-28",
@@ -10088,6 +10088,14 @@
    "season": "2026",
    "teams": [
     "Florida"
+   ],
+   "boxscored": true
+  },
+  "6639375": {
+   "date": "2026-09-06",
+   "season": "2026",
+   "teams": [
+    "Southern California"
    ],
    "boxscored": true
   },
