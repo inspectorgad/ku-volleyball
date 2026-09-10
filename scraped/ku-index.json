@@ -8514,6 +8514,27 @@
    },
    "conferenceGame": false
   },
+  "6628026": {
+   "date": "2026-09-10",
+   "season": "2026",
+   "home": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "UTRGV",
+    "seo": "utrgv",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6628103": {
    "date": "2026-08-29",
    "season": "2026",
@@ -10024,6 +10045,14 @@
   },
   "6628023": {
    "date": "2026-08-29",
+   "season": "2026",
+   "teams": [
+    "Texas Tech"
+   ],
+   "boxscored": true
+  },
+  "6628026": {
+   "date": "2026-09-10",
    "season": "2026",
    "teams": [
     "Texas Tech"
