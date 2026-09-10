@@ -7716,6 +7716,27 @@
    },
    "conferenceGame": false
   },
+  "6625822": {
+   "date": "2026-09-10",
+   "season": "2026",
+   "home": {
+    "name": "Georgia Tech",
+    "seo": "georgia-tech",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": 20,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6626052": {
    "date": "2026-09-05",
    "season": "2026",
@@ -7881,6 +7902,27 @@
     "winner": true,
     "rank": null,
     "inConference": true
+   },
+   "conferenceGame": false
+  },
+  "6626550": {
+   "date": "2026-09-10",
+   "season": "2026",
+   "home": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "VCU",
+    "seo": "vcu",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
    },
    "conferenceGame": false
   },
@@ -8300,6 +8342,27 @@
     "score": 3,
     "winner": true,
     "rank": 18,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
+  "6627438": {
+   "date": "2026-09-10",
+   "season": "2026",
+   "home": {
+    "name": "Morehead St.",
+    "seo": "morehead-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 3,
+    "winner": true,
+    "rank": null,
     "inConference": true
    },
    "conferenceGame": false
@@ -9322,6 +9385,14 @@
    ],
    "boxscored": true
   },
+  "6625822": {
+   "date": "2026-09-10",
+   "season": "2026",
+   "teams": [
+    "Baylor"
+   ],
+   "boxscored": true
+  },
   "6625870": {
    "date": "2026-08-29",
    "season": "2026",
@@ -9558,6 +9629,14 @@
   },
   "6626547": {
    "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
+  "6626550": {
+   "date": "2026-09-10",
    "season": "2026",
    "teams": [
     "West Virginia"
@@ -9888,6 +9967,14 @@
    "season": "2026",
    "teams": [
     "South Dakota St."
+   ],
+   "boxscored": true
+  },
+  "6627438": {
+   "date": "2026-09-10",
+   "season": "2026",
+   "teams": [
+    "Cincinnati"
    ],
    "boxscored": true
   },
