@@ -451,10 +451,10 @@
   },
   "6625732": {
    "date": "2026-09-11",
-   "final": false,
+   "final": true,
    "home": "Kansas",
    "away": "South Dakota St.",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -7220,6 +7220,27 @@
    },
    "conferenceGame": false
   },
+  "6624327": {
+   "date": "2026-09-11",
+   "season": "2026",
+   "home": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 3,
+    "winner": true,
+    "rank": 11,
+    "inConference": true
+   },
+   "away": {
+    "name": "Michigan",
+    "seo": "michigan",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6624351": {
    "date": "2026-08-28",
    "season": "2026",
@@ -7640,6 +7661,27 @@
    },
    "conferenceGame": false
   },
+  "6625732": {
+   "date": "2026-09-11",
+   "season": "2026",
+   "home": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 22,
+    "inConference": true
+   },
+   "away": {
+    "name": "South Dakota St.",
+    "seo": "south-dakota-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -7950,6 +7992,27 @@
     "seo": "vcu",
     "score": 1,
     "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6626552": {
+   "date": "2026-09-11",
+   "season": "2026",
+   "home": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Lehigh",
+    "seo": "lehigh",
+    "score": 3,
+    "winner": true,
     "rank": null,
     "inConference": false
    },
@@ -9125,6 +9188,14 @@
    ],
    "boxscored": true
   },
+  "6624327": {
+   "date": "2026-09-11",
+   "season": "2026",
+   "teams": [
+    "TCU"
+   ],
+   "boxscored": true
+  },
   "6624351": {
    "date": "2026-08-28",
    "season": "2026",
@@ -9421,6 +9492,14 @@
    "season": "2026",
    "teams": [
     "Wichita St."
+   ],
+   "boxscored": true
+  },
+  "6625732": {
+   "date": "2026-09-11",
+   "season": "2026",
+   "teams": [
+    "South Dakota St."
    ],
    "boxscored": true
   },
@@ -9724,6 +9803,14 @@
   },
   "6626550": {
    "date": "2026-09-10",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
+  "6626552": {
+   "date": "2026-09-11",
    "season": "2026",
    "teams": [
     "West Virginia"
