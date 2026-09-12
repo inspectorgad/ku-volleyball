@@ -8586,6 +8586,27 @@
    },
    "conferenceGame": false
   },
+  "6627185": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "home": {
+    "name": "Purdue",
+    "seo": "purdue",
+    "score": 3,
+    "winner": true,
+    "rank": 14,
+    "inConference": false
+   },
+   "away": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6627438": {
    "date": "2026-09-10",
    "season": "2026",
@@ -8789,6 +8810,27 @@
    "away": {
     "name": "Texas Tech",
     "seo": "texas-tech",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
+  "6627755": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "home": {
+    "name": "American",
+    "seo": "american",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
     "score": 0,
     "winner": false,
     "rank": null,
@@ -10065,6 +10107,14 @@
    ],
    "boxscored": true
   },
+  "6626475": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Wichita St."
+   ],
+   "boxscored": true
+  },
   "6626515": {
    "date": "2026-08-28",
    "season": "2026",
@@ -10448,6 +10498,14 @@
    ],
    "boxscored": true
   },
+  "6627185": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Houston"
+   ],
+   "boxscored": true
+  },
   "6627255": {
    "date": "2026-08-28",
    "season": "2026",
@@ -10629,6 +10687,14 @@
    "season": "2026",
    "teams": [
     "South Dakota St."
+   ],
+   "boxscored": true
+  },
+  "6627755": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Iowa St."
    ],
    "boxscored": true
   },
