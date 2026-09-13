@@ -8678,6 +8678,27 @@
    },
    "conferenceGame": false
   },
+  "6627186": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "home": {
+    "name": "Kentucky",
+    "seo": "kentucky",
+    "score": 3,
+    "winner": true,
+    "rank": 3,
+    "inConference": false
+   },
+   "away": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6627438": {
    "date": "2026-09-10",
    "season": "2026",
@@ -9668,6 +9689,14 @@
    ],
    "boxscored": true
   },
+  "6624809": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Florida"
+   ],
+   "boxscored": true
+  },
   "6624826": {
    "date": "2026-08-28",
    "season": "2026",
@@ -9710,6 +9739,14 @@
    ],
    "boxscored": true
   },
+  "6624831": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Minnesota"
+   ],
+   "boxscored": true
+  },
   "6624939": {
    "date": "2026-09-06",
    "season": "2026",
@@ -9739,6 +9776,14 @@
    "season": "2026",
    "teams": [
     "Creighton"
+   ],
+   "boxscored": true
+  },
+  "6624994": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Louisville"
    ],
    "boxscored": true
   },
@@ -10722,6 +10767,14 @@
    ],
    "boxscored": true
   },
+  "6627186": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Houston"
+   ],
+   "boxscored": true
+  },
   "6627255": {
    "date": "2026-08-28",
    "season": "2026",
@@ -11124,6 +11177,14 @@
    ],
    "boxscored": true
   },
+  "6628240": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Stanford"
+   ],
+   "boxscored": true
+  },
   "6628243": {
    "date": "2026-09-11",
    "season": "2026",
@@ -11183,6 +11244,14 @@
   },
   "6628325": {
    "date": "2026-09-11",
+   "season": "2026",
+   "teams": [
+    "Pittsburgh"
+   ],
+   "boxscored": true
+  },
+  "6628326": {
+   "date": "2026-09-13",
    "season": "2026",
    "teams": [
     "Pittsburgh"
