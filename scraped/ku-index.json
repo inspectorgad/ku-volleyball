@@ -167,7 +167,8 @@
   "2026-09-09": true,
   "2026-09-10": true,
   "2026-09-11": true,
-  "2026-09-12": true
+  "2026-09-12": true,
+  "2026-09-13": true
  },
  "games": {
   "6479442": {
@@ -456,6 +457,13 @@
    "home": "Kansas",
    "away": "South Dakota St.",
    "boxscored": true
+  },
+  "6625734": {
+   "date": "2026-09-13",
+   "final": false,
+   "home": "Kansas",
+   "away": "Tulsa",
+   "boxscored": false
   }
  },
  "big12Games": {
@@ -7437,16 +7445,16 @@
    "home": {
     "name": "TCU",
     "seo": "tcu",
-    "score": 1,
-    "winner": false,
+    "score": 3,
+    "winner": true,
     "rank": 11,
     "inConference": true
    },
    "away": {
     "name": "Dayton",
     "seo": "dayton",
-    "score": 3,
-    "winner": true,
+    "score": 1,
+    "winner": false,
     "rank": null,
     "inConference": false
    },
@@ -8859,6 +8867,27 @@
    },
    "conferenceGame": false
   },
+  "6627525": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "home": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 7,
+    "inConference": true
+   },
+   "away": {
+    "name": "San Diego",
+    "seo": "san-diego",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6627597": {
    "date": "2026-09-04",
    "season": "2026",
@@ -8982,6 +9011,27 @@
     "winner": false,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6627968": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "home": {
+    "name": "Oregon St.",
+    "seo": "oregon-st",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
    },
    "conferenceGame": false
   },
@@ -9129,6 +9179,27 @@
     "winner": false,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6628235": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "home": {
+    "name": "Southern California",
+    "seo": "southern-california",
+    "score": 1,
+    "winner": false,
+    "rank": 16,
+    "inConference": false
+   },
+   "away": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 3,
+    "winner": true,
+    "rank": 23,
+    "inConference": true
    },
    "conferenceGame": false
   },
@@ -10057,6 +10128,14 @@
    ],
    "boxscored": true
   },
+  "6626055": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Tulsa"
+   ],
+   "boxscored": true
+  },
   "6626231": {
    "date": "2026-09-12",
    "season": "2026",
@@ -10739,6 +10818,14 @@
    ],
    "boxscored": true
   },
+  "6627525": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Arizona St."
+   ],
+   "boxscored": true
+  },
   "6627569": {
    "date": "2026-08-28",
    "season": "2026",
@@ -10891,6 +10978,14 @@
    ],
    "boxscored": true
   },
+  "6627968": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Arizona"
+   ],
+   "boxscored": true
+  },
   "6628015": {
    "date": "2026-09-11",
    "season": "2026",
@@ -10981,6 +11076,14 @@
   },
   "6628226": {
    "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Colorado"
+   ],
+   "boxscored": true
+  },
+  "6628235": {
+   "date": "2026-09-12",
    "season": "2026",
    "teams": [
     "Colorado"
@@ -11139,6 +11242,14 @@
    "season": "2026",
    "teams": [
     "Cincinnati"
+   ],
+   "boxscored": true
+  },
+  "6628544": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Penn St."
    ],
    "boxscored": true
   },
@@ -11338,6 +11449,14 @@
    "season": "2026",
    "teams": [
     "South Dakota St."
+   ],
+   "boxscored": true
+  },
+  "6640791": {
+   "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Nebraska"
    ],
    "boxscored": true
   }
