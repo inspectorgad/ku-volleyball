@@ -460,10 +460,10 @@
   },
   "6625734": {
    "date": "2026-09-13",
-   "final": false,
+   "final": true,
    "home": "Kansas",
    "away": "Tulsa",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -7754,6 +7754,27 @@
    },
    "conferenceGame": false
   },
+  "6625734": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "home": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 22,
+    "inConference": true
+   },
+   "away": {
+    "name": "Tulsa",
+    "seo": "tulsa",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8846,6 +8867,27 @@
    },
    "conferenceGame": false
   },
+  "6627514": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "home": {
+    "name": "Nevada",
+    "seo": "nevada",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -9908,6 +9950,14 @@
    ],
    "boxscored": true
   },
+  "6625277": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Oregon"
+   ],
+   "boxscored": true
+  },
   "6625330": {
    "date": "2026-08-30",
    "season": "2026",
@@ -10017,6 +10067,14 @@
    "season": "2026",
    "teams": [
     "South Dakota St."
+   ],
+   "boxscored": true
+  },
+  "6625734": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Tulsa"
    ],
    "boxscored": true
   },
@@ -10236,6 +10294,15 @@
    "teams": [
     "SMU",
     "Kentucky"
+   ],
+   "boxscored": true
+  },
+  "6626265": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "SMU",
+    "Purdue"
    ],
    "boxscored": true
   },
@@ -10645,6 +10712,14 @@
    ],
    "boxscored": true
   },
+  "6626986": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Creighton"
+   ],
+   "boxscored": true
+  },
   "6627010": {
    "date": "2026-08-29",
    "season": "2026",
@@ -10855,6 +10930,14 @@
    ],
    "boxscored": true
   },
+  "6627514": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Kansas St."
+   ],
+   "boxscored": true
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -11036,6 +11119,14 @@
    "season": "2026",
    "teams": [
     "Arizona"
+   ],
+   "boxscored": true
+  },
+  "6627970": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Southern California"
    ],
    "boxscored": true
   },
@@ -11330,6 +11421,15 @@
    ],
    "boxscored": true
   },
+  "6628580": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Texas",
+    "Wisconsin"
+   ],
+   "boxscored": true
+  },
   "6628592": {
    "date": "2026-08-29",
    "season": "2026",
@@ -11344,6 +11444,14 @@
    "teams": [
     "Nebraska",
     "Texas"
+   ],
+   "boxscored": true
+  },
+  "6628671": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "North Carolina"
    ],
    "boxscored": true
   },
