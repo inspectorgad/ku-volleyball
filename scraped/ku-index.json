@@ -168,7 +168,8 @@
   "2026-09-10": true,
   "2026-09-11": true,
   "2026-09-12": true,
-  "2026-09-13": true
+  "2026-09-13": true,
+  "2026-09-14": true
  },
  "games": {
   "6479442": {
@@ -7943,6 +7944,27 @@
    },
    "conferenceGame": false
   },
+  "6625956": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "UCLA",
+    "seo": "ucla",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626052": {
    "date": "2026-09-05",
    "season": "2026",
@@ -10171,6 +10193,14 @@
    "season": "2026",
    "teams": [
     "BYU"
+   ],
+   "boxscored": true
+  },
+  "6625956": {
+   "date": "2026-09-13",
+   "season": "2026",
+   "teams": [
+    "Utah"
    ],
    "boxscored": true
   },
