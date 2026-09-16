@@ -170,7 +170,8 @@
   "2026-09-12": true,
   "2026-09-13": true,
   "2026-09-14": true,
-  "2026-09-15": true
+  "2026-09-15": true,
+  "2026-09-16": true
  },
  "games": {
   "6479442": {
@@ -469,10 +470,10 @@
   },
   "6625737": {
    "date": "2026-09-15",
-   "final": false,
+   "final": true,
    "home": "Wichita St.",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -7217,6 +7218,27 @@
    },
    "conferenceGame": false
   },
+  "6624310": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "home": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 24,
+    "inConference": true
+   },
+   "away": {
+    "name": "Utah Valley",
+    "seo": "utah-valley",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6624324": {
    "date": "2026-09-05",
    "season": "2026",
@@ -7781,6 +7803,27 @@
     "winner": false,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6625737": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "home": {
+    "name": "Wichita St.",
+    "seo": "wichita-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 22,
+    "inConference": true
    },
    "conferenceGame": false
   },
@@ -8639,6 +8682,27 @@
     "name": "Wichita St.",
     "seo": "wichita-st",
     "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6627046": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "home": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Tarleton St.",
+    "seo": "tarleton-st",
+    "score": 1,
     "winner": false,
     "rank": null,
     "inConference": false
@@ -9548,6 +9612,27 @@
    },
    "conferenceGame": false
   },
+  "6628527": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "home": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Ball St.",
+    "seo": "ball-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6628592": {
    "date": "2026-08-29",
    "season": "2026",
@@ -9686,6 +9771,14 @@
    "season": "2026",
    "teams": [
     "Utah"
+   ],
+   "boxscored": true
+  },
+  "6624310": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "teams": [
+    "BYU"
    ],
    "boxscored": true
   },
@@ -10036,6 +10129,14 @@
    ],
    "boxscored": true
   },
+  "6625536": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "teams": [
+    "Ole Miss"
+   ],
+   "boxscored": true
+  },
   "6625559": {
    "date": "2026-09-05",
    "season": "2026",
@@ -10113,6 +10214,14 @@
    "season": "2026",
    "teams": [
     "Tulsa"
+   ],
+   "boxscored": true
+  },
+  "6625737": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "teams": [
+    "Wichita St."
    ],
    "boxscored": true
   },
@@ -10432,6 +10541,14 @@
    ],
    "boxscored": true
   },
+  "6626387": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "teams": [
+    "Penn St."
+   ],
+   "boxscored": true
+  },
   "6626426": {
    "date": "2026-09-04",
    "season": "2026",
@@ -10477,6 +10594,14 @@
    "season": "2026",
    "teams": [
     "Wichita St."
+   ],
+   "boxscored": true
+  },
+  "6626522": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "teams": [
+    "Texas A&M"
    ],
    "boxscored": true
   },
@@ -10812,6 +10937,14 @@
    "season": "2026",
    "teams": [
     "Wichita St."
+   ],
+   "boxscored": true
+  },
+  "6627046": {
+   "date": "2026-09-15",
+   "season": "2026",
+   "teams": [
+    "Texas Tech"
    ],
    "boxscored": true
   },
@@ -11445,6 +11578,14 @@
   },
   "6628526": {
    "date": "2026-09-01",
+   "season": "2026",
+   "teams": [
+    "Cincinnati"
+   ],
+   "boxscored": true
+  },
+  "6628527": {
+   "date": "2026-09-15",
    "season": "2026",
    "teams": [
     "Cincinnati"
