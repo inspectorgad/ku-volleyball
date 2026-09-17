@@ -8311,6 +8311,27 @@
    },
    "conferenceGame": false
   },
+  "6626557": {
+   "date": "2026-09-17",
+   "season": "2026",
+   "home": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "East Texas A&M",
+    "seo": "tex-am-commerce",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626681": {
    "date": "2026-09-05",
    "season": "2026",
@@ -8327,6 +8348,27 @@
     "seo": "long-beach-st",
     "score": 3,
     "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6626691": {
+   "date": "2026-09-17",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Air Force",
+    "seo": "air-force",
+    "score": 0,
+    "winner": false,
     "rank": null,
     "inConference": false
    },
@@ -9085,6 +9127,27 @@
     "winner": false,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6627526": {
+   "date": "2026-09-17",
+   "season": "2026",
+   "home": {
+    "name": "Stanford",
+    "seo": "stanford",
+    "score": 0,
+    "winner": false,
+    "rank": 8,
+    "inConference": false
+   },
+   "away": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 12,
+    "inConference": true
    },
    "conferenceGame": false
   },
@@ -10704,6 +10767,14 @@
    ],
    "boxscored": true
   },
+  "6626557": {
+   "date": "2026-09-17",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
   "6626582": {
    "date": "2026-08-29",
    "season": "2026",
@@ -10722,6 +10793,14 @@
   },
   "6626681": {
    "date": "2026-09-05",
+   "season": "2026",
+   "teams": [
+    "Utah"
+   ],
+   "boxscored": true
+  },
+  "6626691": {
+   "date": "2026-09-17",
    "season": "2026",
    "teams": [
     "Utah"
@@ -11105,6 +11184,14 @@
    ],
    "boxscored": true
   },
+  "6627187": {
+   "date": "2026-09-17",
+   "season": "2026",
+   "teams": [
+    "Purdue"
+   ],
+   "boxscored": true
+  },
   "6627255": {
    "date": "2026-08-28",
    "season": "2026",
@@ -11211,6 +11298,14 @@
   },
   "6627525": {
    "date": "2026-09-12",
+   "season": "2026",
+   "teams": [
+    "Arizona St."
+   ],
+   "boxscored": true
+  },
+  "6627526": {
+   "date": "2026-09-17",
    "season": "2026",
    "teams": [
     "Arizona St."
