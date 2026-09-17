@@ -171,7 +171,8 @@
   "2026-09-13": true,
   "2026-09-14": true,
   "2026-09-15": true,
-  "2026-09-16": true
+  "2026-09-16": true,
+  "2026-09-17": true
  },
  "games": {
   "6479442": {
@@ -7974,6 +7975,27 @@
    },
    "conferenceGame": false
   },
+  "6625830": {
+   "date": "2026-09-16",
+   "season": "2026",
+   "home": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": 18,
+    "inConference": true
+   },
+   "away": {
+    "name": "UIW",
+    "seo": "uiw",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6625955": {
    "date": "2026-09-11",
    "season": "2026",
@@ -8346,6 +8368,27 @@
     "name": "UIW",
     "seo": "uiw",
     "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6626746": {
+   "date": "2026-09-16",
+   "season": "2026",
+   "home": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 3,
+    "winner": true,
+    "rank": 13,
+    "inConference": true
+   },
+   "away": {
+    "name": "UTEP",
+    "seo": "utep",
+    "score": 1,
     "winner": false,
     "rank": null,
     "inConference": false
@@ -10289,6 +10332,14 @@
    ],
    "boxscored": true
   },
+  "6625830": {
+   "date": "2026-09-16",
+   "season": "2026",
+   "teams": [
+    "Baylor"
+   ],
+   "boxscored": true
+  },
   "6625870": {
    "date": "2026-08-29",
    "season": "2026",
@@ -10693,6 +10744,14 @@
    ],
    "boxscored": true
   },
+  "6626746": {
+   "date": "2026-09-16",
+   "season": "2026",
+   "teams": [
+    "TCU"
+   ],
+   "boxscored": true
+  },
   "6626806": {
    "date": "2026-08-28",
    "season": "2026",
@@ -10891,6 +10950,15 @@
    ],
    "boxscored": true
   },
+  "6626990": {
+   "date": "2026-09-16",
+   "season": "2026",
+   "teams": [
+    "Nebraska",
+    "Creighton"
+   ],
+   "boxscored": true
+  },
   "6627010": {
    "date": "2026-08-29",
    "season": "2026",
@@ -10926,6 +10994,14 @@
   },
   "6627021": {
    "date": "2026-09-11",
+   "season": "2026",
+   "teams": [
+    "Louisville"
+   ],
+   "boxscored": true
+  },
+  "6627024": {
+   "date": "2026-09-16",
    "season": "2026",
    "teams": [
     "Louisville"
