@@ -8109,6 +8109,27 @@
    },
    "conferenceGame": false
   },
+  "6626318": {
+   "date": "2026-09-18",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Denver",
+    "seo": "denver",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626378": {
    "date": "2026-09-10",
    "season": "2026",
@@ -9789,6 +9810,27 @@
    },
    "conferenceGame": false
   },
+  "6628521": {
+   "date": "2026-09-18",
+   "season": "2026",
+   "home": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "UTSA",
+    "seo": "utsa",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6628525": {
    "date": "2026-08-29",
    "season": "2026",
@@ -10725,6 +10767,14 @@
    "season": "2026",
    "teams": [
     "Colorado"
+   ],
+   "boxscored": true
+  },
+  "6626318": {
+   "date": "2026-09-18",
+   "season": "2026",
+   "teams": [
+    "Utah"
    ],
    "boxscored": true
   },
@@ -11910,6 +11960,14 @@
   },
   "6628520": {
    "date": "2026-09-03",
+   "season": "2026",
+   "teams": [
+    "Houston"
+   ],
+   "boxscored": true
+  },
+  "6628521": {
+   "date": "2026-09-18",
    "season": "2026",
    "teams": [
     "Houston"
