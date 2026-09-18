@@ -8613,6 +8613,27 @@
    },
    "conferenceGame": false
   },
+  "6626854": {
+   "date": "2026-09-18",
+   "season": "2026",
+   "home": {
+    "name": "UAlbany",
+    "seo": "albany-ny",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6626875": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8925,6 +8946,27 @@
     "winner": false,
     "rank": null,
     "inConference": true
+   },
+   "conferenceGame": false
+  },
+  "6627223": {
+   "date": "2026-09-18",
+   "season": "2026",
+   "home": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 3,
+    "winner": true,
+    "rank": 13,
+    "inConference": true
+   },
+   "away": {
+    "name": "Yale",
+    "seo": "yale",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
    },
    "conferenceGame": false
   },
@@ -11016,6 +11058,14 @@
    ],
    "boxscored": true
   },
+  "6626854": {
+   "date": "2026-09-18",
+   "season": "2026",
+   "teams": [
+    "UCF"
+   ],
+   "boxscored": true
+  },
   "6626866": {
    "date": "2026-09-06",
    "season": "2026",
@@ -11292,6 +11342,14 @@
    "season": "2026",
    "teams": [
     "Purdue"
+   ],
+   "boxscored": true
+  },
+  "6627223": {
+   "date": "2026-09-18",
+   "season": "2026",
+   "teams": [
+    "TCU"
    ],
    "boxscored": true
   },
