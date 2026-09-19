@@ -44,16 +44,6 @@ object Seeder {
      * "Florida St." where kuathletics' schedule says "Florida State" — so a raw
      * lowercase name filed one match as two.
      */
-    private fun normTeam(name: String): String =
-        name.trim()
-            .replace(Regex("^#\\d+\\s+"), "")
-            .replace(Regex("\\s*\\((?:\\d+|[Ee]xh\\.?|[Ee]xhibition)\\)\\s*$"), "")
-            .lowercase()
-            .replace(".", "")
-            .replace(Regex("\\bstate\\b"), "st")
-            .replace(Regex("\\s+"), " ")
-            .trim()
-
     /** Also used by [SeasonSync] for network-fetched season data. */
     suspend fun merge(root: JSONObject, dao: JayhawksDao) {
         val players = root.optJSONArray("players")

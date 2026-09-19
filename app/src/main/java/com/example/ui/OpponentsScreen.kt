@@ -37,6 +37,7 @@ import com.example.data.Match
 import com.example.data.MatchTeamStats
 import com.example.data.OpponentRosterEntry
 import com.example.data.OpponentStatLine
+import com.example.data.sameTeam
 import com.example.stats.VolleyballTotals
 import com.example.stats.aggregate
 import com.example.stats.formatAverage
@@ -191,7 +192,7 @@ fun OpponentDetailScreen(
 
     // One row per opposing player across every meeting with Kansas.
     val heightByName = opponentRoster
-        .filter { it.team.equals(opponentName, true) && it.height.isNotBlank() }
+        .filter { sameTeam(it.team, opponentName) && it.height.isNotBlank() }
         .associate { it.playerName.lowercase() to it.height }
 
     val byPlayer = lines.groupBy { it.playerName }

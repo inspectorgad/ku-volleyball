@@ -711,14 +711,24 @@ function renderScouting() {
   if (wrap.hidden) return;
 
   document.getElementById("scout-sub").textContent =
-    `${next.length} of the next opponents have a published roster available.`;
+    `${next.length} of the remaining opponents have a published roster. `
+    + `The next one is open; the rest expand.`;
 
-  for (const { match, roster, form: f } of next.slice(0, 4)) {
-    const h = el("h3", null, `${siteWord(match)} ${roster.team}`);
-    h.style.margin = "18px 0 2px";
-    host.appendChild(h);
+  // Every remaining opponent, not the first handful. It used to render four
+  // while the line above counted fifteen, which read as twelve missing rosters
+  // rather than as the page choosing not to show them. Each is collapsed so
+  // that four hundred players do not land on the page at once, and the next
+  // opponent - the one being scouted now - is already open.
+  next.forEach(({ match, roster, form: f }, i) => {
+    const box = el("details");
+    if (i === 0) box.open = true;
+    box.style.margin = "10px 0 0";
+    const h = el("summary", null, `${siteWord(match)} ${roster.team}`);
+    h.style.cssText = "cursor:pointer;font-weight:600;margin:8px 0 2px";
+    box.appendChild(h);
+    host.appendChild(box);
     const when = el("div", "sub", match.date + (f ? ` · ${f.matches} matches played this season` : " · no matches played yet"));
-    host.appendChild(when);
+    box.appendChild(when);
 
     const t = el("table");
     const head = t.createTHead().insertRow();
@@ -747,8 +757,8 @@ function renderScouting() {
         r.insertCell().textContent = s ? s.d : "—";
       }
     }
-    host.appendChild(t);
-  }
+    box.appendChild(t);
+  });
 }
 
 // Mirrors norm_team() in update-seed.py so names match across sources.

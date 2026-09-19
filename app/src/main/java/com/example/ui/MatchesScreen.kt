@@ -53,6 +53,7 @@ import com.example.data.OpponentSeasonStat
 import com.example.data.OpponentStatLine
 import com.example.data.Player
 import com.example.data.StatLine
+import com.example.data.sameTeam
 import com.example.stats.aggregate
 import com.example.stats.summarize
 import kotlin.math.roundToInt
@@ -506,9 +507,12 @@ fun MatchDetailScreen(
             // the whole point of scraping their site — the NCAA has no roster
             // endpoint, so nothing else can show a line-up in advance.
             if (match.teamSets == null) {
-                val roster = opponentRoster.filter { it.team.equals(match.opponent, true) }
+                // Matched on the normalised name, not the literal one: the
+                // roster is filed under the spelling its own school uses, which
+                // is not always the spelling on the schedule.
+                val roster = opponentRoster.filter { sameTeam(it.team, match.opponent) }
                 val form = opponentSeasonStats
-                    .filter { it.team.equals(match.opponent, true) }
+                    .filter { sameTeam(it.team, match.opponent) }
                     .associateBy { it.playerName.lowercase() }
                 if (roster.isEmpty()) {
                     item {
