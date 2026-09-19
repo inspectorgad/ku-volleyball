@@ -101,10 +101,10 @@ interface JayhawksDao {
     // The NCAA's national top 50 per category. Replaced by season like the
     // standings: it is a snapshot of the current rankings, so yesterday's row
     // 50 is not a fact to keep once today's has pushed it off the list.
-    @Query("SELECT * FROM national_leaders ORDER BY category, rank")
+    @Query("SELECT * FROM national_leaders ORDER BY category, idx")
     fun observeNationalLeaders(): Flow<List<NationalLeader>>
 
-    @Query("SELECT * FROM national_leaders ORDER BY category, rank")
+    @Query("SELECT * FROM national_leaders ORDER BY category, idx")
     suspend fun nationalLeadersOnce(): List<NationalLeader>
 
     @Query("DELETE FROM national_leaders WHERE season = :season")

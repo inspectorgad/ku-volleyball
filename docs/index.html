@@ -631,7 +631,8 @@ function renderMatchTable(results) {
   const t = document.getElementById("matches");
   t.replaceChildren();
   const head = t.createTHead().insertRow();
-  for (const h of ["Date", "Opponent", "", "", "Sets", "Set scores"]) head.appendChild(el("th", null, h));
+  for (const h of ["Date", "Opponent", "", "", "Sets", "Set scores", "Goals", "Team"])
+    head.appendChild(el("th", null, h));
   const body = t.createTBody();
   for (const m of [...results].reverse()) {
     const r = body.insertRow();
@@ -645,6 +646,24 @@ function renderMatchTable(results) {
     r.insertCell().appendChild(tag);
     r.insertCell().textContent = `${m.teamSets}–${m.opponentSets}`;
     const sc = r.insertCell(); sc.textContent = m.setScores ?? ""; sc.style.textAlign = "left"; sc.style.color = "var(--ink-2)";
+
+    // How the match was played rather than whether it was won, from the
+    // coaching staff's game-by-game goals. The first column counts every goal
+    // the box score can settle, including the per-role hitting targets; the
+    // second counts the ten team goals alone, which do not depend on who was
+    // on the floor. Half is the line between the two colours.
+    const g = m.goals;
+    const gc = r.insertCell();
+    const tc = r.insertCell();
+    if (g && g.evaluated) {
+      const pct = Math.round((g.met / g.evaluated) * 100);
+      gc.textContent = `${g.met}/${g.evaluated} (${pct}%)`;
+      gc.style.color = pct >= 50 ? "var(--ku-blue)" : "var(--ink-2)";
+      tc.textContent = g.teamEvaluated ? `${g.teamMet}/${g.teamEvaluated}` : "";
+      tc.style.color = "var(--ink-2)";
+    } else {
+      gc.textContent = tc.textContent = "";
+    }
   }
 }
 

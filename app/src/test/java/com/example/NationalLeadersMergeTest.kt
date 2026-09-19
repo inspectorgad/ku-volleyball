@@ -43,9 +43,9 @@ class NationalLeadersMergeTest {
 
     private val killsPerSet = """
         {"id":"2","name":"Kills Per Set","valueLabel":"Per Set","rows":[
-          {"rank":1,"player":"Jane Doe","team":"LSU","cls":"Sr.","height":"6-2",
+          {"idx":0,"rank":1,"player":"Jane Doe","team":"LSU","cls":"Sr.","height":"6-2",
            "position":"OH","sets":33,"value":"5.70"},
-          {"rank":2,"player":"Ayah Elnady","team":"Kansas","cls":"Jr.","height":"6-0",
+          {"idx":1,"rank":2,"player":"Ayah Elnady","team":"Kansas","cls":"Jr.","height":"6-0",
            "position":"OH","sets":31,"value":"4.90"}]}
     """
 
@@ -74,8 +74,8 @@ class NationalLeadersMergeTest {
         Seeder.merge(
             seed(
                 """{"id":"2","name":"Kills Per Set","valueLabel":"Per Set","rows":[
-                     {"rank":1,"player":"Jane Doe","team":"LSU","value":"5.80"},
-                     {"rank":2,"player":"Mary Smith","team":"Texas","value":"5.10"}]}"""
+                     {"idx":0,"rank":1,"player":"Jane Doe","team":"LSU","value":"5.80"},
+                     {"idx":1,"rank":2,"player":"Mary Smith","team":"Texas","value":"5.10"}]}"""
             ),
             dao
         )
@@ -91,8 +91,8 @@ class NationalLeadersMergeTest {
             seed(
                 killsPerSet + "," +
                     """{"id":"42","name":"Aces Per Set","valueLabel":"Per Set","rows":[
-                         {"rank":1,"player":"Ann Ace","team":"Harvard","value":"0.75"},
-                         {"rank":2,"player":"Ayah Elnady","team":"Kansas","value":"0.61"}]}"""
+                         {"idx":0,"rank":1,"player":"Ann Ace","team":"Harvard","value":"0.75"},
+                         {"idx":1,"rank":2,"player":"Ayah Elnady","team":"Kansas","value":"0.61"}]}"""
             ),
             db.dao()
         )
@@ -113,16 +113,38 @@ class NationalLeadersMergeTest {
     }
 
     @Test
-    fun `rows without a rank or a name are dropped, not stored blank`() = runTest {
+    fun `rows without a name are dropped, not stored blank`() = runTest {
         Seeder.merge(
             seed(
                 """{"id":"1","name":"Hitting Percentage","valueLabel":"Pct.","rows":[
-                     {"rank":1,"player":"Jane Doe","team":"LSU","value":".552"},
-                     {"rank":2,"player":"","team":"Nowhere","value":".500"},
-                     {"player":"No Rank","team":"Nowhere","value":".499"}]}"""
+                     {"idx":0,"rank":1,"player":"Jane Doe","team":"LSU","value":".552"},
+                     {"idx":1,"rank":2,"player":"","team":"Nowhere","value":".500"}]}"""
             ),
             db.dao()
         )
         assertEquals(listOf("Jane Doe"), db.dao().nationalLeadersOnce().map { it.player })
+    }
+
+    @Test
+    fun `tied players both survive the same rank`() = runTest {
+        // The NCAA writes the rank once per group of ties: on Total Kills,
+        // Reck's 162 ties Marthaler's, so her rank column reads "-" and the
+        // feed carries the 4 forward. Keying the table on the rank made the
+        // second of the pair overwrite the first.
+        Seeder.merge(
+            seed(
+                """{"id":"85","name":"Total Kills","valueLabel":"Kills","rows":[
+                     {"idx":0,"rank":4,"player":"Victoria Marthaler","team":"Sacramento St.","value":"162"},
+                     {"idx":1,"rank":4,"player":"Mallory Reck","team":"Marist","value":"162"},
+                     {"idx":2,"rank":6,"player":"Jillian Tippmann","team":"IU Indy","value":"161"}]}"""
+            ),
+            db.dao()
+        )
+        val rows = db.dao().nationalLeadersOnce()
+        assertEquals(
+            listOf("Victoria Marthaler", "Mallory Reck", "Jillian Tippmann"),
+            rows.map { it.player }
+        )
+        assertEquals(listOf(4, 4, 6), rows.map { it.rank })
     }
 }

@@ -150,6 +150,12 @@ object Seeder {
             val seedOppSets = if (m.has("opponentSets")) m.getInt("opponentSets") else null
             val seedSetScores = m.optString("setScores").takeIf { it.isNotBlank() }
 
+            // Goal counts are derived from the box score, not entered here, so
+            // they are read straight off the feed with none of the care the
+            // result below needs. A recount that changes them - a corrected box
+            // score, a target the staff moves - should land on the next sync.
+            val seedGoals = m.optJSONObject("goals")
+
             val seedHome = if (m.has("home")) m.getBoolean("home") else null
             val seedNeutral = m.optBoolean("neutral")
             val seedVenue = m.optString("venue")
@@ -169,7 +175,11 @@ object Seeder {
                         home = seedHome,
                         neutral = seedNeutral,
                         venue = seedVenue,
-                        city = seedCity
+                        city = seedCity,
+                        goalsMet = seedGoals?.optInt("met"),
+                        goalsEvaluated = seedGoals?.optInt("evaluated"),
+                        teamGoalsMet = seedGoals?.optInt("teamMet"),
+                        teamGoalsEvaluated = seedGoals?.optInt("teamEvaluated")
                     )
                 )
             } else {
@@ -201,7 +211,12 @@ object Seeder {
                     home = existing.home ?: seedHome,
                     neutral = existing.neutral || seedNeutral,
                     venue = existing.venue.ifBlank { seedVenue },
-                    city = existing.city.ifBlank { seedCity }
+                    city = existing.city.ifBlank { seedCity },
+                    goalsMet = seedGoals?.optInt("met") ?: existing.goalsMet,
+                    goalsEvaluated = seedGoals?.optInt("evaluated") ?: existing.goalsEvaluated,
+                    teamGoalsMet = seedGoals?.optInt("teamMet") ?: existing.teamGoalsMet,
+                    teamGoalsEvaluated = seedGoals?.optInt("teamEvaluated")
+                        ?: existing.teamGoalsEvaluated
                 )
                 if (updated != existing) dao.updateMatch(updated)
             }
@@ -478,14 +493,16 @@ object Seeder {
                 val list = cat.optJSONArray("rows") ?: continue
                 for (j in 0 until list.length()) {
                     val r = list.getJSONObject(j)
-                    val rank = r.optInt("rank")
                     val player = r.optString("player")
-                    if (rank <= 0 || player.isBlank()) continue
+                    if (player.isBlank()) continue
                     rows.add(
                         NationalLeader(
                             season = season,
                             category = name,
-                            rank = rank,
+                            // The feed numbers the rows; j is the fallback for
+                            // a seed written before it did.
+                            idx = if (r.has("idx")) r.optInt("idx") else j,
+                            rank = r.optInt("rank"),
                             player = player,
                             team = r.optString("team"),
                             position = r.optString("position"),

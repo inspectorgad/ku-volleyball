@@ -150,6 +150,17 @@ data class Match(
     val neutral: Boolean = false,
     val venue: String = "",
     val city: String = "",
+    // How many of the coaching staff's game-by-game performance goals KU met in
+    // this match, out of those the box score can settle. Computed by the feed
+    // from that match's box score, so unlike the result these are never edited
+    // here and a sync always wins. Null for a match with no box score - every
+    // fixture not yet played, and the Creighton exhibition.
+    val goalsMet: Int? = null,
+    val goalsEvaluated: Int? = null,
+    // The same count over the ten team goals alone, which is the half that does
+    // not depend on who was on the floor.
+    val teamGoalsMet: Int? = null,
+    val teamGoalsEvaluated: Int? = null,
     // Who is taking the spare ticket for this match. Typed in by hand and owned
     // by this device alone - it is not in the feed and never will be, so a sync
     // has to leave it alone. Empty means nobody is down for it yet.
@@ -157,6 +168,10 @@ data class Match(
 ) {
     /** Standard notation: "vs" for home and neutral games, "at" on the road. */
     val versus: String get() = if (home == false && !neutral) "at" else "vs"
+
+    /** Share of the match's measurable goals KU met, 0..1, or null if none were. */
+    val goalRate: Double?
+        get() = goalsEvaluated?.takeIf { it > 0 }?.let { (goalsMet ?: 0).toDouble() / it }
 }
 
 @Entity(
@@ -324,10 +339,18 @@ data class MatchTeamStats(
  * "5.70" for a rate, ".552" for a percentage, "154" for a total - and the order
  * is carried by [rank], so nothing here needs it as a number.
  */
-@Entity(tableName = "national_leaders", primaryKeys = ["season", "category", "rank"])
+@Entity(tableName = "national_leaders", primaryKeys = ["season", "category", "idx"])
 data class NationalLeader(
     val season: String,
     val category: String,
+    /**
+     * Where the row sits in the published list, which is what identifies it.
+     *
+     * The rank cannot: the NCAA gives tied players the same one - a quarter of
+     * these rows are ties - so keying on it would have each tie evict the
+     * player it ties with.
+     */
+    val idx: Int,
     val rank: Int,
     val player: String,
     val team: String,

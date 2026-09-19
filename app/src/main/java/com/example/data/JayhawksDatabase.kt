@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         OpponentStatLine::class, MatchTeamStats::class,
         OpponentRosterEntry::class, OpponentSeasonStat::class,
         TeamServing::class, NationalLeader::class],
-    version = 9,
+    version = 10,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -22,6 +22,14 @@ abstract class JayhawksDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var instance: JayhawksDatabase? = null
+
+        private const val NATIONAL_LEADERS_TABLE =
+            """CREATE TABLE IF NOT EXISTS national_leaders (
+                season TEXT NOT NULL, category TEXT NOT NULL, idx INTEGER NOT NULL,
+                rank INTEGER NOT NULL, player TEXT NOT NULL, team TEXT NOT NULL,
+                position TEXT NOT NULL, cls TEXT NOT NULL, height TEXT NOT NULL,
+                sets INTEGER NOT NULL, value TEXT NOT NULL, valueLabel TEXT NOT NULL,
+                PRIMARY KEY(season, category, idx))"""
 
         // v1 -> v2: players gained the active (on current roster) flag.
         private val MIGRATION_1_2 = object : Migration(1, 2) {
@@ -171,6 +179,25 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        // v9 -> v10: how many performance goals KU met in each match. Derived
+        // by the feed from the box score, so the columns start null and the
+        // next sync fills every played match at once.
+        //
+        // It also re-keys national_leaders, which v9 keyed on the rank. A rank
+        // is not unique: the NCAA gives tied players the same one, so each tie
+        // evicted the player it tied with. The list position is the key now.
+        // The table is dropped rather than rebuilt because it is scraper-owned
+        // and the next sync refills it in full.
+        private val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                for (c in listOf("goalsMet", "goalsEvaluated", "teamGoalsMet", "teamGoalsEvaluated")) {
+                    db.execSQL("ALTER TABLE matches ADD COLUMN $c INTEGER")
+                }
+                db.execSQL("DROP TABLE IF EXISTS national_leaders")
+                db.execSQL(NATIONAL_LEADERS_TABLE)
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
@@ -179,7 +206,7 @@ abstract class JayhawksDatabase : RoomDatabase() {
                     "ku_volleyball.db"
                 ).addMigrations(
                     MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6,
-                    MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9
+                    MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10
                 ).build().also { instance = it }
             }
     }

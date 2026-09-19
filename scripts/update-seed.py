@@ -136,6 +136,96 @@ def match_key(date, opponent):
     return (date, norm_team(opponent))
 
 
+def div(a, b):
+    """a/b, or None when there is no denominator to divide by."""
+    return a / b if b else None
+
+
+# --- The coaching staff's game-by-game performance goals --------------------
+# The targets from their tracker, in its order: the ten team goals, then the
+# twelve per-role hitting goals. "higher" says which side of the target counts
+# as met - errors per set and the opponent's hitting percentage are ceilings,
+# everything else is a floor.
+#
+# The two serve-receive rows of that tracker are not here. A 0-3 passing grade
+# is charted by the staff and published in no box score, so there is nothing to
+# evaluate them from.
+#
+# A goal with no number behind it is not counted as won or lost: the ace-to-
+# error ratio in a match with no service errors, or a role nobody filled, drops
+# out of both halves of the fraction rather than scoring as a free pass.
+TEAM_GOALS = [
+    ("Points/set", 19.0, True, lambda k, o, s: div(k["k"] + k["sa"] + k["bs"] + 0.5 * k["ba"], s)),
+    ("Errors/set", 7.5, False, lambda k, o, s: div(k["e"] + k["se"] + k["bhe"], s)),
+    ("Kills/set", 15.0, True, lambda k, o, s: div(k["k"], s)),
+    ("Aces/set", 1.5, True, lambda k, o, s: div(k["sa"], s)),
+    ("Blocks/set", 2.5, True, lambda k, o, s: div(k["bs"] + 0.5 * k["ba"], s)),
+    ("Hit %", 0.29, True, lambda k, o, s: div(k["k"] - k["e"], k["ta"])),
+    ("Opp hit %", 0.18, False, lambda k, o, s: div(o["k"] - o["e"], o["ta"])),
+    ("Ace:error", 0.75, True, lambda k, o, s: div(k["sa"], k["se"])),
+    ("Digs/set", 15.5, True, lambda k, o, s: div(k["d"], s)),
+    ("Kill %", 0.42, True, lambda k, o, s: div(k["k"], k["ta"])),
+]
+
+ROLE_GOALS = [
+    ("L2", "kill", 0.38), ("L2", "hit", 0.26),
+    ("L1", "kill", 0.42), ("L1", "hit", 0.28),
+    ("OPP", "kill", 0.45), ("OPP", "hit", 0.30),
+    ("Setter", "kill", 0.46), ("Setter", "hit", 0.35),
+    ("M1", "kill", 0.48), ("M1", "hit", 0.35),
+    ("M2", "kill", 0.50), ("M2", "hit", 0.38),
+]
+
+
+def match_roles(players):
+    """Who filled each tracker role in this match, read from that match's box score.
+
+    Read per match rather than assumed for the season, because line-ups change.
+    The box score files every pin hitter as "OH", so serve-receive load is what
+    separates them: the opposite is the pin who does not pass. The outsides are
+    then ranked by attack attempts, L1 carrying the primary load.
+    """
+    setters = [p for p in players if p["pos"].startswith("S")] or players
+    roles = {"Setter": max(setters, key=lambda p: p["a"]) if setters else None}
+    mbs = sorted([p for p in players if p["pos"] == "MB"], key=lambda p: -p["ta"])
+    roles["M1"], roles["M2"] = (mbs + [None, None])[:2]
+    pins = [p for p in players if p["pos"] == "OH"]
+    non_passers = [p for p in pins if p["sp"] and p["rcp"] / p["sp"] <= 1.0]
+    roles["OPP"] = max(non_passers, key=lambda p: p["ta"]) if non_passers else None
+    outsides = sorted([p for p in pins if p is not roles["OPP"]], key=lambda p: -p["ta"])
+    roles["L1"], roles["L2"] = (outsides + [None, None])[:2]
+    return roles
+
+
+def evaluate_goals(ku, opp, sets, players):
+    """How many of the match's goals KU met, counted overall and team-only."""
+    if not ku or not opp or not sets:
+        return None
+    roles = match_roles(players)
+    met = evaluated = team_met = team_evaluated = 0
+    for _, target, higher, value_of in TEAM_GOALS:
+        value = value_of(ku, opp, sets)
+        if value is None:
+            continue
+        ok = int(value >= target if higher else value <= target)
+        evaluated, met = evaluated + 1, met + ok
+        team_evaluated, team_met = team_evaluated + 1, team_met + ok
+    for role, kind, target in ROLE_GOALS:
+        p = roles.get(role)
+        value = None if not p else div(p["k"] if kind == "kill" else p["k"] - p["e"], p["ta"])
+        if value is None:
+            continue
+        evaluated, met = evaluated + 1, met + int(value >= target)
+    if not evaluated:
+        return None
+    return {
+        "met": met,
+        "evaluated": evaluated,
+        "teamMet": team_met,
+        "teamEvaluated": team_evaluated,
+    }
+
+
 def team_points(mine, theirs):
     """Points a side scored, from the two box-score team blocks.
 
@@ -256,6 +346,9 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         "opponentLines": [],
     }
 
+    # Position and serve-receive load are what the goal roles are read from, and
+    # neither survives into the stat line, so they are kept aside here.
+    ku_players = []
     for tb in blocks:
         is_ku = tb is ku_block
         # Team totals are recorded, not summed from the player lines: every stat
@@ -274,6 +367,11 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
             if is_ku:
                 add_player(name, str(p.get("number") or ""), p.get("position") or "")
                 match["lines"].append({"player": name, **line})
+                ku_players.append({
+                    "pos": (p.get("position") or "").strip(),
+                    "rcp": to_int(p.get("receptionAttempts")),
+                    **line,
+                })
             else:
                 # Opponent players are stored inline on the match rather than in
                 # the players list: names collide across teams, and we only ever
@@ -310,6 +408,14 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
                 f"{match['teamSets']}-{match['opponentSets']}; the sides may be "
                 f"crossed upstream."
             )
+
+    goals = evaluate_goals(
+        ku_stats, opp_stats,
+        (match["teamSets"] or 0) + (match["opponentSets"] or 0),
+        ku_players,
+    )
+    if goals:
+        match["goals"] = goals
 
     matches[match_key(match["date"], match["opponent"])] = match
 
@@ -922,10 +1028,19 @@ for cat in leaders_raw.get("categories", []):
     columns = list(rows[0].keys())
     value_label = columns[-1] if columns else ""
     out_rows = []
-    for row in rows:
-        rank = col(row, "Rank")
+    # The NCAA writes the rank once per group of ties and "-" on the rows that
+    # share it: on Total Kills, Mallory Reck's 162 ties Victoria Marthaler's, so
+    # Reck's rank column reads "-" and she is also fourth. Read literally that
+    # is a rank of zero, which is how 209 of these 763 rows first came through.
+    # The rank therefore carries forward, and since it then repeats, the row's
+    # place in the published list is what identifies it.
+    last_rank = 0
+    for idx, row in enumerate(rows):
+        rank = to_int(col(row, "Rank")) or last_rank
+        last_rank = rank
         out_rows.append({
-            "rank": to_int(rank),
+            "idx": idx,
+            "rank": rank,
             "player": col(row, "Name"),
             "team": col(row, "Team"),
             "cls": col(row, "Cl"),

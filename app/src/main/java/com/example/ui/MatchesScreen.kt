@@ -55,6 +55,7 @@ import com.example.data.Player
 import com.example.data.StatLine
 import com.example.stats.aggregate
 import com.example.stats.summarize
+import kotlin.math.roundToInt
 
 @Composable
 fun MatchesScreen(
@@ -113,6 +114,7 @@ fun MatchesScreen(
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
+                                GoalsLine(match)
                                 // Only shown once someone is down for the spare
                                 // ticket, so the matches still going begging are
                                 // the ones with nothing on this line.
@@ -210,6 +212,35 @@ private fun ResultText(match: Match) {
             else MaterialTheme.colorScheme.error
         )
     }
+}
+
+/**
+ * How many of the staff's game-by-game performance goals KU met in this match.
+ *
+ * The result line beside it says whether the match was won. This says how it
+ * was played, which is not the same question: the 3-0 over Tulsa met six of
+ * the ten team goals, and the five-set loss to Florida State met two.
+ *
+ * Both halves of the tracker are shown because they answer differently. The
+ * overall figure counts the per-role hitting goals as well, and those depend on
+ * who was on the floor and carry demanding targets - the setter is asked to
+ * hit .350 on the swings she takes. The team figure is the ten goals that do
+ * not depend on the line-up.
+ */
+@Composable
+private fun GoalsLine(match: Match) {
+    val rate = match.goalRate ?: return
+    val teamPart = match.teamGoalsEvaluated?.takeIf { it > 0 }
+        ?.let { " · team ${match.teamGoalsMet ?: 0}/$it" } ?: ""
+    Text(
+        "Goals ${match.goalsMet}/${match.goalsEvaluated}" +
+            " (${(rate * 100).roundToInt()}%)$teamPart",
+        style = MaterialTheme.typography.bodySmall,
+        // Half the goals is the line between a match that went to plan and one
+        // that did not, so it is coloured the same way the result is.
+        color = if (rate >= 0.5) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onSurfaceVariant
+    )
 }
 
 @Composable

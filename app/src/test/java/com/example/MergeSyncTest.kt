@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -335,5 +336,40 @@ class MergeSyncTest {
         Seeder.merge(json, db.dao())
         assertEquals(0, db.dao().statLinesOnce().size)
         assertEquals(1, db.dao().matchesOnce().size)
+    }
+    @Test
+    fun `goal counts come off the feed, and a resync brings a recount with it`() = runTest {
+        val dao = db.dao()
+        val withGoals = { met: Int, teamMet: Int ->
+            JSONObject(
+                """
+                {"players": [],
+                 "matches": [{"date":"2025-08-29","opponent":"Wisconsin","season":"2025",
+                              "teamSets":2,"opponentSets":3,
+                              "goals":{"met":$met,"evaluated":22,
+                                       "teamMet":$teamMet,"teamEvaluated":10}}]}
+                """
+            )
+        }
+        Seeder.merge(withGoals(13, 6), dao)
+        val match = dao.matchesOnce().single()
+        assertEquals(13, match.goalsMet)
+        assertEquals(22, match.goalsEvaluated)
+        assertEquals(6, match.teamGoalsMet)
+        assertEquals(10, match.teamGoalsEvaluated)
+        assertEquals(13.0 / 22.0, match.goalRate!!, 1e-9)
+
+        // Unlike the result, these are derived and nobody edits them here, so a
+        // corrected box score upstream must land rather than be preserved.
+        Seeder.merge(withGoals(15, 7), dao)
+        assertEquals(15, dao.matchesOnce().single().goalsMet)
+    }
+
+    @Test
+    fun `a match the feed has no goals for keeps none`() = runTest {
+        Seeder.merge(seedJson(), db.dao())
+        val match = db.dao().matchesOnce().single()
+        assertNull(match.goalsMet)
+        assertNull(match.goalRate)
     }
 }
