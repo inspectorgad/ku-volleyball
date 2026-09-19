@@ -133,9 +133,9 @@
   }
   .lead-row .name button:hover { text-decoration: underline; }
   #status { color: var(--ink-3); padding: 40px 0; text-align: center; }
-  #serving-wrap { margin-bottom: 14px; }
-  #serving-wrap .sub { color: var(--ink-3); font-size: 13px; margin-top: 2px; }
-  #serving-sort { margin: 10px 0 12px; flex-wrap: wrap; }
+  #serving-wrap, #natlead-wrap { margin-bottom: 14px; }
+  #serving-wrap .sub, #natlead-wrap .sub { color: var(--ink-3); font-size: 13px; margin-top: 2px; }
+  #serving-sort, #natlead-pick { margin: 10px 0 12px; flex-wrap: wrap; }
   #serving th { cursor: help; }
   svg text { fill: var(--ink-3); font-size: 11px; font-variant-numeric: tabular-nums; }
   @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
@@ -187,6 +187,13 @@
     <div class="filters" id="serving-sort" role="group" aria-label="Sort serving by"></div>
     <table id="serving"></table>
     <p class="fineprint" id="serving-fine"></p>
+  </section>
+  <section class="card scroll" id="natlead-wrap" hidden>
+    <h2>National leaders <span class="muted" id="natlead-note"></span></h2>
+    <div class="sub" id="natlead-sub"></div>
+    <div class="filters" id="natlead-pick" role="group" aria-label="Statistical category"></div>
+    <table id="natlead"></table>
+    <p class="fineprint" id="natlead-fine"></p>
   </section>
   <div class="grid two-col">
     <section class="card scroll">
@@ -325,6 +332,7 @@ function render() {
   renderScouting();
   renderBig12();
   renderServing();
+  renderNationalLeaders();
   document.getElementById("chart-season").textContent = season === "All" ? "· all seasons" : "· " + season;
   document.getElementById("foot").textContent =
     `Data: official NCAA box scores + kuathletics.com · updated ${SEED.generatedAt ?? "—"} · refreshed nightly`;
@@ -979,6 +987,64 @@ function renderServing() {
       r.matches, r.sets, r.serviceAces, r.serviceErrors, r.serveAttempts,
       fmtPct(srvPct(r)), fmt2(perSet(r, "serviceErrors")), fmt2(perSet(r, "serviceAces")),
     ]) tr.insertCell().textContent = String(v);
+  }
+}
+
+// --- National individual leaders --------------------------------------------
+// The NCAA's own top 50 per category, across all of Division I. Optional key:
+// a feed without nationalLeaders simply hides the section.
+let natCategory = null;   // null until the data arrives, then the first category
+
+function renderNationalLeaders() {
+  const wrap = document.getElementById("natlead-wrap");
+  const nl = SEED.nationalLeaders;
+  const cats = nl?.categories ?? [];
+  if (!cats.length) { wrap.hidden = true; return; }
+  wrap.hidden = false;
+  if (!cats.some((c) => c.name === natCategory)) natCategory = cats[0].name;
+  const cat = cats.find((c) => c.name === natCategory);
+
+  document.getElementById("natlead-note").textContent = `— ${nl.season}`;
+  document.getElementById("natlead-sub").textContent =
+    `${cats.length} categories, top ${cat.rows.length} in each.`;
+  // The label the NCAA publishes, verbatim: it names the cutoff date, which is
+  // not the same thing as when we fetched it.
+  document.getElementById("natlead-fine").textContent = nl.updated
+    ? `NCAA rankings, ${nl.updated}. Covers all of Division I, so a leader may play for a school Kansas never meets.`
+    : "";
+
+  const pick = document.getElementById("natlead-pick");
+  pick.replaceChildren();
+  for (const c of cats) {
+    const b = el("button", "chip", c.name);
+    b.type = "button";
+    b.setAttribute("aria-pressed", String(c.name === natCategory));
+    b.onclick = () => { natCategory = c.name; renderNationalLeaders(); };
+    pick.appendChild(b);
+  }
+
+  const t = document.getElementById("natlead");
+  t.replaceChildren();
+  const head = t.createTHead().insertRow();
+  for (const h of ["#", "Player", "Team", "Pos", "Cl", "Ht", "S", cat.valueLabel || "Value"]) {
+    const th = el("th", null, h);
+    if (h === "Player" || h === "Team") th.style.textAlign = "left";
+    head.appendChild(th);
+  }
+  const body = t.createTBody();
+  for (const r of cat.rows) {
+    const tr = body.insertRow();
+    // Kansas picked out the same way it is everywhere else on this page.
+    if (normTeam(r.team) === "kansas") tr.className = "ku";
+    tr.insertCell().textContent = r.rank || "";
+    for (const [v, left] of [[r.player, true], [r.team, true]]) {
+      const c = tr.insertCell();
+      c.textContent = v || "";
+      if (left) c.style.textAlign = "left";
+    }
+    for (const v of [r.position, r.cls, r.height, r.sets, r.value]) {
+      tr.insertCell().textContent = v ?? "";
+    }
   }
 }
 

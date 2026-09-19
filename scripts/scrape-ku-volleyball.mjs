@@ -3,7 +3,8 @@
 //     discovery via the daily scoreboard, then per-match box scores. The same
 //     sweep also yields every Big 12 game (each team carries a conference
 //     tag), which is what the Big 12 standings are computed from.
-//  2. NCAA API rankings — AVCA coaches top 25 and NCAA RPI. Both are
+//  2. NCAA API rankings and stats — AVCA coaches top 25, NCAA RPI, and the
+//     national individual leaders (top 50 per category, all of D1). All are
 //     current-snapshot endpoints (no per-season history), so each nightly run
 //     captures the latest and update-seed.py keys it by season.
 //     Note: /standings/volleyball-women/d1 returns HTTP 500 for this sport,
@@ -298,113 +299,51 @@ for (const [name, path] of [
   }
 }
 
-// --- 1c. One-off probe: does this API expose individual stat leaders? -------
-// The question behind it: a national top 50 of players needs either every D1
-// box score (we capture 34 teams' worth, so a star at an unranked school shows
-// up once) or a national leaderboard somebody else has already computed. The
-// NCAA publishes per-category individual leaders; whether this JSON wrapper
-// exposes them, and under which path, is not documented anywhere we can read.
+// --- 1c. National individual leaders ---------------------------------------
+// The NCAA ranks every D1 player by category and publishes the top 50 of each,
+// which is a better answer than deriving one ourselves: we capture 34 teams in
+// full, so a leader at an unranked school never appears in our box scores at
+// all. These tables cover roughly 330 programmes.
 //
-// The first probe answered half of it: /stats/volleyball-women/d1 replies with
-// {sport, individual, team} - a directory of categories - while every guessed
-// category id under it returned 404. So the ids are not what we guessed, and
-// the directory is where they are written down. This reads the directory and
-// then follows whatever it names, which is the part that turns "an endpoint
-// exists" into "here is the path to kills per set".
+// The path took four probes to find and none of it is documented. The category
+// directory lives at the bare sport path and names each category's path
+// relative to a base it never states; that base is "current". The evidence is
+// in scraped/ncaa-stats-probe.json - delete that file to re-run the probe.
 //
-// Self-disabling: the findings file existing is what stops it running again,
-// so the cost is one run's requests and the evidence is committed for whoever
-// picks it up. Delete scraped/ncaa-stats-probe.json to re-probe.
-const STATS_PROBE = 'scraped/ncaa-stats-probe.json';
-if (!fs.existsSync(STATS_PROBE)) {
-  const findings = [];
-  const record = async (path) => {
-    try {
-      const data = await getJson(`${API}/${path}`);
-      const rows = Array.isArray(data?.data) ? data.data : [];
-      findings.push({
-        path,
-        ok: true,
-        title: data?.title ?? null,
-        updated: data?.updated ?? null,
-        rows: rows.length,
-        columns: rows.length ? Object.keys(rows[0]) : Object.keys(data ?? {}),
-        sample: rows[0] ?? null,
-        // A reply that is not a row list is the interesting one here - the
-        // directory itself - so keep it rather than reducing it to its keys.
-        body: rows.length ? undefined : data,
-      });
-      return { data, rows: rows.length };
-    } catch (e) {
-      findings.push({ path, ok: false, error: e.message });
-      return { data: null, rows: 0 };
-    }
-  };
-
-  const index = (await record('stats/volleyball-women/d1')).data;
-  const categories = (Array.isArray(index?.individual) ? index.individual : [])
+// Ids are read from the directory rather than hardcoded, so a category the NCAA
+// adds or renumbers is picked up. Like the rankings above this is best effort:
+// it is a snapshot with no history, so each run overwrites it and the seed keys
+// it by the date in the "Through games" label.
+try {
+  const dir = await getJson(`${API}/stats/volleyball-women/d1`);
+  const categories = (Array.isArray(dir?.individual) ? dir.individual : [])
     .filter((c) => typeof c?.path === 'string');
-
-  // The directory gives each category's path relative to something it does not
-  // name, and hanging it straight off the directory's own path 404s for all
-  // seventeen. The first probe did try a "current/" form, but with guessed ids
-  // - right shape, wrong numbers - so it proved nothing. Now that the real ids
-  // are known, the forms are worth one honest test each, on a single category,
-  // before spending seventeen requests on the wrong one.
-  const probe = categories.find((c) => c.name === 'Kills Per Set') ?? categories[0];
-  const forms = probe ? [
-    (p) => `stats/volleyball-women/d1/current/${p}`,
-    (p) => `stats/volleyball-women/d1/${CURRENT_SEASON}/${p}`,
-    (p) => `stats/volleyball-women/d1/current/${p}/p1`,
-    (p) => `stats/volleyball-women/d1/${p}/p1`,
-  ] : [];
-  let working = null;
-  for (const form of forms) {
-    if ((await record(form(probe.path))).rows > 0) { working = form; break; }
-  }
-  if (working) {
-    for (const c of categories) {
-      if (c !== probe) await record(working(c.path));
+  const captured = [];
+  for (const c of categories) {
+    try {
+      const data = await getJson(`${API}/stats/volleyball-women/d1/current/${c.path}`);
+      const rows = Array.isArray(data?.data) ? data.data : [];
+      if (!rows.length) continue;
+      captured.push({ id: c.id, name: c.name, title: data.title ?? c.name,
+                      updated: data.updated ?? null, rows });
+    } catch (e) {
+      // One category 500s on their side (Kills SG Highs). The other sixteen
+      // are worth having, so a bad category is skipped rather than fatal.
+      console.log(`  leaders ${c.name} failed (non-fatal): ${e.message}`);
     }
   }
-
-  fs.writeFileSync(STATS_PROBE, JSON.stringify({
-    probedAt: new Date().toISOString(),
-    api: API,
-    question: 'which paths return national individual statistical leaders, and in what shape',
-    workingForm: working ? working('individual/<id>') : null,
-    findings,
-  }, null, 1));
-  const hits = findings.filter((f) => f.ok && f.rows > 0);
-  console.log(working
-    ? `stats probe: form "${working('individual/<id>')}" works; ${hits.length} of ${categories.length} categories returned rows`
-    : `stats probe: the directory lists ${categories.length} categories but no path form returned rows`);
-  for (const h of hits.slice(0, 5)) {
-    console.log(`  ${h.path} -> ${h.rows} rows, "${h.title ?? 'untitled'}", columns: ${h.columns.join(', ')}`);
+  if (captured.length) {
+    fs.writeFileSync('scraped/ncaa-leaders.json', JSON.stringify({
+      capturedAt: new Date().toISOString(),
+      sport: dir?.sport ?? null,
+      categories: captured,
+    }, null, 1));
   }
-  if (!hits.length) {
-    const codes = [...new Set(findings.filter((f) => !f.ok).map((f) => f.error.split(' ')[0]))];
-    console.log(`  statuses seen: ${codes.join(', ') || 'none'}`);
-  }
+  console.log(`national leaders: ${captured.length} of ${categories.length} categories, `
+    + `${captured.reduce((n, c) => n + c.rows.length, 0)} rows`);
+} catch (e) {
+  console.log(`national leaders failed (non-fatal): ${e.message}`);
 }
-
-// The poll is read after the sweep, so a team that entered it this week was not
-// in the tracked set while this run scanned the dates - and the sweep only
-// rescans the last four days, so its earlier games would never be spotted. A
-// grown set therefore drops the scanned-date cache: the next run re-reads the
-// season's scoreboards (one cheap request per date) and queues the backlog.
-// Costs one full re-sweep per poll release, which is once a week.
-const grown = [...trackedTeams].filter((t) => !index.trackedTeams.includes(t));
-index.trackedTeams = [...trackedTeams].sort();
-if (grown.length) {
-  console.log(
-    `tracked teams +${grown.length} (${grown.join(', ')}); ` +
-    `clearing ${Object.keys(index.scannedDates).length} scanned dates so their ` +
-    `earlier games are found next run`
-  );
-  index.scannedDates = {};
-}
-console.log(`tracked teams: ${index.trackedTeams.length}`);
 
 // --- 2. Box scores for final games not yet captured ------------------------
 for (const [gameId, meta] of Object.entries(index.games)) {

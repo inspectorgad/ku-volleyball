@@ -896,6 +896,63 @@ seed = {
     "players": sorted(players.values(), key=lambda p: p["name"]),
     "matches": [matches[k] for k in sorted(matches)],
 }
+# --- National individual leaders -------------------------------------------
+# The NCAA's own top 50 per category, across all of Division I. Worth carrying
+# because our box scores cannot produce it: we capture 34 teams in full, so a
+# leader at an unranked school never appears in them at all - the current kills
+# leader plays for LSU, the aces leader for Harvard.
+#
+# Rows are normalised to one shape because the columns are not: every category
+# ends with its headline number, but that column is "Per Set" for a rate, "Pct."
+# for hitting percentage and the stat's own name for a season total. The last
+# column is the headline in all sixteen, so that is what is read, and its label
+# is carried alongside the value so a screen can title the column correctly.
+#
+# A snapshot with no history, like the polls: each run overwrites it, and the
+# season comes from the "Through games ..." label rather than from today's date,
+# so a capture taken in January still files under the season it describes.
+leaders_raw = load_json("scraped/ncaa-leaders.json", {})
+national_leaders = None
+FIXED = ("Rank", "Name", "Team", "Cl", "Height", "Position", "S")
+categories = []
+for cat in leaders_raw.get("categories", []):
+    rows = cat.get("rows") or []
+    if not rows:
+        continue
+    columns = list(rows[0].keys())
+    value_label = columns[-1] if columns else ""
+    out_rows = []
+    for row in rows:
+        rank = col(row, "Rank")
+        out_rows.append({
+            "rank": to_int(rank),
+            "player": col(row, "Name"),
+            "team": col(row, "Team"),
+            "cls": col(row, "Cl"),
+            "height": col(row, "Height"),
+            "position": col(row, "Position"),
+            "sets": to_int(col(row, "S")),
+            "value": (row.get(value_label) or "").strip(),
+        })
+    categories.append({
+        "id": str(cat.get("id") or ""),
+        "name": cat.get("name") or cat.get("title") or "",
+        "valueLabel": value_label,
+        "rows": out_rows,
+    })
+if categories:
+    season = snapshot_season({"updated": leaders_raw["categories"][0].get("updated", "")})
+    national_leaders = {
+        "season": season or str(datetime.now(timezone.utc).year),
+        "updated": leaders_raw["categories"][0].get("updated") or "",
+        "categories": categories,
+    }
+    total = sum(len(c["rows"]) for c in categories)
+    print(f"national leaders: {len(categories)} categories, {total} rows "
+          f"(season {national_leaders['season']})")
+elif leaders_raw:
+    print("  WARNING: ncaa-leaders.json present but no category had rows")
+
 # Additive only: formatVersion stays 1 so already-installed APKs (which reject
 # anything newer) keep syncing, and older seeds without these keys stay valid.
 if standings:
@@ -908,6 +965,8 @@ if opponent_form:
     seed["opponentForm"] = opponent_form
 if team_serving:
     seed["teamServing"] = team_serving
+if national_leaders:
+    seed["nationalLeaders"] = national_leaders
 
 os.makedirs(os.path.dirname(SEED_PATH), exist_ok=True)
 
