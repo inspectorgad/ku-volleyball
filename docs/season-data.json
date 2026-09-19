@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-19T22:14:18Z",
+ "generatedAt": "2026-09-19T22:22:54Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -18566,7 +18566,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-8"
     },
     {
      "player": "Sophie Taylor",
@@ -18583,7 +18584,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-2"
     },
     {
      "player": "Carly Paugh",
@@ -18600,7 +18602,8 @@
      "bs": 0,
      "ba": 1,
      "re": 1,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-1"
     },
     {
      "player": "Rileigh Butler",
@@ -18617,7 +18620,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-2"
     },
     {
      "player": "Tenesyn Frye",
@@ -18634,7 +18638,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-3"
     },
     {
      "player": "Vivianna Samaniego",
@@ -18651,7 +18656,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-0"
     },
     {
      "player": "Cameron Bradley",
@@ -18668,7 +18674,8 @@
      "bs": 0,
      "ba": 0,
      "re": 3,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-10"
     },
     {
      "player": "Bella Bonanno",
@@ -18685,7 +18692,8 @@
      "bs": 0,
      "ba": 0,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-1"
     },
     {
      "player": "Keirstyn Carlton",
@@ -18702,7 +18710,8 @@
      "bs": 0,
      "ba": 4,
      "re": 0,
-     "bhe": 0
+     "bhe": 0,
+     "height": "5-4"
     },
     {
      "player": "Melia Johnson",
@@ -18719,7 +18728,8 @@
      "bs": 0,
      "ba": 0,
      "re": 2,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-1"
     },
     {
      "player": "Shayla Meyer",
@@ -18736,7 +18746,8 @@
      "bs": 0,
      "ba": 1,
      "re": 2,
-     "bhe": 0
+     "bhe": 0,
+     "height": "6-2"
     }
    ],
    "teamStats": {
@@ -21229,6 +21240,108 @@
      "jerseyNumber": "18",
      "position": "OH",
      "height": "6-2"
+    }
+   ]
+  },
+  {
+   "team": "Ole Miss",
+   "fetchedAt": "2026-09-19T22:22:53.787Z",
+   "players": [
+    {
+     "player": "Ryea Jackson",
+     "jerseyNumber": "2",
+     "position": "OH",
+     "height": "5-8"
+    },
+    {
+     "player": "Sophie Taylor",
+     "jerseyNumber": "3",
+     "position": "MB",
+     "height": "6-2"
+    },
+    {
+     "player": "Carly Paugh",
+     "jerseyNumber": "4",
+     "position": "OH",
+     "height": "6-1"
+    },
+    {
+     "player": "Rileigh Butler",
+     "jerseyNumber": "5",
+     "position": "MB",
+     "height": "6-2"
+    },
+    {
+     "player": "Tenesyn Frye",
+     "jerseyNumber": "6",
+     "position": "L/DS",
+     "height": "5-3"
+    },
+    {
+     "player": "Jordyn Towns",
+     "jerseyNumber": "7",
+     "position": "S",
+     "height": "6-1"
+    },
+    {
+     "player": "Coco Natarajan",
+     "jerseyNumber": "9",
+     "position": "OH",
+     "height": "6-1"
+    },
+    {
+     "player": "Nina Moorer",
+     "jerseyNumber": "10",
+     "position": "S",
+     "height": "6-0"
+    },
+    {
+     "player": "Bella Bonanno",
+     "jerseyNumber": "11",
+     "position": "MB",
+     "height": "6-1"
+    },
+    {
+     "player": "Keirstyn Carlton",
+     "jerseyNumber": "12",
+     "position": "L/DS",
+     "height": "5-4"
+    },
+    {
+     "player": "Melia Johnson",
+     "jerseyNumber": "13",
+     "position": "MB",
+     "height": "6-1"
+    },
+    {
+     "player": "Shayla Meyer",
+     "jerseyNumber": "14",
+     "position": "OH",
+     "height": "6-2"
+    },
+    {
+     "player": "Tessa Jones",
+     "jerseyNumber": "15",
+     "position": "OH",
+     "height": "5-11"
+    },
+    {
+     "player": "Vivianna Samaniego",
+     "jerseyNumber": "20",
+     "position": "MB",
+     "height": "6-0"
+    },
+    {
+     "player": "Cameron Bradley",
+     "jerseyNumber": "21",
+     "position": "S",
+     "height": "5-10"
+    },
+    {
+     "player": "Jorda Crook",
+     "jerseyNumber": "23",
+     "position": "L/DS",
+     "height": "5-10"
     }
    ]
   },
