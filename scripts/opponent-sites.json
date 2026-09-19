@@ -14,7 +14,8 @@
     "",
     "'unverified' holds an entry whose URL has not yet been confirmed by a run.",
     "It is read exactly like 'verified'; the split only records what we know.",
-    "Move an entry up once the log shows it parsing.",
+    "Move an entry up once the log shows it parsing - Grand Canyon went up",
+    "this way, 20 players on its first run.",
     "",
     "Arizona St. and Texas Tech were long recorded here as unfixable, on the",
     "grounds that their servers never send the roster. That was wrong, or has",
@@ -33,6 +34,7 @@
     "colorado": "https://cubuffs.com/sports/womens-volleyball/roster",
     "creighton": "https://gocreighton.com/sports/womens-volleyball/roster",
     "florida st": "https://seminoles.com/sports/womens-volleyball/roster",
+    "grand canyon": "https://gculopes.com/sports/womens-volleyball/roster",
     "houston": "https://uhcougars.com/sports/womens-volleyball/roster",
     "iowa st": "https://cyclones.com/sports/womens-volleyball/roster",
     "kansas": "https://kuathletics.com/sports/womens-volleyball/roster",
@@ -50,7 +52,5 @@
     "west virginia": "https://wvusports.com/sports/womens-volleyball/roster",
     "wichita st": "https://goshockers.com/sports/womens-volleyball/roster"
   },
-  "unverified": {
-    "grand canyon": "https://gculopes.com/sports/womens-volleyball/roster"
-  }
+  "unverified": {}
 }
