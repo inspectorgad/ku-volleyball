@@ -113,23 +113,48 @@ jobs:
             git commit -m "Update season data from nightly scrape [skip ci]"
             echo "seed_changed=true" >> "$GITHUB_OUTPUT"
           fi
-          # The concurrency group keeps two scrapes apart, but anything else
-          # pushing to main - a commit made by hand while this is running -
-          # still moves the branch under us between checkout and here. Rebase
-          # onto whatever landed and try again.
+          # The concurrency group is meant to keep two scrapes apart, and on
+          # 2026-09-19 it did not: two pushes to main a few minutes apart
+          # started runs 208 and 209, which overlapped, scraped the same data
+          # and raced to commit it.
           #
-          # A rebase that conflicts stops the run rather than picking a winner:
-          # everything committed here is regenerated from scratch every time,
-          # so the next scrape produces it again, and a wrong silent merge of
-          # season data would be far worse than a visible failure.
+          # That run first tried to rebase, which is what a delta wants. This is
+          # not a delta. Every file committed here - the scraped box scores, the
+          # seed, the dashboard's copy of it - is regenerated in full on every
+          # run, so two runs produce two complete snapshots that differ in
+          # whitespace and ordering, and rebasing one onto the other conflicts
+          # on files where neither version is wrong. Run 209 died on exactly
+          # that, having done the same work as the run that beat it.
+          #
+          # So the snapshot is replayed instead of rebased: take whatever landed
+          # on main, put this run's output back on top of it, and commit that.
+          # Last writer wins, which is right here because the last writer is the
+          # most recent scrape. Nothing is merged, so nothing can be merged
+          # wrongly, and a run that loses the race still publishes its data
+          # rather than failing with it in hand.
+          OUTPUTS="scraped app/src/main/assets/seed.json docs/season-data.json"
           pushed=""
           for attempt in 1 2 3; do
             if git push; then
               pushed=yes
               break
             fi
-            echo "push rejected (attempt $attempt of 3); rebasing onto origin/main"
-            git pull --rebase origin main
+            echo "push rejected (attempt $attempt of 3); replaying this run's output onto origin/main"
+            snapshot="$(mktemp -d)"
+            for f in $OUTPUTS; do
+              mkdir -p "$snapshot/$(dirname "$f")"
+              cp -a "$f" "$snapshot/$f"
+            done
+            git fetch origin main
+            git reset --hard origin/main
+            for f in $OUTPUTS; do
+              rm -rf "$f"
+              cp -a "$snapshot/$f" "$f"
+            done
+            rm -rf "$snapshot"
+            git add -f $OUTPUTS
+            git diff --cached --quiet || \
+              git commit -m "Update scraped KU volleyball data [skip ci]"
           done
           if [ -z "$pushed" ]; then
             echo "::error::push still rejected after 3 attempts"
