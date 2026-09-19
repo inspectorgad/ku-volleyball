@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.Match
+import com.example.data.NationalLeader
 import com.example.data.Player
 import com.example.data.StatLine
 import com.example.stats.VolleyballTotals
@@ -42,6 +45,7 @@ fun LeadersScreen(
     players: List<Player>,
     matches: List<Match>,
     statLines: List<StatLine>,
+    nationalLeaders: List<NationalLeader> = emptyList(),
     modifier: Modifier = Modifier,
     dataUpdatedAt: String? = null
 ) {
@@ -195,9 +199,129 @@ fun LeadersScreen(
                 )
             }
 
+            // The boards above rank the Jayhawks against each other. This one
+            // ranks them against the country, which our own box scores cannot
+            // do: we hold 34 teams and whoever they play, not all of Division I.
+            //
+            // It is filtered to the season the chips above have selected, so a
+            // 2026 snapshot never appears under a 2025 heading. "All" shows the
+            // most recent snapshot, since that is the only one the NCAA keeps.
+            val natSeason =
+                if (season == ALL_SEASONS) nationalLeaders.maxOfOrNull { it.season } else season
+            val natRows = nationalLeaders.filter { it.season == natSeason }
+            if (natRows.isNotEmpty()) {
+                item { NationalLeadersCard(natRows, modifier = Modifier.padding(top = 8.dp)) }
+            }
+
             // Under the boards, same as on the Serving screen: a reference is
             // looked up after something on the way down raised the question.
             item { StatGlossaryCard(modifier = Modifier.padding(top = 8.dp)) }
+        }
+    }
+}
+
+/** How many of the fifty are shown before the reader asks for the rest. */
+private const val NATIONAL_PREVIEW = 10
+
+/**
+ * The NCAA's national top 50, one category at a time.
+ *
+ * Fifty rows across seventeen categories is more than a phone should render
+ * eagerly, so only one category is on screen and only its first ten until the
+ * reader asks for the rest. Any Kansas player on the list is picked out in the
+ * primary colour - finding them is the reason most people will open this.
+ */
+@Composable
+fun NationalLeadersCard(rows: List<NationalLeader>, modifier: Modifier = Modifier) {
+    val categories = rows.map { it.category }.distinct().sorted()
+    if (categories.isEmpty()) return
+    // Kills per set is the headline category, so it opens on that when the NCAA
+    // is publishing it and on whatever comes first alphabetically when not.
+    val default = categories.firstOrNull { it.contains("Kills Per Set", ignoreCase = true) }
+        ?: categories.first()
+    var selected by rememberSaveable { mutableStateOf<String?>(null) }
+    val category = selected?.takeIf { it in categories } ?: default
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    val shown = rows.filter { it.category == category }.sortedBy { it.rank }
+    val visible = if (expanded) shown else shown.take(NATIONAL_PREVIEW)
+    val valueLabel = shown.firstOrNull()?.valueLabel.orEmpty()
+
+    Card(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                "NCAA National Leaders",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                "Top ${shown.size} in Division I" +
+                    if (valueLabel.isNotBlank()) " · $valueLabel" else "",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                categories.forEach { c ->
+                    FilterChip(
+                        selected = category == c,
+                        onClick = { selected = c; expanded = false },
+                        label = { Text(c) }
+                    )
+                }
+            }
+
+            visible.forEach { row ->
+                // The NCAA writes it "Kansas"; nothing else in the file does.
+                val isKU = row.team.equals("Kansas", ignoreCase = true)
+                val color =
+                    if (isKU) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 3.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "${row.rank}.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.width(32.dp)
+                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            row.player,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (isKU) FontWeight.Bold else FontWeight.Normal,
+                            color = color
+                        )
+                        Text(
+                            listOf(row.team, row.position, row.cls)
+                                .filter { it.isNotBlank() }
+                                .joinToString(" · "),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Text(
+                        row.value,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = color
+                    )
+                }
+            }
+
+            if (shown.size > NATIONAL_PREVIEW) {
+                TextButton(onClick = { expanded = !expanded }) {
+                    Text(if (expanded) "Show top $NATIONAL_PREVIEW" else "Show all ${shown.size}")
+                }
+            }
         }
     }
 }

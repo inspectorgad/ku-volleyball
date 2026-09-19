@@ -98,6 +98,21 @@ interface JayhawksDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTeamServing(rows: List<TeamServing>)
 
+    // The NCAA's national top 50 per category. Replaced by season like the
+    // standings: it is a snapshot of the current rankings, so yesterday's row
+    // 50 is not a fact to keep once today's has pushed it off the list.
+    @Query("SELECT * FROM national_leaders ORDER BY category, rank")
+    fun observeNationalLeaders(): Flow<List<NationalLeader>>
+
+    @Query("SELECT * FROM national_leaders ORDER BY category, rank")
+    suspend fun nationalLeadersOnce(): List<NationalLeader>
+
+    @Query("DELETE FROM national_leaders WHERE season = :season")
+    suspend fun deleteNationalLeadersForSeason(season: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNationalLeaders(rows: List<NationalLeader>)
+
     // Opposing box scores and both sides' team totals. Scraper-owned like the
     // standings above, so a sync replaces a match's rows rather than gap-filling.
     @Query("SELECT * FROM opponent_stat_lines")

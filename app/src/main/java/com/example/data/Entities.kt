@@ -311,3 +311,31 @@ data class MatchTeamStats(
     override val receptionErrors: Int = 0,
     override val ballHandlingErrors: Int = 0
 ) : VolleyballLine
+
+/**
+ * A row of the NCAA's national top 50 for one statistical category.
+ *
+ * Not derived from our own box scores and it could not be: we capture 34 teams
+ * in full and whoever they play, so the national kills leader (LSU) and aces
+ * leader (Harvard) never appear in them. The NCAA computes these across all of
+ * Division I and publishes the top 50 of each category.
+ *
+ * [value] stays a string. It is already formatted the way the category wants -
+ * "5.70" for a rate, ".552" for a percentage, "154" for a total - and the order
+ * is carried by [rank], so nothing here needs it as a number.
+ */
+@Entity(tableName = "national_leaders", primaryKeys = ["season", "category", "rank"])
+data class NationalLeader(
+    val season: String,
+    val category: String,
+    val rank: Int,
+    val player: String,
+    val team: String,
+    val position: String = "",
+    val cls: String = "",
+    val height: String = "",
+    val sets: Int = 0,
+    val value: String = "",
+    /** What the category calls its headline number: "Per Set", "Pct.", "Kills". */
+    val valueLabel: String = ""
+)

@@ -55,6 +55,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     val opponentSeasonStats by viewModel.opponentSeasonStats.collectAsStateWithLifecycle()
     val pollEntries by viewModel.pollEntries.collectAsStateWithLifecycle()
     val teamServing by viewModel.teamServing.collectAsStateWithLifecycle()
+    val nationalLeaders by viewModel.nationalLeaders.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val dataUpdatedAt by viewModel.dataUpdatedAt.collectAsStateWithLifecycle()
 
@@ -166,6 +167,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                         players = players,
                         matches = matches,
                         statLines = statLines,
+                        nationalLeaders = nationalLeaders,
                         dataUpdatedAt = dataUpdatedAt
                     )
 

@@ -461,6 +461,48 @@ object Seeder {
                 dao.insertTeamServing(rows)
             }
         }
+
+        // The NCAA's national top 50 per category, flattened from
+        // {season, categories:[{name, valueLabel, rows:[...]}]} into one row
+        // per player per category. The season's rows are replaced wholesale:
+        // this is a snapshot of a live ranking, so a player who has dropped off
+        // the list should leave with it rather than linger at their old rank.
+        root.optJSONObject("nationalLeaders")?.let { nl ->
+            val season = nl.optString("season").takeIf { it.isNotBlank() } ?: return@let
+            val cats = nl.optJSONArray("categories") ?: return@let
+            val rows = mutableListOf<NationalLeader>()
+            for (i in 0 until cats.length()) {
+                val cat = cats.getJSONObject(i)
+                val name = cat.optString("name").takeIf { it.isNotBlank() } ?: continue
+                val label = cat.optString("valueLabel")
+                val list = cat.optJSONArray("rows") ?: continue
+                for (j in 0 until list.length()) {
+                    val r = list.getJSONObject(j)
+                    val rank = r.optInt("rank")
+                    val player = r.optString("player")
+                    if (rank <= 0 || player.isBlank()) continue
+                    rows.add(
+                        NationalLeader(
+                            season = season,
+                            category = name,
+                            rank = rank,
+                            player = player,
+                            team = r.optString("team"),
+                            position = r.optString("position"),
+                            cls = r.optString("cls"),
+                            height = r.optString("height"),
+                            sets = r.optInt("sets"),
+                            value = r.optString("value"),
+                            valueLabel = label
+                        )
+                    )
+                }
+            }
+            if (rows.isNotEmpty()) {
+                dao.deleteNationalLeadersForSeason(season)
+                dao.insertNationalLeaders(rows)
+            }
+        }
     }
 
     /**

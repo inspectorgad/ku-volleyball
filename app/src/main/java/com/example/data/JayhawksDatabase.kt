@@ -12,8 +12,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         ConferenceStanding::class, PollEntry::class,
         OpponentStatLine::class, MatchTeamStats::class,
         OpponentRosterEntry::class, OpponentSeasonStat::class,
-        TeamServing::class],
-    version = 8,
+        TeamServing::class, NationalLeader::class],
+    version = 9,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -156,6 +156,21 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        // v8 -> v9: the NCAA's national top 50 per category. Scraper-owned,
+        // so the table starts empty and the next sync fills it.
+        private val MIGRATION_8_9 = object : Migration(8, 9) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS national_leaders (
+                        season TEXT NOT NULL, category TEXT NOT NULL, rank INTEGER NOT NULL,
+                        player TEXT NOT NULL, team TEXT NOT NULL, position TEXT NOT NULL,
+                        cls TEXT NOT NULL, height TEXT NOT NULL, sets INTEGER NOT NULL,
+                        value TEXT NOT NULL, valueLabel TEXT NOT NULL,
+                        PRIMARY KEY(season, category, rank))"""
+                )
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
@@ -164,7 +179,7 @@ abstract class JayhawksDatabase : RoomDatabase() {
                     "ku_volleyball.db"
                 ).addMigrations(
                     MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6,
-                    MIGRATION_6_7, MIGRATION_7_8
+                    MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9
                 ).build().also { instance = it }
             }
     }
