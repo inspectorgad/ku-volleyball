@@ -305,24 +305,20 @@ for (const [name, path] of [
 // NCAA publishes per-category individual leaders; whether this JSON wrapper
 // exposes them, and under which path, is not documented anywhere we can read.
 //
-// So: ask it. The category ids are opaque, hence the band rather than a guess
-// at one. Findings are written to scraped/ncaa-stats-probe.json, and the file
-// existing is what stops this running again - one run's worth of requests,
-// then never again, with the evidence committed for whoever picks it up.
-// Delete the file to re-probe.
+// The first probe answered half of it: /stats/volleyball-women/d1 replies with
+// {sport, individual, team} - a directory of categories - while every guessed
+// category id under it returned 404. So the ids are not what we guessed, and
+// the directory is where they are written down. This reads the directory and
+// then follows whatever it names, which is the part that turns "an endpoint
+// exists" into "here is the path to kills per set".
+//
+// Self-disabling: the findings file existing is what stops it running again,
+// so the cost is one run's requests and the evidence is committed for whoever
+// picks it up. Delete scraped/ncaa-stats-probe.json to re-probe.
 const STATS_PROBE = 'scraped/ncaa-stats-probe.json';
 if (!fs.existsSync(STATS_PROBE)) {
-  const paths = [
-    'stats/volleyball-women/d1',
-    'stats/volleyball-women/d1/current',
-    'stats/volleyball-women/d1/current/individual',
-    'stats/volleyball-women/d1/current/team',
-  ];
-  for (let id = 140; id <= 175; id += 1) {
-    paths.push(`stats/volleyball-women/d1/current/individual/${id}`);
-  }
   const findings = [];
-  for (const path of paths) {
+  const record = async (path) => {
     try {
       const data = await getJson(`${API}/${path}`);
       const rows = Array.isArray(data?.data) ? data.data : [];
@@ -334,11 +330,46 @@ if (!fs.existsSync(STATS_PROBE)) {
         rows: rows.length,
         columns: rows.length ? Object.keys(rows[0]) : Object.keys(data ?? {}),
         sample: rows[0] ?? null,
+        // A reply that is not a row list is the interesting one here - the
+        // directory itself - so keep it rather than reducing it to its keys.
+        body: rows.length ? undefined : data,
       });
+      return data;
     } catch (e) {
       findings.push({ path, ok: false, error: e.message });
+      return null;
     }
-  }
+  };
+
+  const index = await record('stats/volleyball-women/d1');
+  // The directory's shape is unknown, so pull anything that looks like a path
+  // or an id out of it rather than assuming one layout.
+  const candidates = new Set();
+  const walk = (node) => {
+    if (!node) return;
+    if (typeof node === 'string') {
+      if (node.includes('/stats/') || /^\d+$/.test(node)) candidates.add(node);
+      return;
+    }
+    if (Array.isArray(node)) { node.forEach(walk); return; }
+    if (typeof node === 'object') {
+      for (const [k, v] of Object.entries(node)) {
+        if (/^\d+$/.test(k)) candidates.add(k);
+        // {id: 149} as well as {"149": "Kills Per Set"} - the id is as likely
+        // to be a value under an id-ish key as it is to be the key itself.
+        if (/^(id|statid|categoryid)$/i.test(k) && /^\d+$/.test(String(v))) {
+          candidates.add(String(v));
+        }
+        walk(v);
+      }
+    }
+  };
+  walk(index?.individual);
+  const paths = [...candidates].slice(0, 12).map((c) => (c.includes('/')
+    ? c.replace(/^\/+/, '')
+    : `stats/volleyball-women/d1/${c}`));
+  for (const path of paths) await record(path);
+
   fs.writeFileSync(STATS_PROBE, JSON.stringify({
     probedAt: new Date().toISOString(),
     api: API,
@@ -346,13 +377,13 @@ if (!fs.existsSync(STATS_PROBE)) {
     findings,
   }, null, 1));
   const hits = findings.filter((f) => f.ok && f.rows > 0);
-  console.log(`stats probe: ${hits.length} of ${paths.length} paths returned rows`);
+  console.log(`stats probe: followed ${paths.length} path(s) from the directory; ${hits.length} returned rows`);
   for (const h of hits) {
     console.log(`  ${h.path} -> ${h.rows} rows, "${h.title ?? 'untitled'}", columns: ${h.columns.join(', ')}`);
   }
   if (!hits.length) {
     const codes = [...new Set(findings.filter((f) => !f.ok).map((f) => f.error.split(' ')[0]))];
-    console.log(`  nothing returned rows; statuses seen: ${codes.join(', ')}`);
+    console.log(`  nothing returned rows; statuses seen: ${codes.join(', ') || 'none'}`);
   }
 }
 
