@@ -342,33 +342,15 @@ if (!fs.existsSync(STATS_PROBE)) {
   };
 
   const index = await record('stats/volleyball-women/d1');
-  // The directory's shape is unknown, so pull anything that looks like a path
-  // or an id out of it rather than assuming one layout.
-  const candidates = new Set();
-  const walk = (node) => {
-    if (!node) return;
-    if (typeof node === 'string') {
-      if (node.includes('/stats/') || /^\d+$/.test(node)) candidates.add(node);
-      return;
-    }
-    if (Array.isArray(node)) { node.forEach(walk); return; }
-    if (typeof node === 'object') {
-      for (const [k, v] of Object.entries(node)) {
-        if (/^\d+$/.test(k)) candidates.add(k);
-        // {id: 149} as well as {"149": "Kills Per Set"} - the id is as likely
-        // to be a value under an id-ish key as it is to be the key itself.
-        if (/^(id|statid|categoryid)$/i.test(k) && /^\d+$/.test(String(v))) {
-          candidates.add(String(v));
-        }
-        walk(v);
-      }
-    }
-  };
-  walk(index?.individual);
-  const paths = [...candidates].slice(0, 12).map((c) => (c.includes('/')
-    ? c.replace(/^\/+/, '')
-    : `stats/volleyball-women/d1/${c}`));
-  for (const path of paths) await record(path);
+  // The directory hands over each category's own path - "individual/2" for
+  // Kills Per Set - and the base to hang it off is the directory's own. The
+  // previous pass built the path from the bare id instead and 404'd twelve
+  // times in a row; the answer was sitting in a field it was not reading.
+  const categories = (Array.isArray(index?.individual) ? index.individual : [])
+    .filter((c) => typeof c?.path === 'string');
+  for (const c of categories) {
+    await record(`stats/volleyball-women/d1/${c.path}`);
+  }
 
   fs.writeFileSync(STATS_PROBE, JSON.stringify({
     probedAt: new Date().toISOString(),
@@ -377,7 +359,7 @@ if (!fs.existsSync(STATS_PROBE)) {
     findings,
   }, null, 1));
   const hits = findings.filter((f) => f.ok && f.rows > 0);
-  console.log(`stats probe: followed ${paths.length} path(s) from the directory; ${hits.length} returned rows`);
+  console.log(`stats probe: followed ${categories.length} categor(ies) from the directory; ${hits.length} returned rows`);
   for (const h of hits) {
     console.log(`  ${h.path} -> ${h.rows} rows, "${h.title ?? 'untitled'}", columns: ${h.columns.join(', ')}`);
   }
