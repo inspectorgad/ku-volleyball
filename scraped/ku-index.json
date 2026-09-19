@@ -8425,6 +8425,27 @@
    },
    "conferenceGame": false
   },
+  "6626559": {
+   "date": "2026-09-19",
+   "season": "2026",
+   "home": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Tarleton St.",
+    "seo": "tarleton-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626681": {
    "date": "2026-09-05",
    "season": "2026",
@@ -8719,6 +8740,27 @@
    },
    "conferenceGame": false
   },
+  "6626855": {
+   "date": "2026-09-19",
+   "season": "2026",
+   "home": {
+    "name": "Purdue",
+    "seo": "purdue",
+    "score": 3,
+    "winner": true,
+    "rank": 11,
+    "inConference": false
+   },
+   "away": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6626875": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8968,6 +9010,27 @@
     "winner": false,
     "rank": null,
     "inConference": false
+   },
+   "conferenceGame": false
+  },
+  "6627097": {
+   "date": "2026-09-19",
+   "season": "2026",
+   "home": {
+    "name": "Northern Colo.",
+    "seo": "northern-colo",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
    },
    "conferenceGame": false
   },
@@ -10576,6 +10639,14 @@
    ],
    "boxscored": true
   },
+  "6625208": {
+   "date": "2026-09-19",
+   "season": "2026",
+   "teams": [
+    "Tennessee"
+   ],
+   "boxscored": true
+  },
   "6625239": {
    "date": "2026-09-03",
    "season": "2026",
@@ -11292,6 +11363,14 @@
    ],
    "boxscored": true
   },
+  "6626559": {
+   "date": "2026-09-19",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
   "6626582": {
    "date": "2026-08-29",
    "season": "2026",
@@ -11440,6 +11519,14 @@
   },
   "6626854": {
    "date": "2026-09-18",
+   "season": "2026",
+   "teams": [
+    "UCF"
+   ],
+   "boxscored": true
+  },
+  "6626855": {
+   "date": "2026-09-19",
    "season": "2026",
    "teams": [
     "UCF"
@@ -11665,6 +11752,14 @@
    "season": "2026",
    "teams": [
     "South Dakota St."
+   ],
+   "boxscored": true
+  },
+  "6627097": {
+   "date": "2026-09-19",
+   "season": "2026",
+   "teams": [
+    "Utah"
    ],
    "boxscored": true
   },
@@ -12373,6 +12468,14 @@
    "season": "2026",
    "teams": [
     "TCU"
+   ],
+   "boxscored": true
+  },
+  "6628494": {
+   "date": "2026-09-19",
+   "season": "2026",
+   "teams": [
+    "North Carolina"
    ],
    "boxscored": true
   },
