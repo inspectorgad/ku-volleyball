@@ -650,6 +650,30 @@ try {
   const previous = fs.existsSync(ROSTERS_PATH)
     ? JSON.parse(fs.readFileSync(ROSTERS_PATH, 'utf8'))
     : {};
+
+  // A team Kansas has already played, with no roster stored, is asked for once.
+  // Normally there is nothing to do here: an opponent is scraped while the
+  // match is still ahead, and that roster is what these lines are checked
+  // against. But a team whose site was missing from the map at the time falls
+  // through both nets - no longer upcoming, never in the Big 12 - and is then
+  // the one opponent with no line-up at all. That is what happened to Ole Miss,
+  // played on 18 Sep with no entry in the map until afterwards. The roster is
+  // still worth having: it is where the opposing box-score lines get the
+  // heights they are listed with.
+  // This season only. Last season's opponents are not being scouted and their
+  // rosters have turned over anyway, so asking their sites every run would be
+  // fifteen requests for pages nothing reads.
+  const finished = Object.values(index.games).filter((m) => m.final && m.date);
+  const thisSeason = finished.reduce((y, m) => (m.date > y ? m.date : y), '').slice(0, 4);
+  for (const meta of finished) {
+    if (!meta.date.startsWith(thisSeason)) continue;
+    for (const side of [meta.home, meta.away]) {
+      const key = normTeamName(side);
+      if (key === normTeamName('Kansas')) continue;
+      if (previous[key]?.players?.length) continue;
+      if (!wanted.has(key)) wanted.set(key, side);
+    }
+  }
   const weekAgo = new Date(Date.now() - 7 * 86_400_000).toISOString();
 
   const rosters = { ...previous };
