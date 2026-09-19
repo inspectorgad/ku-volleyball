@@ -42,6 +42,11 @@ on:
       # than wait for the next nightly cron.
       - 'scripts/opponent-sites.json'
       - 'scripts/roster-parser.mjs'
+      # The win model's power ratings are meant to be edited by hand when the
+      # AVCA poll lands. Every remaining match's number changes with them, so
+      # the feed should be rebuilt on the spot rather than up to four hours
+      # later - the edit is the whole event.
+      - 'scripts/power-ratings.json'
       - '.github/workflows/scrape-data.yml'
 
 permissions:
