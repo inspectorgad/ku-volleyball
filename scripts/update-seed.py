@@ -1007,15 +1007,55 @@ if team_serving:
 # the model is worth is set there, not here.
 ratings = load_json("scripts/power-ratings.json", {})
 teams_rated = {norm_team(k): v for k, v in (ratings.get("teams") or {}).items()}
-if teams_rated:
+
+# A ranked team is rated by the poll rather than by hand, so its number moves
+# the Monday a new poll lands instead of whenever someone remembers to edit it.
+# Points are read as a share of the most any team could have scored - every
+# ballot carries exactly one first-place vote, so the first-place votes count
+# the ballots - which keeps the map steady if the panel of coaches changes size.
+poll_rating = {}
+poll_floor = None
+poll_map = ratings.get("pollMap") or {}
+# polls are ordered by season, so the last one with rows is the current one.
+current_poll = next((p for p in reversed(polls) if p.get("rows")), None)
+if current_poll and poll_map:
+    ballots = sum(to_int(r.get("firstPlaceVotes")) for r in current_poll["rows"])
+    most = ballots * 25
+    if most:
+        for row in current_poll["rows"]:
+            share = to_int(row.get("points")) / most
+            value = poll_map.get("base", 0) + poll_map.get("perShare", 0) * share
+            poll_rating[norm_team(row.get("team") or "")] = round(value, 2)
+        poll_floor = min(poll_rating.values())
+
+
+def rating_for(team):
+    """This team's power rating, and where it came from."""
+    key = norm_team(team)
+    if key in poll_rating:
+        return poll_rating[key], "poll"
+    manual = teams_rated.get(key)
+    if not manual:
+        return None, None
+    # Capped at the poll's last-placed team: a rating set before the season
+    # should not leave a team that the coaches have dropped - or never ranked -
+    # sitting above one they still rank.
+    if poll_floor is not None:
+        return min(manual["rating"], poll_floor), "file (capped at the poll floor)"
+    return manual["rating"], "file"
+
+
+if teams_rated or poll_rating:
     scale = ratings.get("scale") or 25
-    ku_rating = ratings.get("kansas") or 0
+    ku_rating, ku_source = rating_for("Kansas")
+    if ku_rating is None:
+        ku_rating, ku_source = ratings.get("kansas") or 0, "file"
     forecast = unrated = 0
     for match in matches.values():
         if match.get("teamSets") is not None or match.get("opponentSets") is not None:
             continue
-        rated = teams_rated.get(norm_team(match["opponent"]))
-        if not rated:
+        opponent_rating, _ = rating_for(match["opponent"])
+        if opponent_rating is None:
             unrated += 1
             continue
         if match.get("neutral"):
@@ -1024,11 +1064,18 @@ if teams_rated:
             venue = ratings.get("homeAdjustment", 0)
         else:
             venue = ratings.get("roadAdjustment", 0)
-        gap = ku_rating + venue - rated["rating"]
+        gap = ku_rating + venue - opponent_rating
         match["winProbability"] = round(1 / (1 + 10 ** (-gap / scale)), 4)
         forecast += 1
-    print(f"win model: {forecast} upcoming match(es) rated"
-          + (f", {unrated} with no rating for the opponent" if unrated else ""))
+    from_poll = sum(
+        1 for m in matches.values()
+        if m.get("winProbability") is not None
+        and norm_team(m["opponent"]) in poll_rating
+    )
+    print(f"win model: {forecast} upcoming match(es) rated "
+          f"({from_poll} opponent(s) from the poll, {forecast - from_poll} from file); "
+          f"Kansas {ku_rating} from the {ku_source}"
+          + (f"; {unrated} with no rating for the opponent" if unrated else ""))
 
 seed = {
     "formatVersion": 1,

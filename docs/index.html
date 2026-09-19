@@ -457,7 +457,11 @@ function renderUpcoming(upcoming) {
     if (p != null) {
       const s = el("span", "d", `${Math.round(p * 100)}% est.`);
       s.style.color = p >= 0.55 ? "var(--win)" : p >= 0.45 ? "var(--ink)" : "var(--loss)";
-      s.title = "Estimated win probability from the power-rating model";
+      const poll = (SEED.polls ?? []).at(-1);
+      s.title = "Estimated win probability. Ranked teams are rated from the "
+        + (poll?.name ?? "AVCA poll")
+        + (poll?.updated ? ` (${poll.updated.toLowerCase()})` : "")
+        + "; the rest from preseason estimates.";
       li.appendChild(s);
     }
     li.appendChild(el("span", "d", m.date));
