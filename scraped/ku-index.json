@@ -8887,6 +8887,27 @@
    },
    "conferenceGame": false
   },
+  "6626881": {
+   "date": "2026-09-19",
+   "season": "2026",
+   "home": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 24,
+    "inConference": true
+   },
+   "away": {
+    "name": "Utah St.",
+    "seo": "utah-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6626979": {
    "date": "2026-09-04",
    "season": "2026",
@@ -11601,6 +11622,14 @@
   },
   "6626880": {
    "date": "2026-09-17",
+   "season": "2026",
+   "teams": [
+    "BYU"
+   ],
+   "boxscored": true
+  },
+  "6626881": {
+   "date": "2026-09-19",
    "season": "2026",
    "teams": [
     "BYU"
