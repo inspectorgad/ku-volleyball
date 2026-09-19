@@ -1,0 +1,675 @@
+{
+ "probedAt": "2026-09-19T20:24:55.738Z",
+ "api": "https://ncaa-api.henrygd.me",
+ "question": "which paths return national individual statistical leaders, and in what shape",
+ "workingForm": "stats/volleyball-women/d1/current/individual/<id>",
+ "findings": [
+  {
+   "path": "stats/volleyball-women/d1",
+   "ok": true,
+   "title": null,
+   "updated": null,
+   "rows": 0,
+   "columns": [
+    "sport",
+    "individual",
+    "team"
+   ],
+   "sample": null,
+   "body": {
+    "sport": "Women's Volleyball",
+    "individual": [
+     {
+      "id": "42",
+      "name": "Aces Per Set",
+      "path": "individual/42"
+     },
+     {
+      "id": "3",
+      "name": "Assists Per Set",
+      "path": "individual/3"
+     },
+     {
+      "id": "890",
+      "name": "Attacks Per Set",
+      "path": "individual/890"
+     },
+     {
+      "id": "43",
+      "name": "Blocks Per Set",
+      "path": "individual/43"
+     },
+     {
+      "id": "44",
+      "name": "Digs Per Set",
+      "path": "individual/44"
+     },
+     {
+      "id": "1",
+      "name": "Hitting Percentage",
+      "path": "individual/1"
+     },
+     {
+      "id": "2",
+      "name": "Kills Per Set",
+      "path": "individual/2"
+     },
+     {
+      "id": "85",
+      "name": "Kills SG Highs",
+      "path": "individual/85"
+     },
+     {
+      "id": "553",
+      "name": "Points",
+      "path": "individual/553"
+     },
+     {
+      "id": "552",
+      "name": "Points Per Set",
+      "path": "individual/552"
+     },
+     {
+      "id": "883",
+      "name": "Service Aces",
+      "path": "individual/883"
+     },
+     {
+      "id": "880",
+      "name": "Total Assists",
+      "path": "individual/880"
+     },
+     {
+      "id": "889",
+      "name": "Total Attacks",
+      "path": "individual/889"
+     },
+     {
+      "id": "887",
+      "name": "Total Blocks",
+      "path": "individual/887"
+     },
+     {
+      "id": "885",
+      "name": "Total Digs",
+      "path": "individual/885"
+     },
+     {
+      "id": "879",
+      "name": "Total Kills",
+      "path": "individual/879"
+     },
+     {
+      "id": "928",
+      "name": "Triple Doubles",
+      "path": "individual/928"
+     }
+    ],
+    "team": [
+     {
+      "id": "48",
+      "name": "Aces Per Set",
+      "path": "team/48"
+     },
+     {
+      "id": "47",
+      "name": "Assists Per Set",
+      "path": "team/47"
+     },
+     {
+      "id": "49",
+      "name": "Blocks Per Set",
+      "path": "team/49"
+     },
+     {
+      "id": "50",
+      "name": "Digs Per Set",
+      "path": "team/50"
+     },
+     {
+      "id": "45",
+      "name": "Hitting Percentage",
+      "path": "team/45"
+     },
+     {
+      "id": "46",
+      "name": "Kills Per Set",
+      "path": "team/46"
+     },
+     {
+      "id": "51",
+      "name": "Match W-L Pctg.",
+      "path": "team/51"
+     },
+     {
+      "id": "911",
+      "name": "Opp Hitting Percentage",
+      "path": "team/911"
+     },
+     {
+      "id": "882",
+      "name": "Team Assists",
+      "path": "team/882"
+     },
+     {
+      "id": "892",
+      "name": "Team Attacks Per Set",
+      "path": "team/892"
+     },
+     {
+      "id": "886",
+      "name": "Team Digs",
+      "path": "team/886"
+     },
+     {
+      "id": "881",
+      "name": "Team Kills",
+      "path": "team/881"
+     },
+     {
+      "id": "884",
+      "name": "Team Service Aces",
+      "path": "team/884"
+     },
+     {
+      "id": "891",
+      "name": "Team Total Attacks",
+      "path": "team/891"
+     },
+     {
+      "id": "888",
+      "name": "Team Total Blocks",
+      "path": "team/888"
+     }
+    ]
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/2",
+   "ok": true,
+   "title": "Kills Per Set",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Kills",
+    "Per Set"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Jurnee Robinson",
+    "Team": "LSU",
+    "Cl": "Sr.",
+    "Height": "6-1",
+    "Position": "OH",
+    "S": "27",
+    "Kills": "154",
+    "Per Set": "5.70"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/42",
+   "ok": true,
+   "title": "Aces Per Set",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Aces",
+    "Per Set"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Sofia Rossi",
+    "Team": "Harvard",
+    "Cl": "So.",
+    "Height": "6-0",
+    "Position": "OH",
+    "S": "25",
+    "Aces": "27",
+    "Per Set": "1.08"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/3",
+   "ok": true,
+   "title": "Assists Per Set",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Assists",
+    "Per Set"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Nikki Quinn",
+    "Team": "Duke",
+    "Cl": "Jr.",
+    "Height": "5-11",
+    "Position": "S",
+    "S": "27",
+    "Assists": "317",
+    "Per Set": "11.74"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/890",
+   "ok": true,
+   "title": "Attacks Per Set",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Kills",
+    "Errors",
+    "Total Attacks",
+    "Per Set"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Jurnee Robinson",
+    "Team": "LSU",
+    "Cl": "Sr.",
+    "Height": "6-1",
+    "Position": "OH",
+    "S": "27",
+    "Kills": "154",
+    "Errors": "51",
+    "Total Attacks": "357",
+    "Per Set": "13.22"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/43",
+   "ok": true,
+   "title": "Blocks Per Set",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Block Solos",
+    "Block Assists",
+    "Total",
+    "Per Set"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Anna Wilson",
+    "Team": "James Madison",
+    "Cl": "Sr.",
+    "Height": "6-3",
+    "Position": "MB",
+    "S": "28",
+    "Block Solos": "4",
+    "Block Assists": "48",
+    "Total": "52",
+    "Per Set": "1.86"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/44",
+   "ok": true,
+   "title": "Digs Per Set",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Digs",
+    "Per Set"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Jasmine Dulan",
+    "Team": "Drake",
+    "Cl": "Sr.",
+    "Height": "5-7",
+    "Position": "L/DS",
+    "S": "37",
+    "Digs": "207",
+    "Per Set": "5.59"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/1",
+   "ok": true,
+   "title": "Hitting Percentage",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Kills",
+    "Errors",
+    "Total Attacks",
+    "Pct."
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Carmen Waye",
+    "Team": "Michigan St.",
+    "Cl": "Jr.",
+    "Height": "6-2",
+    "Position": "MB",
+    "S": "26",
+    "Kills": "63",
+    "Errors": "5",
+    "Total Attacks": "105",
+    "Pct.": ".552"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/85",
+   "ok": false,
+   "error": "500 for https://ncaa-api.henrygd.me/stats/volleyball-women/d1/current/individual/85"
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/553",
+   "ok": true,
+   "title": "Points",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "Kills",
+    "Aces",
+    "Block Solos",
+    "Block Assists",
+    "Pts"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Olivia Babcock",
+    "Team": "Pittsburgh",
+    "Cl": "Sr.",
+    "Height": "6-4",
+    "Position": "RS",
+    "Kills": "164",
+    "Aces": "10",
+    "Block Solos": "1",
+    "Block Assists": "32",
+    "Pts": "191.0"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/552",
+   "ok": true,
+   "title": "Points Per Set",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Kills",
+    "Aces",
+    "Block Solos",
+    "Block Assists",
+    "Per Set"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Jurnee Robinson",
+    "Team": "LSU",
+    "Cl": "Sr.",
+    "Height": "6-1",
+    "Position": "OH",
+    "S": "27",
+    "Kills": "154",
+    "Aces": "7",
+    "Block Solos": "7",
+    "Block Assists": "16",
+    "Per Set": "6.52"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/883",
+   "ok": true,
+   "title": "Service Aces",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Aces"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Sarah Wadsworth",
+    "Team": "UNC Asheville",
+    "Cl": "Jr.",
+    "Height": "6-0",
+    "Position": "OH",
+    "S": "43",
+    "Aces": "37"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/880",
+   "ok": true,
+   "title": "Total Assists",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Assists"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Katie Boney",
+    "Team": "Western Caro.",
+    "Cl": "Sr.",
+    "Height": "6-0",
+    "Position": "S",
+    "S": "48",
+    "Assists": "437"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/889",
+   "ok": true,
+   "title": "Total Attacks",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Kills",
+    "Errors",
+    "Total Attacks"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Emma Sorensen",
+    "Team": "Holy Cross",
+    "Cl": "So.",
+    "Height": "6-0",
+    "Position": "OH",
+    "S": "45",
+    "Kills": "136",
+    "Errors": "58",
+    "Total Attacks": "471"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/887",
+   "ok": true,
+   "title": "Total Blocks",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Block Solos",
+    "Block Assists",
+    "TB"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Ella Piskorz",
+    "Team": "Pepperdine",
+    "Cl": "Jr.",
+    "Height": "6-3",
+    "Position": "MB",
+    "S": "36",
+    "Block Solos": "4",
+    "Block Assists": "58",
+    "TB": "62.0"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/885",
+   "ok": true,
+   "title": "Total Digs",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Digs"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "MeMe Davis",
+    "Team": "App State",
+    "Cl": "Jr.",
+    "Height": "5-7",
+    "Position": "L/DS",
+    "S": "45",
+    "Digs": "212"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/879",
+   "ok": true,
+   "title": "Total Kills",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 50,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "MP",
+    "S",
+    "Kills"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Morgan Hayes",
+    "Team": "Santa Clara",
+    "Cl": "Jr.",
+    "Height": "6-2",
+    "Position": "OPP",
+    "MP": "10",
+    "S": "39",
+    "Kills": "170"
+   }
+  },
+  {
+   "path": "stats/volleyball-women/d1/current/individual/928",
+   "ok": true,
+   "title": "Triple Doubles",
+   "updated": "Thursday, September 17, 2026 9:09 am - Through games Wednesday, September 16, 2026",
+   "rows": 13,
+   "columns": [
+    "Rank",
+    "Name",
+    "Team",
+    "Cl",
+    "Height",
+    "Position",
+    "S",
+    "Trpl Dbl"
+   ],
+   "sample": {
+    "Rank": "1",
+    "Name": "Emilee Hill",
+    "Team": "Eastern Ky.",
+    "Cl": "Sr.",
+    "Height": "5-11",
+    "Position": "S",
+    "S": "38",
+    "Trpl Dbl": "3"
+   }
+  }
+ ]
+}
