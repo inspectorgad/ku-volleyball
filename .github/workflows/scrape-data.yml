@@ -48,6 +48,21 @@ permissions:
   contents: write
   actions: write
 
+# Only one scrape at a time. Two of them racing is not hypothetical: on
+# 2026-09-19 a push-triggered run and a scheduled one overlapped - the 17:37
+# entry arriving at 19:33, which is the late delivery the schedule comment
+# above describes - both scraped the same data, and the loser died on
+# "! [rejected] main -> main (fetch first)". Nothing was lost, since the
+# winner had pushed identical data, but the run history showed a failure that
+# meant nothing, which is the kind of noise that gets a real failure ignored.
+# A push to scripts/ now queues behind a running scrape instead of colliding.
+#
+# cancel-in-progress stays false: a run that is halfway through fetching box
+# scores should finish and commit them, not be killed off by the next trigger.
+concurrency:
+  group: scrape-ku-volleyball
+  cancel-in-progress: false
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -93,7 +108,28 @@ jobs:
             git commit -m "Update season data from nightly scrape [skip ci]"
             echo "seed_changed=true" >> "$GITHUB_OUTPUT"
           fi
-          git push
+          # The concurrency group keeps two scrapes apart, but anything else
+          # pushing to main - a commit made by hand while this is running -
+          # still moves the branch under us between checkout and here. Rebase
+          # onto whatever landed and try again.
+          #
+          # A rebase that conflicts stops the run rather than picking a winner:
+          # everything committed here is regenerated from scratch every time,
+          # so the next scrape produces it again, and a wrong silent merge of
+          # season data would be far worse than a visible failure.
+          pushed=""
+          for attempt in 1 2 3; do
+            if git push; then
+              pushed=yes
+              break
+            fi
+            echo "push rejected (attempt $attempt of 3); rebasing onto origin/main"
+            git pull --rebase origin main
+          done
+          if [ -z "$pushed" ]; then
+            echo "::error::push still rejected after 3 attempts"
+            exit 1
+          fi
 
       # Pushes made with GITHUB_TOKEN never trigger push workflows (GitHub's
       # recursion guard), so the APK rebuild must be dispatched explicitly —
