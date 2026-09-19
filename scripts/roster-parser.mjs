@@ -16,6 +16,9 @@
 //
 //   header    position and height share the line above the number (Wichita St.):
 //               Middle Blocker 6'0" / 1 / Jane Doe / Sophomore Columbia, Mo.
+//
+//   row       one player per line, tab-separated (Texas Tech):
+//               0 / Faith Jordan / MB / 5' 11'' / Fr. / Joliet, Illinois
 
 // Heights appear as 6' 3'', 6'3", or 6′3″ — straight quotes, doubled
 // apostrophes, and Unicode primes all mean the same thing.
@@ -31,7 +34,10 @@ export function normalizeHeight(raw) {
   return m ? `${m[1]}-${m[2] ?? 0}` : '';
 }
 
-const NAME = /^[A-Za-z'.-]+(?: [A-Za-z'.’-]+)+$/;
+// Letters, not just A-Z: Arizona St. field Una Vajagić and Živa Labinjan, and
+// an ASCII-only name test skipped both — reading their roster as empty rather
+// than as eighteen players with two missing.
+const NAME = /^[\p{L}'.’-]+(?: [\p{L}'.’-]+)+$/u;
 const isName = (s) => NAME.test((s || '').trim());
 // UCF prints "#1" rather than "1"; the hash is decoration, not part of the number.
 const isNumber = (s) => /^#?\d{1,2}$/.test((s || '').trim());
@@ -86,7 +92,14 @@ function parseCards(lines) {
     // height, on three distinct lines - is what separates a real card from
     // unrelated lines that happen to sit together. Case is not a reliable
     // signal: Stanford shouts the name, UCF does not.
-    const name = window.find(isName);
+    // Arizona St. prints the name above the number rather than below it, and
+    // its hometown ("San Diego") reads as a name too, so preferring the window
+    // would file every player under their home town. What settles it is that
+    // the card repeats the real name just below as image alt text - a
+    // duplicate the hometown never has.
+    const above = i > 0 && isName(lines[i - 1]) ? lines[i - 1] : undefined;
+    const repeated = above && lines.slice(i + 1, i + 7).includes(above);
+    const name = repeated ? above : (window.find(isName) ?? above);
     const position = window.find((l) => l !== name && POSITION.test(l));
     const height = window.filter((l) => l !== name && l !== position)
       .map(normalizeHeight).find(Boolean);
@@ -153,6 +166,39 @@ function parseTable(lines) {
       jerseyNumber: numberOf(lines[i].replace(/\t+$/, '')),
       position,
       height: heightCell,
+    });
+  }
+  return roster;
+}
+
+/**
+ * One player per line, tab-separated (Texas Tech):
+ *   0 \t Faith Jordan \t MB \t 5' 11'' \t Fr. \t Joliet, Illinois / West Joliet HS
+ *
+ * Distinct from parseTable above, which wants the number and name on their own
+ * lines. Cells are matched by what they look like rather than by position,
+ * because schools order the columns differently and some add or drop one.
+ */
+function parseRows(lines) {
+  const roster = [];
+  for (const line of lines) {
+    if (!line.includes('\t')) continue;
+    const cells = line.split('\t').map((c) => c.trim()).filter(Boolean);
+    // Number, name, position and height at least; a row shorter than that is
+    // a heading or a stray pair of cells.
+    if (cells.length < 4 || !isNumber(cells[0])) continue;
+    const name = cells.find(isName);
+    if (!name) continue;
+    const position = cells.find((c) => c !== name && POSITION.test(c));
+    if (!position) continue;
+    const height = cells.filter((c) => c !== name && c !== position)
+      .map(normalizeHeight).find(Boolean);
+    if (!height) continue;
+    roster.push({
+      name: tidyName(name),
+      jerseyNumber: numberOf(cells[0]),
+      position,
+      height,
     });
   }
   return roster;
@@ -234,7 +280,7 @@ export function playersFromJson(payloads) {
  */
 export function parseRoster(pageText) {
   const lines = (pageText || '').split('\n').map((l) => l.trim());
-  const shapes = [parseLabelled, parseCards, parseHeader, parseTable];
+  const shapes = [parseLabelled, parseCards, parseHeader, parseTable, parseRows];
   let best = [];
   for (const shape of shapes) {
     let players = [];
