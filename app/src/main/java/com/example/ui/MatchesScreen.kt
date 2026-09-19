@@ -197,11 +197,38 @@ private fun ResultText(match: Match) {
     val us = match.teamSets
     val them = match.opponentSets
     if (us == null || them == null) {
-        Text(
-            "No result",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        // Before a match is played this slot carries the forecast instead of
+        // the result it does not have yet. The model is the one from the win
+        // model workbook: subjective power ratings, a flat home-court value and
+        // a logistic curve, so the number is an estimate and is labelled as one.
+        val p = match.winProbability
+        if (p != null) {
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    "${(p * 100).roundToInt()}%",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    // The workbook's own tiers: comfortable, leaning KU, a
+                    // toss-up, or an underdog.
+                    color = when {
+                        p >= 0.55 -> MaterialTheme.colorScheme.primary
+                        p >= 0.45 -> MaterialTheme.colorScheme.onSurface
+                        else -> MaterialTheme.colorScheme.error
+                    }
+                )
+                Text(
+                    "est. win",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            Text(
+                "No result",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     } else {
         val won = us > them
         Text(

@@ -161,6 +161,11 @@ data class Match(
     // not depend on who was on the floor.
     val teamGoalsMet: Int? = null,
     val teamGoalsEvaluated: Int? = null,
+    // The win model's estimate for a match not yet played, 0..1. Carried on
+    // matches with no result only: once one is played the question has been
+    // answered on the floor. Subjective power ratings behind it, not an
+    // official rating system - scripts/power-ratings.json is the whole model.
+    val winProbability: Double? = null,
     // Who is taking the spare ticket for this match. Typed in by hand and owned
     // by this device alone - it is not in the feed and never will be, so a sync
     // has to leave it alone. Empty means nobody is down for it yet.

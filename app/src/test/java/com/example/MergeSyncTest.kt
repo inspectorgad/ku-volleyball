@@ -372,4 +372,35 @@ class MergeSyncTest {
         assertNull(match.goalsMet)
         assertNull(match.goalRate)
     }
+    @Test
+    fun `the win forecast is carried while a match is unplayed and dropped once it is not`() =
+        runTest {
+            val dao = db.dao()
+            val upcoming = JSONObject(
+                """
+                {"players": [],
+                 "matches": [{"date":"2026-09-25","opponent":"Houston","season":"2026",
+                              "home":true,"winProbability":0.8738}]}
+                """
+            )
+            Seeder.merge(upcoming, dao)
+            assertEquals(0.8738, dao.matchesOnce().single().winProbability!!, 1e-9)
+
+            // The feed stops publishing a forecast the moment the match has a
+            // result, and the stored one has to go with it rather than sit
+            // beside the final score.
+            Seeder.merge(
+                JSONObject(
+                    """
+                    {"players": [],
+                     "matches": [{"date":"2026-09-25","opponent":"Houston","season":"2026",
+                                  "home":true,"teamSets":3,"opponentSets":1}]}
+                    """
+                ),
+                dao
+            )
+            val played = dao.matchesOnce().single()
+            assertEquals(3, played.teamSets)
+            assertNull(played.winProbability)
+        }
 }

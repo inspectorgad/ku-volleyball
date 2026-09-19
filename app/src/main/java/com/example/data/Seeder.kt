@@ -155,6 +155,10 @@ object Seeder {
             // result below needs. A recount that changes them - a corrected box
             // score, a target the staff moves - should land on the next sync.
             val seedGoals = m.optJSONObject("goals")
+            // Likewise the forecast: model output, recomputed every run, and a
+            // match that has since been played simply stops carrying one.
+            val seedWinProbability =
+                if (m.has("winProbability")) m.getDouble("winProbability") else null
 
             val seedHome = if (m.has("home")) m.getBoolean("home") else null
             val seedNeutral = m.optBoolean("neutral")
@@ -179,7 +183,8 @@ object Seeder {
                         goalsMet = seedGoals?.optInt("met"),
                         goalsEvaluated = seedGoals?.optInt("evaluated"),
                         teamGoalsMet = seedGoals?.optInt("teamMet"),
-                        teamGoalsEvaluated = seedGoals?.optInt("teamEvaluated")
+                        teamGoalsEvaluated = seedGoals?.optInt("teamEvaluated"),
+                        winProbability = seedWinProbability
                     )
                 )
             } else {
@@ -216,7 +221,12 @@ object Seeder {
                     goalsEvaluated = seedGoals?.optInt("evaluated") ?: existing.goalsEvaluated,
                     teamGoalsMet = seedGoals?.optInt("teamMet") ?: existing.teamGoalsMet,
                     teamGoalsEvaluated = seedGoals?.optInt("teamEvaluated")
-                        ?: existing.teamGoalsEvaluated
+                        ?: existing.teamGoalsEvaluated,
+                    // Not `?:` like the rest: the feed drops the forecast the
+                    // moment a match is played, and that dropping is the point.
+                    // Keeping the last one would leave an estimate sitting
+                    // beside a final score.
+                    winProbability = seedWinProbability
                 )
                 if (updated != existing) dao.updateMatch(updated)
             }

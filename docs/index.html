@@ -449,6 +449,17 @@ function renderUpcoming(upcoming) {
   for (const m of upcoming.slice(0, 10)) {
     const li = el("li");
     li.appendChild(el("span", null, `${siteWord(m)} ${m.opponent}`));
+    // The win model's estimate, where there is a rating for the opponent. An
+    // estimate from subjective power ratings, not a betting line - nobody posts
+    // odds on college volleyball - so it is labelled and coloured by the
+    // workbook's own tiers rather than presented as a fact.
+    const p = m.winProbability;
+    if (p != null) {
+      const s = el("span", "d", `${Math.round(p * 100)}% est.`);
+      s.style.color = p >= 0.55 ? "var(--win)" : p >= 0.45 ? "var(--ink)" : "var(--loss)";
+      s.title = "Estimated win probability from the power-rating model";
+      li.appendChild(s);
+    }
     li.appendChild(el("span", "d", m.date));
     ul.appendChild(li);
   }

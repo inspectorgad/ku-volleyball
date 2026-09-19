@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-19T20:58:35Z",
+ "generatedAt": "2026-09-19T21:03:42Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -18781,7 +18781,8 @@
    "season": "2026",
    "home": true,
    "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.7681
   },
   {
    "date": "2026-09-25",
@@ -18789,7 +18790,8 @@
    "season": "2026",
    "home": true,
    "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.8737
   },
   {
    "date": "2026-09-27",
@@ -18797,7 +18799,8 @@
    "season": "2026",
    "home": false,
    "venue": "United Supermarkets Arena",
-   "city": "Lubbock, TX"
+   "city": "Lubbock, TX",
+   "winProbability": 0.7992
   },
   {
    "date": "2026-10-01",
@@ -18805,7 +18808,8 @@
    "season": "2026",
    "home": true,
    "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.7512
   },
   {
    "date": "2026-10-02",
@@ -18813,14 +18817,16 @@
    "season": "2026",
    "home": true,
    "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.5686
   },
   {
    "date": "2026-10-11",
    "opponent": "UCF",
    "season": "2026",
    "home": false,
-   "city": "Orlando, FL"
+   "city": "Orlando, FL",
+   "winProbability": 0.5911
   },
   {
    "date": "2026-10-15",
@@ -18828,7 +18834,8 @@
    "season": "2026",
    "home": false,
    "venue": "Morgan Family Arena",
-   "city": "Manhattan, KS"
+   "city": "Manhattan, KS",
+   "winProbability": 0.6763
   },
   {
    "date": "2026-10-18",
@@ -18836,7 +18843,8 @@
    "season": "2026",
    "home": true,
    "venue": "Allen Fieldhouse",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.4089
   },
   {
    "date": "2026-10-23",
@@ -18844,7 +18852,8 @@
    "season": "2026",
    "home": false,
    "venue": "Schollmaier Arena",
-   "city": "Fort Worth, TX"
+   "city": "Fort Worth, TX",
+   "winProbability": 0.2664
   },
   {
    "date": "2026-10-25",
@@ -18852,7 +18861,8 @@
    "season": "2026",
    "home": false,
    "venue": "Ferrell Center",
-   "city": "Waco, TX"
+   "city": "Waco, TX",
+   "winProbability": 0.3653
   },
   {
    "date": "2026-10-30",
@@ -18860,7 +18870,8 @@
    "season": "2026",
    "home": true,
    "venue": "Allen Fieldhouse",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.8136
   },
   {
    "date": "2026-11-01",
@@ -18868,7 +18879,8 @@
    "season": "2026",
    "home": false,
    "venue": "Hilton Coliseum",
-   "city": "Ames, IA"
+   "city": "Ames, IA",
+   "winProbability": 0.5
   },
   {
    "date": "2026-11-05",
@@ -18876,7 +18888,8 @@
    "season": "2026",
    "home": true,
    "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.5459
   },
   {
    "date": "2026-11-08",
@@ -18884,7 +18897,8 @@
    "season": "2026",
    "home": true,
    "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.84
   },
   {
    "date": "2026-11-12",
@@ -18892,7 +18906,8 @@
    "season": "2026",
    "home": false,
    "venue": "CU Events Center",
-   "city": "Boulder, CO"
+   "city": "Boulder, CO",
+   "winProbability": 0.3653
   },
   {
    "date": "2026-11-15",
@@ -18900,7 +18915,8 @@
    "season": "2026",
    "home": true,
    "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.4314
   },
   {
    "date": "2026-11-20",
@@ -18908,7 +18924,8 @@
    "season": "2026",
    "home": true,
    "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS"
+   "city": "Lawrence, KS",
+   "winProbability": 0.8519
   },
   {
    "date": "2026-11-25",
@@ -18916,7 +18933,8 @@
    "season": "2026",
    "home": false,
    "venue": "McKale Center",
-   "city": "Tucson, AZ"
+   "city": "Tucson, AZ",
+   "winProbability": 0.5686
   },
   {
    "date": "2026-11-27",
@@ -18924,7 +18942,8 @@
    "season": "2026",
    "home": false,
    "venue": "Desert Financial Arena",
-   "city": "Tempe, AZ"
+   "city": "Tempe, AZ",
+   "winProbability": 0.2488
   }
  ],
  "standings": [

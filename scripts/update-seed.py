@@ -995,6 +995,41 @@ if team_serving:
     if thin:
         print(f"  only one or two matches captured so far for: {', '.join(thin)}")
 
+# --- Estimated win probability for the matches still to play ----------------
+# The win model, moved out of the workbook it was built in so the number is on
+# the schedule rather than in a file someone has to open.
+#
+#   Win % = 1 / (1 + 10 ^ (-gap / scale)),  gap = kansas + venue - opponent
+#
+# A forecast, so it is attached only to matches with no result: once a match is
+# played the question it answers has been answered on the floor. The ratings are
+# subjective and static, which scripts/power-ratings.json says at length; what
+# the model is worth is set there, not here.
+ratings = load_json("scripts/power-ratings.json", {})
+teams_rated = {norm_team(k): v for k, v in (ratings.get("teams") or {}).items()}
+if teams_rated:
+    scale = ratings.get("scale") or 25
+    ku_rating = ratings.get("kansas") or 0
+    forecast = unrated = 0
+    for match in matches.values():
+        if match.get("teamSets") is not None or match.get("opponentSets") is not None:
+            continue
+        rated = teams_rated.get(norm_team(match["opponent"]))
+        if not rated:
+            unrated += 1
+            continue
+        if match.get("neutral"):
+            venue = ratings.get("neutralAdjustment", 0)
+        elif match.get("home"):
+            venue = ratings.get("homeAdjustment", 0)
+        else:
+            venue = ratings.get("roadAdjustment", 0)
+        gap = ku_rating + venue - rated["rating"]
+        match["winProbability"] = round(1 / (1 + 10 ** (-gap / scale)), 4)
+        forecast += 1
+    print(f"win model: {forecast} upcoming match(es) rated"
+          + (f", {unrated} with no rating for the opponent" if unrated else ""))
+
 seed = {
     "formatVersion": 1,
     "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
