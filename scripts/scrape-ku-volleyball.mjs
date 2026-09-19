@@ -334,38 +334,57 @@ if (!fs.existsSync(STATS_PROBE)) {
         // directory itself - so keep it rather than reducing it to its keys.
         body: rows.length ? undefined : data,
       });
-      return data;
+      return { data, rows: rows.length };
     } catch (e) {
       findings.push({ path, ok: false, error: e.message });
-      return null;
+      return { data: null, rows: 0 };
     }
   };
 
-  const index = await record('stats/volleyball-women/d1');
-  // The directory hands over each category's own path - "individual/2" for
-  // Kills Per Set - and the base to hang it off is the directory's own. The
-  // previous pass built the path from the bare id instead and 404'd twelve
-  // times in a row; the answer was sitting in a field it was not reading.
+  const index = (await record('stats/volleyball-women/d1')).data;
   const categories = (Array.isArray(index?.individual) ? index.individual : [])
     .filter((c) => typeof c?.path === 'string');
-  for (const c of categories) {
-    await record(`stats/volleyball-women/d1/${c.path}`);
+
+  // The directory gives each category's path relative to something it does not
+  // name, and hanging it straight off the directory's own path 404s for all
+  // seventeen. The first probe did try a "current/" form, but with guessed ids
+  // - right shape, wrong numbers - so it proved nothing. Now that the real ids
+  // are known, the forms are worth one honest test each, on a single category,
+  // before spending seventeen requests on the wrong one.
+  const probe = categories.find((c) => c.name === 'Kills Per Set') ?? categories[0];
+  const forms = probe ? [
+    (p) => `stats/volleyball-women/d1/current/${p}`,
+    (p) => `stats/volleyball-women/d1/${CURRENT_SEASON}/${p}`,
+    (p) => `stats/volleyball-women/d1/current/${p}/p1`,
+    (p) => `stats/volleyball-women/d1/${p}/p1`,
+  ] : [];
+  let working = null;
+  for (const form of forms) {
+    if ((await record(form(probe.path))).rows > 0) { working = form; break; }
+  }
+  if (working) {
+    for (const c of categories) {
+      if (c !== probe) await record(working(c.path));
+    }
   }
 
   fs.writeFileSync(STATS_PROBE, JSON.stringify({
     probedAt: new Date().toISOString(),
     api: API,
     question: 'which paths return national individual statistical leaders, and in what shape',
+    workingForm: working ? working('individual/<id>') : null,
     findings,
   }, null, 1));
   const hits = findings.filter((f) => f.ok && f.rows > 0);
-  console.log(`stats probe: followed ${categories.length} categor(ies) from the directory; ${hits.length} returned rows`);
-  for (const h of hits) {
+  console.log(working
+    ? `stats probe: form "${working('individual/<id>')}" works; ${hits.length} of ${categories.length} categories returned rows`
+    : `stats probe: the directory lists ${categories.length} categories but no path form returned rows`);
+  for (const h of hits.slice(0, 5)) {
     console.log(`  ${h.path} -> ${h.rows} rows, "${h.title ?? 'untitled'}", columns: ${h.columns.join(', ')}`);
   }
   if (!hits.length) {
     const codes = [...new Set(findings.filter((f) => !f.ok).map((f) => f.error.split(' ')[0]))];
-    console.log(`  nothing returned rows; statuses seen: ${codes.join(', ') || 'none'}`);
+    console.log(`  statuses seen: ${codes.join(', ') || 'none'}`);
   }
 }
 
