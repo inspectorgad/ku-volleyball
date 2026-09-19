@@ -298,6 +298,64 @@ for (const [name, path] of [
   }
 }
 
+// --- 1c. One-off probe: does this API expose individual stat leaders? -------
+// The question behind it: a national top 50 of players needs either every D1
+// box score (we capture 34 teams' worth, so a star at an unranked school shows
+// up once) or a national leaderboard somebody else has already computed. The
+// NCAA publishes per-category individual leaders; whether this JSON wrapper
+// exposes them, and under which path, is not documented anywhere we can read.
+//
+// So: ask it. The category ids are opaque, hence the band rather than a guess
+// at one. Findings are written to scraped/ncaa-stats-probe.json, and the file
+// existing is what stops this running again - one run's worth of requests,
+// then never again, with the evidence committed for whoever picks it up.
+// Delete the file to re-probe.
+const STATS_PROBE = 'scraped/ncaa-stats-probe.json';
+if (!fs.existsSync(STATS_PROBE)) {
+  const paths = [
+    'stats/volleyball-women/d1',
+    'stats/volleyball-women/d1/current',
+    'stats/volleyball-women/d1/current/individual',
+    'stats/volleyball-women/d1/current/team',
+  ];
+  for (let id = 140; id <= 175; id += 1) {
+    paths.push(`stats/volleyball-women/d1/current/individual/${id}`);
+  }
+  const findings = [];
+  for (const path of paths) {
+    try {
+      const data = await getJson(`${API}/${path}`);
+      const rows = Array.isArray(data?.data) ? data.data : [];
+      findings.push({
+        path,
+        ok: true,
+        title: data?.title ?? null,
+        updated: data?.updated ?? null,
+        rows: rows.length,
+        columns: rows.length ? Object.keys(rows[0]) : Object.keys(data ?? {}),
+        sample: rows[0] ?? null,
+      });
+    } catch (e) {
+      findings.push({ path, ok: false, error: e.message });
+    }
+  }
+  fs.writeFileSync(STATS_PROBE, JSON.stringify({
+    probedAt: new Date().toISOString(),
+    api: API,
+    question: 'which paths return national individual statistical leaders, and in what shape',
+    findings,
+  }, null, 1));
+  const hits = findings.filter((f) => f.ok && f.rows > 0);
+  console.log(`stats probe: ${hits.length} of ${paths.length} paths returned rows`);
+  for (const h of hits) {
+    console.log(`  ${h.path} -> ${h.rows} rows, "${h.title ?? 'untitled'}", columns: ${h.columns.join(', ')}`);
+  }
+  if (!hits.length) {
+    const codes = [...new Set(findings.filter((f) => !f.ok).map((f) => f.error.split(' ')[0]))];
+    console.log(`  nothing returned rows; statuses seen: ${codes.join(', ')}`);
+  }
+}
+
 // The poll is read after the sweep, so a team that entered it this week was not
 // in the tracked set while this run scanned the dates - and the sweep only
 // rescans the last four days, so its earlier games would never be spotted. A
