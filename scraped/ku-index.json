@@ -488,10 +488,10 @@
   },
   "6625739": {
    "date": "2026-09-20",
-   "final": false,
+   "final": true,
    "home": "Kansas",
    "away": "Grand Canyon",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -7887,6 +7887,27 @@
    },
    "conferenceGame": false
   },
+  "6625739": {
+   "date": "2026-09-20",
+   "season": "2026",
+   "home": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 22,
+    "inConference": true
+   },
+   "away": {
+    "name": "Grand Canyon",
+    "seo": "grand-canyon",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -9840,6 +9861,27 @@
    },
    "conferenceGame": false
   },
+  "6628151": {
+   "date": "2026-09-20",
+   "season": "2026",
+   "home": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "A&M-Corpus Christi",
+    "seo": "am-corpus-chris",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "conferenceGame": false
+  },
   "6628224": {
    "date": "2026-08-28",
    "season": "2026",
@@ -10565,6 +10607,14 @@
    ],
    "boxscored": true
   },
+  "6624528": {
+   "date": "2026-09-20",
+   "season": "2026",
+   "teams": [
+    "Southern California"
+   ],
+   "boxscored": true
+  },
   "6624546": {
    "date": "2026-09-08",
    "season": "2026",
@@ -10776,6 +10826,15 @@
    ],
    "boxscored": true
   },
+  "6625210": {
+   "date": "2026-09-20",
+   "season": "2026",
+   "teams": [
+    "Penn St.",
+    "Tennessee"
+   ],
+   "boxscored": true
+  },
   "6625239": {
    "date": "2026-09-03",
    "season": "2026",
@@ -10850,6 +10909,14 @@
   },
   "6625278": {
    "date": "2026-09-17",
+   "season": "2026",
+   "teams": [
+    "Oregon"
+   ],
+   "boxscored": true
+  },
+  "6625279": {
+   "date": "2026-09-20",
    "season": "2026",
    "teams": [
     "Oregon"
@@ -11005,6 +11072,14 @@
    "season": "2026",
    "teams": [
     "Ole Miss"
+   ],
+   "boxscored": true
+  },
+  "6625739": {
+   "date": "2026-09-20",
+   "season": "2026",
+   "teams": [
+    "Grand Canyon"
    ],
    "boxscored": true
   },
@@ -11598,6 +11673,15 @@
    ],
    "boxscored": true
   },
+  "6626814": {
+   "date": "2026-09-20",
+   "season": "2026",
+   "teams": [
+    "Kentucky",
+    "Louisville"
+   ],
+   "boxscored": true
+  },
   "6626846": {
    "date": "2026-08-28",
    "season": "2026",
@@ -11816,6 +11900,15 @@
    "season": "2026",
    "teams": [
     "Kansas St."
+   ],
+   "boxscored": true
+  },
+  "6626996": {
+   "date": "2026-09-20",
+   "season": "2026",
+   "teams": [
+    "Creighton",
+    "Texas A&M"
    ],
    "boxscored": true
   },
@@ -12410,6 +12503,14 @@
    "season": "2026",
    "teams": [
     "Penn St."
+   ],
+   "boxscored": true
+  },
+  "6628151": {
+   "date": "2026-09-20",
+   "season": "2026",
+   "teams": [
+    "Iowa St."
    ],
    "boxscored": true
   },
