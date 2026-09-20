@@ -76,19 +76,52 @@ jobs:
           # release is first created, so a rename would otherwise leave the
           # page telling people to download a file that no longer exists.
           gh release edit latest-apk --repo "$GITHUB_REPOSITORY" --notes "$NOTES"
-          cp app/build/outputs/apk/debug/app-debug.apk ku-volleyball.apk
-          gh release upload latest-apk ku-volleyball.apk \
-            --repo "$GITHUB_REPOSITORY" --clobber
+          # Each file is uploaded under a temporary name and then renamed into
+          # place, rather than with `gh release upload --clobber`.
+          #
+          # --clobber deletes the live asset and then uploads its replacement,
+          # so the download URL 404s for as long as an 18 MB upload takes - on
+          # every rebuild, and the feed dispatches one after every scrape. That
+          # is several windows a day, and it is what someone hits when the link
+          # "does not work": the release page looks fine, the file is simply not
+          # there yet. Uploading first and renaming afterwards narrows the gap
+          # from an upload to the moment between two API calls.
+          #
+          # The temporary name keeps the real extension - ku-volleyball.new.apk,
+          # not ku-volleyball.apk.new - because GitHub sets an asset's content
+          # type from it, and renaming does not revisit that. An APK served as a
+          # generic binary is one some phones decline to install.
+          swap_in() {
+            local src="$1" name="$2" tmp="$3" live fresh
+            cp "$src" "$tmp"
+            gh release upload latest-apk "$tmp" --repo "$GITHUB_REPOSITORY" --clobber
+            live=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/latest-apk" \
+              --jq ".assets[] | select(.name==\"$name\") | .id")
+            fresh=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/latest-apk" \
+              --jq ".assets[] | select(.name==\"$tmp\") | .id")
+            if [ -z "$fresh" ]; then
+              echo "::error::$tmp did not upload; leaving $name as it was"
+              return 1
+            fi
+            # An `if`, not `[ -n "$live" ] && ...`: the job runs under `set -e`,
+            # where that list failing its test is a failing command, so the
+            # first publish - the one with nothing to replace - would abort.
+            if [ -n "$live" ]; then
+              gh api -X DELETE "repos/$GITHUB_REPOSITORY/releases/assets/$live"
+            fi
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/releases/assets/$fresh" -f name="$name"
+            echo "published $name"
+          }
+          swap_in app/build/outputs/apk/debug/app-debug.apk \
+            ku-volleyball.apk ku-volleyball.new.apk
           # The parsed season data rides along so the app can sync itself
           # without an APK reinstall.
-          cp app/src/main/assets/seed.json season-data.json
-          gh release upload latest-apk season-data.json \
-            --repo "$GITHUB_REPOSITORY" --clobber
+          swap_in app/src/main/assets/seed.json \
+            season-data.json season-data.new.json
           # Play Store bundle: download this and upload it to the Play
           # Console (internal testing) whenever the app code changes.
-          cp app/build/outputs/bundle/release/app-release.aab ku-volleyball.aab
-          gh release upload latest-apk ku-volleyball.aab \
-            --repo "$GITHUB_REPOSITORY" --clobber
+          swap_in app/build/outputs/bundle/release/app-release.aab \
+            ku-volleyball.aab ku-volleyball.new.aab
           # Drop the pre-rename assets so the old ambiguous names cannot linger
           # on the release. A no-op once they are gone.
           for old in app-debug.apk app-release.aab; do
