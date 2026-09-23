@@ -42,6 +42,8 @@ on:
       # than wait for the next nightly cron.
       - 'scripts/opponent-sites.json'
       - 'scripts/roster-parser.mjs'
+      - 'scripts/schedule-parser.mjs'
+      - 'scripts/ics_feed.py'
       # The win model's power ratings are meant to be edited by hand when the
       # AVCA poll lands. Every remaining match's number changes with them, so
       # the feed should be rebuilt on the spot rather than up to four hours
@@ -93,6 +95,13 @@ jobs:
           npm install playwright@1.49.0 > /dev/null
           npx playwright install --with-deps chromium
 
+      # The script tests are quick and need nothing installed, so a broken
+      # parser fails here, before it can write a bad seed.
+      - name: Test scripts
+        run: |
+          node --test scripts/schedule-parser.test.mjs scripts/roster-parser.test.mjs scripts/match-night-watch.test.mjs
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+
       - name: Scrape NCAA + kuathletics data
         env:
           SEASONS: '2025 2026'
@@ -110,7 +119,7 @@ jobs:
           git diff --cached --quiet || git commit -m "Update scraped KU volleyball data [skip ci]"
           # The dashboard (GitHub Pages, docs/) reads its own copy of the seed.
           cp app/src/main/assets/seed.json docs/season-data.json
-          git add app/src/main/assets/seed.json docs/season-data.json
+          git add app/src/main/assets/seed.json docs/season-data.json docs/ku-volleyball.ics
           if git diff --cached --quiet; then
             echo "seed_changed=false" >> "$GITHUB_OUTPUT"
           else
@@ -136,7 +145,7 @@ jobs:
           # most recent scrape. Nothing is merged, so nothing can be merged
           # wrongly, and a run that loses the race still publishes its data
           # rather than failing with it in hand.
-          OUTPUTS="scraped app/src/main/assets/seed.json docs/season-data.json"
+          OUTPUTS="scraped app/src/main/assets/seed.json docs/season-data.json docs/ku-volleyball.ics"
           pushed=""
           for attempt in 1 2 3; do
             if git push; then
@@ -176,3 +185,23 @@ jobs:
           gh workflow run build-apk.yml \
             --repo "$GITHUB_REPOSITORY" \
             --ref main
+
+      # Match days: start a watcher that scrapes again the moment KU's match
+      # goes final. Once per match - a second scrape inside the window finds
+      # the first watcher by its run name and leaves it be.
+      - name: Plan match night
+        id: night
+        run: node scripts/match-night-watch.mjs plan
+
+      - name: Start match-night watcher
+        if: steps.night.outputs.watch == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DATE: ${{ steps.night.outputs.date }}
+        run: |
+          if gh run list --repo "$GITHUB_REPOSITORY" --workflow match-night.yml --limit 20 \
+               --json displayTitle --jq '.[].displayTitle' | grep -qx "match night $DATE"; then
+            echo "a watcher for $DATE already exists"
+          else
+            gh workflow run match-night.yml --repo "$GITHUB_REPOSITORY" --ref main -f date="$DATE"
+          fi

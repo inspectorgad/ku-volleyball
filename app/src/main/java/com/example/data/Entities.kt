@@ -167,6 +167,20 @@ data class Match(
     // answered on the floor. Subjective power ratings behind it, not an
     // official rating system - scripts/power-ratings.json is the whole model.
     val winProbability: Double? = null,
+    // Where the opponent's rating behind that forecast came from: "poll" when
+    // the current AVCA poll rates them, "preseason" for a number set by hand
+    // before the season. Null alongside a null forecast.
+    val ratingSource: String? = null,
+    // AVCA ranks as they stood when the match was played, from the NCAA's box
+    // score, and NCAA tournament seeds for the postseason. Null when unranked.
+    val kuRank: Int? = null,
+    val opponentRank: Int? = null,
+    val kuSeed: Int? = null,
+    val opponentSeed: Int? = null,
+    // First serve in Central Time, 24h ("18:00"), and the broadcast, both off
+    // the athletics schedule. Empty when not yet announced.
+    val time: String = "",
+    val tv: String = "",
     // Who is taking the spare ticket for this match. Typed in by hand and owned
     // by this device alone - it is not in the feed and never will be, so a sync
     // has to leave it alone. Empty means nobody is down for it yet.

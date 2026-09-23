@@ -417,9 +417,23 @@ private fun PollRow(entry: PollEntry) {
     ) {
         Text(
             entry.rankLabel,
-            modifier = Modifier.width(42.dp),
+            modifier = Modifier.width(34.dp),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1
+        )
+        // Week-on-week movement. The arrow's direction carries it; the colour
+        // only reinforces.
+        val move = pollMovement(entry.rank, entry.previous)
+        Text(
+            move,
+            modifier = Modifier.width(38.dp),
+            style = MaterialTheme.typography.labelSmall,
+            color = when {
+                move.startsWith("▲") || move == "NEW" -> MaterialTheme.colorScheme.primary
+                move.startsWith("▼") -> MaterialTheme.colorScheme.error
+                else -> MaterialTheme.colorScheme.onSurfaceVariant
+            },
             maxLines = 1
         )
         Text(

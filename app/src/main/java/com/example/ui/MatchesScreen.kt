@@ -81,55 +81,17 @@ fun MatchesScreen(
                 contentPadding = ListContentPadding,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(matches, key = { it.id }) { match ->
-                    val lineCount = statLines.count { it.matchId == match.id }
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onOpenMatch(match) }
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(
-                                        "${match.versus} ${match.opponent}",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                    LocationBadge(match)
-                                }
-                                Text(
-                                    "${match.date} · ${match.season}" +
-                                        (match.city.takeIf { it.isNotBlank() && (match.neutral || match.home != true) }
-                                            ?.let { " · $it" } ?: "") +
-                                        if (lineCount > 0) " · $lineCount player${if (lineCount == 1) "" else "s"}" else "",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                                match.setScores?.let {
-                                    Text(
-                                        it,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
-                                GoalsLine(match)
-                                // Only shown once someone is down for the spare
-                                // ticket, so the matches still going begging are
-                                // the ones with nothing on this line.
-                                match.guest.takeIf { it.isNotBlank() }?.let {
-                                    Text(
-                                        "Ticket: $it",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            }
-                            ResultText(match)
-                        }
+                val (upcoming, results) = splitSchedule(matches, todayIso())
+                if (upcoming.isNotEmpty()) {
+                    item(key = "h-upcoming") { SectionHeader("Upcoming") }
+                    items(upcoming, key = { it.id }) { match ->
+                        MatchCard(match, matches, statLines, onOpenMatch)
+                    }
+                }
+                if (results.isNotEmpty()) {
+                    item(key = "h-results") { SectionHeader("Results") }
+                    items(results, key = { it.id }) { match ->
+                        MatchCard(match, matches, statLines, onOpenMatch)
                     }
                 }
             }
@@ -157,6 +119,92 @@ fun MatchesScreen(
         )
     }
 }
+
+@Composable
+private fun SectionHeader(title: String) {
+    Text(
+        title,
+        style = MaterialTheme.typography.titleSmall,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(top = 4.dp)
+    )
+}
+
+@Composable
+private fun MatchCard(
+    match: Match,
+    matches: List<Match>,
+    statLines: List<StatLine>,
+    onOpenMatch: (Match) -> Unit
+) {
+    val lineCount = statLines.count { it.matchId == match.id }
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onOpenMatch(match) }
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        // The rank the opponent held on the night, for results;
+                        // a fixture's rank is today's poll, which is on Big 12.
+                        "${match.versus} ${if (match.played) rankedOpponent(match) else match.opponent}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    LocationBadge(match)
+                }
+                val where = match.city.takeIf { it.isNotBlank() && (match.neutral || match.home != true) }
+                    ?.let { " · $it" } ?: ""
+                Text(
+                    if (match.played) {
+                        "${match.date} · ${match.season}$where" +
+                            if (lineCount > 0) " · $lineCount player${if (lineCount == 1) "" else "s"}" else ""
+                    } else {
+                        kickoffLine(match) + where
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                match.setScores?.let {
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                if (!match.played) {
+                    lastMeeting(match, matches)?.let {
+                        Text(
+                            "Last met: ${meetingLabel(it)}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                GoalsLine(match)
+                // Only shown once someone is down for the spare ticket, so the
+                // matches still going begging are the ones with nothing here.
+                match.guest.takeIf { it.isNotBlank() }?.let {
+                    Text(
+                        "Ticket: $it",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+            ResultText(match)
+        }
+    }
+}
+
+/** Today's date on this phone, as the ISO string match dates are stored in. */
+private fun todayIso(): String =
+    java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US).format(java.util.Date())
 
 /**
  * H / A / N chip. The letter carries the meaning, so the tint is reinforcement
@@ -349,6 +397,44 @@ fun MatchGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * The previous meeting with this opponent, for a fixture: result, sets, and
+ * who hurt Kansas most. The model's number sits beside a result on the floor
+ * that can say something quite different - it had Kansas at 77% at home to
+ * Utah, who swept them in November.
+ */
+@Composable
+private fun LastMeetingCard(meeting: Match, theirLines: List<OpponentStatLine>) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                "Last meeting",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                "${meetingLabel(meeting)} · ${meeting.versus} ${rankedOpponent(meeting)} · ${meeting.date}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            meeting.setScores?.let {
+                Text(
+                    "Sets: $it",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            val top = theirLines.filter { it.kills > 0 }.sortedByDescending { it.kills }.take(3)
+            if (top.isNotEmpty()) {
+                Text(
+                    "Their kills: " + top.joinToString(", ") { "${it.playerName} ${it.kills}" },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
 @Composable
 fun MatchDialog(
     match: Match?,
@@ -478,6 +564,8 @@ fun MatchDetailScreen(
     players: List<Player>,
     statLines: List<StatLine>,
     matchGoals: List<MatchGoal> = emptyList(),
+    // Every match, for the last-meeting card on a fixture.
+    matches: List<Match> = emptyList(),
     opponentStatLines: List<OpponentStatLine>,
     matchTeamStats: List<MatchTeamStats>,
     opponentRoster: List<OpponentRosterEntry>,
@@ -504,10 +592,26 @@ fun MatchDetailScreen(
         .sortedWith(compareByDescending<OpponentStatLine> { it.kills }.thenBy { it.playerName })
     val teamTotals = matchTeamStats.filter { it.matchId == match.id }.associateBy { it.opponent }
 
+    // A fixture with nothing entered yet has no stat lines to show, so the
+    // player list - a column of "Did not play" - waits for the result.
+    val showPlayerLines = match.played || matchLines.isNotEmpty()
+    val previous = if (match.played) null else lastMeeting(match, matches)
+    // What each of their players has done against Kansas, over every meeting.
+    val killsVsKu: Map<String, Int> = if (match.played) emptyMap() else {
+        val meetingIds = matches
+            .filter { it.played && sameTeam(it.opponent, match.opponent) }
+            .map { it.id }.toSet()
+        opponentStatLines.filter { it.matchId in meetingIds }
+            .groupBy { it.playerName.lowercase() }
+            .mapValues { (_, rows) -> rows.sumOf { it.kills } }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("${match.versus} ${match.opponent}") },
+                title = {
+                    Text("${match.versus} ${if (match.played) rankedOpponent(match) else match.opponent}")
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -538,6 +642,13 @@ fun MatchDetailScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
+                            if (!match.played) {
+                                Text(
+                                    kickoffLine(match),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
                             Text(
                                 "${match.date} · ${match.season} · " + when {
                                     match.neutral -> "neutral site"
@@ -574,7 +685,8 @@ fun MatchDetailScreen(
                                 else MaterialTheme.colorScheme.primary
                             )
                             Text(
-                                "Tap a player below to enter their stat line.",
+                                if (showPlayerLines) "Tap a player below to enter their stat line."
+                                else "Player stat entry opens once a result is entered.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -594,6 +706,10 @@ fun MatchDetailScreen(
             // have played so far this season if they have played at all. This is
             // the whole point of scraping their site — the NCAA has no roster
             // endpoint, so nothing else can show a line-up in advance.
+            previous?.let { last ->
+                item { LastMeetingCard(last, opponentStatLines.filter { it.matchId == last.id }) }
+            }
+
             if (match.teamSets == null) {
                 // Matched on the normalised name, not the literal one: the
                 // roster is filed under the spelling its own school uses, which
@@ -641,7 +757,9 @@ fun MatchDetailScreen(
                                         listOfNotNull(
                                             p.position.takeIf { it.isNotBlank() },
                                             p.height.takeIf { it.isNotBlank() },
-                                            form[p.playerName.lowercase()]?.let { summarize(it) }
+                                            form[p.playerName.lowercase()]?.let { summarize(it) },
+                                            killsVsKu[p.playerName.lowercase()]
+                                                ?.takeIf { it > 0 }?.let { "$it K vs KU" }
                                         ).joinToString(" · ").ifBlank { "No details published" },
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -723,7 +841,9 @@ fun MatchDetailScreen(
                 }
             }
 
-            if (players.isEmpty()) {
+            if (!showPlayerLines) {
+                // Nothing to list until the match is played.
+            } else if (players.isEmpty()) {
                 item {
                     EmptyState(
                         title = "No players on the roster",

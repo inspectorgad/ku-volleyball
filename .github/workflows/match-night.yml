@@ -1,0 +1,40 @@
+name: Match night
+
+# Started by a daytime scrape when KU plays within a few hours (see
+# scripts/match-night-watch.mjs). Waits for the match to go final and then
+# dispatches the scrape, so a result lands the same night instead of whenever
+# GitHub gets round to the overnight cron.
+run-name: match night ${{ inputs.date }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Match date, YYYY-MM-DD (Central)'
+        required: true
+
+permissions:
+  contents: read
+  actions: write
+
+# One watcher per match. Not cancelled on a repeat: the one already waiting is
+# the one that knows how long it has waited.
+concurrency:
+  group: match-night-${{ inputs.date }}
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    # The script hands over to a fresh run at 340 minutes, inside GitHub's
+    # six-hour cap, when a watch needs longer than one job allows.
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Wait for the final, then scrape
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/match-night-watch.mjs watch "${{ inputs.date }}"

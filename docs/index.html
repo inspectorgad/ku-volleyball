@@ -138,6 +138,18 @@
   #serving-sort, #natlead-pick { margin: 10px 0 12px; flex-wrap: wrap; }
   #serving th { cursor: help; }
   svg text { fill: var(--ink-3); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .move-up { color: var(--win); font-size: 11px; font-weight: 700; }
+  .move-down { color: var(--loss); font-size: 11px; font-weight: 700; }
+  .upcoming .when { display: block; color: var(--ink-3); font-size: 12px; }
+  #goals-wrap { margin-bottom: 14px; }
+  #goals-wrap .sub { color: var(--ink-3); font-size: 13px; margin: 2px 0 10px; }
+  #goal-tally tbody tr, #matches tbody tr { cursor: pointer; }
+  #goal-tally tbody tr:hover td, #goal-tally tbody tr.sel td,
+  #matches tbody tr:hover td, #matches tbody tr.sel td { background: var(--chip-bg); }
+  td.miss { color: var(--loss); }
+  #goal-match select { font: inherit; margin: 0 0 10px; padding: 3px 6px; background: var(--card); color: var(--ink); border: 1px solid var(--hairline); border-radius: 6px; }
+  .subscribe { color: var(--ku-blue); font-size: 14px; text-decoration: none; }
+  .subscribe:hover { text-decoration: underline; }
   @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -145,6 +157,10 @@
 <header>
   <h1>KU <span class="crimson">Volleyball</span></h1>
   <span class="sub">Kansas Jayhawks · Women's Volleyball</span>
+  <!-- The calendar feed is rewritten on every scrape, so a subscribed phone
+       picks up a moved first serve or a new TV slot on its own. -->
+  <a class="subscribe" id="subscribe" href="webcal://inspectorgad.github.io/ku-volleyball/ku-volleyball.ics"
+     title="Adds every remaining match to your phone's calendar, with times and TV, and keeps it updated">📅 Subscribe to the schedule</a>
 </header>
 <div class="filters" id="filters" role="group" aria-label="Season"></div>
 <div id="status">Loading season data…</div>
@@ -205,6 +221,19 @@
       <table id="matches"></table>
     </section>
   </div>
+  <div class="grid two-col" id="goals-wrap" hidden>
+    <section class="card scroll">
+      <h2>Performance goals <span class="muted">— the staff's game-by-game targets, least often met first</span></h2>
+      <div class="sub" id="goal-sub"></div>
+      <table id="goal-tally"></table>
+      <div id="goal-trend" style="margin-top:12px"></div>
+    </section>
+    <section class="card scroll" id="goal-match">
+      <h2>One match <span class="muted">— or click a row in Match results</span></h2>
+      <select id="goal-pick" aria-label="Match"></select>
+      <table id="goal-detail"></table>
+    </section>
+  </div>
   <section class="card scroll" id="scout-wrap" hidden>
     <h2>Scouting the next opponents <span class="muted">— published rosters, before the match</span></h2>
     <div class="sub" id="scout-sub"></div>
@@ -254,6 +283,41 @@ const STAT_HELP = {
   "SA/S": "Service aces per set.",
 };
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
+
+// The opponent as ranked on the night: "#4 Pittsburgh", or "(1) Nebraska" for
+// an NCAA tournament seed. Mirrors rankedOpponent() in the app's MatchFacts.kt.
+const rankedOpp = m => m.opponentRank ? `#${m.opponentRank} ${m.opponent}`
+  : m.opponentSeed ? `(${m.opponentSeed}) ${m.opponent}` : m.opponent;
+const played = m => m.teamSets != null && m.opponentSets != null;
+const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const ymd = d => { const [y, mo, da] = d.split("-").map(Number); return new Date(Date.UTC(y, mo - 1, da)); };
+// "Fri Sep 25 · 6:00 PM CT · ESPN+". The schedule lists times in Central, so
+// they are shown in Central and labelled, not converted to the reader's zone.
+function kickoff(m) {
+  const d = ymd(m.date);
+  const day = `${DAYS[d.getUTCDay()]} ${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
+  let time = "Time TBA";
+  if (m.time) {
+    const [h, mi] = m.time.split(":").map(Number);
+    time = `${(h % 12) || 12}:${String(mi).padStart(2, "0")} ${h < 12 ? "AM" : "PM"} CT`;
+  }
+  return [day, time, m.tv].filter(Boolean).join(" · ");
+}
+// The most recent played meeting with this opponent before this match.
+const lastMeeting = m => SEED.matches
+  .filter(x => played(x) && x.date < m.date && normTeam(x.opponent) === normTeam(m.opponent))
+  .at(-1) ?? null;
+const meetingLabel = x => {
+  const d = ymd(x.date);
+  return `${x.teamSets > x.opponentSets ? "W" : "L"} ${x.teamSets}-${x.opponentSets} `
+    + `(${MONTHS[d.getUTCMonth()]} '${String(d.getUTCFullYear()).slice(2)})`;
+};
+const roughPct = p => `~${Math.round(p * 100)}%`;
+const goalMet = (def, v) => v == null ? null : def.ceiling ? v <= def.target : v >= def.target;
+// Same as formatGoal() in the app: rates to three places without the leading
+// zero, everything else to two.
+const fmtGoal = (v, dec) => v == null ? "—" : dec === 3 ? fmtPct(v) : Number(v).toFixed(2);
 
 let SEED = null;
 let season = null; // null until data arrives; then latest season with results
@@ -326,6 +390,7 @@ function render() {
   renderLeaders(results, lines);
   renderPlayerTable(results, lines);
   renderMatchTable(results);
+  renderGoals(results);
   renderDetail(lines);
   renderOpponents(results);
   renderScouting();
@@ -360,6 +425,47 @@ function renderKpis(results, lines) {
   tile("Aces", String(t.sa), `${t.se} service errors`);
   // Team blocks, volleyball convention: solos + half of block assists.
   tile("Team blocks", (t.bs + t.ba / 2).toFixed(1).replace(/\.0$/, ""), `${t.bs} solo · ${t.ba} assist`);
+  if (season === "All" || !results.length) return;
+
+  // Against teams ranked on the night, and the road KU's own rank took.
+  const ranked = results.filter(m => m.opponentRank);
+  const rw = ranked.filter(m => m.teamSets > m.opponentSets).length;
+  const un = results.filter(m => !m.opponentRank);
+  const uw = un.filter(m => m.teamSets > m.opponentSets).length;
+  const path = [];
+  for (const m of results) {
+    const label = m.kuRank ? String(m.kuRank) : "NR";
+    if (path.at(-1) !== label) path.push(label);
+  }
+  const now = (SEED.polls ?? []).find(p => p.season === season)?.rows
+    .find(r => normTeam(r.team) === "kansas")?.rank;
+  const nowLabel = now ? String(now) : "NR";
+  if (path.at(-1) !== nowLabel) path.push(nowLabel);
+  tile("vs ranked", `${rw}–${ranked.length - rw}`, `unranked ${uw}–${un.length - uw} · KU rank ${path.join("→")}`);
+
+  // Where the season heads if every forecast lands at its expected value.
+  // Rounded and marked "about": summed estimates, not a promise, and no Big 12
+  // finishing place, since nobody else's remaining matches are modelled.
+  const left = SEED.matches.filter(m => m.season === season && !played(m) && m.winProbability != null);
+  if (!left.length) return;
+  const exp = left.reduce((a, m) => a + m.winProbability, 0);
+  const projW = Math.round(wins + exp), projL = results.length + left.length - projW;
+  const big12 = new Set((SEED.standings ?? []).filter(x => x.season === season).map(x => normTeam(x.team)));
+  const conf = m => big12.has(normTeam(m.opponent));
+  const cPlayed = results.filter(conf), cLeft = left.filter(conf);
+  const cw = Math.round(cPlayed.filter(m => m.teamSets > m.opponentSets).length
+    + cLeft.reduce((a, m) => a + m.winProbability, 0));
+  const cl = cPlayed.length + cLeft.length - cw;
+  const hard = left.reduce((a, m) => (m.winProbability < a.winProbability ? m : a));
+  const easy = left.reduce((a, m) => (m.winProbability > a.winProbability ? m : a));
+  const pre = left.filter(m => m.ratingSource === "preseason").length;
+  const note = [
+    big12.size && (cw + cl) ? `about ${cw}–${cl} Big 12` : "",
+    `toughest: ${siteWord(hard)} ${hard.opponent} ${roughPct(hard.winProbability)}`,
+    easy !== hard ? `easiest: ${siteWord(easy)} ${easy.opponent} ${roughPct(easy.winProbability)}` : "",
+    pre ? `${pre} of ${left.length} forecasts use preseason ratings` : "",
+  ].filter(Boolean).join(" · ");
+  tile("Projected", `~${projW}–${projL}`, note);
 }
 
 function matchPct(m) {
@@ -447,7 +553,9 @@ function renderUpcoming(upcoming) {
   ul.appendChild(el("li", null)).append(el("strong", null, "Upcoming"));
   for (const m of upcoming.slice(0, 10)) {
     const li = el("li");
-    li.appendChild(el("span", null, `${siteWord(m)} ${m.opponent}`));
+    const who = el("span", null, `${siteWord(m)} ${m.opponent}`);
+    who.appendChild(el("span", "when", kickoff(m)));
+    li.appendChild(who);
     // The win model's estimate, where there is a rating for the opponent. An
     // estimate from subjective power ratings, not a betting line - nobody posts
     // odds on college volleyball - so it is labelled and coloured by the
@@ -463,7 +571,6 @@ function renderUpcoming(upcoming) {
         + "; the rest from preseason estimates.";
       li.appendChild(s);
     }
-    li.appendChild(el("span", "d", m.date));
     ul.appendChild(li);
   }
 }
@@ -653,7 +760,16 @@ function renderMatchTable(results) {
   for (const m of [...results].reverse()) {
     const r = body.insertRow();
     r.insertCell().textContent = m.date;
-    r.insertCell().textContent = `${siteWord(m)} ${m.opponent}`;
+    r.insertCell().textContent = `${siteWord(m)} ${rankedOpp(m)}`;
+    if (m.goals) {
+      r.tabIndex = 0;
+      r.title = "Show this match's performance goals";
+      const pick = () => { goalMatchKey = m.date + "|" + m.opponent; renderGoals(slice().results);
+        document.getElementById("goals-wrap").scrollIntoView({ behavior: "smooth", block: "nearest" }); };
+      r.onclick = pick;
+      r.onkeydown = ev => { if (ev.key === "Enter") pick(); };
+      if (goalMatchKey === m.date + "|" + m.opponent) r.className = "sel";
+    }
     const site = r.insertCell();
     site.appendChild(el("span", "sitechip", siteLetter(m)));
     site.title = siteTitle(m);
@@ -681,6 +797,122 @@ function renderMatchTable(results) {
       gc.textContent = tc.textContent = "";
     }
   }
+}
+
+// --- Performance goals: season tally, trend, and one match's breakdown -------
+// The same as the app's Leaders card and match detail: which of the staff's
+// targets KU meet, how often, and how the number has moved match to match.
+let goalMatchKey = null; // "date|opponent" of the match whose goals are open
+let goalTrendIdx = null; // index into goalDefinitions for the trend chart
+
+function renderGoals(results) {
+  const wrap = document.getElementById("goals-wrap");
+  const defs = SEED.goalDefinitions ?? [];
+  const withGoals = results.filter(m => m.goals && (m.goals.values ?? []).length === defs.length);
+  wrap.hidden = !defs.length || !withGoals.length;
+  if (wrap.hidden) return;
+
+  // Season tally, least often met first so the targets out of reach lead.
+  const rows = defs.map((d, i) => {
+    const vals = withGoals.map(m => m.goals.values[i]);
+    const judged = vals.filter(v => v != null);
+    return { d, i, met: judged.filter(v => goalMet(d, v)).length, of: judged.length,
+      avg: judged.length ? judged.reduce((a, v) => a + v, 0) / judged.length : null };
+  }).filter(r => r.of).sort((a, b) => a.met / a.of - b.met / b.of || a.d.name.localeCompare(b.d.name));
+  const avgMet = withGoals.reduce((a, m) => a + m.goals.met, 0) / withGoals.length;
+  document.getElementById("goal-sub").textContent =
+    `${withGoals.length} matches · ${avgMet.toFixed(1)} of ${defs.length} met on average · click a goal for its trend`;
+  const t = document.getElementById("goal-tally");
+  t.replaceChildren();
+  const head = t.createTHead().insertRow();
+  for (const h of ["Goal", "Target", "Met", "Season avg"]) head.appendChild(el("th", null, h));
+  const body = t.createTBody();
+  if (goalTrendIdx == null || !rows.some(r => r.i === goalTrendIdx)) goalTrendIdx = rows[0].i;
+  for (const r of rows) {
+    const tr = body.insertRow();
+    tr.tabIndex = 0;
+    if (r.i === goalTrendIdx) tr.className = "sel";
+    tr.insertCell().textContent = r.d.name;
+    tr.insertCell().textContent = (r.d.ceiling ? "≤ " : "") + fmtGoal(r.d.target, r.d.decimals);
+    tr.insertCell().textContent = `${r.met}/${r.of}`;
+    const a = tr.insertCell();
+    a.textContent = fmtGoal(r.avg, r.d.decimals);
+    if (goalMet(r.d, r.avg) === false) a.className = "miss";
+    const pick = () => { goalTrendIdx = r.i; renderGoals(results); };
+    tr.onclick = pick;
+    tr.onkeydown = ev => { if (ev.key === "Enter") pick(); };
+  }
+  renderGoalTrend(defs[goalTrendIdx], withGoals.map(m => ({ m, v: m.goals.values[goalTrendIdx] })).filter(p => p.v != null));
+
+  // One match: picker plus the breakdown, black for met and red for missed as
+  // on the staff's sheet, with the target beside every number.
+  const sel = document.getElementById("goal-pick");
+  sel.replaceChildren();
+  const keyOf = m => m.date + "|" + m.opponent;
+  if (!goalMatchKey || !withGoals.some(m => keyOf(m) === goalMatchKey)) goalMatchKey = keyOf(withGoals.at(-1));
+  for (const m of [...withGoals].reverse()) {
+    const o = el("option", null, `${m.date} ${siteWord(m)} ${rankedOpp(m)} — ${m.goals.met}/${m.goals.evaluated}`);
+    o.value = keyOf(m);
+    o.selected = o.value === goalMatchKey;
+    sel.appendChild(o);
+  }
+  sel.onchange = () => { goalMatchKey = sel.value; renderGoals(results); renderMatchTable(results); };
+  const m = withGoals.find(x => keyOf(x) === goalMatchKey);
+  const dt = document.getElementById("goal-detail");
+  dt.replaceChildren();
+  const dh = dt.createTHead().insertRow();
+  for (const h of ["Goal", "Who", "Target", "Actual"]) dh.appendChild(el("th", null, h));
+  const db = dt.createTBody();
+  defs.forEach((d, i) => {
+    const v = m.goals.values[i];
+    const tr = db.insertRow();
+    const met = goalMet(d, v);
+    const n = tr.insertCell(); n.textContent = d.name; if (met === false) n.className = "miss";
+    const who = tr.insertCell(); who.textContent = d.role ? (m.goals.roles?.[d.role] ?? "") : "";
+    who.style.color = "var(--ink-3)";
+    tr.insertCell().textContent = (d.ceiling ? "≤ " : "") + fmtGoal(d.target, d.decimals);
+    const a = tr.insertCell(); a.textContent = fmtGoal(v, d.decimals); a.style.fontWeight = "700";
+    if (met === false) a.className = "miss";
+  });
+}
+
+// One goal across the season: the value each match with the target as a
+// dashed line, the same picture as the app's GoalTrendChart.
+function renderGoalTrend(def, pts) {
+  const host = document.getElementById("goal-trend");
+  host.replaceChildren();
+  if (!def || pts.length < 2) return;
+  host.appendChild(el("div", "sub", `${def.name} by match · target ${def.ceiling ? "≤ " : ""}${fmtGoal(def.target, def.decimals)}`));
+  const W = Math.max(host.clientWidth || 520, 300), H = 170;
+  const pad = { l: 44, r: 12, t: 10, b: 18 };
+  const vals = pts.map(p => p.v).concat(def.target);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi === lo) { hi += 1; lo -= 1; }
+  const span = hi - lo; lo -= span * 0.08; hi += span * 0.08;
+  const x = j => pad.l + (j / (pts.length - 1)) * (W - pad.l - pad.r);
+  const y = v => pad.t + (1 - (v - lo) / (hi - lo)) * (H - pad.t - pad.b);
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", `${def.name} by match`);
+  const add = (name, attrs) => { const n = document.createElementNS(svgNS, name); for (const k in attrs) n.setAttribute(k, attrs[k]); svg.appendChild(n); return n; };
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  for (const v of [lo + (hi - lo) * 0.1, (lo + hi) / 2, hi - (hi - lo) * 0.1]) {
+    add("line", { x1: pad.l, x2: W - pad.r, y1: y(v), y2: y(v), stroke: css("--hairline") });
+    add("text", { x: pad.l - 6, y: y(v) + 4, "text-anchor": "end" }).textContent = fmtGoal(v, def.decimals);
+  }
+  add("line", { x1: pad.l, x2: W - pad.r, y1: y(def.target), y2: y(def.target), stroke: css("--ink-3"), "stroke-dasharray": "5 4" });
+  add("path", { d: pts.map((p, j) => `${j ? "L" : "M"}${x(j)},${y(p.v)}`).join(""), fill: "none", stroke: css("--ku-blue"), "stroke-width": 2, "stroke-linejoin": "round" });
+  pts.forEach((p, j) => {
+    const met = goalMet(def, p.v);
+    const c = add("circle", { cx: x(j), cy: y(p.v), r: 4.5, fill: met ? css("--ku-blue") : css("--loss"), stroke: css("--card"), "stroke-width": 2 });
+    const tip = `${p.m.date} ${siteWord(p.m)} ${p.m.opponent}`;
+    c.addEventListener("pointermove", ev => showTip(ev.clientX, ev.clientY, tip, fmtGoal(p.v, def.decimals), met ? "met" : "missed"));
+    c.addEventListener("pointerleave", hideTip);
+  });
+  host.appendChild(svg);
 }
 
 // --- Scouting: rosters for matches not yet played -----------------------------
@@ -728,12 +960,31 @@ function renderScouting() {
     h.style.cssText = "cursor:pointer;font-weight:600;margin:8px 0 2px";
     box.appendChild(h);
     host.appendChild(box);
-    const when = el("div", "sub", match.date + (f ? ` · ${f.matches} matches played this season` : " · no matches played yet"));
+    const when = el("div", "sub", kickoff(match) + (f ? ` · ${f.matches} matches played this season` : " · no matches played yet"));
     box.appendChild(when);
+    // The last time these two met. The model's number can say something quite
+    // different: it had KU at 77% at home to Utah, who swept them in November.
+    const last = lastMeeting(match);
+    if (last) {
+      const top = (last.opponentLines ?? []).filter(l => l.k > 0).sort((a, b) => b.k - a.k).slice(0, 3);
+      box.appendChild(el("div", "sub", `Last met: ${meetingLabel(last)} ${siteWord(last)} ${rankedOpp(last)}`
+        + (last.setScores ? ` · ${last.setScores}` : "")
+        + (top.length ? ` · their kills: ${top.map(l => `${l.player} ${l.k}`).join(", ")}` : "")));
+    }
+    // Kills against Kansas over every meeting, per player.
+    const vsKu = new Map();
+    for (const x of SEED.matches) {
+      if (!played(x) || normTeam(x.opponent) !== normTeam(match.opponent)) continue;
+      for (const l of x.opponentLines ?? []) {
+        const k = l.player.toLowerCase();
+        vsKu.set(k, (vsKu.get(k) ?? 0) + (l.k ?? 0));
+      }
+    }
+    const hasVs = [...vsKu.values()].some(v => v > 0);
 
     const t = el("table");
     const head = t.createTHead().insertRow();
-    for (const c of ["#", "Player", "Pos", "Ht", f ? "K" : "", f ? "PCT" : "", f ? "D" : ""].filter(Boolean)) {
+    for (const c of ["#", "Player", "Pos", "Ht", f ? "K" : "", f ? "PCT" : "", f ? "D" : "", hasVs ? "K vs KU" : ""].filter(Boolean)) {
       const th = head.appendChild(el("th", null, c));
       // The name column is left-aligned, so its header has to be too.
       if (c === "Player") th.style.textAlign = "left";
@@ -757,6 +1008,7 @@ function renderScouting() {
         r.insertCell().textContent = pct === null ? "—" : fmtPct(pct);
         r.insertCell().textContent = s ? s.d : "—";
       }
+      if (hasVs) r.insertCell().textContent = vsKu.get(p.player.toLowerCase()) || "—";
     }
     box.appendChild(t);
   });
@@ -936,7 +1188,7 @@ function renderBig12() {
     : "";
   if (!poll) return;
   const ph = pt.createTHead().insertRow();
-  for (const h of ["#", "Team", "Record", "Pts"]) {
+  for (const h of ["#", "", "Team", "Record", "Pts"]) {
     const th = el("th", null, h);
     if (h === "Team") th.style.textAlign = "left";
     ph.appendChild(th);
@@ -948,6 +1200,16 @@ function renderBig12() {
     // with it, so in a poll holding six of them KU could not be picked out.
     if (normTeam(r.team) === "kansas") tr.className = "ku";
     tr.insertCell().textContent = r.rankLabel ?? String(r.rank);
+    // Week-on-week movement; the arrow carries it and the colour reinforces.
+    const mv = tr.insertCell();
+    const before = parseInt(r.previous, 10);
+    if (!Number.isNaN(before) && before !== r.rank) {
+      const up = before > r.rank;
+      mv.appendChild(el("span", up ? "move-up" : "move-down", `${up ? "▲" : "▼"}${Math.abs(before - r.rank)}`));
+      mv.title = `Previous: ${before}`;
+    } else if (r.previous && Number.isNaN(before)) {
+      mv.appendChild(el("span", "move-up", "NEW"));
+    }
     const name = tr.insertCell();
     name.style.textAlign = "left";
     name.append(document.createTextNode(

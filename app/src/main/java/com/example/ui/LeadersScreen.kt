@@ -27,11 +27,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.data.ConferenceStanding
 import com.example.data.Match
 import com.example.data.MatchGoal
 import com.example.data.NationalLeader
 import com.example.data.Player
+import com.example.data.PollEntry
 import com.example.data.StatLine
+import com.example.data.normTeam
+import com.example.data.sameTeam
 import com.example.stats.VolleyballTotals
 import com.example.stats.aggregate
 import com.example.stats.formatAverage
@@ -52,7 +56,10 @@ fun LeadersScreen(
     modifier: Modifier = Modifier,
     dataUpdatedAt: String? = null,
     lastCheckedMs: Long = 0,
-    syncFailure: String? = null
+    syncFailure: String? = null,
+    // For the ranked split, the rank history and the season outlook.
+    pollEntries: List<PollEntry> = emptyList(),
+    standings: List<ConferenceStanding> = emptyList()
 ) {
     // Seasons ordered most recent first; default selection is the current (latest) season.
     val seasons = matches.sortedByDescending { it.date }.map { it.season }.distinct()
@@ -131,6 +138,32 @@ fun LeadersScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        if (season != ALL_SEASONS) {
+                            val split = rankedSplit(matches, season)
+                            val path = rankPath(
+                                matches, season,
+                                pollEntries.firstOrNull { it.season == season && sameTeam(it.team, "Kansas") }?.rank
+                            )
+                            val parts = listOfNotNull(
+                                "vs ranked ${split.rankedW}-${split.rankedL}",
+                                "unranked ${split.unrankedW}-${split.unrankedL}",
+                                path.takeIf { it.size > 0 }?.let { "KU rank " + it.joinToString("→") }
+                            )
+                            Text(
+                                parts.joinToString(" · "),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            val big12 = standings.filter { it.season == season }
+                                .map { normTeam(it.team) }.toSet()
+                            seasonOutlook(matches, season, big12)?.let {
+                                Text(
+                                    outlookLine(it),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                         // Always shown, and measured from the last time a feed
                         // answered rather than from the file's own date: the
                         // file is only rewritten when something changes, so a

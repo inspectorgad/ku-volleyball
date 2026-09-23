@@ -416,6 +416,22 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         "lines": [],
         "opponentLines": [],
     }
+    # Each side's national rank at first serve, as the NCAA printed it on the
+    # contest. Read from the team found BY NAME (ku/opp), not from ours_team/
+    # theirs_team: when a contest comes back crossed, its scores and home flag
+    # are crossed but its ranks are not. Florida State's is the proof - the
+    # "Kansas" entry carries score 3 (KU lost 2-3) and rank 16, which was KU's
+    # rank that week (#16 at Lipscomb the day before). Taking the un-crossed
+    # side filed KU's own #16 as Florida State's and scored the match a loss to
+    # a ranked team. NCAA tournament games print a bracket seed instead of a
+    # rank; the seed is kept for the card, and the rank is filled in below from
+    # that season's poll so the ranked/unranked record still counts them.
+    for side, team in (("ku", ku), ("opponent", opp)):
+        rank, seed = to_int(team.get("teamRank")), to_int(team.get("seed"))
+        if rank:
+            match[f"{side}Rank"] = rank
+        if seed:
+            match[f"{side}Seed"] = seed
 
     # Position and serve-receive load are what the goal roles are read from, and
     # neither survives into the stat line, so they are kept aside here.
@@ -548,7 +564,10 @@ for entry in load_json("scraped/upcoming.json", []):
         # kuathletics writes "versus" for home and "at" for road games.
         "home": bool(entry.get("home")),
     }
-    for field in ("venue", "city"):
+    # Start time (24-hour, Central, as kuathletics lists it) and broadcast, when
+    # the schedule gives them. Late-season fixtures often have no time yet, and
+    # they get none here rather than a guess.
+    for field in ("venue", "city", "time", "tv"):
         if entry.get(field):
             fixture[field] = entry[field]
     # "versus" only means KU is the designated home team, which at an early-season
@@ -799,6 +818,22 @@ if avca.get("data") and avca_season:
         )
 
 polls = [polls_by_season[s] for s in sorted(polls_by_season)]
+
+# Tournament games print a seed and no rank, so their ranks come from that
+# season's poll as captured - for a finished season, its final poll. That poll
+# postdates the tournament, so it is the nearest thing on disk rather than the
+# rank at first serve; it is used only to count the ranked/unranked record, and
+# the card still shows the seed the NCAA printed.
+for match in matches.values():
+    season_poll = polls_by_season.get(match.get("season"))
+    if not season_poll:
+        continue
+    ranks = {norm_team(r.get("team", "")): to_int(r.get("rank")) for r in season_poll.get("rows", [])}
+    for side, name in (("ku", "Kansas"), ("opponent", match.get("opponent", ""))):
+        if match.get(f"{side}Seed") and not match.get(f"{side}Rank"):
+            rank = ranks.get(norm_team(name))
+            if rank:
+                match[f"{side}Rank"] = rank
 
 # The poll is the authoritative ranking. The scoreboard's per-game rank is only
 # "the rank this team carried in that game", so a team that fell out of the top
@@ -1175,7 +1210,7 @@ if teams_rated or poll_rating:
     for match in matches.values():
         if match.get("teamSets") is not None or match.get("opponentSets") is not None:
             continue
-        opponent_rating, _ = rating_for(match["opponent"])
+        opponent_rating, opponent_source = rating_for(match["opponent"])
         if opponent_rating is None:
             unrated += 1
             continue
@@ -1187,6 +1222,9 @@ if teams_rated or poll_rating:
             venue = ratings.get("roadAdjustment", 0)
         gap = ku_rating + venue - opponent_rating
         match["winProbability"] = round(1 / (1 + 10 ** (-gap / scale)), 4)
+        # Said per match so a screen can own up to how many of its forecasts
+        # still rest on a rating set by hand before the season.
+        match["ratingSource"] = "poll" if opponent_source == "poll" else "preseason"
         forecast += 1
     from_poll = sum(
         1 for m in matches.values()
@@ -1325,3 +1363,27 @@ else:
         f"{len(seed['matches'])} matches "
         f"({sum(1 for m in seed['matches'] if 'teamSets' in m)} with results)"
     )
+
+# --- Calendar feed for iPhones -------------------------------------------------
+# Written beside the dashboard so GitHub Pages serves it, and rewritten only when
+# a match changed: the DTSTAMP alone moving is not worth a commit.
+from ics_feed import build_ics, same_apart_from_stamp  # noqa: E402
+
+ICS_PATH = "docs/ku-volleyball.ics"
+latest_season = max((m["season"] for m in seed["matches"]), default=None)
+if latest_season:
+    ics = build_ics([m for m in seed["matches"] if m["season"] == latest_season],
+                    datetime.now(timezone.utc))
+    try:
+        with open(ICS_PATH, newline="") as f:
+            old_ics = f.read()
+    except FileNotFoundError:
+        old_ics = None
+    if same_apart_from_stamp(ics, old_ics):
+        print("calendar unchanged; not rewriting")
+    else:
+        os.makedirs(os.path.dirname(ICS_PATH), exist_ok=True)
+        with open(ICS_PATH, "w", newline="") as f:
+            f.write(ics)
+        n = sum(1 for m in seed["matches"] if m["season"] == latest_season)
+        print(f"calendar written: {n} {latest_season} matches to {ICS_PATH}")

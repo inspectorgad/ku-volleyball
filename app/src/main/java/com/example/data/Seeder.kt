@@ -158,6 +158,17 @@ object Seeder {
             val seedWinProbability =
                 if (m.has("winProbability")) m.getDouble("winProbability") else null
 
+            // Ranks, seeds, first serve and TV are all the feed's to say, so a
+            // sync always wins - a time moved by the conference lands tonight.
+            fun optIntOrNull(key: String) = if (m.has(key)) m.getInt(key) else null
+            val seedRatingSource = m.optString("ratingSource").takeIf { it.isNotBlank() }
+            val seedKuRank = optIntOrNull("kuRank")
+            val seedOpponentRank = optIntOrNull("opponentRank")
+            val seedKuSeed = optIntOrNull("kuSeed")
+            val seedOpponentSeed = optIntOrNull("opponentSeed")
+            val seedTime = m.optString("time")
+            val seedTv = m.optString("tv")
+
             val seedHome = if (m.has("home")) m.getBoolean("home") else null
             val seedNeutral = m.optBoolean("neutral")
             val seedVenue = m.optString("venue")
@@ -182,7 +193,14 @@ object Seeder {
                         goalsEvaluated = seedGoals?.optInt("evaluated"),
                         teamGoalsMet = seedGoals?.optInt("teamMet"),
                         teamGoalsEvaluated = seedGoals?.optInt("teamEvaluated"),
-                        winProbability = seedWinProbability
+                        winProbability = seedWinProbability,
+                        ratingSource = seedRatingSource,
+                        kuRank = seedKuRank,
+                        opponentRank = seedOpponentRank,
+                        kuSeed = seedKuSeed,
+                        opponentSeed = seedOpponentSeed,
+                        time = seedTime,
+                        tv = seedTv
                     )
                 )
             } else {
@@ -224,7 +242,14 @@ object Seeder {
                     // moment a match is played, and that dropping is the point.
                     // Keeping the last one would leave an estimate sitting
                     // beside a final score.
-                    winProbability = seedWinProbability
+                    winProbability = seedWinProbability,
+                    ratingSource = seedRatingSource,
+                    kuRank = seedKuRank,
+                    opponentRank = seedOpponentRank,
+                    kuSeed = seedKuSeed,
+                    opponentSeed = seedOpponentSeed,
+                    time = seedTime,
+                    tv = seedTv
                 )
                 if (updated != existing) dao.updateMatch(updated)
             }

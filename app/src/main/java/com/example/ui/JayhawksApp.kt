@@ -95,6 +95,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
             players = players,
             statLines = statLines,
             matchGoals = matchGoals.filter { it.matchId == openMatch.id },
+            matches = matches,
             opponentStatLines = opponentStatLines,
             matchTeamStats = matchTeamStats,
             opponentRoster = opponentRoster,
@@ -175,7 +176,9 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                         matchGoals = matchGoals,
                         dataUpdatedAt = dataUpdatedAt,
                         lastCheckedMs = lastCheckedMs,
-                        syncFailure = syncFailure
+                        syncFailure = syncFailure,
+                        pollEntries = pollEntries,
+                        standings = standings
                     )
 
                     Tab.Serving -> ServingScreen(
