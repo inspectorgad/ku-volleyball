@@ -8604,6 +8604,27 @@
    },
    "conferenceGame": false
   },
+  "6626751": {
+   "date": "2026-09-22",
+   "season": "2026",
+   "home": {
+    "name": "UTEP",
+    "seo": "utep",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": false
+   },
+   "away": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": false
+  },
   "6626846": {
    "date": "2026-08-28",
    "season": "2026",
@@ -11647,6 +11668,14 @@
    "season": "2026",
    "teams": [
     "TCU"
+   ],
+   "boxscored": true
+  },
+  "6626751": {
+   "date": "2026-09-22",
+   "season": "2026",
+   "teams": [
+    "Arizona"
    ],
    "boxscored": true
   },
