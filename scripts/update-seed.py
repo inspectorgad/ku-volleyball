@@ -164,6 +164,20 @@ TEAM_GOALS = [
     ("Opp hit %", 0.18, False, lambda k, o, s: div(o["k"] - o["e"], o["ta"])),
     ("Ace:error", 0.75, True, lambda k, o, s: div(k["sa"], k["se"])),
     ("Digs/set", 15.5, True, lambda k, o, s: div(k["d"], s)),
+    # The same defence, measured against the work it was given rather than
+    # against the clock. Digs per set punishes winning quickly: the 3-0s over
+    # Ole Miss and Grand Canyon sit lowest on it, and in those matches the
+    # opponent swung 23.7 and 25.0 times a set against Florida State's 34.8.
+    # On this measure Ole Miss's 8.33 becomes .352, ahead of Pittsburgh's .333
+    # that showed as a healthy 11.00 per set.
+    #
+    # The target is not a translation of the 15.5 - dividing that by a typical
+    # 30 attacks a set gives .510, which this team has never reached and which
+    # would reproduce the very problem this row exists to show. It is set where
+    # the rest of the sheet sits: met five times in ten this season and 60% of
+    # the 45 matches on record, between the 2026 median of .388 and 2025's .427.
+    # It is a coaching number, so change it if the staff want it harder.
+    ("Digs/opp attack", 0.40, True, lambda k, o, s: div(k["d"], o["ta"])),
     ("Kill %", 0.42, True, lambda k, o, s: div(k["k"], k["ta"])),
 ]
 
