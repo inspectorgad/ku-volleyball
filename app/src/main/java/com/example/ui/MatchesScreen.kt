@@ -47,6 +47,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.Match
+import com.example.data.MatchGoal
 import com.example.data.MatchTeamStats
 import com.example.data.OpponentRosterEntry
 import com.example.data.OpponentSeasonStat
@@ -271,6 +272,91 @@ private fun GoalsLine(match: Match) {
     )
 }
 
+/** Formats a goal's number the way the staff's own sheet writes it. */
+private fun goalValue(v: Double?, decimals: Int): String = when {
+    v == null -> "—"
+    // A hitting percentage is written .362, without the leading zero.
+    decimals == 3 -> String.format(java.util.Locale.US, "%.3f", v).removePrefix("0")
+    else -> String.format(java.util.Locale.US, "%.2f", v)
+}
+
+/**
+ * The staff's performance goals for one match: target, actual, met or missed.
+ *
+ * Black for met and red for missed is the sheet's own convention, kept because
+ * it is what the staff already read. Colour is not the only signal though - the
+ * target sits beside every number, so the verdict is legible without it.
+ *
+ * The team goals come first and the per-role ones after, in the sheet's order
+ * rather than sorted by anything, so a row is where the staff expect it to be.
+ */
+@Composable
+fun MatchGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
+    val met = goals.count { it.met == true }
+    val evaluated = goals.count { it.met != null }
+    if (evaluated == 0) return
+    val teamGoals = goals.filter { it.goalGroup == "team" }
+    val teamMet = teamGoals.count { it.met == true }
+
+    Card(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                "Performance goals",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                "$met of $evaluated met · team ${teamMet} of ${teamGoals.count { it.met != null }}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            goals.sortedBy { it.idx }.forEach { goal ->
+                val missed = goal.met == false
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 3.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            goal.name,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = if (missed) MaterialTheme.colorScheme.error
+                            else MaterialTheme.colorScheme.onSurface
+                        )
+                        // Whose number it was, for the goals that belong to
+                        // whoever filled the role that night.
+                        goal.player.takeIf { it.isNotBlank() }?.let {
+                            Text(
+                                it,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    Text(
+                        // "at most" for the two goals where the target is a
+                        // ceiling, so a low number does not read as a failure.
+                        (if (goal.ceiling) "≤ " else "") + goalValue(goal.target, goal.decimals),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(end = 12.dp)
+                    )
+                    Text(
+                        goalValue(goal.value, goal.decimals),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (missed) MaterialTheme.colorScheme.error
+                        else MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Composable
 fun MatchDialog(
     match: Match?,
@@ -399,6 +485,7 @@ fun MatchDetailScreen(
     match: Match,
     players: List<Player>,
     statLines: List<StatLine>,
+    matchGoals: List<MatchGoal> = emptyList(),
     opponentStatLines: List<OpponentStatLine>,
     matchTeamStats: List<MatchTeamStats>,
     opponentRoster: List<OpponentRosterEntry>,
@@ -500,6 +587,12 @@ fun MatchDetailScreen(
                         ResultText(match)
                     }
                 }
+            }
+
+            // After the match: what was asked of the team that night and what
+            // they did, which is the question the result does not answer.
+            if (matchGoals.isNotEmpty()) {
+                item { MatchGoalsCard(matchGoals) }
             }
 
             // Before the match: the opponent's published roster, and how they

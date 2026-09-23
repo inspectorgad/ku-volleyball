@@ -12,8 +12,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         ConferenceStanding::class, PollEntry::class,
         OpponentStatLine::class, MatchTeamStats::class,
         OpponentRosterEntry::class, OpponentSeasonStat::class,
-        TeamServing::class, NationalLeader::class],
-    version = 11,
+        TeamServing::class, NationalLeader::class, MatchGoal::class],
+    version = 12,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -205,6 +205,25 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        // v11 -> v12: the staff's performance goals, one row per goal per
+        // match. Scraper-owned and rebuilt from the feed, so it starts empty
+        // and the next sync fills every played match at once.
+        private val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS match_goals (
+                        matchId INTEGER NOT NULL, idx INTEGER NOT NULL,
+                        name TEXT NOT NULL, goalGroup TEXT NOT NULL,
+                        target REAL NOT NULL, value REAL,
+                        decimals INTEGER NOT NULL, ceiling INTEGER NOT NULL,
+                        role TEXT NOT NULL, player TEXT NOT NULL,
+                        PRIMARY KEY(matchId, idx),
+                        FOREIGN KEY(matchId) REFERENCES matches(id) ON DELETE CASCADE)"""
+                )
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_match_goals_matchId ON match_goals(matchId)")
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
@@ -214,7 +233,7 @@ abstract class JayhawksDatabase : RoomDatabase() {
                 ).addMigrations(
                     MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6,
                     MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10,
-                    MIGRATION_10_11
+                    MIGRATION_10_11, MIGRATION_11_12
                 ).build().also { instance = it }
             }
     }

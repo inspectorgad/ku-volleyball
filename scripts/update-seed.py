@@ -177,6 +177,23 @@ ROLE_GOALS = [
 ]
 
 
+def DECIMALS_FOR(name):
+    """Per-set counts read as 21.33; everything else is a percentage, .362."""
+    return 2 if "/set" in name or name == "Ace:error" else 3
+
+
+# The goals themselves, published once at the top of the seed instead of
+# repeated on all 45 matches - the names and targets are the same every night,
+# and only the numbers underneath them change. A match carries a bare list of
+# values in this order, so the two must not be sorted or filtered apart.
+GOAL_DEFINITIONS = (
+    [{"name": n, "group": "team", "target": t, "decimals": DECIMALS_FOR(n),
+      "ceiling": not higher} for n, t, higher, _ in TEAM_GOALS]
+    + [{"name": f"{role} {kind} %", "group": "role", "role": role, "target": t,
+        "decimals": 3, "ceiling": False} for role, kind, t in ROLE_GOALS]
+)
+
+
 def match_roles(players):
     """Who filled each tracker role in this match, read from that match's box score.
 
@@ -198,13 +215,26 @@ def match_roles(players):
 
 
 def evaluate_goals(ku, opp, sets, players):
-    """How many of the match's goals KU met, counted overall and team-only."""
+    """Every goal of the match, with the number behind it, plus the counts.
+
+    Each goal is published rather than only the tally, because the tally alone
+    says a match went 16 out of 22 without saying which two thirds. The app
+    cannot work the rest out for itself: assigning the roles needs each player's
+    position and serve-receive load, and neither survives into the stat lines.
+
+    'decimals' travels with the value so a rate reads 21.33 and a percentage
+    .362, the way the staff's own sheet writes them. 'ceiling' marks the two
+    goals where lower is better, so a screen can say "at or below" rather than
+    implying the target was a floor that got missed.
+    """
     if not ku or not opp or not sets:
         return None
     roles = match_roles(players)
+    values = []
     met = evaluated = team_met = team_evaluated = 0
-    for _, target, higher, value_of in TEAM_GOALS:
+    for name, target, higher, value_of in TEAM_GOALS:
         value = value_of(ku, opp, sets)
+        values.append(None if value is None else round(value, DECIMALS_FOR(name)))
         if value is None:
             continue
         ok = int(value >= target if higher else value <= target)
@@ -213,6 +243,7 @@ def evaluate_goals(ku, opp, sets, players):
     for role, kind, target in ROLE_GOALS:
         p = roles.get(role)
         value = None if not p else div(p["k"] if kind == "kill" else p["k"] - p["e"], p["ta"])
+        values.append(None if value is None else round(value, 3))
         if value is None:
             continue
         evaluated, met = evaluated + 1, met + int(value >= target)
@@ -223,6 +254,14 @@ def evaluate_goals(ku, opp, sets, players):
         "evaluated": evaluated,
         "teamMet": team_met,
         "teamEvaluated": team_evaluated,
+        # One number per goal, in GOAL_DEFINITIONS order, null where the match
+        # gave the goal nothing to measure. Whether a goal was met is not stored
+        # beside it: that is the value against the target, and a stored copy is
+        # a second answer to a question that already has one.
+        "values": values,
+        # Who filled each role in this match, so a screen can say whose .158 it
+        # was. Only the roles somebody actually filled.
+        "roles": {r: p["name"] for r, p in roles.items() if p and p.get("name")},
     }
 
 
@@ -368,6 +407,7 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
                 add_player(name, str(p.get("number") or ""), p.get("position") or "")
                 match["lines"].append({"player": name, **line})
                 ku_players.append({
+                    "name": name,
                     "pos": (p.get("position") or "").strip(),
                     "rcp": to_int(p.get("receptionAttempts")),
                     **line,
@@ -1084,6 +1124,9 @@ seed = {
     "players": sorted(players.values(), key=lambda p: p["name"]),
     "matches": [matches[k] for k in sorted(matches)],
 }
+# Only worth publishing if some match actually carries values against them.
+if any(m.get("goals") for m in matches.values()):
+    seed["goalDefinitions"] = GOAL_DEFINITIONS
 # --- National individual leaders -------------------------------------------
 # The NCAA's own top 50 per category, across all of Division I. Worth carrying
 # because our box scores cannot produce it: we capture 34 teams in full, so a

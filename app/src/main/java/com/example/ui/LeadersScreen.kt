@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.Match
+import com.example.data.MatchGoal
 import com.example.data.NationalLeader
 import com.example.data.Player
 import com.example.data.StatLine
@@ -46,6 +47,7 @@ fun LeadersScreen(
     matches: List<Match>,
     statLines: List<StatLine>,
     nationalLeaders: List<NationalLeader> = emptyList(),
+    matchGoals: List<MatchGoal> = emptyList(),
     modifier: Modifier = Modifier,
     dataUpdatedAt: String? = null
 ) {
@@ -199,6 +201,14 @@ fun LeadersScreen(
                 )
             }
 
+            // How often each goal is met over the season, which one match
+            // cannot show: a target missed once is a bad night, a target missed
+            // every time is a target worth arguing about.
+            val seasonGoals = matchGoals.filter { it.matchId in seasonMatchIds }
+            if (seasonGoals.isNotEmpty()) {
+                item { SeasonGoalsCard(seasonGoals, modifier = Modifier.padding(top = 8.dp)) }
+            }
+
             // The boards above rank the Jayhawks against each other. This one
             // ranks them against the country, which our own box scores cannot
             // do: we hold 34 teams and whoever they play, not all of Division I.
@@ -216,6 +226,87 @@ fun LeadersScreen(
             // Under the boards, same as on the Serving screen: a reference is
             // looked up after something on the way down raised the question.
             item { StatGlossaryCard(modifier = Modifier.padding(top = 8.dp)) }
+        }
+    }
+}
+
+/**
+ * How often each performance goal was met across the season.
+ *
+ * A match card says a night went sixteen out of twenty-two. This says which
+ * goals keep going missing, which is the only way to tell a bad night from a
+ * target nobody can reach: KU have met the 15.5 digs-per-set goal in none of
+ * their ten matches, and their best night all season was 15.00.
+ *
+ * Ordered worst-first, because the rows worth reading are at that end.
+ */
+@Composable
+fun SeasonGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
+    data class Tally(val name: String, val target: Double, val decimals: Int,
+                     val ceiling: Boolean, val met: Int, val of: Int)
+
+    val tallies = goals
+        .filter { it.met != null }
+        .groupBy { it.idx }
+        .values
+        .mapNotNull { rows ->
+            val first = rows.first()
+            Tally(first.name, first.target, first.decimals, first.ceiling,
+                  rows.count { it.met == true }, rows.size)
+        }
+        .sortedWith(compareBy({ it.met.toDouble() / it.of }, { it.name }))
+    if (tallies.isEmpty()) return
+    val matchCount = goals.map { it.matchId }.distinct().size
+
+    Card(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                "Goals met by target",
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                "Across $matchCount ${if (matchCount == 1) "match" else "matches"} · least often met first",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            tallies.forEach { t ->
+                val share = t.met.toDouble() / t.of
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 3.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        t.name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(
+                        (if (t.ceiling) "≤ " else "") +
+                            if (t.decimals == 3)
+                                String.format(java.util.Locale.US, "%.3f", t.target).removePrefix("0")
+                            else String.format(java.util.Locale.US, "%.2f", t.target),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(end = 12.dp)
+                    )
+                    Text(
+                        "${t.met}/${t.of}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        // Never met all season is worth reading as a warning
+                        // about the target, not only about the team.
+                        color = when {
+                            t.met == 0 -> MaterialTheme.colorScheme.error
+                            share >= 0.5 -> MaterialTheme.colorScheme.primary
+                            else -> MaterialTheme.colorScheme.onSurface
+                        }
+                    )
+                }
+            }
         }
     }
 }

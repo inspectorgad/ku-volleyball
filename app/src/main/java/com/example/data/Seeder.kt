@@ -131,6 +131,12 @@ object Seeder {
         val matchesByKey = (storedMatches - redundant.toSet())
             .associateBy { matchKey(it.date, it.opponent) }
 
+        // The goal names and targets are published once at the top of the feed
+        // and a match carries only its values in that order, so the two are put
+        // back together here. Read before the loop: it is the same list for
+        // every match.
+        val goalDefs = root.optJSONArray("goalDefinitions")
+
         val matches = root.optJSONArray("matches") ?: return
         for (i in 0 until matches.length()) {
             val m = matches.getJSONObject(i)
@@ -225,6 +231,7 @@ object Seeder {
             // guard below: a match whose KU lines are already recorded still
             // needs its opposing box score the first time one shows up.
             mergeOpponentBox(m, matchId, dao)
+            mergeMatchGoals(goalDefs, seedGoals, matchId, dao)
 
             if (existing != null && matchId in matchesWithLines) continue
             val lines = m.optJSONArray("lines") ?: continue
@@ -332,6 +339,49 @@ object Seeder {
      * revised line-up disappears instead of lingering. A match whose seed
      * carries no opponent data is left exactly as it is.
      */
+    /**
+     * Rebuilds one match's performance goals from the feed.
+     *
+     * The definitions and the values arrive apart and are joined by position, so
+     * a mismatched length is a corrupt feed rather than something to paper over:
+     * pairing a value with the wrong goal would show a hitting percentage
+     * against a per-set target and look plausible doing it. Nothing is written
+     * in that case, leaving the previous sync's rows alone.
+     *
+     * Whether a goal was met is not stored; it is the value against the target,
+     * and [MatchGoal.met] works it out on demand.
+     */
+    private suspend fun mergeMatchGoals(
+        defs: org.json.JSONArray?,
+        goals: JSONObject?,
+        matchId: Long,
+        dao: JayhawksDao
+    ) {
+        val values = goals?.optJSONArray("values")
+        if (defs == null || values == null || defs.length() != values.length()) return
+        val roles = goals.optJSONObject("roles")
+        val rows = (0 until defs.length()).map { i ->
+            val d = defs.getJSONObject(i)
+            val role = d.optString("role")
+            MatchGoal(
+                matchId = matchId,
+                idx = i,
+                name = d.optString("name"),
+                goalGroup = d.optString("group"),
+                target = d.optDouble("target", 0.0),
+                // JSONArray turns a JSON null into JSONObject.NULL, which
+                // optDouble would quietly read as NaN.
+                value = if (values.isNull(i)) null else values.optDouble(i),
+                decimals = d.optInt("decimals", 3),
+                ceiling = d.optBoolean("ceiling"),
+                role = role,
+                player = if (role.isBlank()) "" else roles?.optString(role).orEmpty()
+            )
+        }
+        dao.deleteMatchGoalsForMatch(matchId)
+        dao.insertMatchGoals(rows)
+    }
+
     private suspend fun mergeOpponentBox(m: JSONObject, matchId: Long, dao: JayhawksDao) {
         m.optJSONArray("opponentLines")?.takeIf { it.length() > 0 }?.let { arr ->
             val rows = (0 until arr.length()).map { j ->

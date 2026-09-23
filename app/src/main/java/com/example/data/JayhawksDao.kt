@@ -113,6 +113,20 @@ interface JayhawksDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNationalLeaders(rows: List<NationalLeader>)
 
+    // The staff's performance goals, one row per goal per match. Scraper-owned
+    // and rebuilt per match on every sync, like the opposing box scores below.
+    @Query("SELECT * FROM match_goals ORDER BY matchId, idx")
+    fun observeMatchGoals(): Flow<List<MatchGoal>>
+
+    @Query("SELECT * FROM match_goals ORDER BY matchId, idx")
+    suspend fun matchGoalsOnce(): List<MatchGoal>
+
+    @Query("DELETE FROM match_goals WHERE matchId = :matchId")
+    suspend fun deleteMatchGoalsForMatch(matchId: Long)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMatchGoals(rows: List<MatchGoal>)
+
     // Opposing box scores and both sides' team totals. Scraper-owned like the
     // standings above, so a sync replaces a match's rows rather than gap-filling.
     @Query("SELECT * FROM opponent_stat_lines")

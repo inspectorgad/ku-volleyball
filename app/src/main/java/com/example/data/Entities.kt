@@ -367,3 +367,48 @@ data class NationalLeader(
     /** What the category calls its headline number: "Per Set", "Pct.", "Kills". */
     val valueLabel: String = ""
 )
+
+/**
+ * One performance goal in one match: the staff's target, and what KU did.
+ *
+ * The feed keeps these apart - the twenty-two names and targets are published
+ * once, and a match carries only its values in that order - because repeating
+ * them on all 45 matches cost 200 KB against the 23 KB this shape costs. They
+ * are flattened back together here, where 990 rows is nothing and a screen
+ * wanting one match's goals should not have to join two lists by index.
+ */
+@Entity(
+    tableName = "match_goals",
+    primaryKeys = ["matchId", "idx"],
+    foreignKeys = [
+        ForeignKey(
+            entity = Match::class,
+            parentColumns = ["id"],
+            childColumns = ["matchId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("matchId")]
+)
+data class MatchGoal(
+    val matchId: Long,
+    /** Position in the staff's own ordering, which is what keeps the list stable. */
+    val idx: Int,
+    val name: String,
+    /** "team" for the ten that do not depend on the line-up, "role" for the rest. */
+    val goalGroup: String,
+    val target: Double,
+    /** Null when the match gave this goal nothing to measure. */
+    val value: Double? = null,
+    /** 2 for a per-set count, 3 for a percentage - how the staff write it. */
+    val decimals: Int = 3,
+    /** True where the target is a ceiling: errors per set, the opponent's hit %. */
+    val ceiling: Boolean = false,
+    val role: String = "",
+    /** Who filled that role in this match. Empty for a team goal. */
+    val player: String = ""
+) {
+    /** Met, missed, or null when there was nothing to measure. */
+    val met: Boolean?
+        get() = value?.let { if (ceiling) it <= target else it >= target }
+}
