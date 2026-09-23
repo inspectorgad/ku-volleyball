@@ -142,69 +142,82 @@ def div(a, b):
 
 
 # --- The coaching staff's game-by-game performance goals --------------------
-# The targets from their tracker, in its order: the ten team goals, then the
-# twelve per-role hitting goals. "higher" says which side of the target counts
-# as met - errors per set and the opponent's hitting percentage are ceilings,
-# everything else is a floor.
+# The numbers live in scripts/goal-targets.json, which is the only place a
+# target appears and the only file the staff need to touch to change one. What
+# stays here is how each number is worked out: a goal names a metric, and these
+# are the metrics.
 #
-# The two serve-receive rows of that tracker are not here. A 0-3 passing grade
-# is charted by the staff and published in no box score, so there is nothing to
-# evaluate them from.
-#
-# A goal with no number behind it is not counted as won or lost: the ace-to-
-# error ratio in a match with no service errors, or a role nobody filled, drops
-# out of both halves of the fraction rather than scoring as a free pass.
-TEAM_GOALS = [
-    ("Points/set", 19.0, True, lambda k, o, s: div(k["k"] + k["sa"] + k["bs"] + 0.5 * k["ba"], s)),
-    ("Errors/set", 7.5, False, lambda k, o, s: div(k["e"] + k["se"] + k["bhe"], s)),
-    ("Kills/set", 15.0, True, lambda k, o, s: div(k["k"], s)),
-    ("Aces/set", 1.5, True, lambda k, o, s: div(k["sa"], s)),
-    ("Blocks/set", 2.5, True, lambda k, o, s: div(k["bs"] + 0.5 * k["ba"], s)),
-    ("Hit %", 0.29, True, lambda k, o, s: div(k["k"] - k["e"], k["ta"])),
-    ("Opp hit %", 0.18, False, lambda k, o, s: div(o["k"] - o["e"], o["ta"])),
-    ("Ace:error", 0.75, True, lambda k, o, s: div(k["sa"], k["se"])),
-    ("Digs/set", 15.5, True, lambda k, o, s: div(k["d"], s)),
-    # The same defence, measured against the work it was given rather than
-    # against the clock. Digs per set punishes winning quickly: the 3-0s over
-    # Ole Miss and Grand Canyon sit lowest on it, and in those matches the
-    # opponent swung 23.7 and 25.0 times a set against Florida State's 34.8.
-    # On this measure Ole Miss's 8.33 becomes .352, ahead of Pittsburgh's .333
-    # that showed as a healthy 11.00 per set.
-    #
-    # The target is not a translation of the 15.5 - dividing that by a typical
-    # 30 attacks a set gives .510, which this team has never reached and which
-    # would reproduce the very problem this row exists to show. It is set where
-    # the rest of the sheet sits: met five times in ten this season and 60% of
-    # the 45 matches on record, between the 2026 median of .388 and 2025's .427.
-    # It is a coaching number, so change it if the staff want it harder.
-    ("Digs/opp attack", 0.40, True, lambda k, o, s: div(k["d"], o["ta"])),
-    ("Kill %", 0.42, True, lambda k, o, s: div(k["k"], k["ta"])),
-]
+# Splitting it this way because the two change for different reasons and by
+# different people. A target moves when the staff decide the bar is wrong -
+# which they should, since Digs/set at 15.5 has not been met once in ten
+# matches. A formula changes when the sport's arithmetic does, which is
+# essentially never.
+TEAM_METRICS = {
+    "points_per_set": lambda k, o, s: div(k["k"] + k["sa"] + k["bs"] + 0.5 * k["ba"], s),
+    "errors_per_set": lambda k, o, s: div(k["e"] + k["se"] + k["bhe"], s),
+    "kills_per_set": lambda k, o, s: div(k["k"], s),
+    "aces_per_set": lambda k, o, s: div(k["sa"], s),
+    "blocks_per_set": lambda k, o, s: div(k["bs"] + 0.5 * k["ba"], s),
+    "hit_pct": lambda k, o, s: div(k["k"] - k["e"], k["ta"]),
+    "opp_hit_pct": lambda k, o, s: div(o["k"] - o["e"], o["ta"]),
+    "ace_to_error": lambda k, o, s: div(k["sa"], k["se"]),
+    "digs_per_set": lambda k, o, s: div(k["d"], s),
+    "digs_per_opp_attack": lambda k, o, s: div(k["d"], o["ta"]),
+    "kill_pct": lambda k, o, s: div(k["k"], k["ta"]),
+}
 
-ROLE_GOALS = [
-    ("L2", "kill", 0.38), ("L2", "hit", 0.26),
-    ("L1", "kill", 0.42), ("L1", "hit", 0.28),
-    ("OPP", "kill", 0.45), ("OPP", "hit", 0.30),
-    ("Setter", "kill", 0.46), ("Setter", "hit", 0.35),
-    ("M1", "kill", 0.48), ("M1", "hit", 0.35),
-    ("M2", "kill", 0.50), ("M2", "hit", 0.38),
-]
+# A role's goals are about that player's own swings, so these take the player.
+ROLE_METRICS = {
+    "kill_pct": lambda p: div(p["k"], p["ta"]),
+    "hit_pct": lambda p: div(p["k"] - p["e"], p["ta"]),
+}
 
 
-def DECIMALS_FOR(name):
-    """Per-set counts read as 21.33; everything else is a percentage, .362."""
-    return 2 if "/set" in name or name == "Ace:error" else 3
+def _load_goals():
+    """The goals as configured, or nothing at all if the file cannot be used.
 
+    A goal naming a metric that does not exist is a stop, not a skip. Dropping
+    it quietly would publish a tracker that is quietly missing a row, and the
+    tally underneath would still look like a complete answer.
+    """
+    cfg = load_json("scripts/goal-targets.json", None)
+    if not cfg:
+        print("  WARNING: scripts/goal-targets.json missing or unreadable; "
+              "no performance goals will be published")
+        return [], []
+    team, role = [], []
+    for g in cfg.get("teamGoals", []):
+        metric = g.get("metric")
+        if metric not in TEAM_METRICS:
+            raise SystemExit(
+                f"goal-targets.json: team goal {g.get('name')!r} names unknown "
+                f"metric {metric!r}; known: {', '.join(sorted(TEAM_METRICS))}"
+            )
+        team.append(g)
+    for g in cfg.get("roleGoals", []):
+        metric = g.get("metric")
+        if metric not in ROLE_METRICS:
+            raise SystemExit(
+                f"goal-targets.json: role goal {g.get('name')!r} names unknown "
+                f"metric {metric!r}; known: {', '.join(sorted(ROLE_METRICS))}"
+            )
+        role.append(g)
+    return team, role
+
+
+TEAM_GOALS, ROLE_GOALS = _load_goals()
 
 # The goals themselves, published once at the top of the seed instead of
 # repeated on all 45 matches - the names and targets are the same every night,
 # and only the numbers underneath them change. A match carries a bare list of
 # values in this order, so the two must not be sorted or filtered apart.
 GOAL_DEFINITIONS = (
-    [{"name": n, "group": "team", "target": t, "decimals": DECIMALS_FOR(n),
-      "ceiling": not higher} for n, t, higher, _ in TEAM_GOALS]
-    + [{"name": f"{role} {kind} %", "group": "role", "role": role, "target": t,
-        "decimals": 3, "ceiling": False} for role, kind, t in ROLE_GOALS]
+    [{"name": g["name"], "group": "team", "target": g["target"],
+      "decimals": g.get("decimals", 3), "ceiling": bool(g.get("ceiling"))}
+     for g in TEAM_GOALS]
+    + [{"name": g["name"], "group": "role", "role": g["role"], "target": g["target"],
+        "decimals": g.get("decimals", 3), "ceiling": False}
+       for g in ROLE_GOALS]
 )
 
 
@@ -246,21 +259,22 @@ def evaluate_goals(ku, opp, sets, players):
     roles = match_roles(players)
     values = []
     met = evaluated = team_met = team_evaluated = 0
-    for name, target, higher, value_of in TEAM_GOALS:
-        value = value_of(ku, opp, sets)
-        values.append(None if value is None else round(value, DECIMALS_FOR(name)))
+    for g in TEAM_GOALS:
+        value = TEAM_METRICS[g["metric"]](ku, opp, sets)
+        values.append(None if value is None else round(value, g.get("decimals", 3)))
         if value is None:
             continue
-        ok = int(value >= target if higher else value <= target)
+        target = g["target"]
+        ok = int(value <= target if g.get("ceiling") else value >= target)
         evaluated, met = evaluated + 1, met + ok
         team_evaluated, team_met = team_evaluated + 1, team_met + ok
-    for role, kind, target in ROLE_GOALS:
-        p = roles.get(role)
-        value = None if not p else div(p["k"] if kind == "kill" else p["k"] - p["e"], p["ta"])
-        values.append(None if value is None else round(value, 3))
+    for g in ROLE_GOALS:
+        player = roles.get(g["role"])
+        value = None if not player else ROLE_METRICS[g["metric"]](player)
+        values.append(None if value is None else round(value, g.get("decimals", 3)))
         if value is None:
             continue
-        evaluated, met = evaluated + 1, met + int(value >= target)
+        evaluated, met = evaluated + 1, met + int(value >= g["target"])
     if not evaluated:
         return None
     return {

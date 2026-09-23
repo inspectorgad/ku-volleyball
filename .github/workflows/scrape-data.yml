@@ -47,6 +47,10 @@ on:
       # the feed should be rebuilt on the spot rather than up to four hours
       # later - the edit is the whole event.
       - 'scripts/power-ratings.json'
+      # Same reasoning for the goal targets: they are meant to be edited by
+      # hand, every played match's verdicts change with them, and a target
+      # argued over in a meeting should be visible in the app by the end of it.
+      - 'scripts/goal-targets.json'
       - '.github/workflows/scrape-data.yml'
 
 permissions:
