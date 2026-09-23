@@ -3,44 +3,44 @@
   "date": "2026-09-25",
   "opponent": "Houston",
   "home": true,
+  "time": "18:00",
   "city": "Lawrence, KS",
   "venue": "Horejsi Family Volleyball Arena",
-  "time": "18:00",
   "tv": "ESPN+"
  },
  {
   "date": "2026-09-27",
   "opponent": "Texas Tech",
   "home": false,
+  "time": "13:00",
   "city": "Lubbock, TX",
   "venue": "United Supermarkets Arena",
-  "time": "13:00",
   "tv": "ESPN+"
  },
  {
   "date": "2026-10-01",
   "opponent": "Utah",
   "home": true,
+  "time": "18:00",
   "city": "Lawrence, KS",
   "venue": "Horejsi Family Volleyball Arena",
-  "time": "18:00",
   "tv": "ESPN+"
  },
  {
   "date": "2026-10-02",
   "opponent": "BYU",
   "home": true,
+  "time": "18:00",
   "city": "Lawrence, KS",
   "venue": "Horejsi Family Volleyball Arena",
-  "time": "18:00",
   "tv": "ESPN+"
  },
  {
   "date": "2026-10-11",
   "opponent": "UCF",
   "home": false,
-  "city": "Orlando, FL",
   "time": "12:00",
+  "city": "Orlando, FL",
   "tv": "ESPN+"
  },
  {
@@ -148,6 +148,7 @@
   "home": false,
   "city": "Tucson, AZ",
   "venue": "McKale Center",
+  "time": null,
   "tv": "ESPN+"
  },
  {
@@ -156,6 +157,7 @@
   "home": false,
   "city": "Tempe, AZ",
   "venue": "Desert Financial Arena",
+  "time": null,
   "tv": "ESPN+"
  }
 ]
