@@ -20,7 +20,8 @@ data class VolleyballTotals(
     val blockSolos: Int = 0,
     val blockAssists: Int = 0,
     val receptionErrors: Int = 0,
-    val ballHandlingErrors: Int = 0
+    val ballHandlingErrors: Int = 0,
+    val serveAttempts: Int = 0
 ) {
     val totalBlocks: Int get() = blockSolos + blockAssists
 
@@ -36,16 +37,23 @@ data class VolleyballTotals(
     val serveDifferential: Int get() = serviceAces - serviceErrors
 
     /**
-     * Serving efficiency, as net aces per set.
+     * Net aces per set: (aces - errors) / sets played.
      *
-     * Deliberately not the textbook (aces - errors) / attempts: an NCAA
-     * volleyball box score publishes aces and errors but never the number of
-     * serves attempted, so that denominator does not exist in any source we
-     * have. Sets played is the one honest denominator available, and it does
-     * the job a rate is for - comparing a server who plays every set against
-     * one who plays three.
+     * This was once the only serving rate here, on the belief that a box score
+     * never publishes serves attempted per player. That was wrong - every box
+     * score does - so [servingPercentage] is the textbook figure and this stays
+     * as the per-set view of the same ledger.
      */
     val servingEfficiency: Double get() = perSet(serveDifferential.toDouble())
+
+    /**
+     * (aces - errors) / serves taken, or null when no attempts are recorded -
+     * a hand-entered line, or one synced before attempts were carried.
+     * Null rather than zero so a missing denominator never reads as a server
+     * who broke even.
+     */
+    val servingPercentage: Double?
+        get() = if (serveAttempts == 0) null else serveDifferential.toDouble() / serveAttempts
 
     val killsPerSet: Double get() = perSet(kills.toDouble())
     val assistsPerSet: Double get() = perSet(assists.toDouble())
@@ -130,7 +138,8 @@ fun aggregate(lines: Collection<VolleyballLine>): VolleyballTotals = VolleyballT
     blockSolos = lines.sumOf { it.blockSolos },
     blockAssists = lines.sumOf { it.blockAssists },
     receptionErrors = lines.sumOf { it.receptionErrors },
-    ballHandlingErrors = lines.sumOf { it.ballHandlingErrors }
+    ballHandlingErrors = lines.sumOf { it.ballHandlingErrors },
+    serveAttempts = lines.sumOf { it.serveAttempts }
 )
 
 /** Formats hitting percentage volleyball-style: .314, -.050, 1.000 */

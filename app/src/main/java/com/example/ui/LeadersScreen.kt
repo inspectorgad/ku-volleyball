@@ -50,7 +50,9 @@ fun LeadersScreen(
     nationalLeaders: List<NationalLeader> = emptyList(),
     matchGoals: List<MatchGoal> = emptyList(),
     modifier: Modifier = Modifier,
-    dataUpdatedAt: String? = null
+    dataUpdatedAt: String? = null,
+    lastCheckedMs: Long = 0,
+    syncFailure: String? = null
 ) {
     // Seasons ordered most recent first; default selection is the current (latest) season.
     val seasons = matches.sortedByDescending { it.date }.map { it.season }.distinct()
@@ -129,11 +131,21 @@ fun LeadersScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        dataUpdatedAt?.let {
+                        // Always shown, and measured from the last time a feed
+                        // answered rather than from the file's own date: the
+                        // file is only rewritten when something changes, so a
+                        // quiet week would otherwise look like a broken one -
+                        // and a broken one would look like a quiet week.
+                        Text(
+                            dataStatusLine(dataUpdatedAt, lastCheckedMs),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        syncFailure?.let {
                             Text(
-                                "Data updated ${it.take(16).replace('T', ' ')} UTC · pull down to refresh",
+                                "Couldn't reach the season feed: $it",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.error
                             )
                         }
                     }
@@ -335,6 +347,27 @@ fun SeasonGoalsCard(
     }
 }
 
+/** "Data from Sep 23, 9:21 AM · checked 2 h ago · pull down to refresh", in local time. */
+fun dataStatusLine(generatedAt: String?, lastCheckedMs: Long, nowMs: Long = System.currentTimeMillis()): String {
+    val data = generatedAt?.let { iso ->
+        runCatching {
+            val utc = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US)
+                .apply { timeZone = java.util.TimeZone.getTimeZone("UTC") }
+            java.text.SimpleDateFormat("MMM d, h:mm a", java.util.Locale.US).format(utc.parse(iso)!!)
+        }.getOrNull()
+    }
+    val checked = if (lastCheckedMs <= 0) "never checked online" else {
+        val mins = ((nowMs - lastCheckedMs) / 60_000).coerceAtLeast(0)
+        "checked " + when {
+            mins < 1 -> "just now"
+            mins < 60 -> "$mins min ago"
+            mins < 48 * 60 -> "${mins / 60} h ago"
+            else -> "${mins / (24 * 60)} days ago"
+        }
+    }
+    return listOfNotNull(data?.let { "Data from $it" }, checked, "pull down to refresh").joinToString(" · ")
+}
+
 /** How many of the fifty are shown before the reader asks for the rest. */
 private const val NATIONAL_PREVIEW = 10
 
@@ -375,6 +408,13 @@ fun NationalLeadersCard(rows: List<NationalLeader>, modifier: Modifier = Modifie
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            rows.firstOrNull()?.asOf?.takeIf { it.isNotBlank() }?.let {
+                Text(
+                    it,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

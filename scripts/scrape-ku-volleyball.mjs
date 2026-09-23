@@ -332,6 +332,15 @@ try {
       console.log(`  leaders ${c.name} failed (non-fatal): ${e.message}`);
     }
   }
+  if (!captured.length && categories.length) {
+    // Every category failing is not the same as one category failing. On
+    // 23 Sep all seventeen returned 500, the last good file was kept - rightly,
+    // an old list beats an empty one - and the only trace was a count of zero
+    // that nobody reads. The seed step then reported the kept file as if it
+    // were fresh. So say it in words a log search will find.
+    console.log('WARNING: national leaders unavailable this run (every category failed); '
+      + 'keeping the previous snapshot, which the app labels with its own date');
+  }
   if (captured.length) {
     fs.writeFileSync('scraped/ncaa-leaders.json', JSON.stringify({
       capturedAt: new Date().toISOString(),

@@ -39,6 +39,14 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
     private val _dataUpdatedAt = MutableStateFlow(SeasonSync.lastGeneratedAt(app))
     val dataUpdatedAt: StateFlow<String?> = _dataUpdatedAt.asStateFlow()
 
+    // When a feed last answered, and why the latest attempt failed if it did.
+    // Shown on screen because the launch sync is silent: without these a
+    // refresh that never reaches the feed looks exactly like a quiet news day.
+    private val _lastCheckedMs = MutableStateFlow(SeasonSync.lastSuccessMs(app))
+    val lastCheckedMs: StateFlow<Long> = _lastCheckedMs.asStateFlow()
+    private val _syncFailure = MutableStateFlow(SeasonSync.lastFailure(app))
+    val syncFailure: StateFlow<String?> = _syncFailure.asStateFlow()
+
     // Snackbar messages, emitted only for user-initiated refreshes.
     private val _syncMessages = MutableSharedFlow<String>()
     val syncMessages: SharedFlow<String> = _syncMessages.asSharedFlow()
@@ -63,6 +71,8 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
             _isSyncing.value = false
         }
         _dataUpdatedAt.value = SeasonSync.lastGeneratedAt(getApplication())
+        _lastCheckedMs.value = SeasonSync.lastSuccessMs(getApplication())
+        _syncFailure.value = SeasonSync.lastFailure(getApplication())
         if (manual) {
             _syncMessages.emit(
                 when (result) {

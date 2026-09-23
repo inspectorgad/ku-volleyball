@@ -35,6 +35,7 @@ import com.example.data.Player
 import com.example.data.StatLine
 import com.example.stats.ServingMatch
 import com.example.stats.aggregate
+import com.example.stats.formatAverage
 import com.example.stats.formatPerSet
 import com.example.stats.servingProgress
 
@@ -150,12 +151,11 @@ fun ServingScreen(
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            "Serving efficiency is net aces per set. A box score never " +
-                                "publishes serve attempts, so sets played is the denominator. " +
-                                "Below zero means the serving cost more than it won, which is " +
-                                "where most servers sit. This team figure counts every server " +
-                                "over the match, so it runs larger than the per-player rows " +
-                                "below — those are one server over their own sets.",
+                            "Net aces per set. Below zero means the serving cost more than " +
+                                "it won, which is where most servers sit. This team figure counts " +
+                                "every server over the match, so it runs larger than the " +
+                                "per-player rows below - those are one server over their own " +
+                                "sets. SRV% in the table is the per-serve version.",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -271,9 +271,13 @@ private fun ServingTable(rows: List<Pair<Player, com.example.stats.VolleyballTot
             ) {
                 ServingCell(player.name, width = 108.dp, header = true, align = TextAlign.Start)
                 ServingCell(t.setsPlayed.toString(), cellWidth)
+                // A dash, not 0, where attempts were never recorded: a
+                // hand-entered line, or one synced before they were carried.
+                ServingCell(t.serveAttempts.takeIf { it > 0 }?.toString() ?: "—", cellWidth)
                 ServingCell(t.serviceAces.toString(), cellWidth)
                 ServingCell(t.serviceErrors.toString(), cellWidth)
                 ServingCell(withSign(t.serveDifferential), cellWidth)
+                ServingCell(t.servingPercentage?.let { formatAverage(it) } ?: "—", cellWidth)
                 ServingCell(formatPerSet(t.servingEfficiency), cellWidth)
                 ServingCell(formatPerSet(t.acesPerSet), cellWidth)
                 ServingCell(

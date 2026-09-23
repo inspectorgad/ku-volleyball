@@ -54,7 +54,7 @@ fun statValues(t: VolleyballTotals): List<String> = listOf(
 )
 
 /** The serving table's headings. Public so a test can hold the glossary to them. */
-val SERVING_COLUMNS = listOf("SP", "SA", "SE", "NET", "SRV", "SA/S", "SE/S")
+val SERVING_COLUMNS = listOf("SP", "ATT", "SA", "SE", "NET", "SRV%", "SRV", "SA/S", "SE/S")
 
 /** The league serving table's headings on the Big 12 tab, likewise. */
 val SERVING_LEAGUE_COLUMNS = listOf("M", "SP", "SA", "SE", "ATT", "SRV%", "SE/S", "SA/S")
@@ -119,9 +119,9 @@ val STAT_DEFINITIONS: List<StatDefinition> = listOf(
     ),
     StatDefinition(
         "SRV",
-        "Serving efficiency: net aces per set, (aces − errors) ÷ sets played. A box " +
-            "score never publishes serve attempts, so sets is the denominator. Below zero " +
-            "means the serving cost more than it won, where most servers sit."
+        "Net aces per set: (aces − errors) ÷ sets played. The same ledger as SRV%, " +
+            "per set rather than per serve. Below zero means the serving cost more than " +
+            "it won, where most servers sit."
     ),
     StatDefinition("NET", "Aces minus errors. The raw serving ledger, before dividing by sets."),
     StatDefinition("SA/S", "Service aces per set."),
@@ -129,14 +129,13 @@ val STAT_DEFINITIONS: List<StatDefinition> = listOf(
     StatDefinition("M", "Matches captured for this team so far this season."),
     StatDefinition(
         "ATT",
-        "Serves taken. Published in a box score's team totals but never per " +
-            "player, which is why SRV divides by sets and SRV% can divide by this."
+        "Serves taken. Every box score publishes it, per player as well as per team."
     ),
     StatDefinition(
         "SRV%",
         "Serving percentage: (aces − errors) ÷ serves taken. The textbook " +
-            "measure, available for a team because the team totals publish " +
-            "attempts. Nearly every team reads negative."
+            "measure. Nearly every server and every team reads negative: a serve hard " +
+            "enough to trouble the other side is hard enough to miss."
     ),
     StatDefinition("D", "Digs. Keeping an attacked ball off the floor.", listOf("Digs")),
     StatDefinition("D/S", "Digs per set."),

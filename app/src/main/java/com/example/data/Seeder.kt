@@ -101,7 +101,9 @@ object Seeder {
         // Tournament weekends can put two matches on nearby dates, so matches
         // are keyed by date + opponent rather than date alone.
         val storedMatches = dao.matchesOnce()
-        val matchesWithLines = dao.statLinesOnce().map { it.matchId }.toSet()
+        val storedLines = dao.statLinesOnce()
+        val matchesWithLines = storedLines.map { it.matchId }.toSet()
+        val storedLinesByKey = storedLines.associateBy { it.playerId to it.matchId }
 
         // Before matchKey normalised the name, a sync that saw both spellings on
         // the same day filed two rows for one match — which is what happened to
@@ -233,7 +235,23 @@ object Seeder {
             mergeOpponentBox(m, matchId, dao)
             mergeMatchGoals(goalDefs, seedGoals, matchId, dao)
 
-            if (existing != null && matchId in matchesWithLines) continue
+            if (existing != null && matchId in matchesWithLines) {
+                // Stat lines are never re-merged once a match has them, because
+                // they can be edited here. Serve attempts are the exception: they
+                // were not carried until v13, nobody can type them, and a zero
+                // is simply "not recorded yet". So that one field is filled in
+                // where it is still zero, and nothing else on the line is touched.
+                val seedLines = m.optJSONArray("lines") ?: continue
+                for (j in 0 until seedLines.length()) {
+                    val l = seedLines.getJSONObject(j)
+                    val sat = l.optInt("sat")
+                    if (sat <= 0) continue
+                    val playerId = playerIdsByKey[l.getString("player").lowercase()] ?: continue
+                    val stored = storedLinesByKey[playerId to matchId] ?: continue
+                    if (stored.serveAttempts == 0) dao.upsertStatLine(stored.copy(serveAttempts = sat))
+                }
+                continue
+            }
             val lines = m.optJSONArray("lines") ?: continue
             for (j in 0 until lines.length()) {
                 val l = lines.getJSONObject(j)
@@ -253,7 +271,8 @@ object Seeder {
                         blockSolos = l.optInt("bs"),
                         blockAssists = l.optInt("ba"),
                         receptionErrors = l.optInt("re"),
-                        ballHandlingErrors = l.optInt("bhe")
+                        ballHandlingErrors = l.optInt("bhe"),
+                        serveAttempts = l.optInt("sat")
                     )
                 )
             }
@@ -540,6 +559,10 @@ object Seeder {
                 val cat = cats.getJSONObject(i)
                 val name = cat.optString("name").takeIf { it.isNotBlank() } ?: continue
                 val label = cat.optString("valueLabel")
+                // "Friday, September 18, 2026 9:09 am - Through games Thursday,
+                // September 17, 2026": the second half is the part that says
+                // what the list covers.
+                val asOf = nl.optString("updated").substringAfter(" - ", nl.optString("updated"))
                 val list = cat.optJSONArray("rows") ?: continue
                 for (j in 0 until list.length()) {
                     val r = list.getJSONObject(j)
@@ -560,7 +583,8 @@ object Seeder {
                             height = r.optString("height"),
                             sets = r.optInt("sets"),
                             value = r.optString("value"),
-                            valueLabel = label
+                            valueLabel = label,
+                            asOf = asOf
                         )
                     )
                 }

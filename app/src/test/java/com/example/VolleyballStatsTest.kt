@@ -337,4 +337,21 @@ class VolleyballStatsTest {
         assertEquals("3 sets played", summarize(line(setsPlayed = 3)))
         assertEquals("7 D", summarize(line(setsPlayed = 4, digs = 7)))
     }
+    @Test
+    fun `serving percentage is per serve taken, and absent without attempts`() {
+        val server = com.example.stats.VolleyballTotals(
+            setsPlayed = 10, serviceAces = 6, serviceErrors = 10, serveAttempts = 80
+        )
+        assertEquals(-4.0 / 80, server.servingPercentage!!, 1e-9)
+        // No attempts recorded is not the same as breaking even.
+        assertEquals(null, server.copy(serveAttempts = 0).servingPercentage)
+    }
+
+    @Test
+    fun `the data line says when a feed last answered`() {
+        val now = 1_000_000_000L
+        val line = com.example.ui.dataStatusLine(null, now - 3 * 60 * 60 * 1000, now)
+        assertTrue(line, line.contains("checked 3 h ago"))
+        assertTrue(com.example.ui.dataStatusLine(null, 0, now).contains("never checked online"))
+    }
 }

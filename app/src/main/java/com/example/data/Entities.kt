@@ -56,9 +56,8 @@ data class PollEntry(
  * Derived data with no user-entered fields, so sync replaces it wholesale.
  *
  * [serveAttempts] is the reason this is its own table rather than a column on
- * the standings: the team block of a box score publishes serves taken, which no
- * player row does, so a team's serving can be judged on the textbook
- * denominator instead of the per-set proxy the player screens have to use.
+ * the standings: it lets a team's serving be judged on the textbook
+ * denominator, serves taken, rather than per set.
  */
 @Entity(tableName = "team_serving", primaryKeys = ["season", "team"])
 data class TeamServing(
@@ -113,6 +112,8 @@ interface VolleyballLine {
     val blockAssists: Int
     val receptionErrors: Int
     val ballHandlingErrors: Int
+    /** Serves taken. Only Kansas lines carry it; zero means not recorded. */
+    val serveAttempts: Int get() = 0
 }
 
 @Entity(tableName = "players")
@@ -215,7 +216,8 @@ data class StatLine(
     override val blockSolos: Int = 0,
     override val blockAssists: Int = 0,
     override val receptionErrors: Int = 0,
-    override val ballHandlingErrors: Int = 0
+    override val ballHandlingErrors: Int = 0,
+    override val serveAttempts: Int = 0
 ) : VolleyballLine
 
 /**
@@ -365,7 +367,15 @@ data class NationalLeader(
     val sets: Int = 0,
     val value: String = "",
     /** What the category calls its headline number: "Per Set", "Pct.", "Kills". */
-    val valueLabel: String = ""
+    val valueLabel: String = "",
+    /**
+     * How current the list is, in the NCAA's words: "Through games Thursday,
+     * September 17, 2026". Shown on the card because the list can go stale
+     * with nothing else changing - the NCAA's stats service returned errors
+     * for every category on 23 Sep, and the last good copy is kept rather than
+     * replaced with nothing, so without this line an old list reads as today's.
+     */
+    val asOf: String = ""
 )
 
 /**

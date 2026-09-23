@@ -490,6 +490,9 @@ fun MatchDetailScreen(
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
+    // A stat line is one tap from gone, and gone for good: a sync never refills
+    // a match that already has lines, so there is nothing to bring it back.
+    var lineToDelete by remember { mutableStateOf<StatLine?>(null) }
     var editingLineFor by remember { mutableStateOf<Player?>(null) }
 
     val matchLines = statLines.filter { it.matchId == match.id }
@@ -760,7 +763,7 @@ fun MatchDetailScreen(
                                 )
                             }
                             if (line != null) {
-                                IconButton(onClick = { onDeleteStatLine(line) }) {
+                                IconButton(onClick = { lineToDelete = line }) {
                                     Icon(
                                         Icons.Default.Delete,
                                         contentDescription = "Remove stat line",
@@ -796,6 +799,30 @@ fun MatchDetailScreen(
             onSave = {
                 onSaveMatch(it)
                 showEditDialog = false
+            }
+        )
+    }
+
+    lineToDelete?.let { line ->
+        val who = players.firstOrNull { it.id == line.playerId }?.name ?: "this player"
+        AlertDialog(
+            onDismissRequest = { lineToDelete = null },
+            title = { Text("Remove $who's stat line?") },
+            text = {
+                Text(
+                    "Syncing will not bring it back, because a match that already has " +
+                        "stat lines is never refilled from the feed. You would have to " +
+                        "enter it again by hand."
+                )
+            },
+            confirmButton = {
+                Button(onClick = {
+                    onDeleteStatLine(line)
+                    lineToDelete = null
+                }) { Text("Remove") }
+            },
+            dismissButton = {
+                TextButton(onClick = { lineToDelete = null }) { Text("Cancel") }
             }
         )
     }

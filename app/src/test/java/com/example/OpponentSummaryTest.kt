@@ -65,4 +65,20 @@ class OpponentSummaryTest {
         val summaries = summarizeOpponents(matches, teamStats, null)
         assertEquals(listOf("Baylor", "Iowa St."), summaries.map { it.name })
     }
+    @Test
+    fun `one opponent spelled two ways across seasons is one opponent`() {
+        // The 2025 box scores say "Kansas St."; the 2026 schedule says
+        // "Kansas State". Across all seasons they are the same programme.
+        val both = listOf(
+            Match(id = 10, date = "2025-10-01", opponent = "Kansas St.", season = "2025",
+                teamSets = 3, opponentSets = 1),
+            Match(id = 11, date = "2026-10-15", opponent = "Kansas State", season = "2026",
+                teamSets = 1, opponentSets = 3)
+        )
+        val all = summarizeOpponents(both, emptyList(), season = null)
+        assertEquals(1, all.size)
+        assertEquals(2, all.single().matchCount)
+        // Titled with the most recent spelling.
+        assertEquals("Kansas State", all.single().name)
+    }
 }

@@ -244,13 +244,12 @@ const STAT_HELP = {
   SE: "Service errors — a serve out, into the net, or otherwise failed. A fault.",
   NET: "Aces minus errors. The raw serving ledger, before dividing by sets.",
   SRV: "Serving efficiency: net aces per set, (aces − errors) ÷ sets played. "
-    + "A box score never publishes serve attempts per player, so sets is the denominator. "
+    + "This is the per-set view; SRV% is the same ledger per serve taken. "
     + "Below zero means the serving cost more than it won, where most servers sit.",
   M: "Matches captured for this team so far this season.",
   SP: "Sets played.",
-  ATT: "Serves taken. Published in a box score's team totals but never per player, "
-    + "which is why SRV divides by sets and SRV% can divide by this.",
-  "SRV%": "(aces − errors) ÷ serves taken. Nearly every team reads negative.",
+  ATT: "Serves taken. Every box score publishes it, per player as well as per team.",
+  "SRV%": "(aces − errors) ÷ serves taken. Nearly every server and every team reads negative.",
   "SE/S": "Service errors per set.",
   "SA/S": "Service aces per set.",
 };
@@ -306,10 +305,10 @@ function slice() {
 }
 
 function totals(lines) {
-  const t = { sp: 0, k: 0, e: 0, ta: 0, a: 0, sa: 0, se: 0, d: 0, bs: 0, ba: 0, mp: 0 };
+  const t = { sp: 0, k: 0, e: 0, ta: 0, a: 0, sa: 0, se: 0, d: 0, bs: 0, ba: 0, sat: 0, mp: 0 };
   const seen = new Set();
   for (const l of lines) {
-    for (const key of ["sp","k","e","ta","a","sa","se","d","bs","ba"]) t[key] += l[key] ?? 0;
+    for (const key of ["sp","k","e","ta","a","sa","se","d","bs","ba","sat"]) t[key] += l[key] ?? 0;
     seen.add(l.match?.date + "|" + l.match?.opponent);
   }
   t.mp = seen.size;
@@ -544,8 +543,10 @@ const COLS = [
   ["SA", p => p.sa],
   ["SE", p => p.se],
   ["NET", p => p.sa - p.se, p => fmtSigned(p.sa - p.se)],
-  // Per-player serving divides by sets, exactly as the app does: a box score
-  // publishes serve attempts for the team but never for a player.
+  // Serves taken are published per player in every box score, so the textbook
+  // (aces - errors) / attempts sits beside the per-set figure. A dash where a
+  // season copy predates attempts being carried, rather than a misleading .000.
+  ["SRV%", p => p.sat ? (p.sa - p.se) / p.sat : -Infinity, p => p.sat ? fmtPct((p.sa - p.se) / p.sat) : "—"],
   ["SRV", p => srvPerSet(p), p => p.sp ? fmt2(srvPerSet(p)) : "—"],
   ["D", p => p.d],
   ["BLK", p => p.blk],
@@ -943,7 +944,9 @@ function renderBig12() {
   const pb = pt.createTBody();
   for (const r of poll.rows) {
     const tr = pb.insertRow();
-    if (r.big12) tr.className = "ku";
+    // Only Kansas gets Kansas's highlight. This used to mark every Big 12 side
+    // with it, so in a poll holding six of them KU could not be picked out.
+    if (normTeam(r.team) === "kansas") tr.className = "ku";
     tr.insertCell().textContent = r.rankLabel ?? String(r.rank);
     const name = tr.insertCell();
     name.style.textAlign = "left";

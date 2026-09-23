@@ -17,15 +17,35 @@ sealed interface SyncResult {
 }
 
 /**
- * Downloads the latest parsed season data (published by CI next to the APK)
- * and folds it into the database via [Seeder.merge] — the same gap-filling
- * merge used for the bundled seed, so user-entered data is never overwritten.
+ * Downloads the latest parsed season data and folds it into the database via
+ * [Seeder.merge] — the same gap-filling merge used for the bundled seed, so
+ * user-entered data is never overwritten.
  */
 object SeasonSync {
 
-    private const val DATA_URL =
-        "https://github.com/inspectorgad/ku-volleyball/releases/latest/download/season-data.json"
+    /**
+     * The same file, published in three places, tried in order until one
+     * answers with something that passes [SeasonDataValidator].
+     *
+     * This used to be the release asset alone. A release download redirects to
+     * release-assets.githubusercontent.com, and a network that blocks that host
+     * - the one the APK download stalls on - stalled every refresh as well,
+     * silently, so the app sat on whatever season its APK was built with.
+     *
+     * The dashboard's copy on github.io comes first: it is a different host
+     * family, it is rewritten on every scrape rather than only after an APK
+     * build passes, and it is the address a phone that can open the dashboard
+     * can already reach. The raw repository copy is the next best thing, and
+     * the release asset stays last so nothing that worked before stops working.
+     */
+    private val DATA_URLS = listOf(
+        "https://inspectorgad.github.io/ku-volleyball/season-data.json",
+        "https://raw.githubusercontent.com/inspectorgad/ku-volleyball/main/app/src/main/assets/seed.json",
+        "https://github.com/inspectorgad/ku-volleyball/releases/latest/download/season-data.json",
+    )
     private const val PREFS = "season_sync"
+    private const val KEY_FAILURE = "last_failure"
+    private const val KEY_FAILURE_MS = "last_failure_ms"
     private const val KEY_HASH = "last_hash"
     private const val KEY_SUCCESS_MS = "last_success_ms"
     private const val KEY_GENERATED_AT = "last_generated_at"
@@ -41,49 +61,81 @@ object SeasonSync {
     fun lastGeneratedAt(context: Context): String? =
         prefs(context).getString(KEY_GENERATED_AT, null)
 
+    /** When a feed last answered - with news or without - or 0 if never. */
+    fun lastSuccessMs(context: Context): Long = prefs(context).getLong(KEY_SUCCESS_MS, 0)
+
+    /**
+     * Why the most recent attempt failed, or null if it succeeded. Kept so a
+     * refresh that fails on launch - which shows no message, because nobody
+     * asked for it - still leaves a trace on screen instead of vanishing.
+     */
+    fun lastFailure(context: Context): String? = prefs(context).let { p ->
+        if (p.getLong(KEY_FAILURE_MS, 0) > p.getLong(KEY_SUCCESS_MS, 0)) p.getString(KEY_FAILURE, null)
+        else null
+    }
+
     fun shouldAutoSync(context: Context): Boolean =
         System.currentTimeMillis() - prefs(context).getLong(KEY_SUCCESS_MS, 0) >
             AUTO_SYNC_INTERVAL_MS
 
     suspend fun sync(context: Context, dao: JayhawksDao): SyncResult =
         withContext(Dispatchers.IO) {
+            val result = syncOnce(context, dao)
+            if (result is SyncResult.Failed) {
+                prefs(context).edit()
+                    .putString(KEY_FAILURE, result.reason)
+                    .putLong(KEY_FAILURE_MS, System.currentTimeMillis())
+                    .apply()
+            }
+            result
+        }
+
+    private suspend fun syncOnce(context: Context, dao: JayhawksDao): SyncResult {
+        // First source that returns valid data wins. Every failure is kept so
+        // that if all of them fail, the message says what each one did.
+        val failures = mutableListOf<String>()
+        var fetched: Pair<ByteArray, JSONObject>? = null
+        for (url in DATA_URLS) {
+            val host = url.substringAfter("://").substringBefore('/')
             val body = try {
-                client.newCall(Request.Builder().url(DATA_URL).build()).execute().use { resp ->
-                    if (!resp.isSuccessful) {
-                        return@withContext SyncResult.Failed("server returned ${resp.code}")
+                client.newCall(Request.Builder().url(url).build()).execute().use { resp ->
+                    if (resp.isSuccessful) resp.body?.bytes() else {
+                        failures += "$host ${resp.code}"; null
                     }
-                    resp.body?.bytes()
-                        ?: return@withContext SyncResult.Failed("empty response")
                 }
             } catch (e: Exception) {
-                return@withContext SyncResult.Failed(e.message ?: "network error")
-            }
-
+                failures += "$host unreachable"; null
+            } ?: continue
             val root = SeasonDataValidator.parse(body)
-                ?: return@withContext SyncResult.Failed("downloaded data failed validation")
-
-            val hash = MessageDigest.getInstance("SHA-256").digest(body)
-                .joinToString("") { "%02x".format(it) }
-            val p = prefs(context)
-            if (hash == p.getString(KEY_HASH, null)) {
-                p.edit().putLong(KEY_SUCCESS_MS, System.currentTimeMillis()).apply()
-                return@withContext SyncResult.NoChange
-            }
-
-            try {
-                Seeder.merge(root, dao)
-            } catch (e: Exception) {
-                return@withContext SyncResult.Failed("merge failed: ${e.message}")
-            }
-
-            val generatedAt = root.optString("generatedAt").takeIf { it.isNotBlank() }
-            p.edit()
-                .putString(KEY_HASH, hash)
-                .putLong(KEY_SUCCESS_MS, System.currentTimeMillis())
-                .putString(KEY_GENERATED_AT, generatedAt)
-                .apply()
-            SyncResult.Updated(generatedAt)
+            if (root == null) { failures += "$host sent invalid data"; continue }
+            fetched = body to root
+            break
         }
+        val (body, root) = fetched
+            ?: return SyncResult.Failed(failures.joinToString("; "))
+
+        val hash = MessageDigest.getInstance("SHA-256").digest(body)
+            .joinToString("") { "%02x".format(it) }
+        val p = prefs(context)
+        if (hash == p.getString(KEY_HASH, null)) {
+            p.edit().putLong(KEY_SUCCESS_MS, System.currentTimeMillis()).apply()
+            return SyncResult.NoChange
+        }
+
+        try {
+            Seeder.merge(root, dao)
+        } catch (e: Exception) {
+            return SyncResult.Failed("merge failed: ${e.message}")
+        }
+
+        val generatedAt = root.optString("generatedAt").takeIf { it.isNotBlank() }
+        p.edit()
+            .putString(KEY_HASH, hash)
+            .putLong(KEY_SUCCESS_MS, System.currentTimeMillis())
+            .putString(KEY_GENERATED_AT, generatedAt)
+            .apply()
+        return SyncResult.Updated(generatedAt)
+    }
 
     private fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)

@@ -37,6 +37,7 @@ import com.example.data.Match
 import com.example.data.MatchTeamStats
 import com.example.data.OpponentRosterEntry
 import com.example.data.OpponentStatLine
+import com.example.data.normTeam
 import com.example.data.sameTeam
 import com.example.stats.VolleyballTotals
 import com.example.stats.aggregate
@@ -65,10 +66,14 @@ fun summarizeOpponents(
     }
     val teamStatsByMatch = matchTeamStats.groupBy { it.matchId }
 
-    return played.groupBy { it.opponent }.map { (name, theirMatches) ->
+    // Grouped on the normalised name: the NCAA's 2025 box scores say "Kansas
+    // St." where the 2026 schedule says "Kansas State", and grouping on the
+    // literal name split one opponent's history in two. The card is titled with
+    // the most recent spelling.
+    return played.groupBy { normTeam(it.opponent) }.map { (_, theirMatches) ->
         val ids = theirMatches.map { it.id }
         OpponentSummary(
-            name = name,
+            name = theirMatches.maxBy { it.date }.opponent,
             matchCount = theirMatches.size,
             // Stated from their side, so the card reads as the opponent's record.
             wins = theirMatches.count { (it.opponentSets ?: 0) > (it.teamSets ?: 0) },
@@ -184,7 +189,7 @@ fun OpponentDetailScreen(
     onBack: () -> Unit
 ) {
     val theirMatches = matches
-        .filter { it.opponent == opponentName && it.teamSets != null }
+        .filter { sameTeam(it.opponent, opponentName) && it.teamSets != null }
         .sortedByDescending { it.date }
     val ids = theirMatches.map { it.id }.toSet()
     val lines = opponentStatLines.filter { it.matchId in ids }

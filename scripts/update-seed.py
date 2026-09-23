@@ -89,6 +89,10 @@ def stat_line(src):
         "ba": to_int(src.get("blockAssists")),
         "re": to_int(src.get("receptionErrors")),
         "bhe": to_int(src.get("ballHandlingErrors")),
+        # Serves taken. Published per player in every box score - in all 90
+        # team blocks captured so far the player rows sum exactly to the team
+        # total - which makes a true (aces - errors) / attempts possible.
+        "sat": to_int(src.get("serveAttempts")),
     }
 
 
@@ -886,17 +890,64 @@ print(f"  heights applied to {backfilled} opposing box-score lines")
 # Box scores from a scheduled opponent's *other* matches, so the app can show
 # how they have been playing before Kansas faces them. Empty before their first
 # match of the season, which is exactly the gap the roster scrape above covers.
-STAT_KEYS = ["sp", "k", "e", "ta", "a", "sa", "se", "d", "bs", "ba", "re", "bhe"]
+STAT_KEYS = ["sp", "k", "e", "ta", "a", "sa", "se", "d", "bs", "ba", "re", "bhe", "sat"]
+# Roster names per team, for telling which side of another team's box score is
+# which. The NCAA sometimes sends a contest back with the two teams' player
+# blocks under each other's labels - Florida State against Kansas was the first
+# seen, and five captures have it, putting Denver's players under Utah, Weber
+# St.'s under Kansas St. and Utah St.'s under Iowa St. Filed by label, each of
+# those scheduled opponents picked up a second team's worth of players (Utah 37
+# against an 18-player roster) and a second team's serving.
+_OPP_ROSTER_NAMES = {
+    key: {p.get("name", "").strip().lower() for p in (rec.get("players") or [])}
+    for key, rec in (load_json("scraped/opponent-rosters.json", {}) or {}).items()
+}
+_OPP_ROSTER_NAMES.setdefault(norm_team("Kansas"), set()).update(ROSTER_NAMES)
+_crossed_warned = set()
+
+
+def labelled_blocks(path, data):
+    """(team name, block) for each side of a capture, un-crossing a swapped one.
+
+    Swapped only on strong evidence, the same bar the KU transposition guard
+    uses: at least three roster names on the crossed reading, and at least two
+    more than on the labelled one. Where neither team's roster is known the
+    labels stand, because guessing would be worse than trusting them.
+    """
+    box = data.get("box") or {}
+    blocks = box.get("teamBoxscore") or []
+    by_id = {str(t.get("teamId")): t for t in box.get("teams") or []}
+    def name_of(b):
+        t = by_id.get(str(b.get("teamId"))) or {}
+        return t.get("nameShort") or t.get("nameFull") or ""
+    pairs = [(name_of(b), b) for b in blocks]
+    if len(pairs) != 2:
+        return pairs
+
+    def hits(block, team):
+        roster = _OPP_ROSTER_NAMES.get(norm_team(team), set())
+        return len(roster & {
+            f"{p.get('firstName', '').strip()} {p.get('lastName', '').strip()}".strip().lower()
+            for p in block.get("playerStats") or []
+        })
+    (na, a), (nb, b) = pairs
+    straight = hits(a, na) + hits(b, nb)
+    crossed = hits(a, nb) + hits(b, na)
+    if crossed >= 3 and crossed - straight >= 2:
+        if path not in _crossed_warned:
+            _crossed_warned.add(path)
+            print(f"  WARNING: {os.path.basename(path)}: {na} and {nb} blocks are crossed "
+                  f"upstream ({crossed} roster names crossed against {straight}); swapping")
+        return [(nb, a), (na, b)]
+    return pairs
+
+
 form = {}  # norm team -> {"team":..., "matches": set, "players": {name: totals}}
 for path in sorted(glob.glob("scraped/ncaa-opp-*.json")):
     data = load_json(path, None)
     if not data:
         continue
-    box = data.get("box") or {}
-    teams = {str(t.get("teamId")): t for t in box.get("teams") or []}
-    for tb in box.get("teamBoxscore") or []:
-        team = teams.get(str(tb.get("teamId"))) or {}
-        name = team.get("nameShort") or team.get("nameFull") or ""
+    for name, tb in labelled_blocks(path, data):
         key = norm_team(name)
         if not key:
             continue
@@ -908,8 +959,11 @@ for path in sorted(glob.glob("scraped/ncaa-opp-*.json")):
             player = f"{p.get('firstName','').strip()} {p.get('lastName','').strip()}".strip()
             if not player:
                 continue
+            # Keyed without case: the NCAA spells one player "Ndam-Simpson" in
+            # some box scores and "Ndam-simpson" in others, which split her
+            # season in two and showed 74 of her 110 kills.
             totals = rec["players"].setdefault(
-                player,
+                player.lower(),
                 {"player": player, "jerseyNumber": str(p.get("number") or ""),
                  "position": p.get("position") or "", "mp": 0,
                  **{k: 0 for k in STAT_KEYS}},
@@ -952,10 +1006,9 @@ def serving_blocks(path, data):
     """Each team block in a capture, paired with the team it belongs to.
 
     For a KU game the transposition guard decides which block is KU's, so a
-    contest the NCAA sent back the wrong way round is credited correctly. For
-    another team's game there is no roster to check against, so the teamId label
-    stands - the alternative is guessing, and a wrong guess here would silently
-    swap two teams' seasons.
+    contest the NCAA sent back the wrong way round is credited correctly. Another
+    team's game gets the same treatment from the opponent rosters, through
+    labelled_blocks; where no roster is known for either side the label stands.
     """
     box = data.get("box") or {}
     blocks = box.get("teamBoxscore") or []
@@ -978,7 +1031,7 @@ def serving_blocks(path, data):
             return [
                 (ku_name if b is ku_block else opp_name, b) for b in blocks
             ]
-    return [(names.get(str(b.get("teamId")), ""), b) for b in blocks]
+    return labelled_blocks(path, data)
 
 
 serving = {}  # norm team -> totals

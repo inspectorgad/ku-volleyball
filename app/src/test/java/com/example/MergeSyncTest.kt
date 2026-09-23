@@ -403,4 +403,33 @@ class MergeSyncTest {
             assertEquals(3, played.teamSets)
             assertNull(played.winProbability)
         }
+    @Test
+    fun `serve attempts fill in on existing lines without disturbing an edit`() = runTest {
+        val dao = db.dao()
+        fun seed(sat: Int?) = JSONObject(
+            """
+            {"players": [{"name": "Ada Alpha", "jerseyNumber": "1", "position": "OH"}],
+             "matches": [{"date": "2025-08-29", "opponent": "Wisconsin", "season": "2025",
+               "teamSets": 2, "opponentSets": 3,
+               "lines": [{"player": "Ada Alpha", "sp": 5, "k": 15, "e": 6, "ta": 36,
+                          "a": 1, "sa": 2, "se": 3, "d": 3, "bs": 0, "ba": 3,
+                          "re": 0, "bhe": 0${if (sat != null) ", \"sat\": $sat" else ""}}]}]}
+            """
+        )
+        // Synced by an older feed that did not carry attempts, then edited here.
+        Seeder.merge(seed(null), dao)
+        val synced = dao.statLinesOnce().single()
+        assertEquals(0, synced.serveAttempts)
+        dao.upsertStatLine(synced.copy(kills = 16))
+
+        // The next feed carries them: attempts arrive, the edit survives.
+        Seeder.merge(seed(21), dao)
+        val after = dao.statLinesOnce().single()
+        assertEquals(21, after.serveAttempts)
+        assertEquals(16, after.kills)
+
+        // And once filled, they are not overwritten by a later feed.
+        Seeder.merge(seed(99), dao)
+        assertEquals(21, dao.statLinesOnce().single().serveAttempts)
+    }
 }

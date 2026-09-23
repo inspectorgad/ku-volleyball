@@ -59,6 +59,8 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     val matchGoals by viewModel.matchGoals.collectAsStateWithLifecycle()
     val isSyncing by viewModel.isSyncing.collectAsStateWithLifecycle()
     val dataUpdatedAt by viewModel.dataUpdatedAt.collectAsStateWithLifecycle()
+    val lastCheckedMs by viewModel.lastCheckedMs.collectAsStateWithLifecycle()
+    val syncFailure by viewModel.syncFailure.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(Unit) {
@@ -171,7 +173,9 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                         statLines = statLines,
                         nationalLeaders = nationalLeaders,
                         matchGoals = matchGoals,
-                        dataUpdatedAt = dataUpdatedAt
+                        dataUpdatedAt = dataUpdatedAt,
+                        lastCheckedMs = lastCheckedMs,
+                        syncFailure = syncFailure
                     )
 
                     Tab.Serving -> ServingScreen(
