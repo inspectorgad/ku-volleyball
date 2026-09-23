@@ -1,5 +1,6 @@
 package com.example.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -206,7 +207,13 @@ fun LeadersScreen(
             // every time is a target worth arguing about.
             val seasonGoals = matchGoals.filter { it.matchId in seasonMatchIds }
             if (seasonGoals.isNotEmpty()) {
-                item { SeasonGoalsCard(seasonGoals, modifier = Modifier.padding(top = 8.dp)) }
+                item {
+                    SeasonGoalsCard(
+                        goals = seasonGoals,
+                        matches = seasonMatches,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
             }
 
             // The boards above rank the Jayhawks against each other. This one
@@ -241,17 +248,24 @@ fun LeadersScreen(
  * Ordered worst-first, because the rows worth reading are at that end.
  */
 @Composable
-fun SeasonGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
-    data class Tally(val name: String, val target: Double, val decimals: Int,
+fun SeasonGoalsCard(
+    goals: List<MatchGoal>,
+    matches: List<Match>,
+    modifier: Modifier = Modifier
+) {
+    data class Tally(val idx: Int, val name: String, val target: Double, val decimals: Int,
                      val ceiling: Boolean, val met: Int, val of: Int)
+
+    // Matches in the order they were played, so a trend reads left to right.
+    val order = matches.sortedBy { it.date }
+    var openGoal by rememberSaveable { mutableStateOf<Int?>(null) }
 
     val tallies = goals
         .filter { it.met != null }
         .groupBy { it.idx }
-        .values
-        .mapNotNull { rows ->
+        .map { (idx, rows) ->
             val first = rows.first()
-            Tally(first.name, first.target, first.decimals, first.ceiling,
+            Tally(idx, first.name, first.target, first.decimals, first.ceiling,
                   rows.count { it.met == true }, rows.size)
         }
         .sortedWith(compareBy({ it.met.toDouble() / it.of }, { it.name }))
@@ -273,9 +287,11 @@ fun SeasonGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(6.dp))
             tallies.forEach { t ->
                 val share = t.met.toDouble() / t.of
+                val open = openGoal == t.idx
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clickable { openGoal = if (open) null else t.idx }
                         .padding(vertical = 3.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -285,10 +301,7 @@ fun SeasonGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
                         modifier = Modifier.weight(1f)
                     )
                     Text(
-                        (if (t.ceiling) "≤ " else "") +
-                            if (t.decimals == 3)
-                                String.format(java.util.Locale.US, "%.3f", t.target).removePrefix("0")
-                            else String.format(java.util.Locale.US, "%.2f", t.target),
+                        (if (t.ceiling) "≤ " else "") + formatGoal(t.target, t.decimals),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(end = 12.dp)
@@ -304,6 +317,17 @@ fun SeasonGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
                             share >= 0.5 -> MaterialTheme.colorScheme.primary
                             else -> MaterialTheme.colorScheme.onSurface
                         }
+                    )
+                }
+                if (open) {
+                    val byMatch = goals.filter { it.idx == t.idx }.associateBy { it.matchId }
+                    GoalTrendChart(
+                        points = order.map { m ->
+                            GoalPoint(m.opponent.take(3), byMatch[m.id]?.value)
+                        },
+                        target = t.target,
+                        ceiling = t.ceiling,
+                        format = { v -> formatGoal(v, t.decimals) }
                     )
                 }
             }

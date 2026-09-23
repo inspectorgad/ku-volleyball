@@ -272,14 +272,6 @@ private fun GoalsLine(match: Match) {
     )
 }
 
-/** Formats a goal's number the way the staff's own sheet writes it. */
-private fun goalValue(v: Double?, decimals: Int): String = when {
-    v == null -> "—"
-    // A hitting percentage is written .362, without the leading zero.
-    decimals == 3 -> String.format(java.util.Locale.US, "%.3f", v).removePrefix("0")
-    else -> String.format(java.util.Locale.US, "%.2f", v)
-}
-
 /**
  * The staff's performance goals for one match: target, actual, met or missed.
  *
@@ -339,13 +331,13 @@ fun MatchGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
                     Text(
                         // "at most" for the two goals where the target is a
                         // ceiling, so a low number does not read as a failure.
-                        (if (goal.ceiling) "≤ " else "") + goalValue(goal.target, goal.decimals),
+                        (if (goal.ceiling) "≤ " else "") + formatGoal(goal.target, goal.decimals),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(end = 12.dp)
                     )
                     Text(
-                        goalValue(goal.value, goal.decimals),
+                        formatGoal(goal.value, goal.decimals),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = if (missed) MaterialTheme.colorScheme.error
