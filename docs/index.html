@@ -65,12 +65,16 @@
   }
   .chip[aria-pressed="true"] { background: var(--ku-blue); border-color: var(--ku-blue); color: #fff; font-weight: 600; }
   .grid { display: grid; gap: 14px; }
+  /* Grid items default to min-width: auto, which let a wide table (a 2025
+     five-setter's set scores) push its column past the page instead of
+     scrolling inside its card. */
+  .grid > * { min-width: 0; }
   .kpis { grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); margin-bottom: 14px; }
   .card { background: var(--card); border: 1px solid var(--hairline); border-radius: 10px; padding: 14px 16px; }
   .tile .label { font-size: 13px; color: var(--ink-3); }
   .tile .value { font-size: 26px; font-weight: 600; margin-top: 2px; font-variant-numeric: tabular-nums; }
   .tile.hero .value { font-size: 48px; line-height: 1.1; }
-  .tile .note { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  .tile .note { font-size: 12px; color: var(--ink-3); margin-top: 2px; overflow-wrap: anywhere; }
   h2 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
   h2 .muted { color: var(--ink-3); font-weight: 400; }
   .two-col { grid-template-columns: 2fr 1fr; margin-bottom: 14px; }
@@ -299,8 +303,10 @@ const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls)
 
 // The opponent as ranked on the night: "#4 Pittsburgh", or "(1) Nebraska" for
 // an NCAA tournament seed. Mirrors rankedOpponent() in the app's MatchFacts.kt.
-const rankedOpp = m => m.opponentRank ? `#${m.opponentRank} ${m.opponent}`
-  : m.opponentSeed ? `(${m.opponentSeed}) ${m.opponent}` : m.opponent;
+// A tournament seed wins over a rank, which for those matches comes from a
+// poll published after the tournament.
+const rankedOpp = m => m.opponentSeed ? `(${m.opponentSeed}) ${m.opponent}`
+  : m.opponentRank ? `#${m.opponentRank} ${m.opponent}` : m.opponent;
 const played = m => m.teamSets != null && m.opponentSets != null;
 const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -507,7 +513,7 @@ function renderKpis(results, lines) {
     .find(r => normTeam(r.team) === "kansas")?.rank;
   const nowLabel = now ? String(now) : "NR";
   if (path.at(-1) !== nowLabel) path.push(nowLabel);
-  tile("vs ranked", `${rw}–${ranked.length - rw}`, `unranked ${uw}–${un.length - uw} · KU rank ${path.join("→")}`,
+  tile("vs ranked", `${rw}–${ranked.length - rw}`, `unranked ${uw}–${un.length - uw} · KU rank ${path.join("→\u200b")}`,
     false, EXPLAIN.vsRanked + " " + EXPLAIN.kuRank + (scope !== "All matches" ? " " + EXPLAIN.scope : ""));
 
   // Sets decided by two points - every set that went past 25, and 25-23. The

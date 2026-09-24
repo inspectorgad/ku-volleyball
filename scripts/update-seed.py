@@ -269,9 +269,14 @@ def evaluate_goals(ku, opp, sets, players):
     roles = match_roles(players)
     values = []
     met = evaluated = team_met = team_evaluated = 0
+    # Judged on the number as published, rounded the way the card writes it,
+    # so the tally always agrees with the rows under it. Judging the raw value
+    # counted a .2897 hitting night as a miss against .290 while the card
+    # showed .290 beside a .290 target.
     for g in TEAM_GOALS:
         value = TEAM_METRICS[g["metric"]](ku, opp, sets)
-        values.append(None if value is None else round(value, g.get("decimals", 3)))
+        value = None if value is None else round(value, g.get("decimals", 3))
+        values.append(value)
         if value is None:
             continue
         target = g["target"]
@@ -281,7 +286,8 @@ def evaluate_goals(ku, opp, sets, players):
     for g in ROLE_GOALS:
         player = roles.get(g["role"])
         value = None if not player else ROLE_METRICS[g["metric"]](player)
-        values.append(None if value is None else round(value, g.get("decimals", 3)))
+        value = None if value is None else round(value, g.get("decimals", 3))
+        values.append(value)
         if value is None:
             continue
         evaluated, met = evaluated + 1, met + int(value >= g["target"])
@@ -796,8 +802,18 @@ if rpi.get("data") and rpi_season:
 # membership barely moves - so a non-D1 opponent's game stays out of the rating.
 d1_names = {norm_team(col(r, "School", "Team")) for r in rpi.get("data", [])}
 d1_raw = load_json("scraped/d1-results.json", {})
-d1_games = [[g[0], norm_team(g[1]), g[2], norm_team(g[3]), g[4]]
-            for g in (d1_raw.get("games") or {}).values()]
+# The scoreboard sometimes lists one match under two game IDs (Jacksonville St.
+# 0-3 Southern Miss. on Aug 29 appears as 6625557 and 6640466), which would
+# count it twice. Same day, same two teams, same score is taken as one match;
+# a genuine double-header with an identical score is rare enough to accept.
+d1_games, _seen = [], set()
+for g in sorted((d1_raw.get("games") or {}).items()):
+    row = [g[1][0], norm_team(g[1][1]), g[1][2], norm_team(g[1][3]), g[1][4]]
+    key = (row[0],) + tuple(sorted([(row[1], row[2]), (row[3], row[4])]))
+    if key in _seen:
+        continue
+    _seen.add(key)
+    d1_games.append(row)
 current_season = max((m["season"] for m in matches.values()), default=None)
 # Computed whether or not the NCAA has published: the win model below rates
 # unranked teams from these values, and the NCAA's table carries ranks only.
@@ -881,6 +897,17 @@ polls = [polls_by_season[s] for s in sorted(polls_by_season)]
 # postdates the tournament, so it is the nearest thing on disk rather than the
 # rank at first serve; it is used only to count the ranked/unranked record, and
 # the card still shows the seed the NCAA printed.
+#
+# Kansas's own rank is better than that: it is carried forward from its last
+# box score before the tournament, which is the rank it took into it. The
+# final poll had KU 14th after a tournament it entered 13th.
+last_ku_rank = {}
+for match in sorted(matches.values(), key=lambda m: m["date"]):
+    season = match.get("season")
+    if match.get("kuSeed") and not match.get("kuRank") and last_ku_rank.get(season):
+        match["kuRank"] = last_ku_rank[season]
+    elif match.get("kuRank"):
+        last_ku_rank[season] = match["kuRank"]
 for match in matches.values():
     season_poll = polls_by_season.get(match.get("season"))
     if not season_poll:

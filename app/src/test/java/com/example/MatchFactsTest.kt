@@ -42,6 +42,8 @@ class MatchFactsTest {
     fun `ranked opponent prefers the rank then the seed`() {
         assertEquals("#4 Pittsburgh", rankedOpponent(m(1, "2026-09-01", "Pittsburgh", oppRank = 4)))
         assertEquals("(1) Nebraska", rankedOpponent(m(1, "2025-12-01", "Nebraska").copy(opponentSeed = 1)))
+        // The seed wins: a tournament rank comes from the post-tournament poll.
+        assertEquals("(1) Nebraska", rankedOpponent(m(1, "2025-12-12", "Nebraska", oppRank = 3).copy(opponentSeed = 1)))
         assertEquals("Tulsa", rankedOpponent(m(1, "2026-09-01", "Tulsa")))
     }
 

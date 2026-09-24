@@ -16,13 +16,15 @@ import kotlin.math.roundToInt
 val Match.played: Boolean get() = teamSets != null && opponentSets != null
 
 /**
- * The opponent as the poll stood when the match was played: "#4 Pittsburgh",
- * or "(1) Nebraska" for an NCAA tournament seed with no rank to hand. The rank
- * wins when both exist - it is the number the rest of the app talks in.
+ * The opponent as the poll stood when the match was played, "#4 Pittsburgh",
+ * or its NCAA tournament seed, "(1) Nebraska", for a tournament match.
  */
 fun rankedOpponent(match: Match): String = when {
-    match.opponentRank != null -> "#${match.opponentRank} ${match.opponent}"
+    // A tournament seed wins: a tournament match's rank is filled from the
+    // season's final poll, which was published after the tournament, so the
+    // seed is the only number that describes the night itself.
     match.opponentSeed != null -> "(${match.opponentSeed}) ${match.opponent}"
+    match.opponentRank != null -> "#${match.opponentRank} ${match.opponent}"
     else -> match.opponent
 }
 
