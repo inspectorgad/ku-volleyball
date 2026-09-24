@@ -204,6 +204,49 @@ const val EXPLAIN_MILESTONES =
         "means every season this app holds (2025 onward), so totals from earlier years or " +
         "another school are not included."
 
+const val EXPLAIN_FORECAST =
+    "Est. win is the win model's chance that KU wins this match. Every team gets a power " +
+        "rating: ranked teams from the AVCA coaches' poll, and unranked teams from their " +
+        "results this season (their RPI), blended with a preseason estimate that counts for " +
+        "less the more they play. The gap between KU's rating and the opponent's, plus a home " +
+        "or road adjustment, becomes the percentage. It is an estimate from ratings, not a " +
+        "betting line; the Win model scorecard on the Leaders tab shows how it has done."
+
+/** The one sentence on where this opponent's rating comes from. */
+fun forecastSourceLine(ratingSource: String?): String = when (ratingSource) {
+    "poll" -> "This opponent is rated from the current AVCA poll."
+    "results" -> "This opponent is unranked, so it is rated from its results this season blended with its preseason estimate."
+    "preseason" -> "This opponent has played too few Division I matches to rate from results, so its preseason estimate is used."
+    else -> ""
+}
+
+const val EXPLAIN_LAST_MEETING =
+    "The most recent match between these two teams, from KU's side: the result, the set " +
+        "scores, and the opponent's top attackers that day. Rosters change between seasons, " +
+        "so an old meeting is a rough guide only."
+
+const val EXPLAIN_ROSTER =
+    "From the school's own roster page. Each player shows position, height, this season's " +
+        "stats where the NCAA has them, and \"K vs KU\": kills against Kansas across every " +
+        "meeting this app holds."
+
+const val EXPLAIN_MATCH_GOALS =
+    "The coaching staff's game-by-game targets, scored from this match's box score. Each row " +
+        "shows the target, then what KU did: black is met, red is missed, and ≤ marks a goal " +
+        "where lower is better. Team goals come first. Role goals (Setter, middles M1 and M2, " +
+        "OPP for the opposite, L1 and L2 for the left sides) belong to whoever played that role " +
+        "in this match, named under the goal."
+
+const val EXPLAIN_SEASON_GOALS =
+    "How often each target has been met this season, least often first. A goal that is " +
+        "almost never met may be set out of reach rather than badly played. Tap a goal for " +
+        "its match-by-match chart; the dashed line is the target and red dots are misses."
+
+const val EXPLAIN_POLL =
+    "The AVCA coaches' top 25. ▲ or ▼ is the move since the previous poll and NEW is a team " +
+        "that was unranked last time. The number in brackets after a team is its first-place " +
+        "votes. Big 12 teams are in bold."
+
 data class CommonOpponent(val team: String, val ku: String, val them: String)
 
 /** The feed's common-opponent list; empty for anything unreadable. */

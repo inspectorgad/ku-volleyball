@@ -393,6 +393,7 @@ fun MatchGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
                     )
                 }
             }
+            Explanation(EXPLAIN_MATCH_GOALS)
         }
     }
 }
@@ -431,6 +432,7 @@ private fun LastMeetingCard(meeting: Match, theirLines: List<OpponentStatLine>) 
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+            Explanation(EXPLAIN_LAST_MEETING)
         }
     }
 }
@@ -696,6 +698,16 @@ fun MatchDetailScreen(
                 }
             }
 
+            // How the estimate beside a fixture is made, and where this
+            // opponent's rating comes from.
+            if (!match.played && match.winProbability != null) {
+                item {
+                    Explanation(
+                        EXPLAIN_FORECAST + " " + forecastSourceLine(match.ratingSource)
+                    )
+                }
+            }
+
             // After the match: what was asked of the team that night and what
             // they did, which is the question the result does not answer.
             if (matchGoals.isNotEmpty()) {
@@ -760,12 +772,15 @@ fun MatchDetailScreen(
                     }
                 } else {
                     item {
-                        Text(
-                            "${match.opponent} Roster",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
+                        Column {
+                            Text(
+                                "${match.opponent} Roster",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                            Explanation(EXPLAIN_ROSTER)
+                        }
                     }
                     items(roster.sortedBy { it.jerseyNumber.toIntOrNull() ?: 99 },
                         key = { it.playerName }) { p ->

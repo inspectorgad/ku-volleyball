@@ -150,6 +150,7 @@ fun StandingsScreen(
                             Spacer(modifier = Modifier.height(6.dp))
                             HorizontalDivider()
                             poll.forEach { PollRow(it) }
+                            Explanation(EXPLAIN_POLL)
                         }
                     }
                 }

@@ -204,6 +204,7 @@
       <h2 id="poll-title">National poll</h2>
       <div class="sub" id="poll-updated"></div>
       <table id="poll"></table>
+      <p class="fineprint" id="poll-note"></p>
     </section>
   </div>
   <section class="card scroll" id="serving-wrap" hidden>
@@ -235,12 +236,14 @@
       <h2>Performance goals <span class="muted">— the staff's game-by-game targets, least often met first</span></h2>
       <div class="sub" id="goal-sub"></div>
       <table id="goal-tally"></table>
+      <p class="fineprint" id="goal-season-note"></p>
       <div id="goal-trend" style="margin-top:12px"></div>
     </section>
     <section class="card scroll" id="goal-match">
       <h2>One match <span class="muted">— or click a row in Match results</span></h2>
       <select id="goal-pick" aria-label="Match"></select>
       <table id="goal-detail"></table>
+      <p class="fineprint" id="goal-match-note"></p>
     </section>
   </div>
   <section class="card scroll" id="scout-wrap" hidden>
@@ -338,6 +341,12 @@ const EXPLAIN = {
   resume: "RPI (Rating Percentage Index) is the NCAA's strength-of-record formula: 25% a team's winning percentage, 50% its opponents', 25% its opponents' opponents'. The selection committee uses it to choose and seed the NCAA tournament. Each band is KU's record against teams ranked in that range today; wins over the top 50 help a resume most and losses outside the top 100 hurt it most. Until the NCAA publishes this season's RPI, the one shown is worked out here from every Division I result and marked provisional.",
   sets: "Set 1, Set 2 ...: KU's sets won-lost in that set across all matches; only matches that went four or five sets count toward Sets 4 and 5. Won/lost set 1: KU's match record after winning or losing the opening set. Close sets: sets decided by exactly two points - every set that went past 25, plus 25-23 (15-13 in a fifth). A comeback line appears when KU wins from 0-2 down or loses from 2-0 up.",
   scorecard: "Grades the win % shown on the schedule, using the last forecast made before first serve. Called: how often the team the model favoured won. Expected wins: the forecasts added up; if it runs well ahead of the wins KU actually has, the ratings are too kind to KU. Brier score: the average squared gap between forecast and result (1 for a win, 0 for a loss). 0 is perfect, 0.25 is what saying 50% every time would score, and lower is better. Matches before Sep 19, when the model started, are not graded.",
+  forecast: "Est. win is the win model's chance that KU wins this match. Every team gets a power rating: ranked teams from the AVCA coaches' poll, and unranked teams from their results this season (their RPI), blended with a preseason estimate that counts for less the more they play. The gap between KU's rating and the opponent's, plus a home or road adjustment, becomes the percentage. It is an estimate from ratings, not a betting line; the Win model scorecard near the top of this page shows how it has done.",
+  lastMeeting: "The most recent match between these two teams, from KU's side: the result, the set scores, and the opponent's top attackers that day. Rosters change between seasons, so an old meeting is a rough guide only.",
+  roster: "From the school's own roster page. Each player shows position, height, this season's stats where the NCAA has them, and \"K vs KU\": kills against Kansas across every meeting this dashboard holds.",
+  matchGoals: "The coaching staff's game-by-game targets, scored from this match's box score. Each row shows the target, then what KU did: black is met, red is missed, and ≤ marks a goal where lower is better. Team goals come first. Role goals (Setter, middles M1 and M2, OPP for the opposite, L1 and L2 for the left sides) belong to whoever played that role in this match, named in the Who column.",
+  seasonGoals: "How often each target has been met this season, least often first. A goal that is almost never met may be set out of reach rather than badly played. Click a goal for its match-by-match chart; the dashed line is the target and red dots are misses.",
+  poll: "The AVCA coaches' top 25. ▲ or ▼ is the move since the previous poll and NEW is a team that was unranked last time. The number in brackets after a team is its first-place votes. Big 12 teams carry a Big 12 tag and Kansas is highlighted.",
   common: "Teams both KU and this opponent have played this season, and how each side did. A rough guide only: venue, injuries and the point in the season all change what a result means.",
 };
 
@@ -616,6 +625,11 @@ function renderUpcoming(upcoming) {
       li.appendChild(s);
     }
     ul.appendChild(li);
+  }
+  if (upcoming.some(m => m.winProbability != null)) {
+    const note = el("li", null);
+    note.appendChild(el("p", "fineprint", EXPLAIN.forecast));
+    ul.appendChild(note);
   }
 }
 
@@ -1057,6 +1071,9 @@ function renderGoals(results) {
     tr.onclick = pick;
     tr.onkeydown = ev => { if (ev.key === "Enter") pick(); };
   }
+  const seasonNote = document.getElementById("goal-season-note");
+  seasonNote.textContent = EXPLAIN.seasonGoals;
+  document.getElementById("goal-match-note").textContent = EXPLAIN.matchGoals;
   renderGoalTrend(defs[goalTrendIdx], withGoals.map(m => ({ m, v: m.goals.values[goalTrendIdx] })).filter(p => p.v != null));
 
   // One match: picker plus the breakdown, black for met and red for missed as
@@ -1185,6 +1202,7 @@ function renderScouting() {
       box.appendChild(el("div", "sub", `Last met: ${meetingLabel(last)} ${siteWord(last)} ${rankedOpp(last)}`
         + (last.setScores ? ` · ${last.setScores}` : "")
         + (top.length ? ` · their kills: ${top.map(l => `${l.player} ${l.k}`).join(", ")}` : "")));
+      box.appendChild(el("p", "fineprint", EXPLAIN.lastMeeting));
     }
     // Teams both sides have played this season.
     if (match.commonOpponents?.length) {
@@ -1232,6 +1250,7 @@ function renderScouting() {
       if (hasVs) r.insertCell().textContent = vsKu.get(p.player.toLowerCase()) || "—";
     }
     box.appendChild(t);
+    box.appendChild(el("p", "fineprint", EXPLAIN.roster));
   });
 }
 
@@ -1407,6 +1426,7 @@ function renderBig12() {
   document.getElementById("poll-updated").textContent = poll
     ? `${poll.updated} · ${poll.rows.filter(r => r.big12).length} of ${poll.rows.length} from the Big 12`
     : "";
+  document.getElementById("poll-note").textContent = poll ? EXPLAIN.poll : "";
   if (!poll) return;
   const ph = pt.createTHead().insertRow();
   for (const h of ["#", "", "Team", "Record", "Pts"]) {

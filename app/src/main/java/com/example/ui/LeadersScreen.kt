@@ -464,6 +464,7 @@ fun SeasonGoalsCard(
                     )
                 }
             }
+            Explanation(EXPLAIN_SEASON_GOALS)
         }
     }
 }
