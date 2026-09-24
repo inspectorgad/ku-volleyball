@@ -20,6 +20,11 @@ TEAM_SEO = "kansas"
 SEED_PATH = "app/src/main/assets/seed.json"
 
 
+# The NCAA API sends a few names double-encoded ("InÃ©s" for "Inés"), so every
+# box score read below goes through fix_tree (scripts/text_fix.py).
+from text_fix import fix_tree  # noqa: E402
+
+
 def load_json(path, default):
     try:
         with open(path) as f:
@@ -363,7 +368,7 @@ def ku_side(blocks, ku_team_id):
 
 # --- Finished matches from NCAA box scores ---------------------------------
 for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
-    data = load_json(path, None)
+    data = fix_tree(load_json(path, None))
     if not data:
         continue
     contests = (data.get("info") or {}).get("contests") or []
@@ -1024,7 +1029,7 @@ def labelled_blocks(path, data):
 
 form = {}  # norm team -> {"team":..., "matches": set, "players": {name: totals}}
 for path in sorted(glob.glob("scraped/ncaa-opp-*.json")):
-    data = load_json(path, None)
+    data = fix_tree(load_json(path, None))
     if not data:
         continue
     for name, tb in labelled_blocks(path, data):
@@ -1116,7 +1121,7 @@ def serving_blocks(path, data):
 
 serving = {}  # norm team -> totals
 for path in sorted(glob.glob("scraped/ncaa-opp-*.json") + glob.glob("scraped/ncaa-game-*.json")):
-    data = load_json(path, None)
+    data = fix_tree(load_json(path, None))
     if not data:
         continue
     season = str(data.get("season") or (data.get("date") or "")[:4])
