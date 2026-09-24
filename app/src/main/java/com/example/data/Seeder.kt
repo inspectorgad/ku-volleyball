@@ -168,6 +168,9 @@ object Seeder {
             val seedOpponentSeed = optIntOrNull("opponentSeed")
             val seedTime = m.optString("time")
             val seedTv = m.optString("tv")
+            val seedOpponentRpi = optIntOrNull("opponentRpi")
+            val seedForecast = if (m.has("forecast")) m.getDouble("forecast") else null
+            val seedCommon = m.optJSONArray("commonOpponents")?.toString() ?: ""
 
             val seedHome = if (m.has("home")) m.getBoolean("home") else null
             val seedNeutral = m.optBoolean("neutral")
@@ -200,7 +203,10 @@ object Seeder {
                         kuSeed = seedKuSeed,
                         opponentSeed = seedOpponentSeed,
                         time = seedTime,
-                        tv = seedTv
+                        tv = seedTv,
+                        opponentRpi = seedOpponentRpi,
+                        forecast = seedForecast,
+                        commonOpponents = seedCommon
                     )
                 )
             } else {
@@ -249,7 +255,10 @@ object Seeder {
                     kuSeed = seedKuSeed,
                     opponentSeed = seedOpponentSeed,
                     time = seedTime,
-                    tv = seedTv
+                    tv = seedTv,
+                    opponentRpi = seedOpponentRpi,
+                    forecast = seedForecast,
+                    commonOpponents = seedCommon
                 )
                 if (updated != existing) dao.updateMatch(updated)
             }
@@ -503,7 +512,8 @@ object Seeder {
                         overallW = s.optInt("overallW"),
                         overallL = s.optInt("overallL"),
                         nationalRank = s.optInt("nationalRank").takeIf { it > 0 },
-                        rpiRank = s.optInt("rpiRank").takeIf { it > 0 }
+                        rpiRank = s.optInt("rpiRank").takeIf { it > 0 },
+                        rpiSource = s.optString("rpiSource")
                     )
                 )
             }

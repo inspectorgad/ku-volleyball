@@ -148,6 +148,8 @@
   #matches tbody tr:hover td, #matches tbody tr.sel td { background: var(--chip-bg); }
   td.miss { color: var(--loss); }
   #goal-match select { font: inherit; margin: 0 0 10px; padding: 3px 6px; background: var(--card); color: var(--ink); border: 1px solid var(--hairline); border-radius: 6px; }
+  .insight .line { font-size: 13px; color: var(--ink-2); padding: 2px 0; }
+  .insight .fine { font-size: 11px; color: var(--ink-3); margin-top: 6px; }
   .subscribe { color: var(--ku-blue); font-size: 14px; text-decoration: none; }
   .subscribe:hover { text-decoration: underline; }
   @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
@@ -166,6 +168,7 @@
 <div id="status">Loading season data…</div>
 <main id="app" hidden>
   <div class="grid kpis" id="kpis"></div>
+  <div class="grid leaders" id="insights"></div>
   <div class="grid two-col">
     <section class="card">
       <h2>Hitting % by match <span class="muted" id="chart-season"></span></h2>
@@ -384,6 +387,7 @@ function totals(lines) {
 function render() {
   const { results, upcoming, lines } = slice();
   renderKpis(results, lines);
+  renderInsights(results);
   renderLine(results);
   renderStrip(results);
   renderUpcoming(upcoming);
@@ -799,6 +803,83 @@ function renderMatchTable(results) {
   }
 }
 
+// --- Résumé, set by set, and the win model's scorecard ---------------------
+// Mirrors SeasonInsights.kt in the app.
+function renderInsights(results) {
+  const host = document.getElementById("insights");
+  host.replaceChildren();
+  if (season === "All" || !results.length) return;
+  const card = (title, lines, fine) => {
+    const c = el("section", "card insight");
+    c.appendChild(el("h2", null, title));
+    for (const l of lines.filter(Boolean)) c.appendChild(el("div", "line", l));
+    if (fine) c.appendChild(el("div", "fine", fine));
+    host.appendChild(c);
+  };
+  const won = m => m.teamSets > m.opponentSets;
+
+  // Tournament résumé: record by the opponent's RPI band.
+  const rated = results.filter(m => m.opponentRpi);
+  if (rated.length) {
+    const ku = (SEED.standings ?? []).find(x => x.season === season && normTeam(x.team) === "kansas");
+    const bands = [["RPI 1-25", 1, 25], ["26-50", 26, 50], ["51-100", 51, 100], ["101+", 101, Infinity]];
+    const tier = bands.map(([label, lo, hi]) => {
+      const inBand = rated.filter(m => m.opponentRpi >= lo && m.opponentRpi <= hi);
+      return `${label}: ${inBand.filter(won).length}-${inBand.filter(m => !won(m)).length}`;
+    }).join(" · ");
+    // One entry per opponent: two wins over the same team are one data point here.
+    const firstPer = list => list.filter((m, i) => list.findIndex(x => normTeam(x.opponent) === normTeam(m.opponent)) === i);
+    const best = firstPer(rated.filter(won).sort((a, b) => a.opponentRpi - b.opponentRpi)).slice(0, 3);
+    const worst = firstPer(rated.filter(m => !won(m)).sort((a, b) => b.opponentRpi - a.opponentRpi)).slice(0, 2);
+    const provisional = ku?.rpiSource === "provisional";
+    card("Tournament résumé", [
+      ku?.rpiRank ? `KU RPI #${ku.rpiRank}${provisional ? " (provisional)" : " (NCAA)"}` : "",
+      tier,
+      best.length ? "Best wins: " + best.map(m => `${m.opponent} (#${m.opponentRpi})`).join(", ") : "",
+      worst.length ? "Worst losses: " + worst.map(m => `${m.opponent} (#${m.opponentRpi})`).join(", ") : "",
+    ], provisional
+      ? `Provisional RPI worked out here from every Division I result (${SEED.rpi?.updated?.replace(/^Provisional, /, "") ?? ""}), `
+        + "25% winning percentage, 50% opponents', 25% opponents' opponents'. The NCAA's own replaces it once published."
+      : "Opponents ranked by the NCAA's RPI for the season.");
+  }
+
+  // Set by set.
+  const games = results.map(m => ({ m, sets: (m.setScores ?? "").split(",").map(x => x.trim().split("-").map(Number))
+    .filter(x => x.length === 2 && x.every(Number.isFinite)) })).filter(g => g.sets.length);
+  if (games.length) {
+    const bySet = [0, 1, 2, 3, 4].map(i => {
+      const sets = games.map(g => g.sets[i]).filter(Boolean);
+      return [sets.filter(([a, b]) => a > b).length, sets.filter(([a, b]) => a < b).length];
+    }).filter(([w, l]) => w + l);
+    const rec = list => `${list.filter(g => won(g.m)).length}-${list.filter(g => !won(g.m)).length}`;
+    const wonFirst = games.filter(g => g.sets[0][0] > g.sets[0][1]);
+    const lostFirst = games.filter(g => g.sets[0][0] < g.sets[0][1]);
+    const close = games.flatMap(g => g.sets).filter(([a, b]) => Math.abs(a - b) <= 2);
+    const down2 = g => g.sets.length >= 2 && g.sets[0][0] < g.sets[0][1] && g.sets[1][0] < g.sets[1][1];
+    const up2 = g => g.sets.length >= 2 && g.sets[0][0] > g.sets[0][1] && g.sets[1][0] > g.sets[1][1];
+    const rev = games.filter(g => down2(g) && won(g.m)).length, blown = games.filter(g => up2(g) && !won(g.m)).length;
+    card("Set by set", [
+      bySet.map(([w, l], i) => `Set ${i + 1} ${w}-${l}`).join(" · "),
+      `Won set 1: ${rec(wonFirst)} · lost set 1: ${rec(lostFirst)}`,
+      `Close sets (2 pts): ${close.filter(([a, b]) => a > b).length}-${close.filter(([a, b]) => a < b).length}`,
+      [rev ? `came back from 0-2 ${rev}×` : "", blown ? `lost from 2-0 up ${blown}×` : ""].filter(Boolean).join(" · ")
+        .replace(/^./, c => c.toUpperCase()),
+    ]);
+  }
+
+  // The win model graded against what happened.
+  const graded = results.filter(m => m.forecast != null);
+  if (graded.length) {
+    const called = graded.filter(m => (m.forecast >= 0.5) === won(m)).length;
+    const exp = graded.reduce((a, m) => a + m.forecast, 0);
+    const brier = graded.reduce((a, m) => a + (m.forecast - (won(m) ? 1 : 0)) ** 2, 0) / graded.length;
+    card("Win model scorecard", [
+      `Called ${called} of ${graded.length} · expected ${exp.toFixed(1)} wins, won ${graded.filter(won).length} · Brier ${brier.toFixed(2)}`,
+      ...[...graded].reverse().map(m => `${m.date} ${siteWord(m)} ${m.opponent}: ${Math.round(m.forecast * 100)}% → ${won(m) ? "W" : "L"} ${m.teamSets}-${m.opponentSets}`),
+    ], "The last forecast before first serve. Brier is the mean squared miss: 0 is perfect, 0.25 is a coin flip.");
+  }
+}
+
 // --- Performance goals: season tally, trend, and one match's breakdown -------
 // The same as the app's Leaders card and match detail: which of the staff's
 // targets KU meet, how often, and how the number has moved match to match.
@@ -970,6 +1051,11 @@ function renderScouting() {
       box.appendChild(el("div", "sub", `Last met: ${meetingLabel(last)} ${siteWord(last)} ${rankedOpp(last)}`
         + (last.setScores ? ` · ${last.setScores}` : "")
         + (top.length ? ` · their kills: ${top.map(l => `${l.player} ${l.k}`).join(", ")}` : "")));
+    }
+    // Teams both sides have played this season.
+    if (match.commonOpponents?.length) {
+      box.appendChild(el("div", "sub", "Common opponents: " + match.commonOpponents
+        .map(c => `${c.team} (KU ${c.ku}; ${match.opponent} ${c.them})`).join(" · ")));
     }
     // Kills against Kansas over every meeting, per player.
     const vsKu = new Map();

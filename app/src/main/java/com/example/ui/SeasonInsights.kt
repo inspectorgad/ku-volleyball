@@ -1,0 +1,155 @@
+package com.example.ui
+
+import com.example.data.Match
+import com.example.data.normTeam
+import org.json.JSONArray
+import kotlin.math.abs
+import kotlin.math.roundToInt
+
+/*
+ * The season read three more ways: how good the win model has been, what KU's
+ * résumé looks like to a selection committee, and how their matches have gone
+ * set by set. Plain functions, kept out of the composables for the tests.
+ */
+
+private val Match.won: Boolean get() = (teamSets ?: 0) > (opponentSets ?: 0)
+
+data class Scorecard(
+    val graded: Int,
+    // Matches where the side the model favoured won. A 50% call counts as KU.
+    val called: Int,
+    val expectedWins: Double,
+    val actualWins: Int,
+    // Mean squared error of the forecast against the result: 0 is perfect,
+    // 0.25 is what saying 50% every time would score.
+    val brier: Double
+)
+
+fun forecastScorecard(matches: List<Match>, season: String): Scorecard? {
+    val graded = matches.filter { it.season == season && it.played && it.forecast != null }
+    if (graded.isEmpty()) return null
+    return Scorecard(
+        graded = graded.size,
+        called = graded.count { (it.forecast!! >= 0.5) == it.won },
+        expectedWins = graded.sumOf { it.forecast!! },
+        actualWins = graded.count { it.won },
+        brier = graded.sumOf {
+            val miss = it.forecast!! - if (it.won) 1.0 else 0.0
+            miss * miss
+        } / graded.size
+    )
+}
+
+fun scorecardLine(s: Scorecard): String =
+    "Called ${s.called} of ${s.graded} · expected " +
+        "${"%.1f".format(java.util.Locale.US, s.expectedWins)} wins, won ${s.actualWins} · " +
+        "Brier ${"%.2f".format(java.util.Locale.US, s.brier)} (0.25 = coin flip)"
+
+data class RpiTier(val label: String, val wins: Int, val losses: Int)
+
+data class Resume(
+    val tiers: List<RpiTier>,
+    val bestWins: List<Match>,
+    val worstLosses: List<Match>,
+    // Played matches whose opponent has no RPI rank in the table (not
+    // Division I, or a name the table spells differently).
+    val unrated: Int
+)
+
+/**
+ * Record by the opponent's RPI band, the way committees read a résumé:
+ * wins over the top 25 and top 50 build a case, losses outside the top 100
+ * damage one.
+ */
+fun rpiResume(matches: List<Match>, season: String): Resume? {
+    val played = matches.filter { it.season == season && it.played }
+    val rated = played.filter { it.opponentRpi != null }
+    if (rated.isEmpty()) return null
+    val bands = listOf("RPI 1-25" to 1..25, "26-50" to 26..50, "51-100" to 51..100, "101+" to 101..Int.MAX_VALUE)
+    val tiers = bands.map { (label, range) ->
+        val inBand = rated.filter { it.opponentRpi!! in range }
+        RpiTier(label, inBand.count { it.won }, inBand.count { !it.won })
+    }
+    return Resume(
+        tiers = tiers,
+        // One entry per opponent: two wins over the same team are one data point here.
+        bestWins = rated.filter { it.won }.sortedBy { it.opponentRpi }.distinctBy { normTeam(it.opponent) }.take(3),
+        worstLosses = rated.filter { !it.won }.sortedByDescending { it.opponentRpi }
+            .distinctBy { normTeam(it.opponent) }.take(2),
+        unrated = played.size - rated.size
+    )
+}
+
+fun resumeLine(r: Resume): String =
+    r.tiers.joinToString(" · ") { "${it.label}: ${it.wins}-${it.losses}" }
+
+/** Set scores from KU's side, e.g. "25-21, 18-25" -> [(25,21),(18,25)]. */
+fun parseSets(setScores: String?): List<Pair<Int, Int>> =
+    setScores.orEmpty().split(",").mapNotNull { part ->
+        val bits = part.trim().split("-")
+        if (bits.size != 2) null
+        else bits[0].trim().toIntOrNull()?.let { a -> bits[1].trim().toIntOrNull()?.let { b -> a to b } }
+    }
+
+data class SetPatterns(
+    // Sets won and lost by set number, first set first.
+    val bySet: List<Pair<Int, Int>>,
+    val wonFirstRecord: Pair<Int, Int>,
+    val lostFirstRecord: Pair<Int, Int>,
+    // Sets decided by two points - every deuce set, and 25-23.
+    val closeSets: Pair<Int, Int>,
+    val reverseSweeps: Int,
+    val blownTwoNil: Int,
+    val matches: Int
+)
+
+fun setPatterns(matches: List<Match>, season: String): SetPatterns? {
+    val games = matches.filter { it.season == season && it.played }
+        .map { it to parseSets(it.setScores) }
+        .filter { it.second.isNotEmpty() }
+    if (games.isEmpty()) return null
+    val bySet = (0 until 5).map { i ->
+        val sets = games.mapNotNull { it.second.getOrNull(i) }
+        sets.count { it.first > it.second } to sets.count { it.first < it.second }
+    }.filter { it.first + it.second > 0 }
+    fun record(list: List<Pair<Match, List<Pair<Int, Int>>>>) =
+        list.count { it.first.won } to list.count { !it.first.won }
+    val (wonFirst, lostFirst) = games.partition { it.second[0].first > it.second[0].second }
+    val all = games.flatMap { it.second }
+    val close = all.filter { abs(it.first - it.second) <= 2 }
+    fun downTwoNil(sets: List<Pair<Int, Int>>) = sets.size >= 2 && sets[0].first < sets[0].second && sets[1].first < sets[1].second
+    fun upTwoNil(sets: List<Pair<Int, Int>>) = sets.size >= 2 && sets[0].first > sets[0].second && sets[1].first > sets[1].second
+    return SetPatterns(
+        bySet = bySet,
+        wonFirstRecord = record(wonFirst),
+        lostFirstRecord = record(lostFirst),
+        closeSets = close.count { it.first > it.second } to close.count { it.first < it.second },
+        reverseSweeps = games.count { downTwoNil(it.second) && it.first.won },
+        blownTwoNil = games.count { upTwoNil(it.second) && !it.first.won },
+        matches = games.size
+    )
+}
+
+fun setPatternLines(p: SetPatterns): List<String> = listOfNotNull(
+    p.bySet.mapIndexed { i, (w, l) -> "Set ${i + 1} $w-$l" }.joinToString(" · "),
+    "Won set 1: ${p.wonFirstRecord.first}-${p.wonFirstRecord.second} · lost set 1: ${p.lostFirstRecord.first}-${p.lostFirstRecord.second}",
+    "Close sets (2 pts): ${p.closeSets.first}-${p.closeSets.second}",
+    listOfNotNull(
+        p.reverseSweeps.takeIf { it > 0 }?.let { "came back from 0-2 $it×" },
+        p.blownTwoNil.takeIf { it > 0 }?.let { "lost from 2-0 up $it×" }
+    ).takeIf { it.isNotEmpty() }?.joinToString(" · ")?.replaceFirstChar { it.uppercase() }
+)
+
+data class CommonOpponent(val team: String, val ku: String, val them: String)
+
+/** The feed's common-opponent list; empty for anything unreadable. */
+fun parseCommonOpponents(json: String): List<CommonOpponent> = runCatching {
+    val arr = JSONArray(json)
+    (0 until arr.length()).map { i ->
+        val o = arr.getJSONObject(i)
+        CommonOpponent(o.optString("team"), o.optString("ku"), o.optString("them"))
+    }
+}.getOrDefault(emptyList())
+
+/** Percent, rounded, for the scorecard's per-match rows. */
+fun pct(p: Double): String = "${(p * 100).roundToInt()}%"

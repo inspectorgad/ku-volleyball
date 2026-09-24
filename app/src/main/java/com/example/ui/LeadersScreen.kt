@@ -185,6 +185,51 @@ fun LeadersScreen(
                 }
             }
 
+            if (season != ALL_SEASONS) {
+                // What a selection committee reads: KU's RPI and the record by
+                // the opponents' RPI band.
+                val kuStanding = standings.firstOrNull { it.season == season && sameTeam(it.team, "Kansas") }
+                rpiResume(matches, season)?.let { r ->
+                    item {
+                        InsightCard(
+                            title = "Tournament résumé",
+                            lines = listOfNotNull(
+                                kuStanding?.rpiRank?.let {
+                                    "KU RPI #$it" + if (kuStanding?.rpiSource == "provisional")
+                                        " (provisional, worked out here from every D1 result until " +
+                                            "the NCAA publishes its first)" else " (NCAA)"
+                                },
+                                resumeLine(r),
+                                r.bestWins.takeIf { it.isNotEmpty() }?.let { w ->
+                                    "Best wins: " + w.joinToString(", ") { "${it.opponent} (#${it.opponentRpi})" }
+                                },
+                                r.worstLosses.takeIf { it.isNotEmpty() }?.let { l ->
+                                    "Worst losses: " + l.joinToString(", ") { "${it.opponent} (#${it.opponentRpi})" }
+                                },
+                                r.unrated.takeIf { it > 0 }?.let { "$it match(es) against teams without an RPI rank" }
+                            )
+                        )
+                    }
+                }
+                setPatterns(matches, season)?.let { p ->
+                    item { InsightCard("Set by set", setPatternLines(p)) }
+                }
+                forecastScorecard(matches, season)?.let { sc ->
+                    item {
+                        InsightCard(
+                            title = "Win model scorecard",
+                            lines = listOf(scorecardLine(sc)) +
+                                matches.filter { it.season == season && it.played && it.forecast != null }
+                                    .sortedByDescending { it.date }
+                                    .map { m ->
+                                        "${m.date} ${m.versus} ${m.opponent}: ${pct(m.forecast!!)} → " +
+                                            "${if ((m.teamSets ?: 0) > (m.opponentSets ?: 0)) "W" else "L"} ${m.teamSets}-${m.opponentSets}"
+                                    }
+                        )
+                    }
+                }
+            }
+
             item {
                 LeaderCard(
                     title = "Hitting %" + if (minAttempts > 0) " (min $minAttempts TA)" else "",
@@ -278,6 +323,23 @@ fun LeadersScreen(
             // Under the boards, same as on the Serving screen: a reference is
             // looked up after something on the way down raised the question.
             item { StatGlossaryCard(modifier = Modifier.padding(top = 8.dp)) }
+        }
+    }
+}
+
+@Composable
+private fun InsightCard(title: String, lines: List<String>) {
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(4.dp))
+            lines.forEach {
+                Text(
+                    it,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

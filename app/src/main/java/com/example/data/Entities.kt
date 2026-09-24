@@ -21,7 +21,10 @@ data class ConferenceStanding(
     val overallL: Int = 0,
     // AVCA national rank as last reported by the scoreboard that season.
     val nationalRank: Int? = null,
-    val rpiRank: Int? = null
+    val rpiRank: Int? = null,
+    // "ncaa" for the NCAA's own RPI, "provisional" for the one the feed works
+    // out from every D1 result until the NCAA publishes the season's first.
+    val rpiSource: String = ""
 ) {
     val confPct: Double get() = (confW + confL).let { if (it == 0) 0.0 else confW.toDouble() / it }
     val overallPct: Double get() = (overallW + overallL).let { if (it == 0) 0.0 else overallW.toDouble() / it }
@@ -181,6 +184,15 @@ data class Match(
     // the athletics schedule. Empty when not yet announced.
     val time: String = "",
     val tv: String = "",
+    // The opponent's RPI rank for the season (for played matches), which is
+    // what quality wins are judged by.
+    val opponentRpi: Int? = null,
+    // The win model's last forecast before first serve, kept once the match
+    // is played so the model can be graded.
+    val forecast: Double? = null,
+    // Teams both sides have played this season, as the feed's JSON array of
+    // {"team","ku","them"}. Upcoming matches only; empty when there are none.
+    val commonOpponents: String = "",
     // Who is taking the spare ticket for this match. Typed in by hand and owned
     // by this device alone - it is not in the feed and never will be, so a sync
     // has to leave it alone. Empty means nobody is down for it yet.

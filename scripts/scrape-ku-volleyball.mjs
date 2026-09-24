@@ -184,6 +184,21 @@ function* seasonDates(year) {
   }
 }
 
+// Every final Division I result of the current season, compactly. The sweep
+// already reads each day's full scoreboard, so keeping the results costs no
+// requests. They feed a provisional RPI - the NCAA publishes none until well
+// into the season - and the common-opponents view. Its own file with its own
+// record of swept dates, so adding it re-reads only this season's dates.
+const RESULTS_PATH = 'scraped/d1-results.json';
+const d1 = fs.existsSync(RESULTS_PATH)
+  ? JSON.parse(fs.readFileSync(RESULTS_PATH, 'utf8'))
+  : {};
+if (d1.season !== String(CURRENT_SEASON)) {
+  d1.season = String(CURRENT_SEASON);
+  d1.sweptDates = {};
+  d1.games = {};
+}
+
 const today = new Date().toISOString().slice(0, 10);
 const recentCutoff = new Date(Date.now() - 4 * 86_400_000).toISOString().slice(0, 10);
 
@@ -193,7 +208,9 @@ for (const season of SEASONS) {
     if (date > today) break;
     // Rescan recent dates (results may have just gone final); skip older
     // dates we've already scanned.
-    if (index.scannedDates[date] && date < recentCutoff) continue;
+    const currentSeason = Number(season) === CURRENT_SEASON;
+    if (index.scannedDates[date] && date < recentCutoff &&
+        (!currentSeason || d1.sweptDates[date])) continue;
 
     const [y, m, d] = date.split('-');
     let data;
@@ -206,6 +223,13 @@ for (const season of SEASONS) {
     for (const wrap of data.games || []) {
       const g = wrap.game || wrap;
       const sides = [g.home, g.away];
+
+      // [date, home, home sets, away, away sets], names as the scoreboard
+      // spells them. Which of those are Division I is update-seed.py's call.
+      if (currentSeason && g.gameState === 'final' && g.gameID && g.home?.names?.short && g.away?.names?.short) {
+        d1.games[g.gameID] = [date, g.home.names.short, Number(g.home.score ?? 0),
+          g.away.names.short, Number(g.away.score ?? 0)];
+      }
 
       // Big 12 capture: any game with at least one conference team. Conference
       // games (both sides tagged) drive conference records; the rest still
@@ -273,8 +297,15 @@ for (const season of SEASONS) {
       console.log(`found KU game ${g.gameID} on ${date}: ${g.away?.names?.short} at ${g.home?.names?.short} (${g.gameState})`);
     }
     index.scannedDates[date] = true;
+    if (currentSeason) d1.sweptDates[date] = true;
   }
 }
+// One game per line, so a night's results read as a short diff.
+fs.writeFileSync(RESULTS_PATH, '{"season":' + JSON.stringify(d1.season) +
+  ',"sweptDates":' + JSON.stringify(d1.sweptDates) + ',"games":{\n' +
+  Object.entries(d1.games).sort(([, a], [, b]) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))
+    .map(([id, row]) => JSON.stringify(id) + ':' + JSON.stringify(row)).join(',\n') + '\n}}\n');
+console.log(`d1 results: ${Object.keys(d1.games).length} final games this season`);
 console.log(`big12 games captured: ${Object.keys(index.big12Games).length}`);
 
 // --- 1b. Rankings snapshots (best effort; never fail the run) ---------------

@@ -10,6 +10,7 @@ The seed is regenerated in full on every run — all data is scraper-owned, and
 the app's Seeder merge is what protects user edits on-device.
 """
 import glob
+from collections import defaultdict
 import json
 import os
 import re
@@ -768,6 +769,50 @@ for (season, key), rec in records.items():
     if official and official != ours:
         print(f"  cross-check: {rec['team']} computed {ours} vs RPI {official}")
 
+# --- RPI for every season we can rate -----------------------------------------
+# The NCAA's table where it covers the season, and until it does - it serves
+# last season's final RPI for weeks into the new one - a provisional one worked
+# out from every Division I result the sweep has seen (scripts/resume.py).
+# Either way each table is keyed by normalised name, with where it came from.
+from resume import team_games, compute_rpi, rank_rpi, common_opponents  # noqa: E402
+
+rpi_tables = {}  # season -> {"source", "updated", "ranks": {key: (rank, record)}}
+if rpi.get("data") and rpi_season:
+    rpi_tables[rpi_season] = {
+        "source": "ncaa",
+        "updated": rpi.get("updated") or "",
+        "ranks": {
+            norm_team(col(r, "School", "Team")): (
+                int(col(r, "Rank")) if col(r, "Rank").isdigit() else None, col(r, "Record"))
+            for r in rpi["data"]
+        },
+    }
+# Division I is whoever the NCAA's table lists - any season's, since the
+# membership barely moves - so a non-D1 opponent's game stays out of the rating.
+d1_names = {norm_team(col(r, "School", "Team")) for r in rpi.get("data", [])}
+d1_raw = load_json("scraped/d1-results.json", {})
+d1_games = [[g[0], norm_team(g[1]), g[2], norm_team(g[3]), g[4]]
+            for g in (d1_raw.get("games") or {}).values()]
+current_season = max((m["season"] for m in matches.values()), default=None)
+if d1_games and d1_raw.get("season") == current_season and current_season not in rpi_tables:
+    is_d1 = (lambda t: t in d1_names) if d1_names else (lambda t: True)
+    ranked = rank_rpi(compute_rpi(team_games(d1_games, is_d1)))
+    through = max(g[0] for g in d1_games)
+    rpi_tables[current_season] = {
+        "source": "provisional",
+        "updated": f"Provisional, through games {through}",
+        "ranks": {t: (r, f"{w}-{l}") for t, r, _v, w, l in ranked},
+    }
+    ku_row = next((row for row in ranked if row[0] == "kansas"), None)
+    print(f"provisional RPI {current_season}: {len(ranked)} D1 teams from {len(d1_games)} results"
+          + (f"; Kansas #{ku_row[1]} ({ku_row[3]}-{ku_row[4]})" if ku_row else ""))
+
+for (season, key), rec in records.items():
+    table = rpi_tables.get(season)
+    if table and key in table["ranks"]:
+        rec["rpiRank"] = table["ranks"][key][0]
+        rec["rpiSource"] = table["source"]
+
 # Polls accumulate: each snapshot covers one season, and the endpoint only ever
 # serves the current one, so last season's final poll has to be carried forward
 # or it is lost the day the new preseason poll appears. Losing it is not cosmetic
@@ -1236,6 +1281,90 @@ if teams_rated or poll_rating:
           f"Kansas {ku_rating} from the {ku_source}"
           + (f"; {unrated} with no rating for the opponent" if unrated else ""))
 
+# --- Forecast log --------------------------------------------------------------
+# The forecast is dropped from a match once it is played, which is right for the
+# schedule but leaves nothing to grade the model by. So the last forecast made
+# before first serve is kept here, and a played match carries it as "forecast".
+from zoneinfo import ZoneInfo  # noqa: E402
+
+FORECAST_LOG = "scraped/forecasts.json"
+forecast_log = load_json(FORECAST_LOG, {})
+now_utc = datetime.now(timezone.utc)
+central = ZoneInfo("America/Chicago")
+for key, match in matches.items():
+    if match.get("teamSets") is not None or match.get("winProbability") is None:
+        continue
+    # Only while the match is still ahead. With no published time, noon.
+    hh, mm = (match.get("time") or "12:00").split(":")
+    y, mo, d = (int(x) for x in match["date"].split("-"))
+    first_serve = datetime(y, mo, d, int(hh), int(mm), tzinfo=central)
+    if first_serve <= now_utc:
+        continue
+    forecast_log[f"{match['date']}|{norm_team(match['opponent'])}"] = {
+        "date": match["date"], "opponent": match["opponent"],
+        "p": match["winProbability"], "source": match.get("ratingSource"),
+        "recordedAt": now_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+graded = 0
+for match in matches.values():
+    entry = forecast_log.get(f"{match['date']}|{norm_team(match['opponent'])}")
+    if entry and match.get("teamSets") is not None:
+        match["forecast"] = entry["p"]
+        graded += 1
+# Rewritten only when a forecast moved, so recordedAt alone is no commit.
+old_log = load_json(FORECAST_LOG, {})
+strip_at = lambda log: {k: {kk: vv for kk, vv in v.items() if kk != "recordedAt"} for k, v in log.items()}
+if strip_at(old_log) != strip_at(forecast_log):
+    with open(FORECAST_LOG, "w") as f:
+        json.dump(dict(sorted(forecast_log.items())), f, indent=1)
+        f.write("\n")
+print(f"forecast log: {len(forecast_log)} forecasts kept, {graded} played match(es) graded")
+
+# --- Résumé and common opponents -------------------------------------------------
+# Each played match carries its opponent's RPI rank for that season (the current
+# table, not the rank on the night: quality wins are judged on where teams end up).
+for match in matches.values():
+    table = rpi_tables.get(match["season"])
+    if table and match.get("teamSets") is not None:
+        rank = table["ranks"].get(norm_team(match["opponent"]), (None,))[0]
+        if rank:
+            match["opponentRpi"] = rank
+
+if current_season and d1_games:
+    def label(us, them):
+        return f"{'W' if us > them else 'L'} {us}-{them}"
+    ku_vs, ku_names = defaultdict(list), {}
+    for m in sorted(matches.values(), key=lambda m: m["date"]):
+        if m["season"] == current_season and m.get("teamSets") is not None:
+            k = norm_team(m["opponent"])
+            ku_vs[k].append(label(m["teamSets"], m["opponentSets"]))
+            ku_names[k] = m["opponent"]
+    their_vs = defaultdict(lambda: defaultdict(list))
+    for date, home, hs, away, as_ in sorted(d1_games):
+        if hs == as_:
+            continue
+        their_vs[home][away].append(label(hs, as_))
+        their_vs[away][home].append(label(as_, hs))
+    with_common = 0
+    for m in matches.values():
+        if m["season"] != current_season or m.get("teamSets") is not None:
+            continue
+        opp = norm_team(m["opponent"])
+        shared = common_opponents(ku_vs, their_vs.get(opp, {}), exclude=("kansas", opp))
+        if shared:
+            m["commonOpponents"] = [
+                {"team": ku_names[t], "ku": ", ".join(k), "them": ", ".join(th)}
+                for t, k, th in shared
+            ]
+            with_common += 1
+    print(f"common opponents: {with_common} upcoming match(es) share an opponent with KU")
+
+if rpi_tables.get(current_season):
+    rpi_note = {"season": current_season, "source": rpi_tables[current_season]["source"],
+                "updated": rpi_tables[current_season]["updated"]}
+else:
+    rpi_note = None
+
 seed = {
     "formatVersion": 1,
     "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -1326,6 +1455,8 @@ if team_serving:
     seed["teamServing"] = team_serving
 if national_leaders:
     seed["nationalLeaders"] = national_leaders
+if rpi_note:
+    seed["rpi"] = rpi_note
 
 os.makedirs(os.path.dirname(SEED_PATH), exist_ok=True)
 

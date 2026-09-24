@@ -710,6 +710,37 @@ fun MatchDetailScreen(
                 item { LastMeetingCard(last, opponentStatLines.filter { it.matchId == last.id }) }
             }
 
+            val common = if (match.played) emptyList() else parseCommonOpponents(match.commonOpponents)
+            if (common.isNotEmpty()) {
+                item {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                "Common opponents",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                "Teams both have played this season.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            common.forEach { c ->
+                                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
+                                    Text(c.team, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                                    Text(
+                                        "KU ${c.ku} · ${match.opponent} ${c.them}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             if (match.teamSets == null) {
                 // Matched on the normalised name, not the literal one: the
                 // roster is filed under the spelling its own school uses, which
