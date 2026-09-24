@@ -1320,7 +1320,7 @@ if strip_at(old_log) != strip_at(forecast_log):
         f.write("\n")
 print(f"forecast log: {len(forecast_log)} forecasts kept, {graded} played match(es) graded")
 
-# --- Résumé and common opponents -------------------------------------------------
+# --- Resume and common opponents -------------------------------------------------
 # Each played match carries its opponent's RPI rank for that season (the current
 # table, not the rank on the night: quality wins are judged on where teams end up).
 for match in matches.values():

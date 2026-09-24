@@ -8,7 +8,7 @@ import kotlin.math.roundToInt
 
 /*
  * The season read three more ways: how good the win model has been, what KU's
- * résumé looks like to a selection committee, and how their matches have gone
+ * resume looks like to a selection committee, and how their matches have gone
  * set by set. Plain functions, kept out of the composables for the tests.
  */
 
@@ -57,7 +57,7 @@ data class Resume(
 )
 
 /**
- * Record by the opponent's RPI band, the way committees read a résumé:
+ * Record by the opponent's RPI band, the way committees read a resume:
  * wins over the top 25 and top 50 build a case, losses outside the top 100
  * damage one.
  */
@@ -170,7 +170,7 @@ const val EXPLAIN_RESUME =
     "RPI (Rating Percentage Index) is the NCAA's strength-of-record formula: 25% a team's " +
         "winning percentage, 50% its opponents', 25% its opponents' opponents'. The selection " +
         "committee uses it to choose and seed the NCAA tournament. Each band is KU's record " +
-        "against teams ranked in that range today; wins over the top 50 help a résumé most and " +
+        "against teams ranked in that range today; wins over the top 50 help a resume most and " +
         "losses outside the top 100 hurt it most. Until the NCAA publishes this season's RPI, " +
         "the one shown is worked out here from every Division I result and marked provisional."
 

@@ -203,7 +203,7 @@ fun LeadersScreen(
                 rpiResume(matches, season)?.let { r ->
                     item {
                         InsightCard(
-                            title = "Tournament résumé",
+                            title = "Tournament resume",
                             lines = listOfNotNull(
                                 kuStanding?.rpiRank?.let {
                                     "KU RPI #$it" + if (kuStanding?.rpiSource == "provisional")

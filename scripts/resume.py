@@ -1,4 +1,4 @@
-"""Season résumé pieces built from every Division I result.
+"""Season resume pieces built from every Division I result.
 
 Two things the app wants that the NCAA does not hand over in time:
 

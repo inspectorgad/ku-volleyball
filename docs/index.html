@@ -329,7 +329,7 @@ const EXPLAIN = {
   kuRank: "KU rank: KU's poll rank at each match this season, then today's.",
   closeSets: "Close sets: sets won-lost when the final margin was two points.",
   projected: "Projected: the record so far plus the remaining win chances added up and rounded - an estimate, not a forecast of the Big 12 standings.",
-  resume: "RPI (Rating Percentage Index) is the NCAA's strength-of-record formula: 25% a team's winning percentage, 50% its opponents', 25% its opponents' opponents'. The selection committee uses it to choose and seed the NCAA tournament. Each band is KU's record against teams ranked in that range today; wins over the top 50 help a résumé most and losses outside the top 100 hurt it most. Until the NCAA publishes this season's RPI, the one shown is worked out here from every Division I result and marked provisional.",
+  resume: "RPI (Rating Percentage Index) is the NCAA's strength-of-record formula: 25% a team's winning percentage, 50% its opponents', 25% its opponents' opponents'. The selection committee uses it to choose and seed the NCAA tournament. Each band is KU's record against teams ranked in that range today; wins over the top 50 help a resume most and losses outside the top 100 hurt it most. Until the NCAA publishes this season's RPI, the one shown is worked out here from every Division I result and marked provisional.",
   sets: "Set 1, Set 2 ...: KU's sets won-lost in that set across all matches; only matches that went four or five sets count toward Sets 4 and 5. Won/lost set 1: KU's match record after winning or losing the opening set. Close sets: sets decided by exactly two points - every set that went past 25, plus 25-23 (15-13 in a fifth). A comeback line appears when KU wins from 0-2 down or loses from 2-0 up.",
   scorecard: "Grades the win % shown on the schedule, using the last forecast made before first serve. Called: how often the team the model favoured won. Expected wins: the forecasts added up; if it runs well ahead of the wins KU actually has, the ratings are too kind to KU. Brier score: the average squared gap between forecast and result (1 for a win, 0 for a loss). 0 is perfect, 0.25 is what saying 50% every time would score, and lower is better. Matches before Sep 19, when the model started, are not graded.",
   common: "Teams both KU and this opponent have played this season, and how each side did. A rough guide only: venue, injuries and the point in the season all change what a result means.",
@@ -835,7 +835,7 @@ function renderMatchTable(results) {
   }
 }
 
-// --- Résumé, set by set, and the win model's scorecard ---------------------
+// --- Resume, set by set, and the win model's scorecard ---------------------
 // Mirrors SeasonInsights.kt in the app.
 function renderInsights(results) {
   const host = document.getElementById("insights");
@@ -850,7 +850,7 @@ function renderInsights(results) {
   };
   const won = m => m.teamSets > m.opponentSets;
 
-  // Tournament résumé: record by the opponent's RPI band.
+  // Tournament resume: record by the opponent's RPI band.
   const rated = results.filter(m => m.opponentRpi);
   if (rated.length) {
     const ku = (SEED.standings ?? []).find(x => x.season === season && normTeam(x.team) === "kansas");
@@ -864,7 +864,7 @@ function renderInsights(results) {
     const best = firstPer(rated.filter(won).sort((a, b) => a.opponentRpi - b.opponentRpi)).slice(0, 3);
     const worst = firstPer(rated.filter(m => !won(m)).sort((a, b) => b.opponentRpi - a.opponentRpi)).slice(0, 2);
     const provisional = ku?.rpiSource === "provisional";
-    card("Tournament résumé", [
+    card("Tournament resume", [
       ku?.rpiRank ? `KU RPI #${ku.rpiRank}${provisional ? " (provisional)" : " (NCAA)"}` : "",
       tier,
       best.length ? "Best wins: " + best.map(m => `${m.opponent} (#${m.opponentRpi})`).join(", ") : "",
