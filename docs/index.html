@@ -149,7 +149,7 @@
   td.miss { color: var(--loss); }
   #goal-match select { font: inherit; margin: 0 0 10px; padding: 3px 6px; background: var(--card); color: var(--ink); border: 1px solid var(--hairline); border-radius: 6px; }
   .insight .line { font-size: 13px; color: var(--ink-2); padding: 2px 0; }
-  .insight .fine { font-size: 11px; color: var(--ink-3); margin-top: 6px; }
+  .insight .fine, .tile .explain { font-size: 11px; line-height: 1.4; color: var(--ink-3); margin-top: 6px; font-style: italic; }
   .subscribe { color: var(--ku-blue); font-size: 14px; text-decoration: none; }
   .subscribe:hover { text-decoration: underline; }
   @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
@@ -322,6 +322,19 @@ const goalMet = (def, v) => v == null ? null : def.ceiling ? v <= def.target : v
 // zero, everything else to two.
 const fmtGoal = (v, dec) => v == null ? "—" : dec === 3 ? fmtPct(v) : Number(v).toFixed(2);
 
+// What each card's numbers mean, shown under the card. Word-for-word the
+// EXPLAIN_* constants in the app's SeasonInsights.kt.
+const EXPLAIN = {
+  vsRanked: "vs ranked: KU's record against teams in the AVCA top 25 on the day of the match.",
+  kuRank: "KU rank: KU's poll rank at each match this season, then today's.",
+  closeSets: "Close sets: sets won-lost when the final margin was two points.",
+  projected: "Projected: the record so far plus the remaining win chances added up and rounded - an estimate, not a forecast of the Big 12 standings.",
+  resume: "RPI (Rating Percentage Index) is the NCAA's strength-of-record formula: 25% a team's winning percentage, 50% its opponents', 25% its opponents' opponents'. The selection committee uses it to choose and seed the NCAA tournament. Each band is KU's record against teams ranked in that range today; wins over the top 50 help a résumé most and losses outside the top 100 hurt it most. Until the NCAA publishes this season's RPI, the one shown is worked out here from every Division I result and marked provisional.",
+  sets: "Set 1, Set 2 ...: KU's sets won-lost in that set across all matches; only matches that went four or five sets count toward Sets 4 and 5. Won/lost set 1: KU's match record after winning or losing the opening set. Close sets: sets decided by exactly two points - every set that went past 25, plus 25-23 (15-13 in a fifth). A comeback line appears when KU wins from 0-2 down or loses from 2-0 up.",
+  scorecard: "Grades the win % shown on the schedule, using the last forecast made before first serve. Called: how often the team the model favoured won. Expected wins: the forecasts added up; if it runs well ahead of the wins KU actually has, the ratings are too kind to KU. Brier score: the average squared gap between forecast and result (1 for a win, 0 for a loss). 0 is perfect, 0.25 is what saying 50% every time would score, and lower is better. Matches before Sep 19, when the model started, are not graded.",
+  common: "Teams both KU and this opponent have played this season, and how each side did. A rough guide only: venue, injuries and the point in the season all change what a result means.",
+};
+
 let SEED = null;
 let season = null; // null until data arrives; then latest season with results
 let openPlayer = null; // name of the player whose match log is open
@@ -415,11 +428,12 @@ function renderKpis(results, lines) {
   const teamSets = setsFor + setsAg;
   const kpis = document.getElementById("kpis");
   kpis.replaceChildren();
-  const tile = (label, value, note, hero) => {
+  const tile = (label, value, note, hero, explain) => {
     const c = el("div", "card tile" + (hero ? " hero" : ""));
     c.appendChild(el("div", "label", label));
     c.appendChild(el("div", "value", value));
     if (note) c.appendChild(el("div", "note", note));
+    if (explain) c.appendChild(el("div", "explain", explain));
     kpis.appendChild(c);
   };
   tile("Record", results.length ? `${wins}–${losses}` : "—", `Sets ${setsFor}–${setsAg}`, true);
@@ -445,7 +459,8 @@ function renderKpis(results, lines) {
     .find(r => normTeam(r.team) === "kansas")?.rank;
   const nowLabel = now ? String(now) : "NR";
   if (path.at(-1) !== nowLabel) path.push(nowLabel);
-  tile("vs ranked", `${rw}–${ranked.length - rw}`, `unranked ${uw}–${un.length - uw} · KU rank ${path.join("→")}`);
+  tile("vs ranked", `${rw}–${ranked.length - rw}`, `unranked ${uw}–${un.length - uw} · KU rank ${path.join("→")}`,
+    false, EXPLAIN.vsRanked + " " + EXPLAIN.kuRank);
 
   // Sets decided by two points - every set that went past 25, and 25-23. The
   // tight sets are where the season has turned, so they get a tile of their own.
@@ -460,7 +475,8 @@ function renderKpis(results, lines) {
     const cw = close.filter(x => x.a > x.b).length;
     const last = close.at(-1);
     tile("Close sets", `${cw}–${close.length - cw}`,
-      `decided by 2 points · latest ${last.a}-${last.b} ${siteWord(last.m)} ${last.m.opponent}`);
+      `decided by 2 points · latest ${last.a}-${last.b} ${siteWord(last.m)} ${last.m.opponent}`,
+      false, EXPLAIN.closeSets);
   }
 
   // Where the season heads if every forecast lands at its expected value.
@@ -485,7 +501,7 @@ function renderKpis(results, lines) {
     easy !== hard ? `easiest: ${siteWord(easy)} ${easy.opponent} ${roughPct(easy.winProbability)}` : "",
     pre ? `${pre} of ${left.length} forecasts use preseason ratings` : "",
   ].filter(Boolean).join(" · ");
-  tile("Projected", `~${projW}–${projL}`, note);
+  tile("Projected", `~${projW}–${projL}`, note, false, EXPLAIN.projected);
 }
 
 function matchPct(m) {
@@ -853,10 +869,8 @@ function renderInsights(results) {
       tier,
       best.length ? "Best wins: " + best.map(m => `${m.opponent} (#${m.opponentRpi})`).join(", ") : "",
       worst.length ? "Worst losses: " + worst.map(m => `${m.opponent} (#${m.opponentRpi})`).join(", ") : "",
-    ], provisional
-      ? `Provisional RPI worked out here from every Division I result (${SEED.rpi?.updated?.replace(/^Provisional, /, "") ?? ""}), `
-        + "25% winning percentage, 50% opponents', 25% opponents' opponents'. The NCAA's own replaces it once published."
-      : "Opponents ranked by the NCAA's RPI for the season.");
+    ], EXPLAIN.resume + (provisional && SEED.rpi?.updated
+      ? ` Results through ${SEED.rpi.updated.replace(/^Provisional, through games /, "")}.` : ""));
   }
 
   // Set by set.
@@ -880,7 +894,7 @@ function renderInsights(results) {
       `Close sets (2 pts): ${close.filter(([a, b]) => a > b).length}-${close.filter(([a, b]) => a < b).length}`,
       [rev ? `came back from 0-2 ${rev}×` : "", blown ? `lost from 2-0 up ${blown}×` : ""].filter(Boolean).join(" · ")
         .replace(/^./, c => c.toUpperCase()),
-    ]);
+    ], EXPLAIN.sets);
   }
 
   // The win model graded against what happened.
@@ -892,7 +906,7 @@ function renderInsights(results) {
     card("Win model scorecard", [
       `Called ${called} of ${graded.length} · expected ${exp.toFixed(1)} wins, won ${graded.filter(won).length} · Brier ${brier.toFixed(2)}`,
       ...[...graded].reverse().map(m => `${m.date} ${siteWord(m)} ${m.opponent}: ${Math.round(m.forecast * 100)}% → ${won(m) ? "W" : "L"} ${m.teamSets}-${m.opponentSets}`),
-    ], "The last forecast before first serve. Brier is the mean squared miss: 0 is perfect, 0.25 is a coin flip.");
+    ], EXPLAIN.scorecard);
   }
 }
 
@@ -1072,6 +1086,7 @@ function renderScouting() {
     if (match.commonOpponents?.length) {
       box.appendChild(el("div", "sub", "Common opponents: " + match.commonOpponents
         .map(c => `${c.team} (KU ${c.ku}; ${match.opponent} ${c.them})`).join(" · ")));
+      box.appendChild(el("p", "fineprint", EXPLAIN.common));
     }
     // Kills against Kansas over every meeting, per player.
     const vsKu = new Map();

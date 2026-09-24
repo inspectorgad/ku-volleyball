@@ -25,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.ConferenceStanding
@@ -172,6 +173,7 @@ fun LeadersScreen(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
+                            Explanation(EXPLAIN_SUMMARY)
                         }
                         // Always shown, and measured from the last time a feed
                         // answered rather than from the file's own date: the
@@ -216,12 +218,13 @@ fun LeadersScreen(
                                     "Worst losses: " + l.joinToString(", ") { "${it.opponent} (#${it.opponentRpi})" }
                                 },
                                 r.unrated.takeIf { it > 0 }?.let { "$it match(es) against teams without an RPI rank" }
-                            )
+                            ),
+                            explanation = EXPLAIN_RESUME
                         )
                     }
                 }
                 setPatterns(matches, season)?.let { p ->
-                    item { InsightCard("Set by set", setPatternLines(p)) }
+                    item { InsightCard("Set by set", setPatternLines(p), explanation = EXPLAIN_SETS) }
                 }
                 forecastScorecard(matches, season)?.let { sc ->
                     item {
@@ -233,7 +236,8 @@ fun LeadersScreen(
                                     .map { m ->
                                         "${m.date} ${m.versus} ${m.opponent}: ${pct(m.forecast!!)} → " +
                                             "${if ((m.teamSets ?: 0) > (m.opponentSets ?: 0)) "W" else "L"} ${m.teamSets}-${m.opponentSets}"
-                                    }
+                                    },
+                            explanation = EXPLAIN_SCORECARD
                         )
                     }
                 }
@@ -337,7 +341,7 @@ fun LeadersScreen(
 }
 
 @Composable
-private fun InsightCard(title: String, lines: List<String>) {
+private fun InsightCard(title: String, lines: List<String>, explanation: String? = null) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
@@ -349,8 +353,21 @@ private fun InsightCard(title: String, lines: List<String>) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+            explanation?.let { Explanation(it) }
         }
     }
+}
+
+/** The plain-words note under a card: what its numbers are and how to read them. */
+@Composable
+fun Explanation(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.labelSmall,
+        fontStyle = FontStyle.Italic,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(top = 6.dp)
+    )
 }
 
 /**

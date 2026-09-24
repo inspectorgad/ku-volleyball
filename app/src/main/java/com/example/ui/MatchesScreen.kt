@@ -736,6 +736,7 @@ fun MatchDetailScreen(
                                     )
                                 }
                             }
+                            Explanation(EXPLAIN_COMMON)
                         }
                     }
                 }
