@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-24T00:08:55Z",
+ "generatedAt": "2026-09-24T00:11:19Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -17466,7 +17466,8 @@
      "L2": "Grace Nelson"
     }
    },
-   "home": false
+   "home": false,
+   "opponentRpi": 1
   },
   {
    "date": "2026-08-30",
@@ -17871,7 +17872,8 @@
     }
    },
    "home": false,
-   "neutral": true
+   "neutral": true,
+   "opponentRpi": 41
   },
   {
    "date": "2026-09-03",
@@ -18336,7 +18338,8 @@
     }
    },
    "home": false,
-   "neutral": true
+   "neutral": true,
+   "opponentRpi": 26
   },
   {
    "date": "2026-09-04",
@@ -19004,7 +19007,8 @@
     }
    },
    "home": false,
-   "neutral": true
+   "neutral": true,
+   "opponentRpi": 72
   },
   {
    "date": "2026-09-08",
@@ -19455,7 +19459,8 @@
      "L2": "Kenzie Dean"
     }
    },
-   "home": true
+   "home": true,
+   "opponentRpi": 221
   },
   {
    "date": "2026-09-11",
@@ -20084,7 +20089,8 @@
      "L2": "Logan Bell"
     }
    },
-   "home": true
+   "home": true,
+   "opponentRpi": 113
   },
   {
    "date": "2026-09-13",
@@ -20509,7 +20515,8 @@
      "L2": "Logan Bell"
     }
    },
-   "home": true
+   "home": true,
+   "opponentRpi": 81
   },
   {
    "date": "2026-09-15",
@@ -21012,7 +21019,8 @@
      "L2": "Logan Bell"
     }
    },
-   "home": false
+   "home": false,
+   "opponentRpi": 221
   },
   {
    "date": "2026-09-18",
@@ -21436,7 +21444,8 @@
      "L2": "Logan Bell"
     }
    },
-   "home": true
+   "home": true,
+   "opponentRpi": 94
   },
   {
    "date": "2026-09-20",
@@ -22142,7 +22151,8 @@
     }
    },
    "home": true,
-   "forecast": 0.7795
+   "forecast": 0.7795,
+   "opponentRpi": 136
   },
   {
    "date": "2026-09-25",
@@ -22178,7 +22188,14 @@
    "time": "18:00",
    "tv": "ESPN+",
    "winProbability": 0.7744,
-   "ratingSource": "preseason"
+   "ratingSource": "preseason",
+   "commonOpponents": [
+    {
+     "team": "Pittsburgh",
+     "ku": "L 1-3",
+     "them": "L 1-3"
+    }
+   ]
   },
   {
    "date": "2026-10-02",
@@ -22190,7 +22207,19 @@
    "time": "18:00",
    "tv": "ESPN+",
    "winProbability": 0.619,
-   "ratingSource": "poll"
+   "ratingSource": "poll",
+   "commonOpponents": [
+    {
+     "team": "Florida St.",
+     "ku": "L 2-3",
+     "them": "W 3-2"
+    },
+    {
+     "team": "Pittsburgh",
+     "ku": "L 1-3",
+     "them": "L 1-3"
+    }
+   ]
   },
   {
    "date": "2026-10-11",
@@ -22225,7 +22254,14 @@
    "time": "12:00",
    "tv": "ESPN",
    "winProbability": 0.4241,
-   "ratingSource": "poll"
+   "ratingSource": "poll",
+   "commonOpponents": [
+    {
+     "team": "Stanford",
+     "ku": "L 1-3",
+     "them": "W 3-0"
+    }
+   ]
   },
   {
    "date": "2026-10-23",
@@ -22309,7 +22345,14 @@
    "time": "20:00",
    "tv": "ESPN+",
    "winProbability": 0.419,
-   "ratingSource": "poll"
+   "ratingSource": "poll",
+   "commonOpponents": [
+    {
+     "team": "Wichita St.",
+     "ku": "W 3-0, W 3-0",
+     "them": "W 3-0"
+    }
+   ]
   },
   {
    "date": "2026-11-15",
@@ -22344,7 +22387,14 @@
    "city": "Tucson, AZ",
    "tv": "ESPN+",
    "winProbability": 0.5997,
-   "ratingSource": "preseason"
+   "ratingSource": "preseason",
+   "commonOpponents": [
+    {
+     "team": "Tulsa",
+     "ku": "W 3-0",
+     "them": "L 0-3"
+    }
+   ]
   },
   {
    "date": "2026-11-27",
@@ -22355,7 +22405,14 @@
    "city": "Tempe, AZ",
    "tv": "ESPN+",
    "winProbability": 0.2606,
-   "ratingSource": "poll"
+   "ratingSource": "poll",
+   "commonOpponents": [
+    {
+     "team": "Stanford",
+     "ku": "L 1-3",
+     "them": "W 3-0"
+    }
+   ]
   }
  ],
  "goalDefinitions": [
@@ -22722,7 +22779,9 @@
    "confL": 0,
    "overallW": 8,
    "overallL": 0,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 35,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22732,7 +22791,9 @@
    "confL": 0,
    "overallW": 9,
    "overallL": 1,
-   "nationalRank": 21
+   "nationalRank": 21,
+   "rpiRank": 55,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22742,7 +22803,9 @@
    "confL": 0,
    "overallW": 8,
    "overallL": 1,
-   "nationalRank": 22
+   "nationalRank": 22,
+   "rpiRank": 32,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22752,7 +22815,9 @@
    "confL": 0,
    "overallW": 9,
    "overallL": 2,
-   "nationalRank": 9
+   "nationalRank": 9,
+   "rpiRank": 19,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22762,7 +22827,9 @@
    "confL": 0,
    "overallW": 9,
    "overallL": 2,
-   "nationalRank": 11
+   "nationalRank": 11,
+   "rpiRank": 8,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22772,7 +22839,9 @@
    "confL": 0,
    "overallW": 8,
    "overallL": 2,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 31,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22782,7 +22851,9 @@
    "confL": 0,
    "overallW": 8,
    "overallL": 3,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 51,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22792,7 +22863,9 @@
    "confL": 0,
    "overallW": 7,
    "overallL": 3,
-   "nationalRank": 17
+   "nationalRank": 17,
+   "rpiRank": 10,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22802,7 +22875,9 @@
    "confL": 0,
    "overallW": 7,
    "overallL": 3,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 22,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22812,7 +22887,9 @@
    "confL": 0,
    "overallW": 7,
    "overallL": 3,
-   "nationalRank": 19
+   "nationalRank": 19,
+   "rpiRank": 36,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22822,7 +22899,9 @@
    "confL": 0,
    "overallW": 7,
    "overallL": 3,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 86,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22832,7 +22911,9 @@
    "confL": 0,
    "overallW": 8,
    "overallL": 4,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 195,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22842,7 +22923,9 @@
    "confL": 0,
    "overallW": 7,
    "overallL": 4,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 143,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22852,7 +22935,9 @@
    "confL": 0,
    "overallW": 6,
    "overallL": 5,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 107,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -22862,7 +22947,9 @@
    "confL": 0,
    "overallW": 5,
    "overallL": 6,
-   "nationalRank": null
+   "nationalRank": null,
+   "rpiRank": 198,
+   "rpiSource": "provisional"
   }
  ],
  "polls": [
@@ -31114,11 +31201,11 @@
   {
    "team": "Florida",
    "season": "2026",
-   "matches": 9,
-   "sets": 31,
-   "serviceAces": 50,
-   "serviceErrors": 93,
-   "serveAttempts": 746,
+   "matches": 10,
+   "sets": 34,
+   "serviceAces": 61,
+   "serviceErrors": 100,
+   "serveAttempts": 819,
    "big12": false,
    "pollRank": 8
   },
@@ -39923,5 +40010,10 @@
     ]
    }
   ]
+ },
+ "rpi": {
+  "season": "2026",
+  "source": "provisional",
+  "updated": "Provisional, through games 2026-09-23"
  }
 }
