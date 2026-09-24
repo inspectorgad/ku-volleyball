@@ -140,6 +140,20 @@ fun setPatternLines(p: SetPatterns): List<String> = listOfNotNull(
     ).takeIf { it.isNotEmpty() }?.joinToString(" · ")?.replaceFirstChar { it.uppercase() }
 )
 
+/**
+ * "Close sets (2 pts) 0-5 · latest 13-15 vs Florida St.": sets decided by two
+ * points - every set that went past 25, and 25-23 - with the most recent.
+ */
+fun closeSetsLine(matches: List<Match>, season: String): String? {
+    val close = matches.filter { it.season == season && it.played }
+        .sortedBy { it.date }
+        .flatMap { m -> parseSets(m.setScores).filter { abs(it.first - it.second) <= 2 }.map { m to it } }
+    if (close.isEmpty()) return null
+    val won = close.count { it.second.first > it.second.second }
+    val (m, last) = close.last()
+    return "Close sets (2 pts) $won-${close.size - won} · latest ${last.first}-${last.second} ${m.versus} ${m.opponent}"
+}
+
 data class CommonOpponent(val team: String, val ku: String, val them: String)
 
 /** The feed's common-opponent list; empty for anything unreadable. */

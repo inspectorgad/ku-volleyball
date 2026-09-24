@@ -154,6 +154,15 @@ fun LeadersScreen(
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
+                            // The tight sets, where the season has turned: the same
+                            // figure as the dashboard's Close sets tile.
+                            closeSetsLine(matches, season)?.let {
+                                Text(
+                                    it,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                             val big12 = standings.filter { it.season == season }
                                 .map { normTeam(it.team) }.toSet()
                             seasonOutlook(matches, season, big12)?.let {

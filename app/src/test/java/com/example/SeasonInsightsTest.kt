@@ -1,6 +1,7 @@
 package com.example
 
 import com.example.data.Match
+import com.example.ui.closeSetsLine
 import com.example.ui.forecastScorecard
 import com.example.ui.parseCommonOpponents
 import com.example.ui.parseSets
@@ -81,6 +82,17 @@ class SeasonInsightsTest {
         assertEquals(1, p.reverseSweeps)
         assertEquals(1, p.blownTwoNil)
         assertEquals("Came back from 0-2 1× · lost from 2-0 up 1×", setPatternLines(p).last())
+    }
+
+    @Test
+    fun `close sets line counts two-point sets and names the latest`() {
+        val all = listOf(
+            m(1, "Pittsburgh", 1, 3, "17-25, 25-14, 23-25, 20-25"),
+            m(4, "Florida St.", 2, 3, "24-26, 25-21, 25-19, 26-28, 13-15"),
+            m(8, "Wichita St.", 3, 0, "25-9, 25-21, 25-14")
+        )
+        assertEquals("Close sets (2 pts) 0-4 · latest 13-15 vs Florida St.", closeSetsLine(all, "2026"))
+        assertNull(closeSetsLine(all.takeLast(1), "2026"))
     }
 
     @Test
