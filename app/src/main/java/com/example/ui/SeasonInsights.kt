@@ -193,6 +193,17 @@ const val EXPLAIN_COMMON =
     "Teams both KU and this opponent have played this season, and how each side did. A rough " +
         "guide only: venue, injuries and the point in the season all change what a result means."
 
+const val EXPLAIN_FORM =
+    "Form compares this player's last 5 matches with the whole season. ▲ or ▼ marks a " +
+        "recent run clearly above or below the season figure (by at least 10%, or .030 for " +
+        "hitting %). Tap a stat for its match-by-match chart: the dashed line is the season " +
+        "average, and red dots are matches below it. Only stats the player has enough of are shown."
+
+const val EXPLAIN_MILESTONES =
+    "Round-number career totals within about five matches at this season's pace. Career " +
+        "means every season this app holds (2025 onward), so totals from earlier years or " +
+        "another school are not included."
+
 data class CommonOpponent(val team: String, val ku: String, val them: String)
 
 /** The feed's common-opponent list; empty for anything unreadable. */

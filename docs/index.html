@@ -113,6 +113,11 @@
     float: right; cursor: pointer; border: 1px solid var(--hairline); background: none;
     color: var(--ink-2); border-radius: 6px; padding: 4px 10px; font-size: 12px;
   }
+  #detail-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 4px 18px; margin: 0 0 12px; }
+  #detail-form .fl { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  #detail-form .fl span { flex: 1; }
+  #detail-form .up { color: var(--win); } #detail-form .down { color: var(--loss); }
+  #detail-form .full { grid-column: 1 / -1; }
   #detail .sub { color: var(--ink-3); font-size: 13px; margin: 2px 0 10px; }
   #players tbody tr { cursor: pointer; }
   #players tbody tr:hover td, #players tbody tr:focus-visible td { background: var(--chip-bg); }
@@ -185,6 +190,7 @@
     <button class="close" id="detail-close">✕ close</button>
     <h2 id="detail-name"></h2>
     <div class="sub" id="detail-sub"></div>
+    <div id="detail-form"></div>
     <table id="detail-log"></table>
   </section>
   <div class="grid two-col" id="big12-wrap" hidden>
@@ -760,6 +766,8 @@ function renderDetail(lines) {
     : "no matches in this view");
   document.getElementById("detail-sub").textContent = bits.join(" · ");
 
+  renderForm(openPlayer);
+
   const log = document.getElementById("detail-log");
   log.replaceChildren();
   if (mine.length) {
@@ -784,6 +792,100 @@ function renderDetail(lines) {
     }
   }
   panel.hidden = false;
+}
+
+// --- Form and milestones: mirrors PlayerForm.kt in the app ---------------------
+const FORM_MATCHES = 5;
+const FORM_STATS = [
+  ["Kills/set", t => t.k >= 10, t => t.sp ? t.k / t.sp : null, fmt2],
+  ["Hitting %", t => t.ta >= 30, t => t.ta ? (t.k - t.e) / t.ta : null, fmtPct],
+  ["Assists/set", t => t.a >= 30, t => t.sp ? t.a / t.sp : null, fmt2],
+  ["Digs/set", t => t.d >= 10, t => t.sp ? t.d / t.sp : null, fmt2],
+  ["Blocks/set", t => t.blk >= 5, t => t.sp ? t.blk / t.sp : null, fmt2],
+];
+const MILESTONES = [
+  ["kills", t => t.k, [100, 250, 500, 750, 1000, 1250, 1500, 2000]],
+  ["digs", t => t.d, [100, 250, 500, 750, 1000, 1250, 1500, 2000]],
+  ["assists", t => t.a, [250, 500, 1000, 1500, 2000, 2500, 3000, 4000]],
+  ["aces", t => t.sa, [25, 50, 75, 100, 150, 200]],
+  ["blocks", t => t.blk, [50, 100, 150, 200, 300, 400, 500]],
+];
+
+function renderForm(name) {
+  const host = document.getElementById("detail-form");
+  host.replaceChildren();
+  const all = [];
+  for (const m of SEED.matches) for (const l of m.lines ?? []) if (l.player === name) all.push({ ...l, match: m });
+  all.sort((a, b) => (a.match.date < b.match.date ? -1 : 1));
+  // The selected season, or the player's latest one under "All".
+  const cur = season !== "All" ? season : all.at(-1)?.match.season;
+  const lines = all.filter(l => l.match.season === cur && (l.sp ?? 0) > 0);
+  const note = text => host.appendChild(el("p", "fineprint full", text));
+
+  if (lines.length > FORM_MATCHES) {
+    const st = totals(lines), recent = totals(lines.slice(-FORM_MATCHES));
+    host.appendChild(el("h2", "full", `Form — ${cur}`));
+    for (const [label, enough, value, fmt] of FORM_STATS) {
+      if (!enough(st)) continue;
+      const sv = value(st), rv = value(recent);
+      if (sv == null || rv == null) continue;
+      const threshold = label === "Hitting %" ? 0.03 : Math.max(0.25, sv * 0.1);
+      const trend = rv - sv >= threshold ? "up" : sv - rv >= threshold ? "down" : "";
+      const row = el("div", "fl");
+      const txt = el("span", trend, `${label}: last ${FORM_MATCHES} ${fmt(rv)} vs season ${fmt(sv)}`
+        + (trend === "up" ? " ▲" : trend === "down" ? " ▼" : ""));
+      row.appendChild(txt);
+      row.appendChild(sparkline(lines.map(l => value(totals([l]))), sv, lines.map(l => l.match.opponent), fmt));
+      host.appendChild(row);
+    }
+    note("Form compares this player's last 5 matches with the whole season. ▲ or ▼ marks a recent run "
+      + "clearly above or below the season figure (by at least 10%, or .030 for hitting %). The small "
+      + "chart is match by match: the dashed line is the season average and red dots are matches below it.");
+  }
+
+  // Round-number career totals within about five matches at this season's pace.
+  const career = totals(all), seasonT = totals(all.filter(l => l.match.season === cur));
+  const played = all.filter(l => l.match.season === cur).length;
+  const near = [];
+  for (const [stat, get, marks] of MILESTONES) {
+    const now = get(career), next = marks.find(x => x > now);
+    const pace = played ? get(seasonT) / played : 0;
+    if (!next || pace <= 0) continue;
+    const away = Math.ceil((next - now) / pace);
+    if (away <= 5) near.push(`${next - now} ${next - now === 1 ? stat.slice(0, -1) : stat} from ${next} (${now} now) · about ${away} match${away === 1 ? "" : "es"} at this season's pace`);
+  }
+  if (near.length) {
+    host.appendChild(el("h2", "full", "Milestones in reach"));
+    for (const n of near) host.appendChild(el("div", "fl full", n));
+    note("Career means every season this dashboard holds (2025 onward), so totals from earlier years "
+      + "or another school are not included.");
+  }
+}
+
+function sparkline(values, avg, labels, fmt) {
+  const W = 120, H = 28, svgNS = "http://www.w3.org/2000/svg";
+  const vals = values.filter(v => v != null).concat(avg);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi === lo) { hi += 1; lo -= 1; }
+  const x = i => 3 + (i / Math.max(1, values.length - 1)) * (W - 6);
+  const y = v => 3 + (1 - (v - lo) / (hi - lo)) * (H - 6);
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W); svg.setAttribute("height", H);
+  svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", "Match by match against the season average");
+  const add = (n, a) => { const e = document.createElementNS(svgNS, n); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  add("line", { x1: 0, x2: W, y1: y(avg), y2: y(avg), stroke: css("--ink-3"), "stroke-dasharray": "3 3" });
+  const d = values.map((v, i) => v == null ? "" : `${i && values[i - 1] != null ? "L" : "M"}${x(i)},${y(v)}`).join("");
+  add("path", { d, fill: "none", stroke: css("--ku-blue"), "stroke-width": 1.5 });
+  values.forEach((v, i) => {
+    if (v == null) return;
+    const c = add("circle", { cx: x(i), cy: y(v), r: 2.5, fill: v >= avg ? css("--ku-blue") : css("--loss") });
+    c.addEventListener("pointermove", ev => showTip(ev.clientX, ev.clientY, labels[i], fmt(v), `season ${fmt(avg)}`));
+    c.addEventListener("pointerleave", hideTip);
+  });
+  return svg;
 }
 
 document.getElementById("detail-close").onclick = () => { openPlayer = null; document.getElementById("detail").hidden = true; };

@@ -52,7 +52,10 @@ fun GoalTrendChart(
     target: Double,
     ceiling: Boolean,
     format: (Double?) -> String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    // What the dashed line is: the staff's target by default, or a season
+    // average when the chart is showing form.
+    targetLabel: String = "Target"
 ) {
     val measured = points.mapNotNull { it.value }
     if (measured.size < 2) return
@@ -82,7 +85,7 @@ fun GoalTrendChart(
                 .padding(top = 6.dp, bottom = 4.dp)
                 .semantics {
                     contentDescription = "Trend over ${points.size} matches. " +
-                        "Target ${format(target)}, met $met of ${measured.size}. " +
+                        "$targetLabel ${format(target)}, at or above it $met of ${measured.size}. " +
                         "Best ${format(best)}, worst ${format(worst)}."
                 }
         ) {
@@ -127,7 +130,7 @@ fun GoalTrendChart(
             }
         }
         Text(
-            "Target ${if (ceiling) "≤ " else ""}${format(target)} · " +
+            "$targetLabel ${if (ceiling) "≤ " else ""}${format(target)} · " +
                 "best ${format(best)} · worst ${format(worst)} · " +
                 "${points.first().label} to ${points.last().label}",
             style = MaterialTheme.typography.labelSmall,

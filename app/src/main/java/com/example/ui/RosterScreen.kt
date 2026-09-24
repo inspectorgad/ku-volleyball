@@ -286,6 +286,8 @@ fun PlayerDetailScreen(
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
+    // The form stat whose match-by-match chart is open, if any.
+    var openForm by remember { mutableStateOf<String?>(null) }
 
     val matchesById = matches.associateBy { it.id }
     val playerLines = statLines
@@ -357,6 +359,68 @@ fun PlayerDetailScreen(
                             .map { season -> season to aggregate(linesBySeason.getValue(season)) } +
                             listOf("Career" to aggregate(playerLines))
                         StatsTable(rows = rows)
+                    }
+                }
+            }
+
+            // Form and milestones for the current season: the latest one this
+            // player has lines in.
+            val currentSeason = seasonOrder.firstOrNull { linesBySeason.containsKey(it) }
+            val form = currentSeason?.let { playerForm(playerLines, matches, it) }.orEmpty()
+            if (form.isNotEmpty()) {
+                item {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                "Form — $currentSeason",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            form.forEach { f ->
+                                val open = openForm == f.label
+                                Text(
+                                    formLine(f),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = when (f.trend) {
+                                        "up" -> MaterialTheme.colorScheme.primary
+                                        "down" -> MaterialTheme.colorScheme.error
+                                        else -> MaterialTheme.colorScheme.onSurface
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable { openForm = if (open) null else f.label }
+                                        .padding(vertical = 4.dp)
+                                )
+                                if (open) {
+                                    GoalTrendChart(
+                                        points = f.series.map { (opp, v) -> GoalPoint(opp, v) },
+                                        target = f.season,
+                                        ceiling = false,
+                                        format = f.format,
+                                        targetLabel = "Season"
+                                    )
+                                }
+                            }
+                            Explanation(EXPLAIN_FORM)
+                        }
+                    }
+                }
+            }
+            val nearMilestones = currentSeason?.let { milestones(playerLines, matches, it) }.orEmpty()
+            if (nearMilestones.isNotEmpty()) {
+                item {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                "Milestones in reach",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            nearMilestones.forEach {
+                                Text(milestoneLine(it), style = MaterialTheme.typography.bodyMedium)
+                            }
+                            Explanation(EXPLAIN_MILESTONES)
+                        }
                     }
                 }
             }
