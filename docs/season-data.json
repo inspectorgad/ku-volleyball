@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-24T00:11:19Z",
+ "generatedAt": "2026-09-24T06:41:02Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -18339,7 +18339,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 26
+   "opponentRpi": 27
   },
   {
    "date": "2026-09-04",
@@ -19008,7 +19008,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 72
+   "opponentRpi": 76
   },
   {
    "date": "2026-09-08",
@@ -19460,7 +19460,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 221
+   "opponentRpi": 223
   },
   {
    "date": "2026-09-11",
@@ -20090,7 +20090,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 113
+   "opponentRpi": 109
   },
   {
    "date": "2026-09-13",
@@ -20516,7 +20516,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 81
+   "opponentRpi": 79
   },
   {
    "date": "2026-09-15",
@@ -21020,7 +21020,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 221
+   "opponentRpi": 223
   },
   {
    "date": "2026-09-18",
@@ -21445,7 +21445,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 94
+   "opponentRpi": 95
   },
   {
    "date": "2026-09-20",
@@ -22152,7 +22152,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 136
+   "opponentRpi": 134
   },
   {
    "date": "2026-09-25",
@@ -22792,7 +22792,7 @@
    "overallW": 9,
    "overallL": 1,
    "nationalRank": 21,
-   "rpiRank": 55,
+   "rpiRank": 54,
    "rpiSource": "provisional"
   },
   {
@@ -22816,7 +22816,7 @@
    "overallW": 9,
    "overallL": 2,
    "nationalRank": 9,
-   "rpiRank": 19,
+   "rpiRank": 18,
    "rpiSource": "provisional"
   },
   {
@@ -22840,7 +22840,7 @@
    "overallW": 8,
    "overallL": 2,
    "nationalRank": null,
-   "rpiRank": 31,
+   "rpiRank": 30,
    "rpiSource": "provisional"
   },
   {
@@ -22852,7 +22852,7 @@
    "overallW": 8,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 51,
+   "rpiRank": 50,
    "rpiSource": "provisional"
   },
   {
@@ -22876,7 +22876,7 @@
    "overallW": 7,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 22,
+   "rpiRank": 23,
    "rpiSource": "provisional"
   },
   {
@@ -22900,7 +22900,7 @@
    "overallW": 7,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 86,
+   "rpiRank": 84,
    "rpiSource": "provisional"
   },
   {
@@ -22912,7 +22912,7 @@
    "overallW": 8,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 195,
+   "rpiRank": 190,
    "rpiSource": "provisional"
   },
   {
@@ -22924,7 +22924,7 @@
    "overallW": 7,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 143,
+   "rpiRank": 137,
    "rpiSource": "provisional"
   },
   {
@@ -22936,7 +22936,7 @@
    "overallW": 6,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 107,
+   "rpiRank": 106,
    "rpiSource": "provisional"
   },
   {
@@ -22948,7 +22948,7 @@
    "overallW": 5,
    "overallL": 6,
    "nationalRank": null,
-   "rpiRank": 198,
+   "rpiRank": 196,
    "rpiSource": "provisional"
   }
  ],
@@ -31264,11 +31264,11 @@
   {
    "team": "Kentucky",
    "season": "2026",
-   "matches": 10,
-   "sets": 34,
-   "serviceAces": 49,
-   "serviceErrors": 73,
-   "serveAttempts": 805,
+   "matches": 11,
+   "sets": 38,
+   "serviceAces": 54,
+   "serviceErrors": 88,
+   "serveAttempts": 900,
    "big12": false,
    "pollRank": 3
   },
@@ -31297,11 +31297,11 @@
   {
    "team": "Nebraska",
    "season": "2026",
-   "matches": 10,
-   "sets": 33,
-   "serviceAces": 70,
-   "serviceErrors": 81,
-   "serveAttempts": 804,
+   "matches": 11,
+   "sets": 36,
+   "serviceAces": 74,
+   "serviceErrors": 87,
+   "serveAttempts": 878,
    "big12": false,
    "pollRank": 1
   },
