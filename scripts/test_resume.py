@@ -1,6 +1,6 @@
 import unittest
 
-from resume import team_games, compute_rpi, rank_rpi, common_opponents
+from resume import team_games, compute_rpi, rank_rpi, common_opponents, fit_line, blend
 
 
 class RpiTest(unittest.TestCase):
@@ -39,6 +39,22 @@ class RpiTest(unittest.TestCase):
         them = {"pittsburgh": ["L 1-3"], "kansas": ["W 3-0"], "byu": ["W 3-1"]}
         self.assertEqual(common_opponents(ku, them, exclude=("kansas", "utah")),
                          [("pittsburgh", ["L 1-3"], ["L 1-3"])])
+
+
+
+class BlendTest(unittest.TestCase):
+    def test_fit_line(self):
+        a, b = fit_line([(0.5, 70.0), (0.7, 80.0)])
+        self.assertAlmostEqual(a, 45.0)
+        self.assertAlmostEqual(b, 50.0)
+        self.assertIsNone(fit_line([(0.5, 70.0), (0.5, 80.0)]))
+        self.assertIsNone(fit_line([]))
+
+    def test_blend_leans_on_results_as_games_accumulate(self):
+        self.assertEqual(blend(70.0, 10, 60.0, 10), 65.0)   # half each at priorGames
+        self.assertEqual(blend(70.0, 30, 60.0, 10), 67.5)   # 75% results at three times
+        self.assertEqual(blend(70.0, 0, 60.0, 10), 60.0)    # nothing played yet
+        self.assertEqual(blend(70.0, 8, None, 10), 70.0)    # no preseason number
 
 
 if __name__ == "__main__":

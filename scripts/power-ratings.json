@@ -20,9 +20,11 @@
   "stale number cannot leave a team that has dropped out of the poll rated above",
   "the team still in it.",
   "",
-  "The fallbacks are the part that still needs a human, and they go stale: they",
-  "are preseason opinion about teams that have since played a season. Revisit",
-  "them when a Big 12 team's form clearly diverges from where it was picked.",
+  "The fallbacks go stale - they are preseason opinion about teams that have",
+  "since played - so they no longer stand alone: rpiBlend below blends each",
+  "with a rating from the team's results, leaning further on results as the",
+  "season goes. They still anchor the early weeks, so revisit one when a team's",
+  "form clearly diverges from where it was picked.",
   "The scrape reads this file; it never writes it."
  ],
  "asOf": "2026-09-14",
@@ -46,6 +48,24 @@
    "what the model says about a team hardly at all. What it changed is that the",
    "numbers now move by themselves. On that poll the scale runs from 86.1 at",
    "No. 1 to 71.5 at No. 25."
+  ]
+ },
+ "rpiBlend": {
+  "priorGames": 10,
+  "minGames": 5,
+  "_comment": [
+   "How an unranked team's rating follows its results. Each scrape computes an",
+   "RPI for every D1 team from every result, puts it on this file's scale with",
+   "a straight-line fit to the poll-rated teams, and blends it with the team's",
+   "preseason rating below:",
+   "",
+   "  rating = w * from_results + (1 - w) * preseason,  w = games / (games + priorGames)",
+   "",
+   "So at priorGames games played the two count equally, at three times that",
+   "the results count 75%. A team with fewer than minGames D1 games stays on its",
+   "preseason rating; one with no preseason rating is rated from results alone.",
+   "The poll-floor cap still applies. Raise priorGames to trust the preseason",
+   "numbers for longer, lower it to follow results sooner."
   ]
  },
  "kansas": 72,

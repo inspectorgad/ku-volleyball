@@ -171,8 +171,9 @@ data class Match(
     // official rating system - scripts/power-ratings.json is the whole model.
     val winProbability: Double? = null,
     // Where the opponent's rating behind that forecast came from: "poll" when
-    // the current AVCA poll rates them, "preseason" for a number set by hand
-    // before the season. Null alongside a null forecast.
+    // the current AVCA poll rates them, "results" for a rating from their RPI
+    // this season blended with the preseason number, "preseason" for the
+    // preseason number alone. Null alongside a null forecast.
     val ratingSource: String? = null,
     // AVCA ranks as they stood when the match was played, from the NCAA's box
     // score, and NCAA tournament seeds for the postseason. Null when unranked.

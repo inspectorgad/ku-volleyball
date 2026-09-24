@@ -779,7 +779,7 @@ for (season, key), rec in records.items():
 # last season's final RPI for weeks into the new one - a provisional one worked
 # out from every Division I result the sweep has seen (scripts/resume.py).
 # Either way each table is keyed by normalised name, with where it came from.
-from resume import team_games, compute_rpi, rank_rpi, common_opponents  # noqa: E402
+from resume import team_games, compute_rpi, rank_rpi, common_opponents, fit_line, blend  # noqa: E402
 
 rpi_tables = {}  # season -> {"source", "updated", "ranks": {key: (rank, record)}}
 if rpi.get("data") and rpi_season:
@@ -799,9 +799,16 @@ d1_raw = load_json("scraped/d1-results.json", {})
 d1_games = [[g[0], norm_team(g[1]), g[2], norm_team(g[3]), g[4]]
             for g in (d1_raw.get("games") or {}).values()]
 current_season = max((m["season"] for m in matches.values()), default=None)
-if d1_games and d1_raw.get("season") == current_season and current_season not in rpi_tables:
+# Computed whether or not the NCAA has published: the win model below rates
+# unranked teams from these values, and the NCAA's table carries ranks only.
+computed_rpi, d1_games_played = {}, {}
+if d1_games and d1_raw.get("season") == current_season:
     is_d1 = (lambda t: t in d1_names) if d1_names else (lambda t: True)
-    ranked = rank_rpi(compute_rpi(team_games(d1_games, is_d1)))
+    by_team_games = team_games(d1_games, is_d1)
+    computed_rpi = compute_rpi(by_team_games)
+    d1_games_played = {t: len(g) for t, g in by_team_games.items()}
+if computed_rpi and current_season not in rpi_tables:
+    ranked = rank_rpi(computed_rpi)
     through = max(g[0] for g in d1_games)
     rpi_tables[current_season] = {
         "source": "provisional",
@@ -1235,12 +1242,45 @@ if current_poll and poll_map:
         poll_floor = min(poll_rating.values())
 
 
+# A team the poll does not rate is rated from its results as well as from the
+# preseason number, once it has played enough to say anything. The RPI is put
+# on the model's scale by a straight-line fit to the poll-rated teams, the one
+# set of ratings the model already trusts, and then blended with the preseason
+# rating by games played: at `priorGames` games it is half each, and it leans
+# further on results as the season goes. The fit needs enough ranked teams
+# with an RPI to mean anything, or the preseason ratings stand alone.
+blend_cfg = ratings.get("rpiBlend") or {}
+prior_games = blend_cfg.get("priorGames", 10)
+min_games = blend_cfg.get("minGames", 5)
+rpi_fit = None
+pairs = [(computed_rpi[k][0], v) for k, v in poll_rating.items() if k in computed_rpi]
+if len(pairs) >= 10:
+    rpi_fit = fit_line(pairs)
+    if rpi_fit:
+        print(f"win model: RPI mapped to ratings as {rpi_fit[0]:.2f} + {rpi_fit[1]:.2f} x RPI "
+              f"(fit to {len(pairs)} poll-rated teams)")
+
+
+def results_rating(key):
+    """(rating from results, games played) or (None, 0) when there is too little to go on."""
+    games = d1_games_played.get(key, 0)
+    if rpi_fit is None or key not in computed_rpi or games < min_games:
+        return None, games
+    return rpi_fit[0] + rpi_fit[1] * computed_rpi[key][0], games
+
+
 def rating_for(team):
     """This team's power rating, and where it came from."""
     key = norm_team(team)
     if key in poll_rating:
         return poll_rating[key], "poll"
     manual = teams_rated.get(key)
+    from_results, games = results_rating(key)
+    if from_results is not None:
+        value = blend(from_results, games, manual["rating"] if manual else None, prior_games)
+        if poll_floor is not None:
+            value = min(value, poll_floor)
+        return round(value, 2), "results"
     if not manual:
         return None, None
     # Capped at the poll's last-placed team: a rating set before the season
@@ -1274,15 +1314,16 @@ if teams_rated or poll_rating:
         match["winProbability"] = round(1 / (1 + 10 ** (-gap / scale)), 4)
         # Said per match so a screen can own up to how many of its forecasts
         # still rest on a rating set by hand before the season.
-        match["ratingSource"] = "poll" if opponent_source == "poll" else "preseason"
+        match["ratingSource"] = (
+            "poll" if opponent_source == "poll"
+            else "results" if opponent_source == "results" else "preseason")
         forecast += 1
-    from_poll = sum(
-        1 for m in matches.values()
-        if m.get("winProbability") is not None
-        and norm_team(m["opponent"]) in poll_rating
-    )
+    by_source = {}
+    for m in matches.values():
+        if m.get("winProbability") is not None:
+            by_source[m["ratingSource"]] = by_source.get(m["ratingSource"], 0) + 1
     print(f"win model: {forecast} upcoming match(es) rated "
-          f"({from_poll} opponent(s) from the poll, {forecast - from_poll} from file); "
+          f"({', '.join(f'{n} from {src}' for src, n in sorted(by_source.items()))}); "
           f"Kansas {ku_rating} from the {ku_source}"
           + (f"; {unrated} with no rating for the opponent" if unrated else ""))
 

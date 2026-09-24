@@ -604,7 +604,9 @@ function renderUpcoming(upcoming) {
       s.title = "Estimated win probability. Ranked teams are rated from the "
         + (poll?.name ?? "AVCA poll")
         + (poll?.updated ? ` (${poll.updated.toLowerCase()})` : "")
-        + "; the rest from preseason estimates.";
+        + (m.ratingSource === "results"
+          ? "; this opponent from its results this season (RPI), blended with a preseason estimate that fades as it plays more."
+          : m.ratingSource === "preseason" ? "; this opponent from a preseason estimate." : ".");
       li.appendChild(s);
     }
     ul.appendChild(li);

@@ -81,3 +81,28 @@ def common_opponents(ku_results, their_results, exclude=()):
     """
     shared = sorted(set(ku_results) & set(their_results) - set(exclude))
     return [(t, ku_results[t], their_results[t]) for t in shared]
+
+
+def fit_line(pairs):
+    """Least-squares (intercept, slope) for [(x, y)], or None if x never varies."""
+    if not pairs:
+        return None
+    mx = sum(x for x, _ in pairs) / len(pairs)
+    my = sum(y for _, y in pairs) / len(pairs)
+    sxx = sum((x - mx) ** 2 for x, _ in pairs)
+    if sxx == 0:
+        return None
+    slope = sum((x - mx) * (y - my) for x, y in pairs) / sxx
+    return my - slope * mx, slope
+
+
+def blend(from_results, games, preseason, prior_games):
+    """Results and preseason ratings weighted games : prior_games.
+
+    Half each at prior_games games; results alone when there is no preseason
+    number to blend with.
+    """
+    if preseason is None:
+        return from_results
+    weight = games / (games + prior_games)
+    return weight * from_results + (1 - weight) * preseason
