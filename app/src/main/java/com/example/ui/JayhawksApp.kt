@@ -73,6 +73,12 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
         openMatchId = null
         openOpponent = null
     }
+    // On any tab but the first, back returns to the first tab rather than
+    // leaving the app - the usual Android pattern for bottom navigation. Only
+    // from the first tab does back exit.
+    BackHandler(enabled = !showingDetail && currentTab != Tab.Roster) {
+        currentTab = Tab.Roster
+    }
 
     val openPlayer = openPlayerId?.let { id -> players.firstOrNull { it.id == id } }
     val openMatch = openMatchId?.let { id -> matches.firstOrNull { it.id == id } }

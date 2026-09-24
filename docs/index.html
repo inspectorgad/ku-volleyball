@@ -170,6 +170,7 @@
      title="Adds every remaining match to your phone's calendar, with times and TV, and keeps it updated">📅 Subscribe to the schedule</a>
 </header>
 <div class="filters" id="filters" role="group" aria-label="Season"></div>
+<div class="filters" id="scopes" role="group" aria-label="Conference" style="margin-top:-12px"></div>
 <div id="status">Loading season data…</div>
 <main id="app" hidden>
   <div class="grid kpis" id="kpis"></div>
@@ -347,11 +348,21 @@ const EXPLAIN = {
   matchGoals: "The coaching staff's game-by-game targets, scored from this match's box score. Each row shows the target, then what KU did: black is met, red is missed, and ≤ marks a goal where lower is better. Team goals come first. Role goals (Setter, middles M1 and M2, OPP for the opposite, L1 and L2 for the left sides) belong to whoever played that role in this match, named in the Who column.",
   seasonGoals: "How often each target has been met this season, least often first. A goal that is almost never met may be set out of reach rather than badly played. Click a goal for its match-by-match chart; the dashed line is the target and red dots are misses.",
   poll: "The AVCA coaches' top 25. ▲ or ▼ is the move since the previous poll and NEW is a team that was unranked last time. The number in brackets after a team is its first-place votes. Big 12 teams carry a Big 12 tag and Kansas is highlighted.",
+  scope: "The second row of chips narrows everything on this page to Big 12 matches or to non-conference ones; Big 12 means an opponent in that season's conference standings. The rank history and the projection always cover the whole season.",
+  splits: "KU's record and production by where the match was played. Neutral means a tournament or event site that is neither team's home. K/S and D/S are team kills and digs per set. Early in the season each line rests on only a few matches, so small differences mean little.",
+  playerSplits: "This player's numbers by where the match was played, this season. Only matches with a known location count, and a line built on two or three matches is a rough guide.",
   common: "Teams both KU and this opponent have played this season, and how each side did. A rough guide only: venue, injuries and the point in the season all change what a result means.",
 };
 
 let SEED = null;
-let season = null; // null until data arrives; then latest season with results
+let season = null;
+// "All matches", "Big 12" or "Non-conference". Mirrors MatchScope in the app.
+let scope = "All matches";
+const SCOPES = ["All matches", "Big 12", "Non-conference"];
+// A Big 12 match is one against a team in that season's standings; a season
+// with no standings held counts nothing as conference rather than guessing.
+const isConference = m => (SEED.standings ?? []).some(x => x.season === m.season && normTeam(x.team) === normTeam(m.opponent));
+const inScope = m => scope === "All matches" || (scope === "Big 12") === isConference(m); // null until data arrives; then latest season with results
 let openPlayer = null; // name of the player whose match log is open
 let sortKey = "K", sortDir = -1;
 
@@ -388,10 +399,20 @@ function buildFilters() {
     b.onclick = () => { season = s; buildFilters(); render(); };
     box.appendChild(b);
   }
+  const sbox = document.getElementById("scopes");
+  sbox.replaceChildren();
+  if (!(SEED.standings ?? []).length) return;
+  for (const sc of SCOPES) {
+    const b = el("button", "chip", sc);
+    b.setAttribute("aria-pressed", String(sc === scope));
+    b.onclick = () => { scope = sc; buildFilters(); render(); };
+    sbox.appendChild(b);
+  }
+  if (scope !== "All matches") sbox.appendChild(el("span", "fineprint", EXPLAIN.scope));
 }
 
 function slice() {
-  const matches = SEED.matches.filter(m => season === "All" || m.season === season);
+  const matches = SEED.matches.filter(m => (season === "All" || m.season === season) && inScope(m));
   const results = matches.filter(m => m.teamSets != null);
   const upcoming = matches.filter(m => m.teamSets == null);
   const lines = [];
@@ -443,6 +464,15 @@ function renderKpis(results, lines) {
   const teamSets = setsFor + setsAg;
   const kpis = document.getElementById("kpis");
   kpis.replaceChildren();
+  if (!results.length && scope !== "All matches") {
+    const next = SEED.matches.filter(m => !played(m) && inScope(m)).sort((x, y) => (x.date < y.date ? -1 : 1))[0];
+    const c = el("div", "card tile");
+    c.appendChild(el("div", "label", scope));
+    c.appendChild(el("div", "value", "No matches yet"));
+    c.appendChild(el("div", "note", next ? `First: ${siteWord(next)} ${next.opponent}, ${kickoff(next)}` : "None played in this season."));
+    kpis.appendChild(c);
+    return;
+  }
   const tile = (label, value, note, hero, explain) => {
     const c = el("div", "card tile" + (hero ? " hero" : ""));
     c.appendChild(el("div", "label", label));
@@ -465,8 +495,11 @@ function renderKpis(results, lines) {
   const rw = ranked.filter(m => m.teamSets > m.opponentSets).length;
   const un = results.filter(m => !m.opponentRank);
   const uw = un.filter(m => m.teamSets > m.opponentSets).length;
+  // The rank history and the projection cover the whole season, whatever
+  // the conference chips say.
+  const seasonPlayed = SEED.matches.filter(m => m.season === season && played(m));
   const path = [];
-  for (const m of results) {
+  for (const m of seasonPlayed) {
     const label = m.kuRank ? String(m.kuRank) : "NR";
     if (path.at(-1) !== label) path.push(label);
   }
@@ -475,7 +508,7 @@ function renderKpis(results, lines) {
   const nowLabel = now ? String(now) : "NR";
   if (path.at(-1) !== nowLabel) path.push(nowLabel);
   tile("vs ranked", `${rw}–${ranked.length - rw}`, `unranked ${uw}–${un.length - uw} · KU rank ${path.join("→")}`,
-    false, EXPLAIN.vsRanked + " " + EXPLAIN.kuRank);
+    false, EXPLAIN.vsRanked + " " + EXPLAIN.kuRank + (scope !== "All matches" ? " " + EXPLAIN.scope : ""));
 
   // Sets decided by two points - every set that went past 25, and 25-23. The
   // tight sets are where the season has turned, so they get a tile of their own.
@@ -500,10 +533,11 @@ function renderKpis(results, lines) {
   const left = SEED.matches.filter(m => m.season === season && !played(m) && m.winProbability != null);
   if (!left.length) return;
   const exp = left.reduce((a, m) => a + m.winProbability, 0);
-  const projW = Math.round(wins + exp), projL = results.length + left.length - projW;
+  const allWins = seasonPlayed.filter(m => m.teamSets > m.opponentSets).length;
+  const projW = Math.round(allWins + exp), projL = seasonPlayed.length + left.length - projW;
   const big12 = new Set((SEED.standings ?? []).filter(x => x.season === season).map(x => normTeam(x.team)));
   const conf = m => big12.has(normTeam(m.opponent));
-  const cPlayed = results.filter(conf), cLeft = left.filter(conf);
+  const cPlayed = seasonPlayed.filter(conf), cLeft = left.filter(conf);
   const cw = Math.round(cPlayed.filter(m => m.teamSets > m.opponentSets).length
     + cLeft.reduce((a, m) => a + m.winProbability, 0));
   const cl = cPlayed.length + cLeft.length - cw;
@@ -857,6 +891,24 @@ function renderForm(name) {
       + "chart is match by match: the dashed line is the season average and red dots are matches below it.");
   }
 
+  // This player by venue, this season.
+  const seasonLines = all.filter(l => l.match.season === cur);
+  const pv = [["Home", m => m.home === true && !m.neutral], ["Away", m => m.home === false && !m.neutral], ["Neutral", m => !!m.neutral]]
+    .map(([label, test]) => [label, seasonLines.filter(l => test(l.match))]).filter(([, ls]) => ls.length);
+  if (pv.length > 1) {
+    host.appendChild(el("h2", "full", `Home, away and neutral — ${cur}`));
+    for (const [label, ls] of pv) {
+      const t = totals(ls);
+      const parts = [];
+      if (t.k) parts.push(`${fmt2(t.k / t.sp)} K/S`);
+      if (t.ta) parts.push(`${fmtPct(t.pct)} hitting`);
+      if (t.a >= 10) parts.push(`${fmt2(t.a / t.sp)} A/S`);
+      if (t.d) parts.push(`${fmt2(t.d / t.sp)} D/S`);
+      host.appendChild(el("div", "fl full", `${label} (${ls.length} ${ls.length === 1 ? "match" : "matches"}): ${parts.join(" · ") || "no attacking or defensive stats"}`));
+    }
+    note(EXPLAIN.playerSplits);
+  }
+
   // Round-number career totals within about five matches at this season's pace.
   const career = totals(all), seasonT = totals(all.filter(l => l.match.season === cur));
   const played = all.filter(l => l.match.season === cur).length;
@@ -990,6 +1042,19 @@ function renderInsights(results) {
     ], EXPLAIN.resume + (provisional && SEED.rpi?.updated
       ? ` Results through ${SEED.rpi.updated.replace(/^Provisional, through games /, "")}.` : ""));
   }
+
+  // Home, away and neutral.
+  const venues = [["Home", m => m.home === true && !m.neutral], ["Away", m => m.home === false && !m.neutral], ["Neutral", m => !!m.neutral]];
+  const splitLines = [];
+  for (const [label, test] of venues) {
+    const here = results.filter(test);
+    if (!here.length) continue;
+    const t = totals(here.flatMap(m => (m.lines ?? []).map(l => ({ ...l, match: m }))));
+    const sets = here.reduce((a, m) => a + m.teamSets + m.opponentSets, 0);
+    const w = here.filter(won).length;
+    splitLines.push(`${label} ${w}-${here.length - w} · ${fmtPct(t.pct)} hitting · ${fmt2(t.k / sets)} K/S · ${fmt2(t.d / sets)} D/S`);
+  }
+  if (splitLines.length) card("Home, away and neutral", splitLines, EXPLAIN.splits);
 
   // Set by set.
   const games = results.map(m => ({ m, sets: (m.setScores ?? "").split(",").map(x => x.trim().split("-").map(Number))

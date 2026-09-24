@@ -247,6 +247,21 @@ const val EXPLAIN_POLL =
         "that was unranked last time. The number in brackets after a team is its first-place " +
         "votes. Big 12 teams are in bold."
 
+const val EXPLAIN_SCOPE =
+    "The chips under the seasons narrow everything on this tab to Big 12 matches or to " +
+        "non-conference ones; Big 12 means an opponent in that season's conference standings. " +
+        "The rank history and the projection always cover the whole season."
+
+const val EXPLAIN_SPLITS =
+    "KU's record and production by where the match was played. Neutral means a tournament " +
+        "or event site that is neither team's home. K/S and D/S are team kills and digs per " +
+        "set. Early in the season each line rests on only a few matches, so small differences " +
+        "mean little."
+
+const val EXPLAIN_PLAYER_SPLITS =
+    "This player's numbers by where the match was played, this season. Only matches with a " +
+        "known location count, and a line built on two or three matches is a rough guide."
+
 data class CommonOpponent(val team: String, val ku: String, val them: String)
 
 /** The feed's common-opponent list; empty for anything unreadable. */

@@ -35,7 +35,6 @@ import com.example.data.NationalLeader
 import com.example.data.Player
 import com.example.data.PollEntry
 import com.example.data.StatLine
-import com.example.data.normTeam
 import com.example.data.sameTeam
 import com.example.stats.VolleyballTotals
 import com.example.stats.aggregate
@@ -67,8 +66,15 @@ fun LeadersScreen(
     var selectedSeason by rememberSaveable { mutableStateOf<String?>(null) }
     val season = selectedSeason ?: seasons.firstOrNull() ?: ALL_SEASONS
 
+    // Big 12, non-conference, or everything. Conference play is judged by
+    // each season's standings, so realignment cannot stale it.
+    var selectedScope by rememberSaveable { mutableStateOf(MatchScope.All) }
+    val big12 = big12BySeason(standings)
+    val scoped = if (selectedScope == MatchScope.All) matches
+        else matches.filter { inScope(it, selectedScope, big12) }
+
     val seasonMatches =
-        if (season == ALL_SEASONS) matches else matches.filter { it.season == season }
+        if (season == ALL_SEASONS) scoped else scoped.filter { it.season == season }
     val seasonMatchIds = seasonMatches.map { it.id }.toSet()
     val seasonLines = statLines.filter { it.matchId in seasonMatchIds }
     val playersById = players.associateBy { it.id }
@@ -84,9 +90,12 @@ fun LeadersScreen(
     }
     val setsFor = seasonMatches.sumOf { it.teamSets ?: 0 }
     val setsAgainst = seasonMatches.sumOf { it.opponentSets ?: 0 }
-    val teamTotals = aggregate(seasonLines)
     // Total sets the team has played this season, for rate-stat qualification.
     val teamSetsPlayed = seasonMatches.sumOf { (it.teamSets ?: 0) + (it.opponentSets ?: 0) }
+    // Summed player lines count every player's sets, so the team's per-set
+    // rates are taken over the sets the matches had. Dividing by the players'
+    // sets once showed 1.4 kills a set for a team making 13.9.
+    val teamTotals = aggregate(seasonLines).copy(setsPlayed = teamSetsPlayed)
     val minAttempts = teamSetsPlayed * MIN_TA_PER_TEAM_SET
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -105,11 +114,38 @@ fun LeadersScreen(
                 )
             }
         }
+        if (big12.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                MatchScope.entries.forEach { sc ->
+                    FilterChip(
+                        selected = selectedScope == sc,
+                        onClick = { selectedScope = sc },
+                        label = { Text(sc.label) }
+                    )
+                }
+            }
+        }
 
         if (seasonMatches.isEmpty()) {
             EmptyState(
                 title = "No matches recorded",
                 subtitle = "Add matches and stat lines to see team totals and leaderboards here."
+            )
+            return@Column
+        }
+        // A conference view before conference play: say so, and say when it starts.
+        if (selectedScope != MatchScope.All && seasonMatches.none { it.played }) {
+            val next = seasonMatches.filter { !it.played }.minByOrNull { it.date }
+            EmptyState(
+                title = "No ${selectedScope.label} matches played yet",
+                subtitle = next?.let { "First: ${it.versus} ${it.opponent}, ${kickoffLine(it)}." }
+                    ?: "None in this season."
             )
             return@Column
         }
@@ -122,7 +158,8 @@ fun LeadersScreen(
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(12.dp)) {
                         Text(
-                            "Jayhawks — $season",
+                            "Jayhawks — $season" +
+                                if (selectedScope == MatchScope.All) "" else " · ${selectedScope.label}",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold
                         )
@@ -140,7 +177,7 @@ fun LeadersScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         if (season != ALL_SEASONS) {
-                            val split = rankedSplit(matches, season)
+                            val split = rankedSplit(scoped, season)
                             val path = rankPath(
                                 matches, season,
                                 pollEntries.firstOrNull { it.season == season && sameTeam(it.team, "Kansas") }?.rank
@@ -157,23 +194,21 @@ fun LeadersScreen(
                             )
                             // The tight sets, where the season has turned: the same
                             // figure as the dashboard's Close sets tile.
-                            closeSetsLine(matches, season)?.let {
+                            closeSetsLine(scoped, season)?.let {
                                 Text(
                                     it,
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
-                            val big12 = standings.filter { it.season == season }
-                                .map { normTeam(it.team) }.toSet()
-                            seasonOutlook(matches, season, big12)?.let {
+                            seasonOutlook(matches, season, big12[season].orEmpty())?.let {
                                 Text(
                                     outlookLine(it),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
-                            Explanation(EXPLAIN_SUMMARY)
+                            Explanation(EXPLAIN_SUMMARY + " " + EXPLAIN_SCOPE)
                         }
                         // Always shown, and measured from the last time a feed
                         // answered rather than from the file's own date: the
@@ -200,7 +235,7 @@ fun LeadersScreen(
                 // What a selection committee reads: KU's RPI and the record by
                 // the opponents' RPI band.
                 val kuStanding = standings.firstOrNull { it.season == season && sameTeam(it.team, "Kansas") }
-                rpiResume(matches, season)?.let { r ->
+                rpiResume(scoped, season)?.let { r ->
                     item {
                         InsightCard(
                             title = "Tournament resume",
@@ -223,15 +258,25 @@ fun LeadersScreen(
                         )
                     }
                 }
-                setPatterns(matches, season)?.let { p ->
+                val splits = venueSplits(seasonMatches, seasonLines, { (it as StatLine).matchId }, team = true)
+                if (splits.isNotEmpty()) {
+                    item {
+                        InsightCard(
+                            "Home, away and neutral",
+                            splits.map { teamSplitLine(it) },
+                            explanation = EXPLAIN_SPLITS
+                        )
+                    }
+                }
+                setPatterns(scoped, season)?.let { p ->
                     item { InsightCard("Set by set", setPatternLines(p), explanation = EXPLAIN_SETS) }
                 }
-                forecastScorecard(matches, season)?.let { sc ->
+                forecastScorecard(scoped, season)?.let { sc ->
                     item {
                         InsightCard(
                             title = "Win model scorecard",
                             lines = listOf(scorecardLine(sc)) +
-                                matches.filter { it.season == season && it.played && it.forecast != null }
+                                scoped.filter { it.season == season && it.played && it.forecast != null }
                                     .sortedByDescending { it.date }
                                     .map { m ->
                                         "${m.date} ${m.versus} ${m.opponent}: ${pct(m.forecast!!)} → " +

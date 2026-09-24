@@ -406,6 +406,28 @@ fun PlayerDetailScreen(
                     }
                 }
             }
+            val splits = currentSeason?.let { cs ->
+                // Only the matches this player has a line in.
+                val mine = playerLines.map { it.matchId }.toSet()
+                venueSplits(matches.filter { it.season == cs && it.id in mine }, playerLines, { (it as StatLine).matchId })
+            }.orEmpty()
+            if (splits.size > 1) {
+                item {
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                "Home, away and neutral — $currentSeason",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            splits.forEach {
+                                Text(playerSplitLine(it), style = MaterialTheme.typography.bodyMedium)
+                            }
+                            Explanation(EXPLAIN_PLAYER_SPLITS)
+                        }
+                    }
+                }
+            }
             val nearMilestones = currentSeason?.let { milestones(playerLines, matches, it) }.orEmpty()
             if (nearMilestones.isNotEmpty()) {
                 item {
