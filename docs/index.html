@@ -447,6 +447,22 @@ function renderKpis(results, lines) {
   if (path.at(-1) !== nowLabel) path.push(nowLabel);
   tile("vs ranked", `${rw}–${ranked.length - rw}`, `unranked ${uw}–${un.length - uw} · KU rank ${path.join("→")}`);
 
+  // Sets decided by two points - every set that went past 25, and 25-23. The
+  // tight sets are where the season has turned, so they get a tile of their own.
+  const close = [];
+  for (const m of results) {
+    for (const part of (m.setScores ?? "").split(",")) {
+      const [a, b] = part.trim().split("-").map(Number);
+      if (Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= 2) close.push({ m, a, b });
+    }
+  }
+  if (close.length) {
+    const cw = close.filter(x => x.a > x.b).length;
+    const last = close.at(-1);
+    tile("Close sets", `${cw}–${close.length - cw}`,
+      `decided by 2 points · latest ${last.a}-${last.b} ${siteWord(last.m)} ${last.m.opponent}`);
+  }
+
   // Where the season heads if every forecast lands at its expected value.
   // Rounded and marked "about": summed estimates, not a promise, and no Big 12
   // finishing place, since nobody else's remaining matches are modelled.
