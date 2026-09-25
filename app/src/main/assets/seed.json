@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-25T06:33:25Z",
+ "generatedAt": "2026-09-25T18:04:00Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -19460,7 +19460,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 210
+   "opponentRpi": 211
   },
   {
    "date": "2026-09-11",
@@ -21020,7 +21020,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 210
+   "opponentRpi": 211
   },
   {
    "date": "2026-09-18",
@@ -22152,7 +22152,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 175
+   "opponentRpi": 173
   },
   {
    "date": "2026-09-25",
@@ -33727,13 +33727,13 @@
      {
       "idx": 5,
       "rank": 6,
-      "player": "Reagan Anderson",
-      "team": "Austin Peay",
-      "cls": "Sr.",
-      "height": "5-5",
-      "position": "L/DS",
-      "sets": 49,
-      "value": "4.96"
+      "player": "Emmarie McFarland",
+      "team": "Northwestern St.",
+      "cls": "So.",
+      "height": "5-10",
+      "position": "L",
+      "sets": 57,
+      "value": "5.00"
      },
      {
       "idx": 6,
@@ -33771,17 +33771,28 @@
      {
       "idx": 9,
       "rank": 10,
-      "player": "Madison Winkler",
-      "team": "Denver",
+      "player": "Brennan Ramirez",
+      "team": "Abilene Christian",
       "cls": "So.",
-      "height": "5-5",
-      "position": "L/DS",
-      "sets": 46,
-      "value": "4.93"
+      "height": "5-1",
+      "position": "L",
+      "sets": 51,
+      "value": "4.94"
      },
      {
       "idx": 10,
       "rank": 11,
+      "player": "Reagan Anderson",
+      "team": "Austin Peay",
+      "cls": "Sr.",
+      "height": "5-5",
+      "position": "L/DS",
+      "sets": 53,
+      "value": "4.91"
+     },
+     {
+      "idx": 11,
+      "rank": 12,
       "player": "Najah Harris",
       "team": "Southern U.",
       "cls": "Sr.",
@@ -33791,26 +33802,15 @@
       "value": "4.90"
      },
      {
-      "idx": 11,
-      "rank": 12,
-      "player": "Brennan Ramirez",
-      "team": "Abilene Christian",
-      "cls": "So.",
-      "height": "5-1",
-      "position": "L",
-      "sets": 46,
-      "value": "4.87"
-     },
-     {
       "idx": 12,
       "rank": 13,
-      "player": "Emmarie McFarland",
-      "team": "Northwestern St.",
+      "player": "Madison Winkler",
+      "team": "Denver",
       "cls": "So.",
-      "height": "5-10",
-      "position": "L",
-      "sets": 53,
-      "value": "4.87"
+      "height": "5-5",
+      "position": "L/DS",
+      "sets": 49,
+      "value": "4.90"
      },
      {
       "idx": 13,
@@ -33820,23 +33820,12 @@
       "cls": "Sr.",
       "height": "5-5",
       "position": "L/DS",
-      "sets": 41,
-      "value": "4.85"
+      "sets": 46,
+      "value": "4.83"
      },
      {
       "idx": 14,
       "rank": 15,
-      "player": "MeMe Davis",
-      "team": "App State",
-      "cls": "Jr.",
-      "height": "5-7",
-      "position": "L/DS",
-      "sets": 57,
-      "value": "4.84"
-     },
-     {
-      "idx": 15,
-      "rank": 16,
       "player": "Asialin Powell",
       "team": "Grambling",
       "cls": "Jr.",
@@ -33846,14 +33835,25 @@
       "value": "4.80"
      },
      {
-      "idx": 16,
-      "rank": 17,
+      "idx": 15,
+      "rank": 16,
       "player": "Jadyn Petersen",
       "team": "UNI",
       "cls": "Jr.",
       "height": "5-8",
       "position": "DS",
       "sets": 44,
+      "value": "4.77"
+     },
+     {
+      "idx": 16,
+      "rank": 17,
+      "player": "MeMe Davis",
+      "team": "App State",
+      "cls": "Jr.",
+      "height": "5-7",
+      "position": "L/DS",
+      "sets": 61,
       "value": "4.77"
      },
      {
@@ -33903,12 +33903,12 @@
      {
       "idx": 21,
       "rank": 22,
-      "player": "Lauren Lynch",
-      "team": "San Diego",
-      "cls": "So.",
-      "height": "5-5",
+      "player": "Lani Toutai",
+      "team": "Utah Valley",
+      "cls": "Sr.",
+      "height": "5-6",
       "position": "L/DS",
-      "sets": 37,
+      "sets": 47,
       "value": "4.68"
      },
      {
@@ -33980,6 +33980,17 @@
      {
       "idx": 28,
       "rank": 29,
+      "player": "Ashton Rogers",
+      "team": "UIW",
+      "cls": "So.",
+      "height": "5-6",
+      "position": "L",
+      "sets": 39,
+      "value": "4.59"
+     },
+     {
+      "idx": 29,
+      "rank": 30,
       "player": "Sophia Overholt",
       "team": "USC Upstate",
       "cls": "So.",
@@ -33989,8 +34000,8 @@
       "value": "4.58"
      },
      {
-      "idx": 29,
-      "rank": 30,
+      "idx": 30,
+      "rank": 31,
       "player": "Shaelin White",
       "team": "Sam Houston",
       "cls": "Jr.",
@@ -34000,8 +34011,8 @@
       "value": "4.57"
      },
      {
-      "idx": 30,
-      "rank": 31,
+      "idx": 31,
+      "rank": 32,
       "player": "Daisy Cluxton",
       "team": "Northern Ky.",
       "cls": "So.",
@@ -34011,25 +34022,14 @@
       "value": "4.56"
      },
      {
-      "idx": 31,
-      "rank": 32,
+      "idx": 32,
+      "rank": 33,
       "player": "Carrina Barron",
       "team": "Bryant",
       "cls": "Sr.",
       "height": "5-5",
       "position": "L",
       "sets": 53,
-      "value": "4.55"
-     },
-     {
-      "idx": 32,
-      "rank": 33,
-      "player": "Lani Toutai",
-      "team": "Utah Valley",
-      "cls": "Sr.",
-      "height": "5-6",
-      "position": "L/DS",
-      "sets": 44,
       "value": "4.55"
      },
      {
@@ -34068,35 +34068,35 @@
      {
       "idx": 36,
       "rank": 37,
-      "player": "Laine Briggs",
-      "team": "Pepperdine",
-      "cls": "Sr.",
-      "height": "5-11",
+      "player": "Mia Lopez",
+      "team": "LSU New Orleans",
+      "cls": "Fr.",
+      "height": "5-4",
       "position": "L/DS",
-      "sets": 43,
-      "value": "4.51"
+      "sets": 50,
+      "value": "4.50"
      },
      {
       "idx": 37,
       "rank": 38,
-      "player": "Ashton Rogers",
-      "team": "UIW",
-      "cls": "So.",
-      "height": "5-6",
-      "position": "L",
-      "sets": 35,
-      "value": "4.49"
-     },
-     {
-      "idx": 38,
-      "rank": 39,
       "player": "Aspen Boice",
       "team": "Idaho St.",
       "cls": "Fr.",
       "height": "6-0",
       "position": "L",
+      "sets": 45,
+      "value": "4.49"
+     },
+     {
+      "idx": 38,
+      "rank": 39,
+      "player": "Lauren Lynch",
+      "team": "San Diego",
+      "cls": "So.",
+      "height": "5-5",
+      "position": "L/DS",
       "sets": 42,
-      "value": "4.48"
+      "value": "4.45"
      },
      {
       "idx": 39,
@@ -34123,6 +34123,17 @@
      {
       "idx": 41,
       "rank": 42,
+      "player": "Jade Washington",
+      "team": "East Texas A&M",
+      "cls": "So.",
+      "height": "5-1",
+      "position": "L/DS",
+      "sets": 56,
+      "value": "4.45"
+     },
+     {
+      "idx": 42,
+      "rank": 43,
       "player": "Dakota Henry",
       "team": "Rhode Island",
       "cls": "Jr.",
@@ -34132,8 +34143,8 @@
       "value": "4.44"
      },
      {
-      "idx": 42,
-      "rank": 43,
+      "idx": 43,
+      "rank": 44,
       "player": "Paige Sentes",
       "team": "CSUN",
       "cls": "Sr.",
@@ -34143,8 +34154,19 @@
       "value": "4.44"
      },
      {
-      "idx": 43,
-      "rank": 44,
+      "idx": 44,
+      "rank": 45,
+      "player": "Ella Vogel",
+      "team": "Air Force",
+      "cls": "Fr.",
+      "height": "5-7",
+      "position": "L/DS",
+      "sets": 39,
+      "value": "4.44"
+     },
+     {
+      "idx": 45,
+      "rank": 46,
       "player": "Alyssa Chu",
       "team": "Lafayette",
       "cls": "Fr.",
@@ -34154,8 +34176,8 @@
       "value": "4.43"
      },
      {
-      "idx": 44,
-      "rank": 45,
+      "idx": 46,
+      "rank": 47,
       "player": "Maya Evens",
       "team": "Notre Dame",
       "cls": "So.",
@@ -34165,8 +34187,8 @@
       "value": "4.43"
      },
      {
-      "idx": 45,
-      "rank": 46,
+      "idx": 47,
+      "rank": 48,
       "player": "Payton Petersen",
       "team": "Louisville",
       "cls": "Jr.",
@@ -34176,8 +34198,8 @@
       "value": "4.41"
      },
      {
-      "idx": 46,
-      "rank": 47,
+      "idx": 48,
+      "rank": 49,
       "player": "Jillian Shaneyfelt",
       "team": "Southern Ill.",
       "cls": "Sr.",
@@ -34187,37 +34209,15 @@
       "value": "4.41"
      },
      {
-      "idx": 47,
-      "rank": 48,
-      "player": "Saige Damrow",
-      "team": "Creighton",
-      "cls": "Sr.",
-      "height": "5-8",
-      "position": "L/DS",
-      "sets": 49,
-      "value": "4.39"
-     },
-     {
-      "idx": 48,
-      "rank": 49,
-      "player": "Caiti Barthel",
-      "team": "Chattanooga",
-      "cls": "Sr.",
-      "height": "5-9",
-      "position": "L/DS",
-      "sets": 45,
-      "value": "4.36"
-     },
-     {
       "idx": 49,
       "rank": 50,
-      "player": "Hannah Howard",
-      "team": "UMBC",
+      "player": "Laine Briggs",
+      "team": "Pepperdine",
       "cls": "Sr.",
-      "height": "5-7",
+      "height": "5-11",
       "position": "L/DS",
-      "sets": 37,
-      "value": "4.35"
+      "sets": 48,
+      "value": "4.40"
      }
     ]
    },
@@ -39957,6 +39957,6 @@
  "rpi": {
   "season": "2026",
   "source": "provisional",
-  "updated": "Provisional, through games 2026-09-24"
+  "updated": "Provisional, through games 2026-09-25"
  }
 }
