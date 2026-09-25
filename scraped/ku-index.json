@@ -179,7 +179,8 @@
   "2026-09-21": true,
   "2026-09-22": true,
   "2026-09-23": true,
-  "2026-09-24": true
+  "2026-09-24": true,
+  "2026-09-25": true
  },
  "games": {
   "6479442": {
@@ -496,6 +497,13 @@
    "home": "Kansas",
    "away": "Grand Canyon",
    "boxscored": true
+  },
+  "6625740": {
+   "date": "2026-09-25",
+   "final": false,
+   "home": "Kansas",
+   "away": "Houston",
+   "boxscored": false
   }
  },
  "big12Games": {
@@ -9025,6 +9033,27 @@
    },
    "conferenceGame": false
   },
+  "6627005": {
+   "date": "2026-09-24",
+   "season": "2026",
+   "home": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627010": {
    "date": "2026-08-29",
    "season": "2026",
@@ -10552,6 +10581,14 @@
    ],
    "boxscored": true
   },
+  "6624245": {
+   "date": "2026-09-24",
+   "season": "2026",
+   "teams": [
+    "Indiana"
+   ],
+   "boxscored": true
+  },
   "6624297": {
    "date": "2026-08-31",
    "season": "2026",
@@ -10616,6 +10653,14 @@
    ],
    "boxscored": true
   },
+  "6624388": {
+   "date": "2026-09-24",
+   "season": "2026",
+   "teams": [
+    "Minnesota"
+   ],
+   "boxscored": true
+  },
   "6624507": {
    "date": "2026-09-03",
    "season": "2026",
@@ -10645,6 +10690,14 @@
    "season": "2026",
    "teams": [
     "Houston"
+   ],
+   "boxscored": true
+  },
+  "6624631": {
+   "date": "2026-09-24",
+   "season": "2026",
+   "teams": [
+    "Purdue"
    ],
    "boxscored": true
   },
@@ -10945,6 +10998,23 @@
    "season": "2026",
    "teams": [
     "Oregon"
+   ],
+   "boxscored": true
+  },
+  "6625280": {
+   "date": "2026-09-24",
+   "season": "2026",
+   "teams": [
+    "Wisconsin",
+    "Oregon"
+   ],
+   "boxscored": true
+  },
+  "6625281": {
+   "date": "2026-09-24",
+   "season": "2026",
+   "teams": [
+    "Southern California"
    ],
    "boxscored": true
   },
@@ -11950,6 +12020,15 @@
    "teams": [
     "Creighton",
     "Texas A&M"
+   ],
+   "boxscored": true
+  },
+  "6627005": {
+   "date": "2026-09-24",
+   "season": "2026",
+   "teams": [
+    "UCF",
+    "Kansas St."
    ],
    "boxscored": true
   },
