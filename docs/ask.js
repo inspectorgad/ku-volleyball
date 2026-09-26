@@ -22,13 +22,18 @@
 // Only /v1/messages is used now, which does allow browser calls.
 import { Anthropic } from "./vendor/anthropic-sdk-0.128.0.mjs";
 
-// Opus 5 by default; Sonnet 5 as the reader's choice for cheaper questions.
-// Prices are per million tokens, for the cost line under each answer.
+// Opus 5.5 by default: the newest Opus, about 20% cheaper than Opus 5, and
+// its "medium" thinking depth - set explicitly, since that is its default and
+// the reader should not be surprised by a change - beat Opus 5 at "high" on
+// analysis work in Anthropic's testing. Opus 5 and Sonnet 5 stay as choices.
+// Prices are per million tokens; cacheRead is the fraction of the input price
+// a cached read costs. They feed the cost line under each answer.
 const MODELS = {
-  "claude-opus-5": { label: "Claude Opus 5 — most thorough", input: 5, output: 25, fallbacks: true },
-  "claude-sonnet-5": { label: "Claude Sonnet 5 — about 40% of the cost", input: 2, output: 10, fallbacks: false },
+  "claude-opus-5-5": { label: "Claude Opus 5.5 — newest, about 20% cheaper than Opus 5", input: 4, output: 20, cacheRead: 0.05, fallbacks: true, effort: "medium" },
+  "claude-opus-5": { label: "Claude Opus 5 — previous Opus", input: 5, output: 25, cacheRead: 0.1, fallbacks: true },
+  "claude-sonnet-5": { label: "Claude Sonnet 5 — about half the cost of Opus 5.5", input: 2, output: 10, cacheRead: 0.1, fallbacks: false },
 };
-const DEFAULT_MODEL = "claude-opus-5";
+const DEFAULT_MODEL = "claude-opus-5-5";
 // Round trips per question: pause_turn resumptions plus get_table answers.
 const MAX_HOPS = 16;
 const TABLES = ["matches", "sets", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
@@ -82,7 +87,9 @@ const store = {
 };
 const KEY_SLOT = "ku-ask-api-key";
 const OLD_FILE_SLOT = "ku-ask-file"; // left by the Files API version; cleared on Forget key
-const MODEL_SLOT = "ku-ask-model";
+// "-v2" since Opus 5.5 became the default: a choice saved under the old slot
+// was usually just the old default, so it is not carried over.
+const MODEL_SLOT = "ku-ask-model-v2";
 
 let memoryKey = null; // used when browser storage is blocked
 let pack = null;
@@ -164,6 +171,7 @@ async function ask(question) {
         tools: TOOLS,
         messages: conversation,
         ...(containerId ? { container: containerId } : {}),
+        ...(cfg.effort ? { output_config: { effort: cfg.effort } } : {}),
         ...(cfg.fallbacks ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" } : {}),
       };
       running = client.beta.messages.stream(params);
@@ -248,7 +256,7 @@ function explainError(e) {
 }
 
 function costLine(cfg, u, model) {
-  const dollars = (u.input * cfg.input + u.write * cfg.input * 1.25 + u.read * cfg.input * 0.1 + u.output * cfg.output) / 1e6;
+  const dollars = (u.input * cfg.input + u.write * cfg.input * 1.25 + u.read * cfg.input * cfg.cacheRead + u.output * cfg.output) / 1e6;
   const cents = dollars * 100;
   const price = cents < 1 ? "under 1¢" : `about ${cents < 10 ? cents.toFixed(1) : Math.round(cents)}¢`;
   return `${MODELS[model].label.split(" —")[0]} · ${price}` +
