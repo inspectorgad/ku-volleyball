@@ -6,11 +6,20 @@
 // dashboard without a key sees the box and nothing else happens.
 //
 // Accuracy is the point, so Claude is not asked to do arithmetic from memory.
-// The season is uploaded once as a data file (ask-data.json, built nightly by
-// scripts/ask_pack.py from the validated seed) into Claude's Python sandbox,
-// and the instructions require every number to be computed there. A short
-// summary of the same data rides in the prompt, cached, so a follow-up within
-// a few minutes pays about a tenth of the price for it.
+// Claude gets a Python sandbox (code execution) and one tool, get_table, that
+// its code calls to fetch any table of the season (ask-data.json, built
+// nightly by scripts/ask_pack.py from the validated seed). This page answers
+// those calls from the data it already has - programmatic tool calling - so
+// the numbers are computed in code, and the tables go to the code without
+// being billed as tokens. The instructions require every number to be
+// computed that way. A short summary of the smaller tables rides in the
+// prompt, cached, so a follow-up within a few minutes pays about a tenth of
+// the price for it.
+//
+// An earlier version uploaded the data with the Files API. Anthropic does not
+// allow that endpoint to be called from a web page (its CORS preflight answers
+// "Disallowed CORS origin"), so every question failed as a connection error.
+// Only /v1/messages is used now, which does allow browser calls.
 import { Anthropic } from "./vendor/anthropic-sdk-0.128.0.mjs";
 
 // Opus 5 by default; Sonnet 5 as the reader's choice for cheaper questions.
@@ -20,8 +29,26 @@ const MODELS = {
   "claude-sonnet-5": { label: "Claude Sonnet 5 — about 40% of the cost", input: 2, output: 10, fallbacks: false },
 };
 const DEFAULT_MODEL = "claude-opus-5";
-const MAX_CONTINUATIONS = 4; // pause_turn resumptions per question
-const FILE_TTL_SECONDS = 7 * 24 * 3600;
+// Round trips per question: pause_turn resumptions plus get_table answers.
+const MAX_HOPS = 16;
+const TABLES = ["matches", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
+  "standings", "poll", "roster", "definitions"];
+const TOOLS = [
+  { type: "code_execution_20260120", name: "code_execution" },
+  {
+    name: "get_table",
+    description: "Returns one table of the Kansas volleyball season data as a JSON string: a list of " +
+      "records (one per row) for every table except 'definitions' (a dict of column meanings) and " +
+      "'poll' (a dict with season, updated and rows). Call it from Python and load it with " +
+      "pandas, e.g. df = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))).",
+    input_schema: {
+      type: "object",
+      properties: { table: { type: "string", enum: TABLES } },
+      required: ["table"],
+    },
+    allowed_callers: ["code_execution_20260120"],
+  },
+];
 
 const EXAMPLES = [
   "How does Taylor Stanley hit against ranked opponents compared with unranked ones?",
@@ -32,10 +59,10 @@ const EXAMPLES = [
 
 const SYSTEM_RULES = `You are the analyst behind a Kansas Jayhawks women's volleyball dashboard. You answer questions from coaches and fans about the team, using only the season data you are given.
 
-The complete data is the file ask-data.json in your code execution container - locate it with: find / -name ask-data.json -not -path '*/proc/*' 2>/dev/null | head -1. It holds flat tables (matches, ku_lines, team_totals, opponent_lines, goals, upcoming, standings, poll, roster) and a definitions dictionary; load them with pandas. A summary of the smaller tables is below for orientation.
+The complete data is available to your Python code through the get_table tool: tables matches, ku_lines (KU player lines per match), team_totals, opponent_lines, goals (the staff's per-match goals), upcoming, standings, poll, roster, and definitions. Call it from inside code execution, for example: import json, pandas as pd; lines = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))). Join tables on (season, date, opponent). A summary of the smaller tables is below for orientation.
 
 How to answer:
-- Compute every number with code from the file. Do not estimate, recall, or do arithmetic in your head, even for a simple total.
+- Compute every number with code from the tables. Do not estimate, recall, or do arithmetic in your head, even for a simple total.
 - Lead with the answer in a sentence or two. Add a small markdown table when it helps. End with one short line saying what the figures cover (which season, which matches, any filter).
 - Use volleyball conventions: hitting percentage as .300, per-set rates to two decimals, team blocks as solos plus half of assists.
 - Name small samples plainly (for example "only 3 matches").
@@ -54,7 +81,7 @@ const store = {
   del(k) { try { localStorage.removeItem(k); sessionStorage.removeItem(k); } catch { /* ignore */ } },
 };
 const KEY_SLOT = "ku-ask-api-key";
-const FILE_SLOT = "ku-ask-file";
+const OLD_FILE_SLOT = "ku-ask-file"; // left by the Files API version; cleared on Forget key
 const MODEL_SLOT = "ku-ask-model";
 
 let memoryKey = null; // used when browser storage is blocked
@@ -104,25 +131,6 @@ function summarize(p) {
   ].filter(Boolean).join("\n\n");
 }
 
-// The data file lives in the reader's own Anthropic account, uploaded once
-// per data version and reused until it expires.
-async function dataFileId(client, key) {
-  const want = `${pack.generated_at}|${key.slice(-6)}`;
-  try {
-    const saved = JSON.parse(store.get(FILE_SLOT) || "null");
-    if (saved?.version === want) {
-      await client.files.retrieveMetadata(saved.id);
-      return saved.id;
-    }
-  } catch (e) {
-    if (!(e instanceof Anthropic.NotFoundError) && !(e instanceof SyntaxError)) throw e;
-  }
-  const file = new File([JSON.stringify(pack)], "ask-data.json", { type: "application/json" });
-  const meta = await client.files.upload({ file, expires_in_seconds: FILE_TTL_SECONDS });
-  store.set(FILE_SLOT, JSON.stringify({ version: want, id: meta.id }), true);
-  return meta.id;
-}
-
 // --- Asking -----------------------------------------------------------------------
 
 function apiKey() {
@@ -141,23 +149,19 @@ async function ask(question) {
   setBusy(true, "Loading the season data…");
   try {
     await loadPack();
-    const content = [{ type: "text", text: `Today is ${new Date().toLocaleDateString("en-CA")}. ${question}` }];
-    if (!conversation.length) {
-      setBusy(true, "Uploading the season data to your Claude workspace…");
-      content.push({ type: "container_upload", file_id: await dataFileId(client, key) });
-    }
-    conversation.push({ role: "user", content });
+    conversation.push({ role: "user", content: [
+      { type: "text", text: `Today is ${new Date().toLocaleDateString("en-CA")}. ${question}` }] });
 
     const usage = { input: 0, write: 0, read: 0, output: 0 };
     let final = null;
-    for (let hop = 0; hop <= MAX_CONTINUATIONS; hop++) {
+    for (let hop = 0; hop < MAX_HOPS; hop++) {
       setBusy(true, hop ? "Still working…" : "Thinking…");
       const params = {
         model,
         max_tokens: 16000,
         cache_control: { type: "ephemeral" },
         system: [{ type: "text", text: systemText, cache_control: { type: "ephemeral" } }],
-        tools: [{ type: "code_execution_20260521", name: "code_execution" }],
+        tools: TOOLS,
         messages: conversation,
         ...(containerId ? { container: containerId } : {}),
         ...(cfg.fallbacks ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" } : {}),
@@ -170,7 +174,8 @@ async function ask(question) {
           setBusy(true, "Writing the answer…");
         }
       });
-      running.on("text", () => renderAnswer(turn, running.currentMessage));
+      const earlier = conversation.slice(mark);
+      running.on("text", () => renderAnswer(turn, [...earlier, running.currentMessage]));
       final = await running.finalMessage();
       running = null;
       const u = final.usage || {};
@@ -181,6 +186,14 @@ async function ask(question) {
       if (final.container?.id) containerId = final.container.id;
       if (final.stop_reason === "refusal") break;
       conversation.push({ role: "assistant", content: final.content });
+      if (final.stop_reason === "tool_use") {
+        // Claude's code asked for tables: answer every pending call in one
+        // message of tool_result blocks only, then let the code carry on.
+        const calls = final.content.filter((b) => b.type === "tool_use");
+        conversation.push({ role: "user", content: calls.map((c) => tableResult(c)) });
+        setBusy(true, "Running Python on the season data…");
+        continue;
+      }
       if (final.stop_reason !== "pause_turn") break;
     }
 
@@ -189,8 +202,13 @@ async function ask(question) {
       turn.answer.replaceChildren(el("p", "ask-note",
         "Claude declined to answer that one. Try rephrasing it as a question about the stats."));
     } else {
-      renderAnswer(turn, final);
-      if (final.stop_reason === "pause_turn") note(turn, "Claude was still working when it paused - ask it to continue.");
+      renderAnswer(turn, conversation.slice(mark));
+      if (final.stop_reason === "tool_use" || final.stop_reason === "pause_turn") {
+        // Out of round trips mid-answer. The thread cannot continue from a
+        // pending tool call, so it is rolled back; the reader can ask again.
+        conversation.length = mark;
+        note(turn, "Claude was still working when this page stopped waiting. Try a narrower question.");
+      }
       if (final.stop_reason === "max_tokens") note(turn, "The answer hit its length limit and was cut short.");
     }
     showCode(turn, conversation.slice(mark));
@@ -206,6 +224,16 @@ async function ask(question) {
     running = null;
     setBusy(false);
   }
+}
+
+// One get_table call answered from the loaded data.
+function tableResult(call) {
+  const name = call.input?.table;
+  if (call.name !== "get_table" || !TABLES.includes(name)) {
+    return { type: "tool_result", tool_use_id: call.id, is_error: true,
+      content: `Unknown request. Available tables: ${TABLES.join(", ")}.` };
+  }
+  return { type: "tool_result", tool_use_id: call.id, content: JSON.stringify(pack[name]) };
 }
 
 function explainError(e) {
@@ -248,9 +276,9 @@ function addTurn(question) {
 }
 
 let pendingRender = null;
-function renderAnswer(turn, message) {
-  if (!message) return;
-  const text = message.content.filter((b) => b.type === "text").map((b) => b.text).join("");
+function renderAnswer(turn, messages) {
+  const text = messages.filter((m) => m && m.role === "assistant")
+    .flatMap((m) => m.content).filter((b) => b.type === "text").map((b) => b.text).join("\n\n");
   if (pendingRender) cancelAnimationFrame(pendingRender);
   pendingRender = requestAnimationFrame(() => { turn.answer.innerHTML = markdown(text); });
 }
@@ -360,7 +388,7 @@ function init() {
   $("ask-key-forget").onclick = () => {
     memoryKey = null;
     store.del(KEY_SLOT);
-    store.del(FILE_SLOT);
+    store.del(OLD_FILE_SLOT);
     refreshKeyState();
   };
   const submit = () => {
