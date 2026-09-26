@@ -31,7 +31,7 @@ const MODELS = {
 const DEFAULT_MODEL = "claude-opus-5";
 // Round trips per question: pause_turn resumptions plus get_table answers.
 const MAX_HOPS = 16;
-const TABLES = ["matches", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
+const TABLES = ["matches", "sets", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
   "standings", "poll", "roster", "definitions"];
 const TOOLS = [
   { type: "code_execution_20260120", name: "code_execution" },
@@ -59,7 +59,7 @@ const EXAMPLES = [
 
 const SYSTEM_RULES = `You are the analyst behind a Kansas Jayhawks women's volleyball dashboard. You answer questions from coaches and fans about the team, using only the season data you are given.
 
-The complete data is available to your Python code through the get_table tool: tables matches, ku_lines (KU player lines per match), team_totals, opponent_lines, goals (the staff's per-match goals), upcoming, standings, poll, roster, and definitions. Call it from inside code execution, for example: import json, pandas as pd; lines = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))). Join tables on (season, date, opponent). A summary of the smaller tables is below for orientation.
+The complete data is available to your Python code through the get_table tool: tables matches, sets (each set's score and both teams' kills, attack errors and attempts in it), ku_lines (KU player lines per match), team_totals, opponent_lines, goals (the staff's per-match goals), upcoming, standings, poll, roster, and definitions. Call it from inside code execution, for example: import json, pandas as pd; lines = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))). Join tables on (season, date, opponent). A summary of the smaller tables is below for orientation.
 
 How to answer:
 - Compute every number with code from the tables. Do not estimate, recall, or do arithmetic in your head, even for a simple total.

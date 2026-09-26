@@ -458,6 +458,13 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
             match["teamStats"] = side_totals
         else:
             match["opponentStats"] = side_totals
+        # Kills, attack errors and attempts for each set - the only stats the
+        # NCAA splits by set - as [k, e, ta] in set order.
+        per_set = [[to_int(g.get("kills")), to_int(g.get("attackErrors")), to_int(g.get("attackAttempts"))]
+                   for g in sorted((tb.get("teamStats") or {}).get("sets") or [],
+                                   key=lambda g: to_int(g.get("game")))]
+        if per_set:
+            match.setdefault("setAttack", {})["ku" if is_ku else "opp"] = per_set
         for p in tb.get("playerStats") or []:
             if not p.get("participated"):
                 continue

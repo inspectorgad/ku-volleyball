@@ -34,6 +34,8 @@ DEFINITIONS = {
     "opp_rpi": "the opponent's RPI rank for that season (current table, not on the day); 2026 is a provisional "
                "RPI computed from every Division I result until the NCAA publishes its own",
     "forecast": "the win model's last pre-match chance that KU wins (0-1), only for matches since Sep 19 2026",
+    "sets": "one row per set: the score (ku_points, opp_points) and each side's kills, attack errors and "
+            "attempts in that set (ku_k, ku_e, ku_ta, opp_k, opp_e, opp_ta) - the only stats the NCAA splits by set",
     "goals": "the coaching staff's per-match targets; met is judged on the value as published; "
              "ceiling=true means lower is better",
 }
@@ -56,7 +58,7 @@ def build_pack(seed):
         big12.setdefault(st["season"], set()).add(_norm(st["team"]))
     defs = seed.get("goalDefinitions") or []
 
-    matches, ku_lines, team_totals, opp_lines, goals, upcoming = [], [], [], [], [], []
+    matches, ku_lines, team_totals, opp_lines, goals, upcoming, set_attack = [], [], [], [], [], [], []
     for m in sorted(seed.get("matches", []), key=lambda x: x["date"]):
         base = {"season": m["season"], "date": m["date"], "opponent": m["opponent"]}
         conf = _norm(m["opponent"]) in big12.get(m["season"], set())
@@ -79,6 +81,14 @@ def build_pack(seed):
             p = players.get(l["player"].lower(), {})
             ku_lines.append({**base, "player": l["player"], "jersey": p.get("jerseyNumber"),
                              "position": p.get("position"), **{c: l.get(c, 0) for c in STAT_COLS}})
+        scores = [tuple(int(x) for x in s.strip().split("-")) for s in (m.get("setScores") or "").split(",") if "-" in s]
+        sa = m.get("setAttack") or {}
+        for i, (ku_pts, opp_pts) in enumerate(scores):
+            row = {**base, "set": i + 1, "ku_points": ku_pts, "opp_points": opp_pts}
+            for side in ("ku", "opp"):
+                v = (sa.get(side) or [])[i] if i < len(sa.get(side) or []) else None
+                row.update({f"{side}_k": v and v[0], f"{side}_e": v and v[1], f"{side}_ta": v and v[2]})
+            set_attack.append(row)
         for side, key in (("KU", "teamStats"), ("OPP", "opponentStats")):
             if m.get(key):
                 team_totals.append({**base, "side": side, **{c: m[key].get(c, 0) for c in STAT_COLS}})
@@ -108,6 +118,7 @@ def build_pack(seed):
         "team_totals": team_totals,
         "opponent_lines": opp_lines,
         "goals": goals,
+        "sets": set_attack,
         "upcoming": upcoming,
         "standings": [{k: st.get(k) for k in ("season", "team", "confW", "confL", "overallW",
                                              "overallL", "nationalRank", "rpiRank", "rpiSource")}
