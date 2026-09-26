@@ -1,7 +1,10 @@
-// Runs the schedule parser on a real saved page (scraped/schedule-page.txt,
-// the copy the last scrape wrote) and on small hand-written rows, so a change
-// that loses fixtures, times or channels shows up here instead of as a quieter
-// schedule in the app. Run with:  node --test scripts/
+// Runs the schedule parser on a real saved page and on small hand-written rows,
+// so a change that loses fixtures, times or channels shows up here instead of
+// as a quieter schedule in the app. The page is a frozen copy in
+// scripts/fixtures, not the live scraped/schedule-page.txt: that one changes as
+// matches are played, and reading it failed this test - and blocked the scrape
+// it guards - the morning after Houston dropped off the upcoming list.
+// Run with:  node --test scripts/*.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -41,7 +44,7 @@ test('a row with no time yet gets none, not the next row\'s', () => {
 });
 
 test('the saved schedule page yields every fixture, with times and channels', () => {
-  const page = fs.readFileSync(new URL('../scraped/schedule-page.txt', import.meta.url), 'utf8');
+  const page = fs.readFileSync(new URL('./fixtures/schedule-page-2026-09-23.txt', import.meta.url), 'utf8');
   const got = parseSchedule(page, { stripRank });
   // As of the 23 Sep capture: eighteen fixtures left, sixteen with a set time,
   // all eighteen with a broadcast. If the page's layout moves, these drop.
