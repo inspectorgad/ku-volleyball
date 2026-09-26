@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-26T06:35:13Z",
+ "generatedAt": "2026-09-26T12:40:20Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -20090,7 +20090,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 93
+   "opponentRpi": 94
   },
   {
    "date": "2026-09-13",
@@ -21445,7 +21445,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 94
+   "opponentRpi": 93
   },
   {
    "date": "2026-09-20",
@@ -22832,7 +22832,7 @@
    "city": "Lubbock, TX",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7249,
+   "winProbability": 0.7247,
    "ratingSource": "results"
   },
   {
@@ -22886,7 +22886,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.5005,
+   "winProbability": 0.5002,
    "ratingSource": "results"
   },
   {
@@ -22898,7 +22898,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5356,
+   "winProbability": 0.5354,
    "ratingSource": "results"
   },
   {
@@ -22953,7 +22953,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7067,
+   "winProbability": 0.7065,
    "ratingSource": "results"
   },
   {
@@ -22965,7 +22965,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5127,
+   "winProbability": 0.512,
    "ratingSource": "results"
   },
   {
@@ -22989,7 +22989,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7266,
+   "winProbability": 0.7264,
    "ratingSource": "results"
   },
   {
@@ -23293,7 +23293,7 @@
    "overallW": 9,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 33,
+   "rpiRank": 32,
    "rpiSource": "provisional"
   },
   {
@@ -23317,7 +23317,7 @@
    "overallW": 8,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 60,
+   "rpiRank": 59,
    "rpiSource": "provisional"
   },
   {
@@ -23329,7 +23329,7 @@
    "overallW": 7,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 101,
+   "rpiRank": 100,
    "rpiSource": "provisional"
   },
   {
@@ -23521,7 +23521,7 @@
    "overallW": 9,
    "overallL": 2,
    "nationalRank": 21,
-   "rpiRank": 53,
+   "rpiRank": 54,
    "rpiSource": "provisional"
   },
   {
@@ -40266,6 +40266,6 @@
  "rpi": {
   "season": "2026",
   "source": "provisional",
-  "updated": "Provisional, through games 2026-09-25"
+  "updated": "Provisional, through games 2026-09-26"
  }
 }
