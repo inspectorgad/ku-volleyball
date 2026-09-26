@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-25T20:44:38Z",
+ "generatedAt": "2026-09-26T00:08:34Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -17873,7 +17873,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 42
+   "opponentRpi": 41
   },
   {
    "date": "2026-09-03",
@@ -19008,7 +19008,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 74
+   "opponentRpi": 75
   },
   {
    "date": "2026-09-08",
@@ -19460,7 +19460,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 212
+   "opponentRpi": 211
   },
   {
    "date": "2026-09-11",
@@ -20516,7 +20516,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 79
+   "opponentRpi": 76
   },
   {
    "date": "2026-09-15",
@@ -21020,7 +21020,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 212
+   "opponentRpi": 211
   },
   {
    "date": "2026-09-18",
@@ -21445,7 +21445,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 95
+   "opponentRpi": 96
   },
   {
    "date": "2026-09-20",
@@ -22155,18 +22155,6 @@
    "opponentRpi": 173
   },
   {
-   "date": "2026-09-25",
-   "opponent": "Houston",
-   "season": "2026",
-   "home": true,
-   "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS",
-   "time": "18:00",
-   "tv": "ESPN+",
-   "winProbability": 0.8189,
-   "ratingSource": "results"
-  },
-  {
    "date": "2026-09-27",
    "opponent": "Texas Tech",
    "season": "2026",
@@ -22175,7 +22163,7 @@
    "city": "Lubbock, TX",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7236,
+   "winProbability": 0.726,
    "ratingSource": "results"
   },
   {
@@ -22187,7 +22175,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.6827,
+   "winProbability": 0.6843,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -22229,7 +22217,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.4889,
+   "winProbability": 0.4913,
    "ratingSource": "results"
   },
   {
@@ -22241,7 +22229,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5352,
+   "winProbability": 0.5324,
    "ratingSource": "results"
   },
   {
@@ -22296,7 +22284,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7064,
+   "winProbability": 0.7041,
    "ratingSource": "results"
   },
   {
@@ -22308,7 +22296,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5306,
+   "winProbability": 0.5324,
    "ratingSource": "results"
   },
   {
@@ -22332,7 +22320,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7164,
+   "winProbability": 0.7232,
    "ratingSource": "results"
   },
   {
@@ -22375,7 +22363,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7798,
+   "winProbability": 0.7803,
    "ratingSource": "results"
   },
   {
@@ -22386,7 +22374,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.6188,
+   "winProbability": 0.619,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -22600,7 +22588,7 @@
    "overallW": 9,
    "overallL": 0,
    "nationalRank": null,
-   "rpiRank": 25,
+   "rpiRank": 20,
    "rpiSource": "provisional"
   },
   {
@@ -22792,7 +22780,7 @@
    "overallW": 9,
    "overallL": 1,
    "nationalRank": 21,
-   "rpiRank": 43,
+   "rpiRank": 44,
    "rpiSource": "provisional"
   },
   {
@@ -22804,7 +22792,7 @@
    "overallW": 8,
    "overallL": 1,
    "nationalRank": 22,
-   "rpiRank": 33,
+   "rpiRank": 35,
    "rpiSource": "provisional"
   },
   {
@@ -22828,7 +22816,7 @@
    "overallW": 9,
    "overallL": 2,
    "nationalRank": 11,
-   "rpiRank": 9,
+   "rpiRank": 11,
    "rpiSource": "provisional"
   },
   {
@@ -22840,7 +22828,7 @@
    "overallW": 8,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 29,
+   "rpiRank": 33,
    "rpiSource": "provisional"
   },
   {
@@ -22852,7 +22840,7 @@
    "overallW": 8,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 44,
+   "rpiRank": 45,
    "rpiSource": "provisional"
   },
   {
@@ -22864,7 +22852,7 @@
    "overallW": 7,
    "overallL": 3,
    "nationalRank": 17,
-   "rpiRank": 13,
+   "rpiRank": 14,
    "rpiSource": "provisional"
   },
   {
@@ -22876,7 +22864,7 @@
    "overallW": 7,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 23,
+   "rpiRank": 27,
    "rpiSource": "provisional"
   },
   {
@@ -22900,7 +22888,7 @@
    "overallW": 7,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 88,
+   "rpiRank": 86,
    "rpiSource": "provisional"
   },
   {
@@ -22912,7 +22900,7 @@
    "overallW": 8,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 177,
+   "rpiRank": 178,
    "rpiSource": "provisional"
   },
   {
@@ -22924,7 +22912,7 @@
    "overallW": 7,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 140,
+   "rpiRank": 135,
    "rpiSource": "provisional"
   },
   {
@@ -22936,7 +22924,7 @@
    "overallW": 6,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 107,
+   "rpiRank": 112,
    "rpiSource": "provisional"
   },
   {
@@ -22948,7 +22936,7 @@
    "overallW": 5,
    "overallL": 6,
    "nationalRank": null,
-   "rpiRank": 196,
+   "rpiRank": 194,
    "rpiSource": "provisional"
   }
  ],
@@ -28319,354 +28307,6 @@
    ]
   },
   {
-   "team": "Houston",
-   "matches": 11,
-   "players": [
-    {
-     "player": "Sydney Jones",
-     "jerseyNumber": "11",
-     "position": "OH",
-     "mp": 11,
-     "sp": 40,
-     "k": 166,
-     "e": 55,
-     "ta": 370,
-     "a": 6,
-     "sa": 5,
-     "se": 10,
-     "d": 37,
-     "bs": 0,
-     "ba": 8,
-     "re": 6,
-     "bhe": 0,
-     "sat": 53
-    },
-    {
-     "player": "Kamille Gibson",
-     "jerseyNumber": "4",
-     "position": "OH",
-     "mp": 11,
-     "sp": 40,
-     "k": 125,
-     "e": 46,
-     "ta": 312,
-     "a": 6,
-     "sa": 15,
-     "se": 31,
-     "d": 81,
-     "bs": 0,
-     "ba": 22,
-     "re": 1,
-     "bhe": 0,
-     "sat": 132
-    },
-    {
-     "player": "Noemi Despaigne",
-     "jerseyNumber": "21",
-     "position": "OH",
-     "mp": 9,
-     "sp": 32,
-     "k": 101,
-     "e": 49,
-     "ta": 254,
-     "a": 7,
-     "sa": 4,
-     "se": 1,
-     "d": 34,
-     "bs": 1,
-     "ba": 7,
-     "re": 13,
-     "bhe": 0,
-     "sat": 71
-    },
-    {
-     "player": "Tara Greenberry",
-     "jerseyNumber": "34",
-     "position": "OH",
-     "mp": 11,
-     "sp": 39,
-     "k": 48,
-     "e": 16,
-     "ta": 95,
-     "a": 0,
-     "sa": 0,
-     "se": 3,
-     "d": 14,
-     "bs": 9,
-     "ba": 22,
-     "re": 0,
-     "bhe": 0,
-     "sat": 14
-    },
-    {
-     "player": "Alexis Roberson",
-     "jerseyNumber": "3",
-     "position": "MB",
-     "mp": 11,
-     "sp": 40,
-     "k": 41,
-     "e": 10,
-     "ta": 93,
-     "a": 2,
-     "sa": 0,
-     "se": 0,
-     "d": 20,
-     "bs": 3,
-     "ba": 27,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Alyssa Gonzales",
-     "jerseyNumber": "1",
-     "position": "OH",
-     "mp": 9,
-     "sp": 28,
-     "k": 36,
-     "e": 11,
-     "ta": 95,
-     "a": 1,
-     "sa": 0,
-     "se": 0,
-     "d": 8,
-     "bs": 0,
-     "ba": 1,
-     "re": 2,
-     "bhe": 0,
-     "sat": 2
-    },
-    {
-     "player": "Kalei Edson",
-     "jerseyNumber": "6",
-     "position": "S",
-     "mp": 11,
-     "sp": 39,
-     "k": 21,
-     "e": 5,
-     "ta": 53,
-     "a": 351,
-     "sa": 12,
-     "se": 14,
-     "d": 51,
-     "bs": 3,
-     "ba": 22,
-     "re": 0,
-     "bhe": 1,
-     "sat": 122
-    },
-    {
-     "player": "Olivia Stringer",
-     "jerseyNumber": "2",
-     "position": "OH",
-     "mp": 8,
-     "sp": 21,
-     "k": 4,
-     "e": 2,
-     "ta": 9,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 2,
-     "bs": 0,
-     "ba": 1,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Aidan Conner",
-     "jerseyNumber": "10",
-     "position": "MB",
-     "mp": 7,
-     "sp": 20,
-     "k": 3,
-     "e": 1,
-     "ta": 12,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 1,
-     "bs": 1,
-     "ba": 7,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Shannon Dworaczyk",
-     "jerseyNumber": "9",
-     "position": "S",
-     "mp": 9,
-     "sp": 27,
-     "k": 2,
-     "e": 0,
-     "ta": 3,
-     "a": 86,
-     "sa": 3,
-     "se": 5,
-     "d": 22,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 45
-    },
-    {
-     "player": "Kaitlyn Evans",
-     "jerseyNumber": "8",
-     "position": "MB",
-     "mp": 7,
-     "sp": 21,
-     "k": 2,
-     "e": 5,
-     "ta": 7,
-     "a": 0,
-     "sa": 1,
-     "se": 1,
-     "d": 2,
-     "bs": 1,
-     "ba": 5,
-     "re": 0,
-     "bhe": 0,
-     "sat": 6
-    },
-    {
-     "player": "Lily Barron",
-     "jerseyNumber": "5",
-     "position": "OH",
-     "mp": 11,
-     "sp": 40,
-     "k": 1,
-     "e": 0,
-     "ta": 3,
-     "a": 10,
-     "sa": 11,
-     "se": 9,
-     "d": 69,
-     "bs": 0,
-     "ba": 0,
-     "re": 7,
-     "bhe": 0,
-     "sat": 158
-    },
-    {
-     "player": "Ava Wilkerson",
-     "jerseyNumber": "25",
-     "position": "MB",
-     "mp": 7,
-     "sp": 20,
-     "k": 1,
-     "e": 0,
-     "ta": 1,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Mattie Casale",
-     "jerseyNumber": "19",
-     "position": "DS",
-     "mp": 11,
-     "sp": 40,
-     "k": 0,
-     "e": 0,
-     "ta": 3,
-     "a": 32,
-     "sa": 6,
-     "se": 4,
-     "d": 152,
-     "bs": 0,
-     "ba": 0,
-     "re": 3,
-     "bhe": 0,
-     "sat": 136
-    },
-    {
-     "player": "Cali Reece",
-     "jerseyNumber": "15",
-     "position": "L",
-     "mp": 11,
-     "sp": 40,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 3,
-     "sa": 7,
-     "se": 11,
-     "d": 11,
-     "bs": 0,
-     "ba": 0,
-     "re": 1,
-     "bhe": 0,
-     "sat": 129
-    },
-    {
-     "player": "Gillian Pitts",
-     "jerseyNumber": "24",
-     "position": "L",
-     "mp": 10,
-     "sp": 31,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 4,
-     "sa": 8,
-     "se": 3,
-     "d": 21,
-     "bs": 0,
-     "ba": 0,
-     "re": 2,
-     "bhe": 0,
-     "sat": 34
-    },
-    {
-     "player": "Leah Robinson",
-     "jerseyNumber": "13",
-     "position": "OH",
-     "mp": 6,
-     "sp": 19,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Harmoni Dobbins",
-     "jerseyNumber": "22",
-     "position": "MB",
-     "mp": 6,
-     "sp": 19,
-     "k": 0,
-     "e": 1,
-     "ta": 1,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    }
-   ]
-  },
-  {
    "team": "Iowa St.",
    "matches": 11,
    "players": [
@@ -31133,11 +30773,11 @@
   {
    "team": "Creighton",
    "season": "2026",
-   "matches": 12,
-   "sets": 49,
-   "serviceAces": 58,
-   "serviceErrors": 125,
-   "serveAttempts": 1045,
+   "matches": 13,
+   "sets": 52,
+   "serviceAces": 65,
+   "serviceErrors": 137,
+   "serveAttempts": 1118,
    "big12": false,
    "pollRank": 25
   },
@@ -31218,11 +30858,11 @@
   {
    "team": "Louisville",
    "season": "2026",
-   "matches": 12,
-   "sets": 41,
-   "serviceAces": 56,
-   "serviceErrors": 96,
-   "serveAttempts": 986,
+   "matches": 13,
+   "sets": 44,
+   "serviceAces": 66,
+   "serviceErrors": 102,
+   "serveAttempts": 1060,
    "big12": false,
    "pollRank": 4
   },
