@@ -1591,3 +1591,12 @@ if latest_season:
             f.write(ics)
         n = sum(1 for m in seed["matches"] if m["season"] == latest_season)
         print(f"calendar written: {n} {latest_season} matches to {ICS_PATH}")
+
+# --- Data for the dashboard's "Ask about the team" box --------------------------
+# Flat tables Claude can load and compute on (scripts/ask_pack.py).
+from ask_pack import write_pack  # noqa: E402
+
+if write_pack(seed, "docs/ask-data.json"):
+    print("ask data written: docs/ask-data.json")
+else:
+    print("ask data unchanged; not rewriting")

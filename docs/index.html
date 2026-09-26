@@ -159,6 +159,31 @@
   #goal-match select { font: inherit; margin: 0 0 10px; padding: 3px 6px; background: var(--card); color: var(--ink); border: 1px solid var(--hairline); border-radius: 6px; }
   .insight .line { font-size: 13px; color: var(--ink-2); padding: 2px 0; }
   .insight .fine, .tile .explain { font-size: 11px; line-height: 1.4; color: var(--ink-3); margin-top: 6px; font-style: italic; }
+  #ask-wrap { margin-bottom: 14px; }
+  .ask-label { font-size: 13px; color: var(--ink-2); }
+  .ask-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 6px 0; }
+  .ask-check { font-size: 12px; color: var(--ink-3); display: flex; gap: 6px; align-items: center; }
+  #ask-key, #ask-q, #ask-model { font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--hairline); border-radius: 8px; padding: 7px 10px; }
+  #ask-key { flex: 1 1 220px; min-width: 0; }
+  #ask-q { flex: 1 1 260px; min-width: 0; resize: vertical; }
+  .ask-go { background: var(--ku-blue); border-color: var(--ku-blue); color: #fff; font-weight: 600; }
+  .ask-go:disabled { opacity: .5; cursor: default; }
+  .ask-status { font-size: 12px; color: var(--ink-3); flex: 1; }
+  .ask-examples { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+  .ask-example { font-size: 12px; padding: 4px 10px; text-align: left; }
+  .ask-turn { border-top: 1px solid var(--hairline); padding: 10px 0; }
+  .ask-q { font-weight: 600; margin-bottom: 6px; }
+  .ask-a { font-size: 14px; overflow-wrap: anywhere; }
+  .ask-a p, .ask-a ul, .ask-a ol { margin: 0 0 8px; }
+  .ask-a ul, .ask-a ol { padding-left: 20px; }
+  .ask-a h3 { font-size: 14px; margin: 8px 0 4px; }
+  .ask-a pre, .ask-code pre { background: var(--chip-bg); border-radius: 6px; padding: 8px; overflow-x: auto;
+    font-size: 12px; white-space: pre; }
+  .ask-table { overflow-x: auto; margin: 0 0 8px; }
+  .ask-note { font-size: 11px; color: var(--ink-3); margin: 4px 0 0; }
+  .ask-error { color: var(--loss); }
+  .ask-code summary { font-size: 12px; color: var(--ink-3); cursor: pointer; margin-top: 6px; }
   .subscribe { color: var(--ku-blue); font-size: 14px; text-decoration: none; }
   .subscribe:hover { text-decoration: underline; }
   @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
@@ -179,6 +204,39 @@
 <main id="app" hidden>
   <div class="grid kpis" id="kpis"></div>
   <div class="grid leaders" id="insights"></div>
+  <section class="card" id="ask-wrap">
+    <h2>Ask about the team <span class="muted">— questions answered by Claude from this season's data</span></h2>
+    <div id="ask-key-form">
+      <label for="ask-key" class="ask-label">Your Anthropic API key</label>
+      <div class="ask-row">
+        <input id="ask-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+        <button class="chip" id="ask-key-save">Save key</button>
+      </div>
+      <label class="ask-check"><input type="checkbox" id="ask-remember" checked> Remember on this device</label>
+    </div>
+    <div id="ask-key-set" class="ask-row" hidden>
+      <span class="ask-label">API key saved in this browser.</span>
+      <button class="chip" id="ask-key-forget">Forget key</button>
+      <select id="ask-model" aria-label="Model"></select>
+    </div>
+    <div id="ask-thread" aria-live="polite"></div>
+    <div class="ask-row ask-input">
+      <textarea id="ask-q" rows="2" placeholder="e.g. How do we hit when we win the first set?"></textarea>
+      <button class="chip ask-go" id="ask-go">Ask</button>
+      <button class="chip" id="ask-stop" hidden>Stop</button>
+    </div>
+    <div class="ask-row"><span id="ask-status" class="ask-status" role="status"></span>
+      <button class="chip" id="ask-new" hidden>New conversation</button></div>
+    <div class="ask-examples" id="ask-examples"></div>
+    <p class="fineprint">You bring your own Anthropic API key (console.anthropic.com). It is kept only in
+      this browser and sent only to Anthropic, never to this site, and the questions are billed to your
+      account: usually a few cents to about 15¢ each with Claude Opus 5, less with Sonnet 5, and follow-ups within
+      a few minutes cost less because the season data is cached. Claude works from the same validated box
+      scores as this dashboard: it runs Python on the season's data file for every number, and you can open
+      the code it ran under each answer. It knows only what is in the box scores, schedule, polls, RPI and
+      goals - not injuries, line-ups, practice or anything else not in the data - and it says so when a
+      question goes beyond them.</p>
+  </section>
   <div class="grid two-col">
     <section class="card">
       <h2>Hitting % by match <span class="muted" id="chart-season"></span></h2>
@@ -1693,5 +1751,6 @@ if ("serviceWorker" in navigator) {
 
 load();
 </script>
+<script type="module" src="ask.js"></script>
 </body>
 </html>

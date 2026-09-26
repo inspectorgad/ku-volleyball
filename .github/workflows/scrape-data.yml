@@ -44,6 +44,7 @@ on:
       - 'scripts/roster-parser.mjs'
       - 'scripts/schedule-parser.mjs'
       - 'scripts/ics_feed.py'
+      - 'scripts/ask_pack.py'
       # The win model's power ratings are meant to be edited by hand when the
       # AVCA poll lands. Every remaining match's number changes with them, so
       # the feed should be rebuilt on the spot rather than up to four hours
@@ -119,7 +120,7 @@ jobs:
           git diff --cached --quiet || git commit -m "Update scraped KU volleyball data [skip ci]"
           # The dashboard (GitHub Pages, docs/) reads its own copy of the seed.
           cp app/src/main/assets/seed.json docs/season-data.json
-          git add app/src/main/assets/seed.json docs/season-data.json docs/ku-volleyball.ics
+          git add app/src/main/assets/seed.json docs/season-data.json docs/ku-volleyball.ics docs/ask-data.json
           if git diff --cached --quiet; then
             echo "seed_changed=false" >> "$GITHUB_OUTPUT"
           else
@@ -145,7 +146,7 @@ jobs:
           # most recent scrape. Nothing is merged, so nothing can be merged
           # wrongly, and a run that loses the race still publishes its data
           # rather than failing with it in hand.
-          OUTPUTS="scraped app/src/main/assets/seed.json docs/season-data.json docs/ku-volleyball.ics"
+          OUTPUTS="scraped app/src/main/assets/seed.json docs/season-data.json docs/ku-volleyball.ics docs/ask-data.json"
           pushed=""
           for attempt in 1 2 3; do
             if git push; then
