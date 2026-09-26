@@ -5,6 +5,8 @@
 -->
 <data-extraction-rules>
     <cloud-backup>
+        <!-- The encrypted Anthropic API key: its keystore key stays on this phone. -->
+        <exclude domain="sharedpref" path="ask_key.xml"/>
         <!-- TODO: Use <include> and <exclude> to control what is backed up.
         <include .../>
         <exclude .../>
@@ -16,4 +18,7 @@
         <exclude .../>
     </device-transfer>
     -->
+    <device-transfer>
+        <exclude domain="sharedpref" path="ask_key.xml"/>
+    </device-transfer>
 </data-extraction-rules>

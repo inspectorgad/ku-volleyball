@@ -44,6 +44,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     var openPlayerId by rememberSaveable { mutableStateOf<Long?>(null) }
     var openMatchId by rememberSaveable { mutableStateOf<Long?>(null) }
     var openOpponent by rememberSaveable { mutableStateOf<String?>(null) }
+    var askOpen by rememberSaveable { mutableStateOf(false) }
 
     val players by viewModel.players.collectAsStateWithLifecycle()
     val matches by viewModel.matches.collectAsStateWithLifecycle()
@@ -67,11 +68,12 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
         viewModel.syncMessages.collect { snackbarHostState.showSnackbar(it) }
     }
 
-    val showingDetail = openPlayerId != null || openMatchId != null || openOpponent != null
+    val showingDetail = openPlayerId != null || openMatchId != null || openOpponent != null || askOpen
     BackHandler(enabled = showingDetail) {
         openPlayerId = null
         openMatchId = null
         openOpponent = null
+        askOpen = false
     }
     // On any tab but the first, back returns to the first tab rather than
     // leaving the app - the usual Android pattern for bottom navigation. Only
@@ -84,6 +86,8 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     val openMatch = openMatchId?.let { id -> matches.firstOrNull { it.id == id } }
 
     when {
+        askOpen -> AskScreen(onBack = { askOpen = false })
+
         openPlayer != null -> PlayerDetailScreen(
             player = openPlayer,
             matches = matches,
@@ -184,7 +188,8 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                         lastCheckedMs = lastCheckedMs,
                         syncFailure = syncFailure,
                         pollEntries = pollEntries,
-                        standings = standings
+                        standings = standings,
+                        onOpenAsk = { askOpen = true }
                     )
 
                     Tab.Serving -> ServingScreen(

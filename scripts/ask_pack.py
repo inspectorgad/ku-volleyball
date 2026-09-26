@@ -41,6 +41,61 @@ DEFINITIONS = {
 }
 
 
+# The instructions Claude is given, shared by the dashboard (docs/ask.js) and
+# the app (AskEngine.kt) so both ask the same way. The tables are fetched by
+# Claude's own code through the get_table tool; this only says how.
+SYSTEM_RULES = """You are the analyst behind the Kansas Jayhawks women's volleyball app and dashboard. You answer questions from coaches and fans about the team, using only the season data you are given.
+
+The complete data is available to your Python code through the get_table tool: tables matches, sets (each set's score and both teams' kills, attack errors and attempts in it), ku_lines (KU player lines per match), team_totals, opponent_lines, goals (the staff's per-match goals), upcoming, standings, poll, roster, and definitions. Call it from inside code execution, for example: import json, pandas as pd; lines = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))). Join tables on (season, date, opponent). A summary of the smaller tables is below for orientation.
+
+How to answer:
+- Compute every number with code from the tables. Do not estimate, recall, or do arithmetic in your head, even for a simple total.
+- Lead with the answer in a sentence or two. Add a small markdown table when it helps. End with one short line saying what the figures cover (which season, which matches, any filter).
+- Use volleyball conventions: hitting percentage as .300, per-set rates to two decimals, team blocks as solos plus half of assists.
+- Name small samples plainly (for example "only 3 matches").
+- If the data cannot answer the question - injuries, practice, line-ups, serve-receive ratings, anything not in the box scores - say so in a sentence instead of guessing.
+- Season 2026 is the current season. "This season" means 2026 unless the reader says otherwise."""
+
+
+def _cell(v):
+    if v is None:
+        return ""
+    if isinstance(v, bool):
+        return "true" if v else "false"
+    if isinstance(v, list):
+        v = "; ".join(f"{c.get('team')}: KU {c.get('ku')} / them {c.get('them')}" for c in v)
+    s = str(v)
+    return '"' + s.replace('"', '""') + '"' if any(ch in s for ch in '",\n') else s
+
+
+def _csv(rows, cols):
+    return "\n".join([",".join(cols)] + [",".join(_cell(r.get(c)) for c in cols) for r in rows])
+
+
+def system_prompt(p):
+    """The rules plus a compact summary of the smaller tables, in fixed column
+    order so the text - and the prompt cache - changes only with the data."""
+    current = (p["upcoming"][0]["season"] if p["upcoming"] else
+               (p["matches"][-1]["season"] if p["matches"] else None))
+    parts = [
+        f"Data generated {p['generated_at']}.",
+        "Definitions:\n" + "\n".join(f"- {k}: {v}" for k, v in p["definitions"].items()),
+        f"RPI: {p['rpi_note']}." if p.get("rpi_note") else "",
+        "Played matches:\n" + _csv(p["matches"], ["season", "date", "opponent", "site", "conference", "result",
+                                                  "ku_sets", "opp_sets", "set_scores", "ku_rank", "opp_rank",
+                                                  "opp_seed", "opp_rpi", "forecast"]),
+        "Upcoming matches:\n" + _csv(p["upcoming"], ["date", "opponent", "site", "conference", "first_serve_ct",
+                                                     "tv", "win_probability", "rating_source", "common_opponents"]),
+        f"Big 12 standings {current}:\n" + _csv([s for s in p["standings"] if s["season"] == current],
+                                                ["team", "confW", "confL", "overallW", "overallL",
+                                                 "nationalRank", "rpiRank", "rpiSource"]),
+        (f"AVCA poll ({p['poll']['updated']}):\n" + _csv(p["poll"]["rows"], ["rank", "team", "record", "points", "previous"]))
+        if p.get("poll") else "",
+        "Roster:\n" + _csv(p["roster"], ["name", "jerseyNumber", "position", "height", "active"]),
+    ]
+    return SYSTEM_RULES + "\n\n" + "\n\n".join(x for x in parts if x)
+
+
 def _site(m):
     if m.get("neutral"):
         return "N"
@@ -107,7 +162,7 @@ def build_pack(seed):
     polls = seed.get("polls") or []
     current_poll = polls[-1] if polls else None
     rpi = seed.get("rpi") or {}
-    return {
+    pack = {
         "about": "Kansas Jayhawks women's volleyball, from the official NCAA box scores and "
                  "kuathletics.com. One record per row; join tables on (season, date, opponent).",
         "generated_at": seed.get("generatedAt"),
@@ -130,6 +185,8 @@ def build_pack(seed):
         "roster": [{k: p.get(k) for k in ("name", "jerseyNumber", "position", "height", "active")}
                    for p in seed.get("players", [])],
     }
+    pack["system_prompt"] = system_prompt(pack)
+    return pack
 
 
 def _norm(name):

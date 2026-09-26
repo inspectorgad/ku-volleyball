@@ -59,7 +59,9 @@ fun LeadersScreen(
     syncFailure: String? = null,
     // For the ranked split, the rank history and the season outlook.
     pollEntries: List<PollEntry> = emptyList(),
-    standings: List<ConferenceStanding> = emptyList()
+    standings: List<ConferenceStanding> = emptyList(),
+    // Opens "Ask about the team".
+    onOpenAsk: (() -> Unit)? = null
 ) {
     // Seasons ordered most recent first; default selection is the current (latest) season.
     val seasons = matches.sortedByDescending { it.date }.map { it.season }.distinct()
@@ -154,6 +156,28 @@ fun LeadersScreen(
             contentPadding = ListContentPadding,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            onOpenAsk?.let { open ->
+                item {
+                    Card(modifier = Modifier.fillMaxWidth().clickable(onClick = open)) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                "Ask about the team ›",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                "Type a question - \"how do we do when we lose the first set?\" - and get an answer worked out from the data.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Explanation(
+                                "Answered by Claude, Anthropic's AI, using your own Anthropic API key. " +
+                                    "Each question usually costs a few cents on your Anthropic account."
+                            )
+                        }
+                    }
+                }
+            }
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(12.dp)) {

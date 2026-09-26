@@ -44,6 +44,15 @@ class AskPackTest(unittest.TestCase):
         g = {x["goal"]: x["met"] for x in self.p["goals"]}
         self.assertEqual(g, {"Hit %": False, "Errors/set": True})
 
+    def test_system_prompt_is_shared_and_summarizes_the_small_tables(self):
+        t = self.p["system_prompt"]
+        self.assertTrue(t.startswith("You are the analyst behind"))
+        self.assertIn("get_table", t)
+        self.assertIn("Played matches:\nseason,date,opponent,site", t)
+        self.assertIn("Roster:\nname,jerseyNumber,position,height,active", t)
+        # Same input, same text: the prompt cache depends on it.
+        self.assertEqual(t, build_pack(SEED)["system_prompt"])
+
 
 if __name__ == "__main__":
     unittest.main()

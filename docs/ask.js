@@ -62,17 +62,9 @@ const EXAMPLES = [
   "Compare our serving this season with last season, per set.",
 ];
 
-const SYSTEM_RULES = `You are the analyst behind a Kansas Jayhawks women's volleyball dashboard. You answer questions from coaches and fans about the team, using only the season data you are given.
-
-The complete data is available to your Python code through the get_table tool: tables matches, sets (each set's score and both teams' kills, attack errors and attempts in it), ku_lines (KU player lines per match), team_totals, opponent_lines, goals (the staff's per-match goals), upcoming, standings, poll, roster, and definitions. Call it from inside code execution, for example: import json, pandas as pd; lines = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))). Join tables on (season, date, opponent). A summary of the smaller tables is below for orientation.
-
-How to answer:
-- Compute every number with code from the tables. Do not estimate, recall, or do arithmetic in your head, even for a simple total.
-- Lead with the answer in a sentence or two. Add a small markdown table when it helps. End with one short line saying what the figures cover (which season, which matches, any filter).
-- Use volleyball conventions: hitting percentage as .300, per-set rates to two decimals, team blocks as solos plus half of assists.
-- Name small samples plainly (for example "only 3 matches").
-- If the data cannot answer the question - injuries, practice, line-ups, serve-receive ratings, anything not in the box scores - say so in a sentence instead of guessing.
-- Season 2026 is the current season. "This season" means 2026 unless the reader says otherwise.`;
+// The instructions and data summary Claude is given are built by the
+// pipeline (scripts/ask_pack.py) and shipped in ask-data.json, so the app and
+// this page send the same prompt.
 
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -105,37 +97,9 @@ async function loadPack() {
   const r = await fetch("ask-data.json", { cache: "no-cache" });
   if (!r.ok) throw new Error(`couldn't load the season data (${r.status})`);
   pack = await r.json();
-  systemText = SYSTEM_RULES + "\n\n" + summarize(pack);
+  systemText = pack.system_prompt;
+  if (!systemText) throw new Error("the season data is out of date - reload the page");
   return pack;
-}
-
-// Compact CSV of the smaller tables, in a fixed column order so the text - and
-// the prompt cache - only changes when the data does.
-function csv(rows, cols) {
-  const cell = (v) => {
-    if (v === null || v === undefined) return "";
-    if (Array.isArray(v)) v = v.map((c) => `${c.team}: KU ${c.ku} / them ${c.them}`).join("; ");
-    const s = String(v);
-    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-  };
-  return [cols.join(","), ...rows.map((r) => cols.map((c) => cell(r[c])).join(","))].join("\n");
-}
-
-function summarize(p) {
-  const current = p.upcoming[0]?.season ?? p.matches.at(-1)?.season;
-  return [
-    `Data generated ${p.generated_at}.`,
-    "Definitions:\n" + Object.entries(p.definitions).map(([k, v]) => `- ${k}: ${v}`).join("\n"),
-    p.rpi_note ? `RPI: ${p.rpi_note}.` : "",
-    "Played matches:\n" + csv(p.matches, ["season", "date", "opponent", "site", "conference", "result",
-      "ku_sets", "opp_sets", "set_scores", "ku_rank", "opp_rank", "opp_seed", "opp_rpi", "forecast"]),
-    "Upcoming matches:\n" + csv(p.upcoming, ["date", "opponent", "site", "conference", "first_serve_ct",
-      "tv", "win_probability", "rating_source", "common_opponents"]),
-    `Big 12 standings ${current}:\n` + csv(p.standings.filter((s) => s.season === current),
-      ["team", "confW", "confL", "overallW", "overallL", "nationalRank", "rpiRank", "rpiSource"]),
-    p.poll ? `AVCA poll (${p.poll.updated}):\n` + csv(p.poll.rows, ["rank", "team", "record", "points", "previous"]) : "",
-    "Roster:\n" + csv(p.roster, ["name", "jerseyNumber", "position", "height", "active"]),
-  ].filter(Boolean).join("\n\n");
 }
 
 // --- Asking -----------------------------------------------------------------------
