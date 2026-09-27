@@ -522,6 +522,7 @@ fun Explanation(text: String) {
  *
  * Ordered worst-first, because the rows worth reading are at that end.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SeasonGoalsCard(
     goals: List<MatchGoal>,
