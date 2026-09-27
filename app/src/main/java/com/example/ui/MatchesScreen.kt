@@ -338,62 +338,58 @@ fun MatchGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
     val teamGoals = goals.filter { it.goalGroup == "team" }
     val teamMet = teamGoals.count { it.met == true }
 
-    Card(modifier = modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                "Performance goals",
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                "$met of $evaluated met · team ${teamMet} of ${teamGoals.count { it.met != null }}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            goals.sortedBy { it.idx }.forEach { goal ->
-                val missed = goal.met == false
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 3.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            goal.name,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = if (missed) MaterialTheme.colorScheme.error
-                            else MaterialTheme.colorScheme.onSurface
-                        )
-                        // Whose number it was, for the goals that belong to
-                        // whoever filled the role that night.
-                        goal.player.takeIf { it.isNotBlank() }?.let {
-                            Text(
-                                it,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
+    ExplainedCard(EXPLAIN_MATCH_GOALS, modifier = modifier) {
+        Text(
+            "Performance goals",
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            "$met of $evaluated met · team ${teamMet} of ${teamGoals.count { it.met != null }}",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        goals.sortedBy { it.idx }.forEach { goal ->
+            val missed = goal.met == false
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 3.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        // "at most" for the two goals where the target is a
-                        // ceiling, so a low number does not read as a failure.
-                        (if (goal.ceiling) "≤ " else "") + formatGoal(goal.target, goal.decimals),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(end = 12.dp)
-                    )
-                    Text(
-                        formatGoal(goal.value, goal.decimals),
+                        goal.name,
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
                         color = if (missed) MaterialTheme.colorScheme.error
                         else MaterialTheme.colorScheme.onSurface
                     )
+                    // Whose number it was, for the goals that belong to
+                    // whoever filled the role that night.
+                    goal.player.takeIf { it.isNotBlank() }?.let {
+                        Text(
+                            it,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
+                Text(
+                    // "at most" for the two goals where the target is a
+                    // ceiling, so a low number does not read as a failure.
+                    (if (goal.ceiling) "≤ " else "") + formatGoal(goal.target, goal.decimals),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(end = 12.dp)
+                )
+                Text(
+                    formatGoal(goal.value, goal.decimals),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = if (missed) MaterialTheme.colorScheme.error
+                    else MaterialTheme.colorScheme.onSurface
+                )
             }
-            Explanation(EXPLAIN_MATCH_GOALS)
         }
     }
 }
@@ -406,33 +402,28 @@ fun MatchGoalsCard(goals: List<MatchGoal>, modifier: Modifier = Modifier) {
  */
 @Composable
 private fun LastMeetingCard(meeting: Match, theirLines: List<OpponentStatLine>) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp)) {
+    ExplainedCard(EXPLAIN_LAST_MEETING) {
+        Text(
+            "Last meeting",
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            "${meetingLabel(meeting)} · ${meeting.versus} ${rankedOpponent(meeting)} · ${meeting.date}",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        meeting.setScores?.let {
             Text(
-                "Last meeting",
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                "${meetingLabel(meeting)} · ${meeting.versus} ${rankedOpponent(meeting)} · ${meeting.date}",
+                "Sets: $it",
                 style = MaterialTheme.typography.bodyMedium
             )
-            meeting.setScores?.let {
-                Text(
-                    "Sets: $it",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            val top = theirLines.filter { it.kills > 0 }.sortedByDescending { it.kills }.take(3)
-            if (top.isNotEmpty()) {
-                Text(
-                    "Their kills: " + top.joinToString(", ") { "${it.playerName} ${it.kills}" },
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            Explanation(EXPLAIN_LAST_MEETING)
+        }
+        val top = theirLines.filter { it.kills > 0 }.sortedByDescending { it.kills }.take(3)
+        if (top.isNotEmpty()) {
+            Text(
+                "Their kills: " + top.joinToString(", ") { "${it.playerName} ${it.kills}" },
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
@@ -673,8 +664,7 @@ fun MatchDetailScreen(
                             match.setScores?.let {
                                 Text(
                                     "Sets: $it",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
                             }
                             Text(
@@ -702,8 +692,10 @@ fun MatchDetailScreen(
             // opponent's rating comes from.
             if (!match.played && match.winProbability != null) {
                 item {
-                    Explanation(
-                        EXPLAIN_FORECAST + " " + forecastSourceLine(match.ratingSource)
+                    ExplainedHeading(
+                        "How the win chance is worked out",
+                        EXPLAIN_FORECAST + " " + forecastSourceLine(match.ratingSource),
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
@@ -725,30 +717,26 @@ fun MatchDetailScreen(
             val common = if (match.played) emptyList() else parseCommonOpponents(match.commonOpponents)
             if (common.isNotEmpty()) {
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                "Common opponents",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                "Teams both have played this season.",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            common.forEach { c ->
-                                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
-                                    Text(c.team, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-                                    Text(
-                                        "KU ${c.ku} · ${match.opponent} ${c.them}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                }
+                    ExplainedCard(EXPLAIN_COMMON) {
+                        Text(
+                            "Common opponents",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            "Teams both have played this season.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        common.forEach { c ->
+                            Row(modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
+                                Text(c.team, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                                Text(
+                                    "KU ${c.ku} · ${match.opponent} ${c.them}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
                             }
-                            Explanation(EXPLAIN_COMMON)
                         }
                     }
                 }
@@ -772,15 +760,11 @@ fun MatchDetailScreen(
                     }
                 } else {
                     item {
-                        Column {
-                            Text(
-                                "${match.opponent} Roster",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
-                            Explanation(EXPLAIN_ROSTER)
-                        }
+                        ExplainedHeading(
+                            "${match.opponent} Roster",
+                            EXPLAIN_ROSTER,
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
                     }
                     items(roster.sortedBy { it.jerseyNumber.toIntOrNull() ?: 99 },
                         key = { it.playerName }) { p ->

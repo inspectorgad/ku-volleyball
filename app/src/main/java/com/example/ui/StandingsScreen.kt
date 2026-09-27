@@ -127,31 +127,28 @@ fun StandingsScreen(
 
             if (poll.isNotEmpty()) {
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                    ExplainedCard(EXPLAIN_POLL) {
+                        Text(
+                            poll.first().pollName.ifBlank { "National Poll" },
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        poll.first().updated.takeIf { it.isNotBlank() }?.let {
                             Text(
-                                poll.first().pollName.ifBlank { "National Poll" },
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            poll.first().updated.takeIf { it.isNotBlank() }?.let {
-                                Text(
-                                    it,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                "${poll.count { it.big12 }} of 25 from the Big 12",
-                                style = MaterialTheme.typography.bodySmall,
+                                it,
+                                style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            HorizontalDivider()
-                            poll.forEach { PollRow(it) }
-                            Explanation(EXPLAIN_POLL)
                         }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            "${poll.count { it.big12 }} of 25 from the Big 12",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        HorizontalDivider()
+                        poll.forEach { PollRow(it) }
                     }
                 }
             }

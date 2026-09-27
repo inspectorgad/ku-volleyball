@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import com.example.ui.ExplainedCard
+import com.example.ui.ExplainedHeading
 import com.example.ui.theme.MyApplicationTheme
 import org.junit.Rule
 import org.junit.Test
@@ -50,6 +51,19 @@ class ExplainedCardTest {
     fun `the info button opens it too`() {
         show()
         rule.onNodeWithContentDescription("What this card means").performClick()
+        rule.onNodeWithText(note).assertExists()
+        rule.onNodeWithContentDescription("Hide explanation").performClick()
+        rule.waitForIdle()
+        rule.onNodeWithText(note).assertDoesNotExist()
+    }
+
+    @Test
+    fun `a heading folds its explanation away the same way`() {
+        rule.setContent {
+            MyApplicationTheme { Surface { ExplainedHeading("Utah Roster", note) } }
+        }
+        rule.onNodeWithText(note).assertDoesNotExist()
+        rule.onNodeWithText("Utah Roster").performTouchInput { longClick() }
         rule.onNodeWithText(note).assertExists()
         rule.onNodeWithContentDescription("Hide explanation").performClick()
         rule.waitForIdle()

@@ -1,5 +1,26 @@
 package com.example.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -327,3 +348,102 @@ fun EmptyState(title: String, subtitle: String, modifier: Modifier = Modifier) {
 }
 
 val ListContentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp)
+
+/** The line under the filter chips that says the explanations are there. */
+const val HOLD_HINT = "Press and hold any card (or tap ⓘ) to see what its numbers mean."
+
+/**
+ * A card whose plain-words explanation stays out of the way of its numbers
+ * until the reader asks for it: press and hold the card, or tap the ⓘ in its
+ * corner, and the explanation opens underneath; do either again to close it.
+ *
+ * [content] gets the toggle, for a card whose rows are themselves tappable -
+ * a row's own tap handler would otherwise swallow the hold.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ExplainedCard(
+    explanation: String,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    content: @Composable ColumnScope.(toggleExplanation: () -> Unit) -> Unit
+) {
+    var open by rememberSaveable(explanation) { mutableStateOf(false) }
+    val haptics = LocalHapticFeedback.current
+    val toggle = {
+        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+        open = !open
+    }
+    val hold = if (onClick != null) {
+        Modifier.combinedClickable(onClick = onClick, onLongClick = toggle)
+    } else {
+        Modifier.pointerInput(Unit) { detectTapGestures(onLongPress = { toggle() }) }
+    }
+    Card(modifier = modifier.fillMaxWidth().then(hold)) {
+        Box {
+            Column(modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 12.dp, end = 32.dp)) {
+                content(toggle)
+                AnimatedVisibility(visible = open) { ExplanationBox(explanation) }
+            }
+            IconButton(
+                onClick = toggle,
+                modifier = Modifier.align(Alignment.TopEnd).size(36.dp)
+            ) {
+                Icon(
+                    if (open) Icons.Filled.Info else Icons.Outlined.Info,
+                    contentDescription = if (open) "Hide explanation" else "What this card means",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+        }
+    }
+}
+
+/**
+ * A heading with its explanation folded away, for a section that is a list
+ * rather than one card: hold the heading, or tap its ⓘ, to open or close it.
+ */
+@Composable
+fun ExplainedHeading(
+    title: String,
+    explanation: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.titleSmall
+) {
+    var open by rememberSaveable(explanation) { mutableStateOf(false) }
+    val haptics = LocalHapticFeedback.current
+    val toggle = {
+        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+        open = !open
+    }
+    Column(modifier = modifier.fillMaxWidth().pointerInput(Unit) { detectTapGestures(onLongPress = { toggle() }) }) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(title, style = style, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+            IconButton(onClick = toggle, modifier = Modifier.size(36.dp)) {
+                Icon(
+                    if (open) Icons.Filled.Info else Icons.Outlined.Info,
+                    contentDescription = if (open) "Hide explanation" else "What this means",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+        }
+        AnimatedVisibility(visible = open) { ExplanationBox(explanation) }
+    }
+}
+
+/** The opened explanation: a tinted box, set apart from the numbers. */
+@Composable
+fun ExplanationBox(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSecondaryContainer,
+        modifier = Modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondaryContainer, RoundedCornerShape(8.dp))
+            .padding(10.dp)
+    )
+}

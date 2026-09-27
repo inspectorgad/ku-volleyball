@@ -1,6 +1,8 @@
 package com.example.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -274,7 +276,7 @@ fun PlayerDialog(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun PlayerDetailScreen(
     player: Player,
@@ -369,39 +371,39 @@ fun PlayerDetailScreen(
             val form = currentSeason?.let { playerForm(playerLines, matches, it) }.orEmpty()
             if (form.isNotEmpty()) {
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                    ExplainedCard(EXPLAIN_FORM) { toggleExplanation ->
+                        Text(
+                            "Form — $currentSeason",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        form.forEach { f ->
+                            val open = openForm == f.label
                             Text(
-                                "Form — $currentSeason",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            form.forEach { f ->
-                                val open = openForm == f.label
-                                Text(
-                                    formLine(f),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = when (f.trend) {
-                                        "up" -> MaterialTheme.colorScheme.primary
-                                        "down" -> MaterialTheme.colorScheme.error
-                                        else -> MaterialTheme.colorScheme.onSurface
-                                    },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable { openForm = if (open) null else f.label }
-                                        .padding(vertical = 4.dp)
-                                )
-                                if (open) {
-                                    GoalTrendChart(
-                                        points = f.series.map { (opp, v) -> GoalPoint(opp, v) },
-                                        target = f.season,
-                                        ceiling = false,
-                                        format = f.format,
-                                        targetLabel = "Season"
+                                formLine(f),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = when (f.trend) {
+                                    "up" -> MaterialTheme.colorScheme.primary
+                                    "down" -> MaterialTheme.colorScheme.error
+                                    else -> MaterialTheme.colorScheme.onSurface
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .combinedClickable(
+                                        onClick = { openForm = if (open) null else f.label },
+                                        onLongClick = toggleExplanation
                                     )
-                                }
+                                    .padding(vertical = 4.dp)
+                            )
+                            if (open) {
+                                GoalTrendChart(
+                                    points = f.series.map { (opp, v) -> GoalPoint(opp, v) },
+                                    target = f.season,
+                                    ceiling = false,
+                                    format = f.format,
+                                    targetLabel = "Season"
+                                )
                             }
-                            Explanation(EXPLAIN_FORM)
                         }
                     }
                 }
@@ -413,17 +415,14 @@ fun PlayerDetailScreen(
             }.orEmpty()
             if (splits.size > 1) {
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                "Home, away and neutral — $currentSeason",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            splits.forEach {
-                                Text(playerSplitLine(it), style = MaterialTheme.typography.bodyMedium)
-                            }
-                            Explanation(EXPLAIN_PLAYER_SPLITS)
+                    ExplainedCard(EXPLAIN_PLAYER_SPLITS) {
+                        Text(
+                            "Home, away and neutral — $currentSeason",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        splits.forEach {
+                            Text(playerSplitLine(it), style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }
@@ -431,17 +430,14 @@ fun PlayerDetailScreen(
             val nearMilestones = currentSeason?.let { milestones(playerLines, matches, it) }.orEmpty()
             if (nearMilestones.isNotEmpty()) {
                 item {
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                "Milestones in reach",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            nearMilestones.forEach {
-                                Text(milestoneLine(it), style = MaterialTheme.typography.bodyMedium)
-                            }
-                            Explanation(EXPLAIN_MILESTONES)
+                    ExplainedCard(EXPLAIN_MILESTONES) {
+                        Text(
+                            "Milestones in reach",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        nearMilestones.forEach {
+                            Text(milestoneLine(it), style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }
