@@ -45,7 +45,12 @@ class AskEngineTest {
 
     @After
     fun stop() {
-        server.shutdown()
+        // A request cancelled mid-response can still be closing when the test
+        // ends, and shutdown then throws; that is cleanup, not a failure.
+        try {
+            server.shutdown()
+        } catch (e: java.io.IOException) {
+        }
     }
 
     private fun engine() = AskEngine(
@@ -200,7 +205,7 @@ class AskEngineTest {
     @Test
     fun `stopping cancels the request and rolls the question back`() = runBlocking {
         val engine = engine()
-        server.enqueue(reply("end_turn", text("Too late.")).setBodyDelay(10, TimeUnit.SECONDS))
+        server.enqueue(reply("end_turn", text("Too late.")).setBodyDelay(3, TimeUnit.SECONDS))
         val job = async { engine.ask("Slow?", "sk-ant-test", opus, "2026-09-26") }
         // This thread must stay free for the request to go out: wait by suspending.
         while (server.requestCount == 0) delay(20)
