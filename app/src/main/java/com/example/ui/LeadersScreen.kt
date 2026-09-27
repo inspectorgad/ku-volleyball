@@ -1,6 +1,22 @@
 package com.example.ui
 
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -134,6 +150,13 @@ fun LeadersScreen(
             }
         }
 
+        Text(
+            HOLD_HINT,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+        )
+
         if (seasonMatches.isEmpty()) {
             EmptyState(
                 title = "No matches recorded",
@@ -158,99 +181,91 @@ fun LeadersScreen(
         ) {
             onOpenAsk?.let { open ->
                 item {
-                    Card(modifier = Modifier.fillMaxWidth().clickable(onClick = open)) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                "Ask about the team ›",
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                "Type a question - \"how do we do when we lose the first set?\" - and get an answer worked out from the data.",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Explanation(
-                                "Answered by Claude, Anthropic's AI, using your own Anthropic API key. " +
-                                    "Each question usually costs a few cents on your Anthropic account."
-                            )
-                        }
+                    ExplainedCard(
+                        "Answered by Claude, Anthropic's AI, using your own Anthropic API key. " +
+                            "Each question usually costs a few cents on your Anthropic account.",
+                        onClick = open
+                    ) {
+                        Text(
+                            "Ask about the team ›",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            "Type a question - \"how do we do when we lose the first set?\" - and get an answer worked out from the data.",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
             }
             item {
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(
-                            "Jayhawks — $season" +
-                                if (selectedScope == MatchScope.All) "" else " · ${selectedScope.label}",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold
+                ExplainedCard(
+                    if (season != ALL_SEASONS) EXPLAIN_SUMMARY + " " + EXPLAIN_SCOPE else EXPLAIN_SCOPE
+                ) {
+                    Text(
+                        "Jayhawks — $season" +
+                            if (selectedScope == MatchScope.All) "" else " · ${selectedScope.label}",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        "Record ${wins}-${losses}" +
+                            " · Sets $setsFor for / $setsAgainst against",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        "Team ${formatAverage(teamTotals.hittingPercentage)} hitting · " +
+                            "${formatPerSet(teamTotals.killsPerSet)} kills/set · " +
+                            "${formatPerSet(teamTotals.digsPerSet)} digs/set",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    if (season != ALL_SEASONS) {
+                        val split = rankedSplit(scoped, season)
+                        val path = rankPath(
+                            matches, season,
+                            pollEntries.firstOrNull { it.season == season && sameTeam(it.team, "Kansas") }?.rank
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        val parts = listOfNotNull(
+                            "vs ranked ${split.rankedW}-${split.rankedL}",
+                            "unranked ${split.unrankedW}-${split.unrankedL}",
+                            path.takeIf { it.size > 0 }?.let { "KU rank " + it.joinToString("→") }
+                        )
                         Text(
-                            "Record ${wins}-${losses}" +
-                                " · Sets $setsFor for / $setsAgainst against",
+                            parts.joinToString(" · "),
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        Text(
-                            "Team ${formatAverage(teamTotals.hittingPercentage)} hitting · " +
-                                "${formatPerSet(teamTotals.killsPerSet)} kills/set · " +
-                                "${formatPerSet(teamTotals.digsPerSet)} digs/set",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        if (season != ALL_SEASONS) {
-                            val split = rankedSplit(scoped, season)
-                            val path = rankPath(
-                                matches, season,
-                                pollEntries.firstOrNull { it.season == season && sameTeam(it.team, "Kansas") }?.rank
-                            )
-                            val parts = listOfNotNull(
-                                "vs ranked ${split.rankedW}-${split.rankedL}",
-                                "unranked ${split.unrankedW}-${split.unrankedL}",
-                                path.takeIf { it.size > 0 }?.let { "KU rank " + it.joinToString("→") }
-                            )
+                        // The tight sets, where the season has turned: the same
+                        // figure as the dashboard's Close sets tile.
+                        closeSetsLine(scoped, season)?.let {
                             Text(
-                                parts.joinToString(" · "),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                it,
+                                style = MaterialTheme.typography.bodyMedium
                             )
-                            // The tight sets, where the season has turned: the same
-                            // figure as the dashboard's Close sets tile.
-                            closeSetsLine(scoped, season)?.let {
-                                Text(
-                                    it,
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            seasonOutlook(matches, season, big12[season].orEmpty())?.let {
-                                Text(
-                                    outlookLine(it),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                            Explanation(EXPLAIN_SUMMARY + " " + EXPLAIN_SCOPE)
                         }
-                        // Always shown, and measured from the last time a feed
-                        // answered rather than from the file's own date: the
-                        // file is only rewritten when something changes, so a
-                        // quiet week would otherwise look like a broken one -
-                        // and a broken one would look like a quiet week.
+                        seasonOutlook(matches, season, big12[season].orEmpty())?.let {
+                            Text(
+                                outlookLine(it),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    // Always shown, and measured from the last time a feed
+                    // answered rather than from the file's own date: the
+                    // file is only rewritten when something changes, so a
+                    // quiet week would otherwise look like a broken one -
+                    // and a broken one would look like a quiet week.
+                    Text(
+                        dataStatusLine(dataUpdatedAt, lastCheckedMs),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    syncFailure?.let {
                         Text(
-                            dataStatusLine(dataUpdatedAt, lastCheckedMs),
+                            "Couldn't reach the season feed: $it",
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.error
                         )
-                        syncFailure?.let {
-                            Text(
-                                "Couldn't reach the season feed: $it",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        }
                     }
                 }
             }
@@ -410,19 +425,77 @@ fun LeadersScreen(
 }
 
 @Composable
-private fun InsightCard(title: String, lines: List<String>, explanation: String? = null) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(4.dp))
-            lines.forEach {
-                Text(
-                    it,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+private fun InsightCard(title: String, lines: List<String>, explanation: String) {
+    ExplainedCard(explanation) {
+        Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(4.dp))
+        lines.forEach {
+            Text(it, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(vertical = 1.dp))
+        }
+    }
+}
+
+/** The line under the filter chips that says the explanations are there. */
+const val HOLD_HINT = "Press and hold any card (or tap ⓘ) to see what its numbers mean."
+
+/**
+ * A card whose plain-words explanation stays out of the way of its numbers
+ * until the reader asks for it: press and hold the card, or tap the ⓘ in its
+ * corner, and the explanation opens underneath; do either again to close it.
+ *
+ * [content] gets the toggle, for a card whose rows are themselves tappable -
+ * a row's own tap handler would otherwise swallow the hold.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ExplainedCard(
+    explanation: String,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+    content: @Composable ColumnScope.(toggleExplanation: () -> Unit) -> Unit
+) {
+    var open by rememberSaveable(explanation) { mutableStateOf(false) }
+    val haptics = LocalHapticFeedback.current
+    val toggle = {
+        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+        open = !open
+    }
+    val hold = if (onClick != null) {
+        Modifier.combinedClickable(onClick = onClick, onLongClick = toggle)
+    } else {
+        Modifier.pointerInput(Unit) { detectTapGestures(onLongPress = { toggle() }) }
+    }
+    Card(modifier = modifier.fillMaxWidth().then(hold)) {
+        Box {
+            Column(modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 12.dp, end = 32.dp)) {
+                content(toggle)
+                AnimatedVisibility(visible = open) {
+                    Text(
+                        explanation,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .fillMaxWidth()
+                            .background(
+                                MaterialTheme.colorScheme.secondaryContainer,
+                                RoundedCornerShape(8.dp)
+                            )
+                            .padding(10.dp)
+                    )
+                }
+            }
+            IconButton(
+                onClick = toggle,
+                modifier = Modifier.align(Alignment.TopEnd).size(36.dp)
+            ) {
+                Icon(
+                    if (open) Icons.Filled.Info else Icons.Outlined.Info,
+                    contentDescription = if (open) "Hide explanation" else "What this card means",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(18.dp)
                 )
             }
-            explanation?.let { Explanation(it) }
         }
     }
 }
@@ -474,66 +547,66 @@ fun SeasonGoalsCard(
     if (tallies.isEmpty()) return
     val matchCount = goals.map { it.matchId }.distinct().size
 
-    Card(modifier = modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                "Goals met by target",
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                "Across $matchCount ${if (matchCount == 1) "match" else "matches"} · least often met first",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-            tallies.forEach { t ->
-                val share = t.met.toDouble() / t.of
-                val open = openGoal == t.idx
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { openGoal = if (open) null else t.idx }
-                        .padding(vertical = 3.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        t.name,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(1f)
+    ExplainedCard(EXPLAIN_SEASON_GOALS, modifier = modifier) { toggleExplanation ->
+        Text(
+            "Goals met by target",
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            "Across $matchCount ${if (matchCount == 1) "match" else "matches"} · least often met first",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        tallies.forEach { t ->
+            val share = t.met.toDouble() / t.of
+            val open = openGoal == t.idx
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .combinedClickable(
+                        onClick = { openGoal = if (open) null else t.idx },
+                        onLongClick = toggleExplanation
                     )
-                    Text(
-                        (if (t.ceiling) "≤ " else "") + formatGoal(t.target, t.decimals),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(end = 12.dp)
-                    )
-                    Text(
-                        "${t.met}/${t.of}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
-                        // Never met all season is worth reading as a warning
-                        // about the target, not only about the team.
-                        color = when {
-                            t.met == 0 -> MaterialTheme.colorScheme.error
-                            share >= 0.5 -> MaterialTheme.colorScheme.primary
-                            else -> MaterialTheme.colorScheme.onSurface
-                        }
-                    )
-                }
-                if (open) {
-                    val byMatch = goals.filter { it.idx == t.idx }.associateBy { it.matchId }
-                    GoalTrendChart(
-                        points = order.map { m ->
-                            GoalPoint(m.opponent.take(3), byMatch[m.id]?.value)
-                        },
-                        target = t.target,
-                        ceiling = t.ceiling,
-                        format = { v -> formatGoal(v, t.decimals) }
-                    )
-                }
+                    .padding(vertical = 3.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    t.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.weight(1f)
+                )
+                Text(
+                    (if (t.ceiling) "≤ " else "") + formatGoal(t.target, t.decimals),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(end = 12.dp)
+                )
+                Text(
+                    "${t.met}/${t.of}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    // Never met all season is worth reading as a warning
+                    // about the target, not only about the team.
+                    color = when {
+                        t.met == 0 -> MaterialTheme.colorScheme.error
+                        share >= 0.5 -> MaterialTheme.colorScheme.primary
+                        else -> MaterialTheme.colorScheme.onSurface
+                    }
+                )
             }
-            Explanation(EXPLAIN_SEASON_GOALS)
+            if (open) {
+                val byMatch = goals.filter { it.idx == t.idx }.associateBy { it.matchId }
+                GoalTrendChart(
+                    points = order.map { m ->
+                        GoalPoint(m.opponent.take(3), byMatch[m.id]?.value)
+                    },
+                    target = t.target,
+                    ceiling = t.ceiling,
+                    format = { v -> formatGoal(v, t.decimals) }
+                )
+            }
         }
     }
 }
