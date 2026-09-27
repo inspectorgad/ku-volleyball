@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-27T19:44:27Z",
+ "generatedAt": "2026-09-27T20:22:42Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -19485,7 +19485,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 38
+   "opponentRpi": 36
   },
   {
    "date": "2026-09-03",
@@ -19997,7 +19997,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 40
+   "opponentRpi": 42
   },
   {
    "date": "2026-09-04",
@@ -21210,7 +21210,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 168
+   "opponentRpi": 205
   },
   {
    "date": "2026-09-11",
@@ -22338,7 +22338,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 83
+   "opponentRpi": 81
   },
   {
    "date": "2026-09-15",
@@ -22878,7 +22878,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 168
+   "opponentRpi": 205
   },
   {
    "date": "2026-09-18",
@@ -23339,7 +23339,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 94
+   "opponentRpi": 93
   },
   {
    "date": "2026-09-20",
@@ -24082,7 +24082,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 164
+   "opponentRpi": 163
   },
   {
    "date": "2026-09-25",
@@ -25364,7 +25364,7 @@
    },
    "home": false,
    "forecast": 0.7102,
-   "opponentRpi": 170
+   "opponentRpi": 169
   },
   {
    "date": "2026-10-01",
@@ -25417,7 +25417,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.5131,
+   "winProbability": 0.5138,
    "ratingSource": "results"
   },
   {
@@ -25429,7 +25429,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5352,
+   "winProbability": 0.5359,
    "ratingSource": "results"
   },
   {
@@ -25484,7 +25484,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7064,
+   "winProbability": 0.7069,
    "ratingSource": "results"
   },
   {
@@ -25496,7 +25496,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5012,
+   "winProbability": 0.5018,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25527,7 +25527,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7316,
+   "winProbability": 0.734,
    "ratingSource": "results"
   },
   {
@@ -25570,7 +25570,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7499,
+   "winProbability": 0.7519,
    "ratingSource": "results"
   },
   {
@@ -25581,7 +25581,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.5917,
+   "winProbability": 0.5926,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25807,7 +25807,7 @@
    "overallW": 9,
    "overallL": 3,
    "nationalRank": 19,
-   "rpiRank": 31,
+   "rpiRank": 32,
    "rpiSource": "provisional"
   },
   {
@@ -25819,7 +25819,7 @@
    "overallW": 9,
    "overallL": 0,
    "nationalRank": null,
-   "rpiRank": 21,
+   "rpiRank": 22,
    "rpiSource": "provisional"
   },
   {
@@ -25843,7 +25843,7 @@
    "overallW": 9,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 27,
+   "rpiRank": 28,
    "rpiSource": "provisional"
   },
   {
@@ -25975,7 +25975,7 @@
    "overallW": 10,
    "overallL": 3,
    "nationalRank": 9,
-   "rpiRank": 26,
+   "rpiRank": 27,
    "rpiSource": "provisional"
   },
   {
@@ -25987,7 +25987,7 @@
    "overallW": 8,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 60,
+   "rpiRank": 63,
    "rpiSource": "provisional"
   },
   {
@@ -26071,7 +26071,7 @@
    "overallW": 9,
    "overallL": 2,
    "nationalRank": 21,
-   "rpiRank": 53,
+   "rpiRank": 54,
    "rpiSource": "provisional"
   },
   {
@@ -26107,7 +26107,7 @@
    "overallW": 7,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 46,
+   "rpiRank": 48,
    "rpiSource": "provisional"
   },
   {
@@ -26131,7 +26131,7 @@
    "overallW": 8,
    "overallL": 6,
    "nationalRank": null,
-   "rpiRank": 170,
+   "rpiRank": 169,
    "rpiSource": "provisional"
   },
   {
@@ -33786,11 +33786,11 @@
   {
    "team": "SMU",
    "season": "2026",
-   "matches": 11,
-   "sets": 42,
-   "serviceAces": 47,
-   "serviceErrors": 130,
-   "serveAttempts": 986,
+   "matches": 12,
+   "sets": 46,
+   "serviceAces": 53,
+   "serviceErrors": 143,
+   "serveAttempts": 1079,
    "big12": false,
    "pollRank": 5
   },
