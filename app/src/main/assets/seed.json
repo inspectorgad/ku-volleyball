@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-27T23:56:56Z",
+ "generatedAt": "2026-09-28T07:31:46Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -19485,7 +19485,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 35
+   "opponentRpi": 34
   },
   {
    "date": "2026-09-03",
@@ -21210,7 +21210,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 199
+   "opponentRpi": 198
   },
   {
    "date": "2026-09-11",
@@ -22878,7 +22878,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 199
+   "opponentRpi": 198
   },
   {
    "date": "2026-09-18",
@@ -25417,7 +25417,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.5365,
+   "winProbability": 0.5379,
    "ratingSource": "results"
   },
   {
@@ -25429,7 +25429,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5528,
+   "winProbability": 0.5532,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25491,7 +25491,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7208,
+   "winProbability": 0.7212,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25510,7 +25510,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.4901,
+   "winProbability": 0.4915,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25541,7 +25541,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7356,
+   "winProbability": 0.7363,
    "ratingSource": "results"
   },
   {
@@ -25584,7 +25584,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7521,
+   "winProbability": 0.753,
    "ratingSource": "results"
   },
   {
@@ -25595,7 +25595,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.5969,
+   "winProbability": 0.5997,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26157,7 +26157,7 @@
    "overallW": 5,
    "overallL": 7,
    "nationalRank": null,
-   "rpiRank": 156,
+   "rpiRank": 155,
    "rpiSource": "provisional"
   }
  ],
@@ -33778,11 +33778,11 @@
   {
    "team": "Pittsburgh",
    "season": "2026",
-   "matches": 11,
-   "sets": 37,
-   "serviceAces": 52,
-   "serviceErrors": 69,
-   "serveAttempts": 888,
+   "matches": 12,
+   "sets": 40,
+   "serviceAces": 53,
+   "serviceErrors": 75,
+   "serveAttempts": 961,
    "big12": false,
    "pollRank": 2
   },
@@ -33822,11 +33822,11 @@
   {
    "team": "Stanford",
    "season": "2026",
-   "matches": 11,
-   "sets": 40,
-   "serviceAces": 55,
-   "serviceErrors": 114,
-   "serveAttempts": 912,
+   "matches": 12,
+   "sets": 43,
+   "serviceAces": 58,
+   "serviceErrors": 118,
+   "serveAttempts": 979,
    "big12": false,
    "pollRank": 12
   },
