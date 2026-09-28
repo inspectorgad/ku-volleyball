@@ -182,7 +182,8 @@
   "2026-09-24": true,
   "2026-09-25": true,
   "2026-09-26": true,
-  "2026-09-27": true
+  "2026-09-27": true,
+  "2026-09-28": true
  },
  "games": {
   "6479442": {
@@ -13264,6 +13265,15 @@
    "date": "2026-09-18",
    "season": "2026",
    "teams": [
+    "Stanford"
+   ],
+   "boxscored": true
+  },
+  "6628242": {
+   "date": "2026-09-27",
+   "season": "2026",
+   "teams": [
+    "Pittsburgh",
     "Stanford"
    ],
    "boxscored": true
