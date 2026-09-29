@@ -864,6 +864,11 @@ if avca.get("data") and avca_season:
     b12_keys = {k for (_s, k) in records}
     rows = []
     for row in avca["data"]:
+        # The NCAA's table sometimes ends with a row that is empty in every
+        # column (the Sep 27 2026 poll did). That is padding, not a team we
+        # failed to read, so it is dropped before the check below.
+        if not any(str(v).strip() for v in row.values()):
+            continue
         label = col(row, "RANK")  # can be a tie, e.g. "T-22."
         digits = re.search(r"\d+", label)
         school = col(row, "SCHOOL", "TEAM")
