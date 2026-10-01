@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-09-30T16:04:03Z",
+ "generatedAt": "2026-10-01T00:49:11Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -22338,7 +22338,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 82
+   "opponentRpi": 84
   },
   {
    "date": "2026-09-15",
@@ -23339,7 +23339,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 83
+   "opponentRpi": 81
   },
   {
    "date": "2026-09-20",
@@ -24082,7 +24082,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 160
+   "opponentRpi": 159
   },
   {
    "date": "2026-09-25",
@@ -24787,7 +24787,7 @@
    },
    "home": true,
    "forecast": 0.8189,
-   "opponentRpi": 109
+   "opponentRpi": 110
   },
   {
    "date": "2026-09-27",
@@ -25429,7 +25429,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5812,
+   "winProbability": 0.581,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25491,7 +25491,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7436,
+   "winProbability": 0.7434,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25510,7 +25510,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5198,
+   "winProbability": 0.5196,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25584,7 +25584,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7741,
+   "winProbability": 0.7739,
    "ratingSource": "results"
   },
   {
@@ -25595,7 +25595,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.6305,
+   "winProbability": 0.6302,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -25977,7 +25977,7 @@
    "overallW": 9,
    "overallL": 1,
    "nationalRank": null,
-   "rpiRank": 38,
+   "rpiRank": 39,
    "rpiSource": "provisional"
   },
   {
@@ -25989,7 +25989,7 @@
    "overallW": 10,
    "overallL": 2,
    "nationalRank": 24,
-   "rpiRank": 52,
+   "rpiRank": 51,
    "rpiSource": "provisional"
   },
   {
@@ -26025,7 +26025,7 @@
    "overallW": 8,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 109,
+   "rpiRank": 110,
    "rpiSource": "provisional"
   },
   {
@@ -26133,7 +26133,7 @@
    "overallW": 7,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 47,
+   "rpiRank": 48,
    "rpiSource": "provisional"
   },
   {
@@ -26157,7 +26157,7 @@
    "overallW": 5,
    "overallL": 7,
    "nationalRank": null,
-   "rpiRank": 156,
+   "rpiRank": 157,
    "rpiSource": "provisional"
   }
  ],
@@ -33701,11 +33701,11 @@
   {
    "team": "Louisville",
    "season": "2026",
-   "matches": 14,
-   "sets": 47,
-   "serviceAces": 73,
-   "serviceErrors": 109,
-   "serveAttempts": 1134,
+   "matches": 15,
+   "sets": 50,
+   "serviceAces": 80,
+   "serviceErrors": 118,
+   "serveAttempts": 1207,
    "big12": false,
    "pollRank": 4
   },
@@ -42441,6 +42441,6 @@
  "rpi": {
   "season": "2026",
   "source": "provisional",
-  "updated": "Provisional, through games 2026-09-29"
+  "updated": "Provisional, through games 2026-09-30"
  }
 }
