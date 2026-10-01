@@ -185,7 +185,8 @@
   "2026-09-27": true,
   "2026-09-28": true,
   "2026-09-29": true,
-  "2026-09-30": true
+  "2026-09-30": true,
+  "2026-10-01": true
  },
  "games": {
   "6479442": {
@@ -516,6 +517,13 @@
    "home": "Texas Tech",
    "away": "Kansas",
    "boxscored": true
+  },
+  "6625742": {
+   "date": "2026-10-01",
+   "final": false,
+   "home": "Kansas",
+   "away": "Utah",
+   "boxscored": false
   }
  },
  "big12Games": {
@@ -11901,6 +11909,14 @@
    "season": "2026",
    "teams": [
     "Utah"
+   ],
+   "boxscored": true
+  },
+  "6626341": {
+   "date": "2026-09-30",
+   "season": "2026",
+   "teams": [
+    "Louisville"
    ],
    "boxscored": true
   },
