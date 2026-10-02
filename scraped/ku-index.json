@@ -186,7 +186,8 @@
   "2026-09-28": true,
   "2026-09-29": true,
   "2026-09-30": true,
-  "2026-10-01": true
+  "2026-10-01": true,
+  "2026-10-02": true
  },
  "games": {
   "6479442": {
@@ -520,9 +521,16 @@
   },
   "6625742": {
    "date": "2026-10-01",
-   "final": false,
+   "final": true,
    "home": "Kansas",
    "away": "Utah",
+   "boxscored": true
+  },
+  "6625743": {
+   "date": "2026-10-02",
+   "final": false,
+   "home": "Kansas",
+   "away": "BYU",
    "boxscored": false
   }
  },
@@ -7982,6 +7990,27 @@
    },
    "conferenceGame": true
   },
+  "6625742": {
+   "date": "2026-10-01",
+   "season": "2026",
+   "home": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 2,
+    "winner": true,
+    "rank": 19,
+    "inConference": true
+   },
+   "away": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 0,
+    "winner": false,
+    "rank": 23,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -11577,6 +11606,14 @@
    ],
    "boxscored": true
   },
+  "6625742": {
+   "date": "2026-10-01",
+   "season": "2026",
+   "teams": [
+    "Utah"
+   ],
+   "boxscored": true
+  },
   "6625787": {
    "date": "2026-08-30",
    "season": "2026",
@@ -13808,6 +13845,15 @@
    "season": "2026",
    "teams": [
     "Pittsburgh"
+   ],
+   "boxscored": true
+  },
+  "6639892": {
+   "date": "2026-10-01",
+   "season": "2026",
+   "teams": [
+    "Penn St.",
+    "Nebraska"
    ],
    "boxscored": true
   },
