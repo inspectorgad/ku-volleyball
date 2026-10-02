@@ -33,6 +33,28 @@ def load_json(path, default):
         return default
 
 
+def sets_from_scores(set_scores):
+    """(KU sets, opponent sets) counted from "25-20" strings, or None unless
+    every set is finished: first to 25 (15 in a fifth set), won by two, and
+    the match itself decided - three sets to one side."""
+    us = them = 0
+    for n, s in enumerate(set_scores, start=1):
+        try:
+            a, b = (int(x) for x in s.split("-"))
+        except ValueError:
+            return None
+        target = 15 if n == 5 else 25
+        if max(a, b) < target or abs(a - b) < 2:
+            return None
+        if a > b:
+            us += 1
+        else:
+            them += 1
+    if max(us, them) != 3 or min(us, them) > 2:
+        return None
+    return us, them
+
+
 def to_int(value):
     try:
         return int(str(value).strip() or 0)
@@ -407,6 +429,21 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         ours, theirs = (home, visit) if ku_home else (visit, home)
         set_scores.append(f"{ours}-{theirs}")
 
+    # Sets won, from the set scores themselves. The NCAA's own sets-won field
+    # can lag the line score: Utah on 2026-10-01 came back FINAL with three set
+    # scores all won by Kansas (32-30, 25-20, 26-24) and a score of 2-0. When
+    # every set in the line score is a finished set, its count is the truth.
+    counted = sets_from_scores(set_scores)
+    team_sets = to_int(ours_team.get("score"))
+    opponent_sets = to_int(theirs_team.get("score"))
+    if counted and counted != (team_sets, opponent_sets):
+        print(
+            f"  WARNING: {data['date']} {opp.get('nameShort')}: NCAA sets-won field says "
+            f"{team_sets}-{opponent_sets} but the set scores ({', '.join(set_scores)}) "
+            f"make it {counted[0]}-{counted[1]}; using the set scores"
+        )
+        team_sets, opponent_sets = counted
+
     season = str(contest.get("seasonYear") or data["date"][:4])
     location = contest.get("location") or {}
     city = ", ".join(
@@ -416,8 +453,8 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         "date": data["date"],
         "opponent": opp.get("nameShort") or opp.get("nameFull") or "Unknown",
         "season": season,
-        "teamSets": to_int(ours_team.get("score")),
-        "opponentSets": to_int(theirs_team.get("score")),
+        "teamSets": team_sets,
+        "opponentSets": opponent_sets,
         "setScores": ", ".join(set_scores),
         "venue": (location.get("venue") or "").strip(),
         "city": city,

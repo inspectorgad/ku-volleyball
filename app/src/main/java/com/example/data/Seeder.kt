@@ -227,7 +227,18 @@ object Seeder {
                     seedTeamSets != null && seedOppSets != null &&
                     existing.teamSets == seedOppSets && existing.opponentSets == seedTeamSets &&
                     seedTeamSets != seedOppSets
-                val takeSeedResult = fillResult || mirrored
+                // The same reasoning for a result the feed got wrong and later
+                // fixed without mirroring it: Utah on 2026-10-01 went out as
+                // 2-0 beside three set scores Kansas all won. A stored result
+                // that its own set scores contradict, where those set scores
+                // are the feed's and the feed's result now agrees with them,
+                // was never typed by anybody either.
+                val stale = !fillResult && !mirrored &&
+                    seedTeamSets != null && seedOppSets != null &&
+                    existing.setScores != null && existing.setScores == seedSetScores &&
+                    setsFromScores(seedSetScores) == (seedTeamSets to seedOppSets) &&
+                    setsFromScores(existing.setScores) != (existing.teamSets to existing.opponentSets)
+                val takeSeedResult = fillResult || mirrored || stale
                 // Venue facts fill in when missing (an upcoming match becoming a
                 // played one learns where it happened) but never overwrite.
                 val updated = existing.copy(
@@ -654,4 +665,24 @@ object Seeder {
             }
         }
     }
+}
+
+/**
+ * (KU sets, opponent sets) counted from "25-20, 23-25, ..." or null unless
+ * every set is a finished one (first to 25, 15 in a fifth, won by two) and
+ * the match is decided at three sets.
+ */
+fun setsFromScores(scores: String?): Pair<Int, Int>? {
+    if (scores.isNullOrBlank()) return null
+    var us = 0
+    var them = 0
+    scores.split(",").forEachIndexed { i, set ->
+        val parts = set.trim().split("-").mapNotNull { it.trim().toIntOrNull() }
+        if (parts.size != 2) return null
+        val (a, b) = parts
+        val target = if (i == 4) 15 else 25
+        if (maxOf(a, b) < target || kotlin.math.abs(a - b) < 2) return null
+        if (a > b) us++ else them++
+    }
+    return if (maxOf(us, them) == 3 && minOf(us, them) <= 2) us to them else null
 }

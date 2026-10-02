@@ -262,6 +262,59 @@ class MergeSyncTest {
             assertEquals("24-26, 25-21, 25-19, 26-28, 13-15", match.setScores)
         }
 
+    private fun utahJson() = org.json.JSONObject(
+        """
+        {"players": [], "matches": [
+          {"date": "2026-10-01", "opponent": "Utah", "season": "2026", "home": true,
+           "teamSets": 3, "opponentSets": 0, "setScores": "32-30, 25-20, 26-24"}
+        ]}
+        """
+    )
+
+    @Test
+    fun `a stored result its own set scores contradict is taken from the corrected feed`() =
+        runTest {
+            val dao = db.dao()
+            // What a phone that synced on 1 Oct holds: the NCAA's 2-0 beside
+            // three set scores Kansas all won.
+            dao.insertMatch(
+                com.example.data.Match(
+                    date = "2026-10-01", opponent = "Utah", season = "2026",
+                    teamSets = 2, opponentSets = 0, setScores = "32-30, 25-20, 26-24"
+                )
+            )
+            Seeder.merge(utahJson(), dao)
+            val match = dao.matchesOnce().single()
+            assertEquals(3, match.teamSets)
+            assertEquals(0, match.opponentSets)
+        }
+
+    @Test
+    fun `a hand-typed result with its own set scores is left alone by that correction`() =
+        runTest {
+            val dao = db.dao()
+            dao.insertMatch(
+                com.example.data.Match(
+                    date = "2026-10-01", opponent = "Utah", season = "2026",
+                    // Typed by hand with different set scores: not the feed's, so kept.
+                    teamSets = 2, opponentSets = 0, setScores = "25-20, 25-22"
+                )
+            )
+            Seeder.merge(utahJson(), dao)
+            val match = dao.matchesOnce().single()
+            assertEquals(2, match.teamSets)
+            assertEquals("25-20, 25-22", match.setScores)
+        }
+
+    @Test
+    fun `sets are counted only from finished sets`() {
+        assertEquals(3 to 0, com.example.data.setsFromScores("32-30, 25-20, 26-24"))
+        assertEquals(2 to 3, com.example.data.setsFromScores("24-26, 25-21, 25-19, 26-28, 13-15"))
+        // A set still in play, or a match not yet decided, counts as nothing.
+        assertEquals(null, com.example.data.setsFromScores("25-20, 25-22, 14-11"))
+        assertEquals(null, com.example.data.setsFromScores("25-20, 25-22"))
+    }
+
     @Test
     fun `a hand-edited result that is not a mirror still stands`() = runTest {
         val dao = db.dao()
