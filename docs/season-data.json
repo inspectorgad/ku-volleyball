@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-02T01:06:10Z",
+ "generatedAt": "2026-10-02T04:03:05Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -19485,7 +19485,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 34
+   "opponentRpi": 32
   },
   {
    "date": "2026-09-03",
@@ -20722,7 +20722,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 101
+   "opponentRpi": 98
   },
   {
    "date": "2026-09-08",
@@ -21210,7 +21210,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 187
+   "opponentRpi": 181
   },
   {
    "date": "2026-09-11",
@@ -21876,7 +21876,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 93
+   "opponentRpi": 101
   },
   {
    "date": "2026-09-13",
@@ -22338,7 +22338,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 80
+   "opponentRpi": 84
   },
   {
    "date": "2026-09-15",
@@ -22878,7 +22878,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 187
+   "opponentRpi": 181
   },
   {
    "date": "2026-09-18",
@@ -23339,7 +23339,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 77
+   "opponentRpi": 74
   },
   {
    "date": "2026-09-20",
@@ -24082,7 +24082,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 154
+   "opponentRpi": 146
   },
   {
    "date": "2026-09-25",
@@ -24787,7 +24787,7 @@
    },
    "home": true,
    "forecast": 0.8189,
-   "opponentRpi": 110
+   "opponentRpi": 115
   },
   {
    "date": "2026-09-27",
@@ -25364,13 +25364,13 @@
    },
    "home": false,
    "forecast": 0.7102,
-   "opponentRpi": 161
+   "opponentRpi": 171
   },
   {
    "date": "2026-10-01",
    "opponent": "Utah",
    "season": "2026",
-   "teamSets": 2,
+   "teamSets": 3,
    "opponentSets": 0,
    "setScores": "32-30, 25-20, 26-24",
    "venue": "Horejsi Family Volleyball Arena",
@@ -26028,20 +26028,20 @@
     "sat": 75
    },
    "goals": {
-    "met": 12,
+    "met": 8,
     "evaluated": 23,
-    "teamMet": 6,
+    "teamMet": 2,
     "teamEvaluated": 11,
     "values": [
-     28.0,
-     15.0,
-     23.0,
-     1.5,
-     3.5,
+     18.67,
+     10.0,
+     15.33,
+     1.0,
+     2.33,
      0.219,
      0.135,
      0.33,
-     23.0,
+     15.33,
      0.365,
      0.404,
      0.2,
@@ -26068,7 +26068,7 @@
    },
    "home": true,
    "forecast": 0.6552,
-   "opponentRpi": 25
+   "opponentRpi": 27
   },
   {
    "date": "2026-10-02",
@@ -26102,7 +26102,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.5686,
+   "winProbability": 0.5756,
    "ratingSource": "results"
   },
   {
@@ -26114,7 +26114,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5795,
+   "winProbability": 0.577,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26169,7 +26169,7 @@
    "commonOpponents": [
     {
      "team": "Utah",
-     "ku": "W 2-0",
+     "ku": "W 3-0",
      "them": "L 1-3"
     }
    ]
@@ -26183,7 +26183,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7422,
+   "winProbability": 0.7402,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26202,7 +26202,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5143,
+   "winProbability": 0.5191,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26226,7 +26226,7 @@
    "commonOpponents": [
     {
      "team": "Utah",
-     "ku": "W 2-0",
+     "ku": "W 3-0",
      "them": "L 1-3"
     }
    ]
@@ -26240,7 +26240,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7586,
+   "winProbability": 0.7584,
    "ratingSource": "results"
   },
   {
@@ -26257,7 +26257,7 @@
    "commonOpponents": [
     {
      "team": "Utah",
-     "ku": "W 2-0",
+     "ku": "W 3-0",
      "them": "L 0-3"
     },
     {
@@ -26288,7 +26288,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7746,
+   "winProbability": 0.7766,
    "ratingSource": "results"
   },
   {
@@ -26299,7 +26299,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.633,
+   "winProbability": 0.6347,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26513,7 +26513,19 @@
    "overallW": 10,
    "overallL": 3,
    "nationalRank": 19,
-   "rpiRank": 22,
+   "rpiRank": 24,
+   "rpiSource": "provisional"
+  },
+  {
+   "season": "2026",
+   "team": "BYU",
+   "seo": "byu",
+   "confW": 2,
+   "confL": 0,
+   "overallW": 10,
+   "overallL": 1,
+   "nationalRank": 18,
+   "rpiRank": 15,
    "rpiSource": "provisional"
   },
   {
@@ -26537,19 +26549,7 @@
    "overallW": 8,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 63,
-   "rpiSource": "provisional"
-  },
-  {
-   "season": "2026",
-   "team": "BYU",
-   "seo": "byu",
-   "confW": 1,
-   "confL": 0,
-   "overallW": 9,
-   "overallL": 1,
-   "nationalRank": 18,
-   "rpiRank": 19,
+   "rpiRank": 65,
    "rpiSource": "provisional"
   },
   {
@@ -26621,7 +26621,7 @@
    "overallW": 10,
    "overallL": 4,
    "nationalRank": 23,
-   "rpiRank": 25,
+   "rpiRank": 27,
    "rpiSource": "provisional"
   },
   {
@@ -26674,18 +26674,6 @@
   },
   {
    "season": "2026",
-   "team": "Kansas St.",
-   "seo": "kansas-st",
-   "confW": 1,
-   "confL": 1,
-   "overallW": 9,
-   "overallL": 1,
-   "nationalRank": null,
-   "rpiRank": 36,
-   "rpiSource": "provisional"
-  },
-  {
-   "season": "2026",
    "team": "Colorado",
    "seo": "colorado",
    "confW": 1,
@@ -26705,7 +26693,7 @@
    "overallW": 10,
    "overallL": 3,
    "nationalRank": 12,
-   "rpiRank": 27,
+   "rpiRank": 25,
    "rpiSource": "provisional"
   },
   {
@@ -26729,7 +26717,7 @@
    "overallW": 8,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 110,
+   "rpiRank": 115,
    "rpiSource": "provisional"
   },
   {
@@ -26767,6 +26755,18 @@
    "nationalRank": null,
    "rpiRank": 41,
    "rpiSource": "ncaa"
+  },
+  {
+   "season": "2026",
+   "team": "Kansas St.",
+   "seo": "kansas-st",
+   "confW": 1,
+   "confL": 2,
+   "overallW": 9,
+   "overallL": 2,
+   "nationalRank": null,
+   "rpiRank": 38,
+   "rpiSource": "provisional"
   },
   {
    "season": "2025",
@@ -26813,7 +26813,7 @@
    "overallW": 8,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 78,
+   "rpiRank": 77,
    "rpiSource": "provisional"
   },
   {
@@ -26825,7 +26825,7 @@
    "overallW": 7,
    "overallL": 5,
    "nationalRank": 21,
-   "rpiRank": 17,
+   "rpiRank": 18,
    "rpiSource": "provisional"
   },
   {
@@ -26837,7 +26837,7 @@
    "overallW": 7,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 47,
+   "rpiRank": 45,
    "rpiSource": "provisional"
   },
   {
@@ -26849,7 +26849,7 @@
    "overallW": 8,
    "overallL": 6,
    "nationalRank": null,
-   "rpiRank": 161,
+   "rpiRank": 171,
    "rpiSource": "provisional"
   },
   {
@@ -26861,7 +26861,7 @@
    "overallW": 5,
    "overallL": 7,
    "nationalRank": null,
-   "rpiRank": 156,
+   "rpiRank": 150,
    "rpiSource": "provisional"
   }
  ],
@@ -31113,61 +31113,61 @@
   },
   {
    "team": "BYU",
-   "matches": 10,
+   "matches": 11,
    "players": [
     {
      "player": "Claire Little Chambers",
      "jerseyNumber": "12",
      "position": "OH",
-     "mp": 10,
-     "sp": 38,
-     "k": 124,
-     "e": 32,
-     "ta": 293,
+     "mp": 11,
+     "sp": 42,
+     "k": 137,
+     "e": 34,
+     "ta": 333,
      "a": 11,
-     "sa": 9,
+     "sa": 10,
      "se": 6,
-     "d": 68,
+     "d": 74,
      "bs": 0,
-     "ba": 29,
-     "re": 7,
+     "ba": 32,
+     "re": 11,
      "bhe": 0,
-     "sat": 137
+     "sat": 158
     },
     {
      "player": "Elli Mortensen",
      "jerseyNumber": "2",
      "position": "OH",
-     "mp": 10,
-     "sp": 38,
-     "k": 98,
-     "e": 35,
-     "ta": 234,
-     "a": 11,
+     "mp": 11,
+     "sp": 42,
+     "k": 117,
+     "e": 37,
+     "ta": 261,
+     "a": 13,
      "sa": 15,
-     "se": 18,
-     "d": 63,
+     "se": 20,
+     "d": 75,
      "bs": 0,
-     "ba": 14,
-     "re": 8,
+     "ba": 17,
+     "re": 10,
      "bhe": 0,
-     "sat": 130
+     "sat": 145
     },
     {
      "player": "Sophia Callahan",
      "jerseyNumber": "22",
      "position": "OH",
-     "mp": 8,
-     "sp": 32,
-     "k": 67,
-     "e": 26,
-     "ta": 167,
-     "a": 2,
+     "mp": 9,
+     "sp": 36,
+     "k": 80,
+     "e": 31,
+     "ta": 196,
+     "a": 3,
      "sa": 0,
      "se": 0,
-     "d": 21,
+     "d": 23,
      "bs": 0,
-     "ba": 24,
+     "ba": 29,
      "re": 0,
      "bhe": 0,
      "sat": 0
@@ -31176,36 +31176,36 @@
      "player": "Brooke Hardy",
      "jerseyNumber": "4",
      "position": "MB",
-     "mp": 9,
-     "sp": 35,
-     "k": 59,
-     "e": 12,
-     "ta": 108,
+     "mp": 10,
+     "sp": 39,
+     "k": 67,
+     "e": 14,
+     "ta": 125,
      "a": 5,
-     "sa": 14,
+     "sa": 17,
      "se": 10,
-     "d": 20,
+     "d": 22,
      "bs": 3,
-     "ba": 31,
+     "ba": 35,
      "re": 0,
      "bhe": 0,
-     "sat": 159
+     "sat": 181
     },
     {
      "player": "Kate Prior",
      "jerseyNumber": "1",
      "position": "OPP",
-     "mp": 9,
-     "sp": 33,
-     "k": 50,
-     "e": 22,
-     "ta": 110,
+     "mp": 10,
+     "sp": 37,
+     "k": 55,
+     "e": 25,
+     "ta": 125,
      "a": 1,
      "sa": 0,
      "se": 0,
      "d": 11,
      "bs": 0,
-     "ba": 27,
+     "ba": 29,
      "re": 0,
      "bhe": 0,
      "sat": 0
@@ -31214,17 +31214,17 @@
      "player": "Kelli Jo Burgess",
      "jerseyNumber": "17",
      "position": "MB",
-     "mp": 9,
-     "sp": 35,
-     "k": 49,
-     "e": 9,
-     "ta": 92,
+     "mp": 10,
+     "sp": 39,
+     "k": 54,
+     "e": 11,
+     "ta": 103,
      "a": 0,
      "sa": 0,
      "se": 1,
      "d": 1,
      "bs": 2,
-     "ba": 61,
+     "ba": 71,
      "re": 0,
      "bhe": 0,
      "sat": 5
@@ -31233,20 +31233,20 @@
      "player": "Anna Blamires",
      "jerseyNumber": "8",
      "position": "OPP",
-     "mp": 7,
-     "sp": 24,
+     "mp": 8,
+     "sp": 25,
      "k": 23,
      "e": 6,
-     "ta": 45,
+     "ta": 46,
      "a": 0,
      "sa": 0,
      "se": 0,
      "d": 1,
      "bs": 0,
-     "ba": 2,
+     "ba": 3,
      "re": 0,
      "bhe": 0,
-     "sat": 0
+     "sat": 1
     },
     {
      "player": "Kylie Buttars",
@@ -31309,39 +31309,39 @@
      "player": "Kaylie Kofe",
      "jerseyNumber": "20",
      "position": "S",
-     "mp": 10,
-     "sp": 38,
+     "mp": 11,
+     "sp": 42,
      "k": 6,
      "e": 0,
      "ta": 11,
-     "a": 207,
+     "a": 232,
      "sa": 7,
-     "se": 14,
-     "d": 53,
+     "se": 17,
+     "d": 61,
      "bs": 0,
      "ba": 0,
      "re": 0,
      "bhe": 0,
-     "sat": 129
+     "sat": 143
     },
     {
      "player": "Lulu Po'uha",
      "jerseyNumber": "5",
      "position": "L",
-     "mp": 10,
-     "sp": 38,
+     "mp": 11,
+     "sp": 42,
      "k": 3,
      "e": 0,
      "ta": 6,
-     "a": 41,
-     "sa": 2,
-     "se": 10,
-     "d": 99,
+     "a": 45,
+     "sa": 3,
+     "se": 13,
+     "d": 119,
      "bs": 0,
      "ba": 0,
      "re": 6,
      "bhe": 0,
-     "sat": 128
+     "sat": 140
     },
     {
      "player": "Grace Fredrick",
@@ -31366,27 +31366,27 @@
      "player": "Alex Bower",
      "jerseyNumber": "7",
      "position": "S",
-     "mp": 10,
-     "sp": 38,
+     "mp": 11,
+     "sp": 42,
      "k": 0,
      "e": 4,
      "ta": 10,
-     "a": 203,
+     "a": 228,
      "sa": 5,
-     "se": 16,
-     "d": 49,
+     "se": 19,
+     "d": 54,
      "bs": 0,
      "ba": 0,
      "re": 0,
      "bhe": 0,
-     "sat": 148
+     "sat": 163
     },
     {
      "player": "Kaylee Tingey",
      "jerseyNumber": "3",
      "position": "L",
-     "mp": 7,
-     "sp": 26,
+     "mp": 8,
+     "sp": 29,
      "k": 0,
      "e": 0,
      "ta": 0,
@@ -32600,42 +32600,42 @@
   },
   {
    "team": "Kansas St.",
-   "matches": 10,
+   "matches": 11,
    "players": [
     {
      "player": "Addison Massey",
      "jerseyNumber": "15",
      "position": "OPP",
-     "mp": 10,
-     "sp": 38,
-     "k": 160,
-     "e": 64,
-     "ta": 371,
-     "a": 6,
+     "mp": 11,
+     "sp": 42,
+     "k": 183,
+     "e": 73,
+     "ta": 427,
+     "a": 7,
      "sa": 10,
-     "se": 9,
-     "d": 75,
+     "se": 10,
+     "d": 83,
      "bs": 10,
-     "ba": 11,
-     "re": 9,
+     "ba": 12,
+     "re": 12,
      "bhe": 0,
-     "sat": 151
+     "sat": 164
     },
     {
      "player": "Skylar Brady",
      "jerseyNumber": "11",
      "position": "OPP",
-     "mp": 10,
-     "sp": 32,
-     "k": 78,
-     "e": 39,
-     "ta": 210,
+     "mp": 11,
+     "sp": 35,
+     "k": 82,
+     "e": 41,
+     "ta": 228,
      "a": 1,
      "sa": 2,
      "se": 1,
-     "d": 25,
+     "d": 27,
      "bs": 4,
-     "ba": 14,
+     "ba": 16,
      "re": 6,
      "bhe": 0,
      "sat": 35
@@ -32644,94 +32644,94 @@
      "player": "Reagan Fox",
      "jerseyNumber": "4",
      "position": "OH",
-     "mp": 10,
-     "sp": 37,
-     "k": 57,
-     "e": 29,
-     "ta": 154,
+     "mp": 11,
+     "sp": 41,
+     "k": 62,
+     "e": 31,
+     "ta": 170,
      "a": 7,
-     "sa": 0,
+     "sa": 1,
      "se": 2,
-     "d": 21,
+     "d": 23,
      "bs": 2,
-     "ba": 18,
+     "ba": 20,
      "re": 2,
      "bhe": 0,
-     "sat": 6
-    },
-    {
-     "player": "Sydney Maue",
-     "jerseyNumber": "2",
-     "position": "OH",
-     "mp": 9,
-     "sp": 32,
-     "k": 44,
-     "e": 19,
-     "ta": 98,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 13,
-     "bs": 0,
-     "ba": 7,
-     "re": 0,
-     "bhe": 0,
-     "sat": 2
+     "sat": 12
     },
     {
      "player": "Ellah Derrer",
      "jerseyNumber": "27",
      "position": "MB",
-     "mp": 10,
-     "sp": 33,
-     "k": 42,
-     "e": 7,
-     "ta": 88,
+     "mp": 11,
+     "sp": 37,
+     "k": 46,
+     "e": 8,
+     "ta": 98,
      "a": 3,
-     "sa": 9,
-     "se": 6,
-     "d": 18,
-     "bs": 5,
-     "ba": 20,
+     "sa": 10,
+     "se": 7,
+     "d": 21,
+     "bs": 6,
+     "ba": 23,
      "re": 1,
      "bhe": 0,
-     "sat": 105
+     "sat": 117
     },
     {
-     "player": "Cadence Lundgren",
-     "jerseyNumber": "16",
-     "position": "MB",
+     "player": "Sydney Maue",
+     "jerseyNumber": "2",
+     "position": "OH",
      "mp": 10,
      "sp": 33,
-     "k": 39,
-     "e": 10,
-     "ta": 84,
+     "k": 45,
+     "e": 22,
+     "ta": 106,
      "a": 0,
      "sa": 0,
      "se": 0,
-     "d": 5,
-     "bs": 7,
-     "ba": 26,
+     "d": 13,
+     "bs": 0,
+     "ba": 8,
      "re": 0,
      "bhe": 0,
-     "sat": 0
+     "sat": 2
     },
     {
      "player": "Avery Stones",
      "jerseyNumber": "5",
      "position": "OH",
-     "mp": 9,
-     "sp": 27,
-     "k": 37,
-     "e": 16,
-     "ta": 110,
+     "mp": 10,
+     "sp": 31,
+     "k": 43,
+     "e": 22,
+     "ta": 137,
      "a": 0,
      "sa": 0,
      "se": 0,
-     "d": 8,
+     "d": 9,
      "bs": 1,
      "ba": 6,
-     "re": 2,
+     "re": 3,
+     "bhe": 0,
+     "sat": 1
+    },
+    {
+     "player": "Cadence Lundgren",
+     "jerseyNumber": "16",
+     "position": "MB",
+     "mp": 11,
+     "sp": 35,
+     "k": 41,
+     "e": 11,
+     "ta": 90,
+     "a": 0,
+     "sa": 0,
+     "se": 0,
+     "d": 5,
+     "bs": 7,
+     "ba": 28,
+     "re": 0,
      "bhe": 0,
      "sat": 0
     },
@@ -32739,17 +32739,17 @@
      "player": "Reese Resmer",
      "jerseyNumber": "21",
      "position": "MB",
-     "mp": 8,
-     "sp": 22,
-     "k": 21,
+     "mp": 9,
+     "sp": 24,
+     "k": 26,
      "e": 11,
-     "ta": 51,
+     "ta": 57,
      "a": 0,
      "sa": 0,
      "se": 1,
-     "d": 1,
-     "bs": 4,
-     "ba": 13,
+     "d": 2,
+     "bs": 5,
+     "ba": 14,
      "re": 0,
      "bhe": 0,
      "sat": 11
@@ -32758,103 +32758,103 @@
      "player": "Emerson Van Lannen",
      "jerseyNumber": "13",
      "position": "S",
-     "mp": 10,
-     "sp": 38,
-     "k": 9,
+     "mp": 11,
+     "sp": 42,
+     "k": 11,
      "e": 1,
-     "ta": 27,
-     "a": 213,
-     "sa": 22,
-     "se": 9,
-     "d": 72,
+     "ta": 30,
+     "a": 237,
+     "sa": 23,
+     "se": 10,
+     "d": 77,
      "bs": 0,
      "ba": 1,
      "re": 0,
      "bhe": 0,
-     "sat": 186
+     "sat": 200
     },
     {
      "player": "Lauren Latham",
      "jerseyNumber": "23",
      "position": "S",
-     "mp": 9,
-     "sp": 27,
+     "mp": 10,
+     "sp": 29,
      "k": 5,
      "e": 1,
-     "ta": 13,
-     "a": 79,
+     "ta": 14,
+     "a": 83,
      "sa": 3,
-     "se": 7,
-     "d": 26,
+     "se": 9,
+     "d": 31,
      "bs": 0,
      "ba": 0,
      "re": 0,
      "bhe": 0,
-     "sat": 61
+     "sat": 66
     },
     {
      "player": "Camdyn Stucky",
      "jerseyNumber": "8",
      "position": "S",
-     "mp": 8,
-     "sp": 23,
+     "mp": 9,
+     "sp": 25,
      "k": 1,
      "e": 2,
      "ta": 7,
-     "a": 82,
+     "a": 93,
      "sa": 3,
-     "se": 7,
-     "d": 32,
+     "se": 9,
+     "d": 35,
      "bs": 0,
      "ba": 2,
      "re": 0,
      "bhe": 0,
-     "sat": 65
+     "sat": 73
     },
     {
      "player": "Caleigh Ponn",
      "jerseyNumber": "1",
      "position": "L",
-     "mp": 10,
-     "sp": 36,
+     "mp": 11,
+     "sp": 40,
      "k": 0,
      "e": 0,
      "ta": 0,
-     "a": 4,
+     "a": 5,
      "sa": 6,
-     "se": 12,
-     "d": 46,
+     "se": 14,
+     "d": 55,
      "bs": 0,
      "ba": 0,
      "re": 4,
      "bhe": 0,
-     "sat": 105
+     "sat": 117
     },
     {
      "player": "Fuka Sekita",
      "jerseyNumber": "",
      "position": "L",
-     "mp": 10,
-     "sp": 38,
+     "mp": 11,
+     "sp": 42,
      "k": 0,
      "e": 0,
      "ta": 3,
-     "a": 50,
-     "sa": 5,
+     "a": 57,
+     "sa": 9,
      "se": 10,
-     "d": 139,
+     "d": 148,
      "bs": 0,
      "ba": 0,
      "re": 6,
      "bhe": 0,
-     "sat": 145
+     "sat": 161
     },
     {
      "player": "Chandler Carter",
      "jerseyNumber": "9",
      "position": "L",
-     "mp": 4,
-     "sp": 10,
+     "mp": 5,
+     "sp": 11,
      "k": 0,
      "e": 0,
      "ta": 0,
@@ -32866,7 +32866,7 @@
      "ba": 0,
      "re": 0,
      "bhe": 0,
-     "sat": 9
+     "sat": 10
     },
     {
      "player": "Alex Klukvin",
@@ -33951,11 +33951,11 @@
   {
    "team": "BYU",
    "season": "2026",
-   "matches": 10,
-   "sets": 38,
-   "serviceAces": 53,
-   "serviceErrors": 77,
-   "serveAttempts": 854,
+   "matches": 11,
+   "sets": 42,
+   "serviceAces": 58,
+   "serviceErrors": 88,
+   "serveAttempts": 954,
    "big12": true,
    "pollRank": 18
   },
@@ -34004,11 +34004,11 @@
   {
    "team": "Indiana",
    "season": "2026",
-   "matches": 11,
-   "sets": 35,
-   "serviceAces": 61,
-   "serviceErrors": 83,
-   "serveAttempts": 803,
+   "matches": 12,
+   "sets": 40,
+   "serviceAces": 69,
+   "serviceErrors": 97,
+   "serveAttempts": 895,
    "big12": false,
    "pollRank": 15
   },
@@ -34036,11 +34036,11 @@
   {
    "team": "Kansas St.",
    "season": "2026",
-   "matches": 10,
-   "sets": 38,
-   "serviceAces": 61,
-   "serviceErrors": 66,
-   "serveAttempts": 882,
+   "matches": 11,
+   "sets": 42,
+   "serviceAces": 68,
+   "serviceErrors": 75,
+   "serveAttempts": 970,
    "big12": true
   },
   {
@@ -34068,11 +34068,11 @@
   {
    "team": "Minnesota",
    "season": "2026",
-   "matches": 10,
-   "sets": 36,
-   "serviceAces": 74,
-   "serviceErrors": 110,
-   "serveAttempts": 849,
+   "matches": 11,
+   "sets": 39,
+   "serviceAces": 83,
+   "serviceErrors": 118,
+   "serveAttempts": 922,
    "big12": false,
    "pollRank": 20
   },
@@ -34263,11 +34263,11 @@
   {
    "team": "Wisconsin",
    "season": "2026",
-   "matches": 12,
-   "sets": 45,
-   "serviceAces": 59,
-   "serviceErrors": 107,
-   "serveAttempts": 1008,
+   "matches": 13,
+   "sets": 50,
+   "serviceAces": 67,
+   "serviceErrors": 110,
+   "serveAttempts": 1114,
    "big12": false,
    "pollRank": 6
   }
