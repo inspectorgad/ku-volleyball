@@ -7996,7 +7996,7 @@
    "home": {
     "name": "Kansas",
     "seo": "kansas",
-    "score": 2,
+    "score": 3,
     "winner": true,
     "rank": 19,
     "inConference": true
@@ -9165,6 +9165,27 @@
     "inConference": false
    },
    "conferenceGame": false
+  },
+  "6626883": {
+   "date": "2026-10-01",
+   "season": "2026",
+   "home": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 18,
+    "inConference": true
+   },
+   "conferenceGame": true
   },
   "6626979": {
    "date": "2026-09-04",
@@ -10919,6 +10940,15 @@
    ],
    "boxscored": true
   },
+  "6624247": {
+   "date": "2026-10-01",
+   "season": "2026",
+   "teams": [
+    "Wisconsin",
+    "Indiana"
+   ],
+   "boxscored": true
+  },
   "6624279": {
    "date": "2026-09-25",
    "season": "2026",
@@ -11183,6 +11213,14 @@
    "teams": [
     "Minnesota",
     "Oregon"
+   ],
+   "boxscored": true
+  },
+  "6624835": {
+   "date": "2026-10-01",
+   "season": "2026",
+   "teams": [
+    "Minnesota"
    ],
    "boxscored": true
   },
@@ -12449,6 +12487,15 @@
    "date": "2026-09-19",
    "season": "2026",
    "teams": [
+    "BYU"
+   ],
+   "boxscored": true
+  },
+  "6626883": {
+   "date": "2026-10-01",
+   "season": "2026",
+   "teams": [
+    "Kansas St.",
     "BYU"
    ],
    "boxscored": true
