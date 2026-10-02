@@ -1,12 +1,12 @@
 {
- "capturedAt": "2026-10-02T11:18:45.893Z",
+ "capturedAt": "2026-10-02T15:57:15.701Z",
  "sport": "Women's Volleyball",
  "categories": [
   {
    "id": "42",
    "name": "Aces Per Set",
    "title": "Aces Per Set",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -54,17 +54,6 @@
     },
     {
      "Rank": "5",
-     "Name": "Ema Petkovic",
-     "Team": "UTRGV",
-     "Cl": "So.",
-     "Height": "6-2",
-     "Position": "RS",
-     "S": "47",
-     "Aces": "35",
-     "Per Set": ".74"
-    },
-    {
-     "Rank": "6",
      "Name": "Emersen Schrom",
      "Team": "Duquesne",
      "Cl": "Jr.",
@@ -72,6 +61,17 @@
      "Position": "OH",
      "S": "47",
      "Aces": "34",
+     "Per Set": ".72"
+    },
+    {
+     "Rank": "6",
+     "Name": "Mckenna Wucherer",
+     "Team": "Minnesota",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "39",
+     "Aces": "28",
      "Per Set": ".72"
     },
     {
@@ -86,40 +86,18 @@
      "Per Set": ".70"
     },
     {
-     "Rank": "-",
-     "Name": "Antonie Kelnárová",
-     "Team": "Saint Mary's (CA)",
-     "Cl": "Jr.",
-     "Height": "5-10",
-     "Position": "OH",
-     "S": "56",
-     "Aces": "39",
-     "Per Set": ".70"
+     "Rank": "8",
+     "Name": "Ema Petkovic",
+     "Team": "UTRGV",
+     "Cl": "So.",
+     "Height": "6-2",
+     "Position": "RS",
+     "S": "51",
+     "Aces": "35",
+     "Per Set": ".69"
     },
     {
      "Rank": "9",
-     "Name": "Mckenna Wucherer",
-     "Team": "Minnesota",
-     "Cl": "Sr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "S": "36",
-     "Aces": "25",
-     "Per Set": ".69"
-    },
-    {
-     "Rank": "10",
-     "Name": "Ruth Ziegler",
-     "Team": "Illinois St.",
-     "Cl": "Jr.",
-     "Height": "6-3",
-     "Position": "OPP",
-     "S": "39",
-     "Aces": "27",
-     "Per Set": ".69"
-    },
-    {
-     "Rank": "11",
      "Name": "Karis Willow",
      "Team": "Rutgers",
      "Cl": "Jr.",
@@ -130,7 +108,18 @@
      "Per Set": ".67"
     },
     {
-     "Rank": "12",
+     "Rank": "10",
+     "Name": "Antonie Kelnárová",
+     "Team": "Saint Mary's (CA)",
+     "Cl": "Jr.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "59",
+     "Aces": "39",
+     "Per Set": ".66"
+    },
+    {
+     "Rank": "11",
      "Name": "Ashby Zubchevich",
      "Team": "Duke",
      "Cl": "So.",
@@ -141,14 +130,25 @@
      "Per Set": ".65"
     },
     {
-     "Rank": "13",
+     "Rank": "12",
      "Name": "Jenna Legault",
      "Team": "Fresno St.",
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "S": "50",
-     "Aces": "32",
+     "S": "54",
+     "Aces": "35",
+     "Per Set": ".65"
+    },
+    {
+     "Rank": "13",
+     "Name": "Ruth Ziegler",
+     "Team": "Illinois St.",
+     "Cl": "Jr.",
+     "Height": "6-3",
+     "Position": "OPP",
+     "S": "42",
+     "Aces": "27",
      "Per Set": ".64"
     },
     {
@@ -208,6 +208,17 @@
     },
     {
      "Rank": "19",
+     "Name": "McKenna Garr",
+     "Team": "Minnesota",
+     "Cl": "So.",
+     "Height": "5-7",
+     "Position": "L/DS",
+     "S": "39",
+     "Aces": "23",
+     "Per Set": ".59"
+    },
+    {
+     "Rank": "-",
      "Name": "Piper Rama",
      "Team": "Arizona St.",
      "Cl": "Jr.",
@@ -218,7 +229,7 @@
      "Per Set": ".59"
     },
     {
-     "Rank": "20",
+     "Rank": "21",
      "Name": "Abbie Lyttle",
      "Team": "Bellarmine",
      "Cl": "Fr.",
@@ -229,7 +240,7 @@
      "Per Set": ".58"
     },
     {
-     "Rank": "21",
+     "Rank": "22",
      "Name": "Jazeli Vandenburgh",
      "Team": "Norfolk St.",
      "Cl": "Jr.",
@@ -240,18 +251,18 @@
      "Per Set": ".58"
     },
     {
-     "Rank": "22",
-     "Name": "Emerson Van Lannen",
-     "Team": "Kansas St.",
-     "Cl": "Jr.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "38",
-     "Aces": "22",
-     "Per Set": ".58"
+     "Rank": "23",
+     "Name": "Kennedy Louisell",
+     "Team": "James Madison",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "47",
+     "Aces": "27",
+     "Per Set": ".57"
     },
     {
-     "Rank": "23",
+     "Rank": "24",
      "Name": "Kate Rush",
      "Team": "Western Ky.",
      "Cl": "So.",
@@ -262,7 +273,7 @@
      "Per Set": ".57"
     },
     {
-     "Rank": "24",
+     "Rank": "25",
      "Name": "Helena Vukovic",
      "Team": "Col. of Charleston",
      "Cl": "Jr.",
@@ -271,17 +282,6 @@
      "S": "44",
      "Aces": "25",
      "Per Set": ".57"
-    },
-    {
-     "Rank": "25",
-     "Name": "Courtney Nix",
-     "Team": "Delaware St.",
-     "Cl": "Sr.",
-     "Height": "5-8",
-     "Position": "L/DS",
-     "S": "54",
-     "Aces": "30",
-     "Per Set": ".56"
     },
     {
      "Rank": "26",
@@ -296,13 +296,13 @@
     },
     {
      "Rank": "27",
-     "Name": "Kennedy Louisell",
-     "Team": "James Madison",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "44",
-     "Aces": "24",
+     "Name": "Emerson Van Lannen",
+     "Team": "Kansas St.",
+     "Cl": "Jr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "42",
+     "Aces": "23",
      "Per Set": ".55"
     },
     {
@@ -318,17 +318,6 @@
     },
     {
      "Rank": "29",
-     "Name": "Jeryn Hildenbrand",
-     "Team": "Portland",
-     "Cl": "So.",
-     "Height": "5-5",
-     "Position": "DS",
-     "S": "39",
-     "Aces": "21",
-     "Per Set": ".54"
-    },
-    {
-     "Rank": "-",
      "Name": "Malayah Long",
      "Team": "Michigan St.",
      "Cl": "So.",
@@ -350,7 +339,7 @@
      "Per Set": ".54"
     },
     {
-     "Rank": "32",
+     "Rank": "31",
      "Name": "Abby Zimmerman",
      "Team": "California",
      "Cl": "Fr.",
@@ -361,18 +350,18 @@
      "Per Set": ".54"
     },
     {
-     "Rank": "33",
-     "Name": "Lauren Perry",
-     "Team": "UTEP",
-     "Cl": "Jr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "56",
-     "Aces": "30",
-     "Per Set": ".54"
+     "Rank": "32",
+     "Name": "Courtney Nix",
+     "Team": "Delaware St.",
+     "Cl": "Sr.",
+     "Height": "5-8",
+     "Position": "L/DS",
+     "S": "58",
+     "Aces": "31",
+     "Per Set": ".53"
     },
     {
-     "Rank": "34",
+     "Rank": "33",
      "Name": "Jazen Debina",
      "Team": "Cleveland St.",
      "Cl": "Jr.",
@@ -383,7 +372,7 @@
      "Per Set": ".53"
     },
     {
-     "Rank": "35",
+     "Rank": "34",
      "Name": "Addie Huber",
      "Team": "Loyola Maryland",
      "Cl": "So.",
@@ -391,6 +380,17 @@
      "Position": "L/DS",
      "S": "49",
      "Aces": "26",
+     "Per Set": ".53"
+    },
+    {
+     "Rank": "35",
+     "Name": "Lauren Perry",
+     "Team": "UTEP",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "59",
+     "Aces": "31",
      "Per Set": ".53"
     },
     {
@@ -406,13 +406,13 @@
     },
     {
      "Rank": "37",
-     "Name": "Ana Appel",
-     "Team": "Oral Roberts",
-     "Cl": "Fr.",
-     "Height": "5-9",
-     "Position": "S",
-     "S": "48",
-     "Aces": "25",
+     "Name": "Jeryn Hildenbrand",
+     "Team": "Portland",
+     "Cl": "So.",
+     "Height": "5-5",
+     "Position": "DS",
+     "S": "42",
+     "Aces": "22",
      "Per Set": ".52"
     },
     {
@@ -428,17 +428,6 @@
     },
     {
      "Rank": "39",
-     "Name": "Reagan Anderson",
-     "Team": "Austin Peay",
-     "Cl": "Sr.",
-     "Height": "5-5",
-     "Position": "L/DS",
-     "S": "58",
-     "Aces": "30",
-     "Per Set": ".52"
-    },
-    {
-     "Rank": "40",
      "Name": "Madison Hsieh",
      "Team": "Columbia",
      "Cl": "Sr.",
@@ -449,14 +438,25 @@
      "Per Set": ".51"
     },
     {
+     "Rank": "40",
+     "Name": "Ana Appel",
+     "Team": "Oral Roberts",
+     "Cl": "Fr.",
+     "Height": "5-9",
+     "Position": "S",
+     "S": "49",
+     "Aces": "25",
+     "Per Set": ".51"
+    },
+    {
      "Rank": "41",
      "Name": "Ava Blascziek",
      "Team": "Portland St.",
      "Cl": "Sr.",
      "Height": "5-10",
      "Position": "S",
-     "S": "47",
-     "Aces": "24",
+     "S": "51",
+     "Aces": "26",
      "Per Set": ".51"
     },
     {
@@ -472,28 +472,6 @@
     },
     {
      "Rank": "-",
-     "Name": "McKenna Garr",
-     "Team": "Minnesota",
-     "Cl": "So.",
-     "Height": "5-7",
-     "Position": "L/DS",
-     "S": "36",
-     "Aces": "18",
-     "Per Set": ".50"
-    },
-    {
-     "Rank": "-",
-     "Name": "Jillian Gregory",
-     "Team": "Illinois St.",
-     "Cl": "So.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "30",
-     "Aces": "15",
-     "Per Set": ".50"
-    },
-    {
-     "Rank": "-",
      "Name": "Kaylee Lowther",
      "Team": "Southern Miss.",
      "Cl": "Jr.",
@@ -504,18 +482,18 @@
      "Per Set": ".50"
     },
     {
-     "Rank": "-",
-     "Name": "Tessa Treanor",
-     "Team": "Utah Tech",
+     "Rank": "44",
+     "Name": "Reagan Anderson",
+     "Team": "Austin Peay",
      "Cl": "Sr.",
-     "Height": "5-11",
-     "Position": "OH",
-     "S": "46",
-     "Aces": "23",
-     "Per Set": ".50"
+     "Height": "5-5",
+     "Position": "L/DS",
+     "S": "61",
+     "Aces": "30",
+     "Per Set": ".49"
     },
     {
-     "Rank": "47",
+     "Rank": "45",
      "Name": "Grace Kreutz",
      "Team": "Miami (OH)",
      "Cl": "So.",
@@ -526,29 +504,7 @@
      "Per Set": ".49"
     },
     {
-     "Rank": "48",
-     "Name": "Caroline Formankova",
-     "Team": "Saint Mary's (CA)",
-     "Cl": "So.",
-     "Height": "6-3",
-     "Position": "OPP",
-     "S": "43",
-     "Aces": "21",
-     "Per Set": ".49"
-    },
-    {
-     "Rank": "49",
-     "Name": "Teodora Kričković",
-     "Team": "Indiana",
-     "Cl": "So.",
-     "Height": "6-2",
-     "Position": "S",
-     "S": "39",
-     "Aces": "19",
-     "Per Set": ".49"
-    },
-    {
-     "Rank": "50",
+     "Rank": "46",
      "Name": "Sjakkie Donkers",
      "Team": "Oregon",
      "Cl": "Jr.",
@@ -557,6 +513,50 @@
      "S": "29",
      "Aces": "14",
      "Per Set": ".48"
+    },
+    {
+     "Rank": "-",
+     "Name": "Maggie Uhwat",
+     "Team": "Valparaiso",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "58",
+     "Aces": "28",
+     "Per Set": ".48"
+    },
+    {
+     "Rank": "48",
+     "Name": "Giada Ianuale",
+     "Team": "Fordham",
+     "Cl": "Fr.",
+     "Height": "6-1",
+     "Position": "S",
+     "S": "56",
+     "Aces": "27",
+     "Per Set": ".48"
+    },
+    {
+     "Rank": "-",
+     "Name": "Chloe Smith",
+     "Team": "Wofford",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "56",
+     "Aces": "27",
+     "Per Set": ".48"
+    },
+    {
+     "Rank": "50",
+     "Name": "Jaylyn Tuiasosopo",
+     "Team": "Jacksonville",
+     "Cl": "Fr.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "50",
+     "Aces": "24",
+     "Per Set": ".48"
     }
    ]
   },
@@ -564,7 +564,7 @@
    "id": "3",
    "name": "Assists Per Set",
    "title": "Assists Per Set",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -601,36 +601,36 @@
     },
     {
      "Rank": "4",
-     "Name": "Charlie Fuerbringer",
-     "Team": "Wisconsin",
-     "Cl": "Jr.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "45",
-     "Assists": "508",
-     "Per Set": "11.29"
-    },
-    {
-     "Rank": "5",
-     "Name": "Jenna Meitzler",
-     "Team": "Iowa",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "S",
-     "S": "59",
-     "Assists": "662",
-     "Per Set": "11.22"
-    },
-    {
-     "Rank": "6",
      "Name": "Sara Toth",
      "Team": "Maryland",
      "Cl": "So.",
      "Height": "6-0",
      "Position": "S",
-     "S": "40",
-     "Assists": "446",
-     "Per Set": "11.15"
+     "S": "45",
+     "Assists": "502",
+     "Per Set": "11.16"
+    },
+    {
+     "Rank": "5",
+     "Name": "Charlie Fuerbringer",
+     "Team": "Wisconsin",
+     "Cl": "Jr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "50",
+     "Assists": "555",
+     "Per Set": "11.10"
+    },
+    {
+     "Rank": "6",
+     "Name": "Jenna Meitzler",
+     "Team": "Iowa",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "S",
+     "S": "64",
+     "Assists": "706",
+     "Per Set": "11.03"
     },
     {
      "Rank": "7",
@@ -645,20 +645,20 @@
     },
     {
      "Rank": "8",
-     "Name": "Stella Swenson",
-     "Team": "Minnesota",
-     "Cl": "So.",
-     "Height": "6-1",
-     "Position": "S",
-     "S": "36",
-     "Assists": "394",
-     "Per Set": "10.94"
-    },
-    {
-     "Rank": "9",
      "Name": "Izzy Starck",
      "Team": "Pittsburgh",
      "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "S",
+     "S": "39",
+     "Assists": "423",
+     "Per Set": "10.85"
+    },
+    {
+     "Rank": "-",
+     "Name": "Stella Swenson",
+     "Team": "Minnesota",
+     "Cl": "So.",
      "Height": "6-1",
      "Position": "S",
      "S": "39",
@@ -678,25 +678,25 @@
     },
     {
      "Rank": "11",
-     "Name": "Teodora Kričković",
-     "Team": "Indiana",
-     "Cl": "So.",
-     "Height": "6-2",
-     "Position": "S",
-     "S": "39",
-     "Assists": "421",
-     "Per Set": "10.79"
-    },
-    {
-     "Rank": "12",
      "Name": "Bergen Reilly",
      "Team": "Nebraska",
      "Cl": "Sr.",
      "Height": "6-1",
      "Position": "S",
-     "S": "36",
-     "Assists": "388",
-     "Per Set": "10.78"
+     "S": "39",
+     "Assists": "422",
+     "Per Set": "10.82"
+    },
+    {
+     "Rank": "12",
+     "Name": "Teodora Kričković",
+     "Team": "Indiana",
+     "Cl": "So.",
+     "Height": "6-2",
+     "Position": "S",
+     "S": "44",
+     "Assists": "475",
+     "Per Set": "10.80"
     },
     {
      "Rank": "13",
@@ -738,8 +738,8 @@
      "Cl": "Jr.",
      "Height": "5-11",
      "Position": "S",
-     "S": "45",
-     "Assists": "479",
+     "S": "50",
+     "Assists": "532",
      "Per Set": "10.64"
     },
     {
@@ -755,6 +755,28 @@
     },
     {
      "Rank": "18",
+     "Name": "Reese Messer",
+     "Team": "Kansas",
+     "Cl": "So.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "41",
+     "Assists": "433",
+     "Per Set": "10.56"
+    },
+    {
+     "Rank": "19",
+     "Name": "Macy Hinshaw",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "5-9",
+     "Position": "S",
+     "S": "60",
+     "Assists": "633",
+     "Per Set": "10.55"
+    },
+    {
+     "Rank": "20",
      "Name": "Taylor Parks",
      "Team": "Florida",
      "Cl": "Jr.",
@@ -765,7 +787,7 @@
      "Per Set": "10.53"
     },
     {
-     "Rank": "19",
+     "Rank": "21",
      "Name": "Kaci Johnson",
      "Team": "Lindenwood",
      "Cl": "Jr.",
@@ -776,7 +798,7 @@
      "Per Set": "10.50"
     },
     {
-     "Rank": "20",
+     "Rank": "22",
      "Name": "Kate Lijic",
      "Team": "Cincinnati",
      "Cl": "Jr.",
@@ -785,28 +807,6 @@
      "S": "40",
      "Assists": "419",
      "Per Set": "10.48"
-    },
-    {
-     "Rank": "21",
-     "Name": "Macy Hinshaw",
-     "Team": "Santa Clara",
-     "Cl": "Jr.",
-     "Height": "5-9",
-     "Position": "S",
-     "S": "57",
-     "Assists": "596",
-     "Per Set": "10.46"
-    },
-    {
-     "Rank": "22",
-     "Name": "Reese Messer",
-     "Team": "Kansas",
-     "Cl": "So.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "38",
-     "Assists": "397",
-     "Per Set": "10.45"
     },
     {
      "Rank": "23",
@@ -843,6 +843,28 @@
     },
     {
      "Rank": "26",
+     "Name": "Avery Van Hook",
+     "Team": "South Dakota",
+     "Cl": "Sr.",
+     "Height": "5-9",
+     "Position": "S",
+     "S": "36",
+     "Assists": "371",
+     "Per Set": "10.31"
+    },
+    {
+     "Rank": "27",
+     "Name": "Erin Debiec",
+     "Team": "Colorado St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "S",
+     "S": "48",
+     "Assists": "494",
+     "Per Set": "10.29"
+    },
+    {
+     "Rank": "28",
      "Name": "Kenna Phelan",
      "Team": "Illinois",
      "Cl": "Sr.",
@@ -864,7 +886,18 @@
      "Per Set": "10.29"
     },
     {
-     "Rank": "28",
+     "Rank": "30",
+     "Name": "Jackie Matias",
+     "Team": "Oregon St.",
+     "Cl": "Sr.",
+     "Height": "5-9",
+     "Position": "S",
+     "S": "45",
+     "Assists": "462",
+     "Per Set": "10.27"
+    },
+    {
+     "Rank": "31",
      "Name": "Leah Richmond",
      "Team": "Western Mich.",
      "Cl": "So.",
@@ -875,18 +908,7 @@
      "Per Set": "10.26"
     },
     {
-     "Rank": "29",
-     "Name": "Erin Debiec",
-     "Team": "Colorado St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "S",
-     "S": "43",
-     "Assists": "441",
-     "Per Set": "10.26"
-    },
-    {
-     "Rank": "30",
+     "Rank": "32",
      "Name": "Kennedi Inman",
      "Team": "Delaware",
      "Cl": "Sr.",
@@ -897,7 +919,7 @@
      "Per Set": "10.23"
     },
     {
-     "Rank": "31",
+     "Rank": "33",
      "Name": "Abbigail Pickard",
      "Team": "Northern Ky.",
      "Cl": "So.",
@@ -908,7 +930,7 @@
      "Per Set": "10.21"
     },
     {
-     "Rank": "32",
+     "Rank": "34",
      "Name": "Charlee Solomon",
      "Team": "Tulane",
      "Cl": "So.",
@@ -919,7 +941,7 @@
      "Per Set": "10.21"
     },
     {
-     "Rank": "33",
+     "Rank": "35",
      "Name": "Kelsey Schenck",
      "Team": "Lipscomb",
      "Cl": "Jr.",
@@ -930,18 +952,7 @@
      "Per Set": "10.20"
     },
     {
-     "Rank": "34",
-     "Name": "Jackie Matias",
-     "Team": "Oregon St.",
-     "Cl": "Sr.",
-     "Height": "5-9",
-     "Position": "S",
-     "S": "41",
-     "Assists": "418",
-     "Per Set": "10.20"
-    },
-    {
-     "Rank": "35",
+     "Rank": "36",
      "Name": "Kinslee McGowan",
      "Team": "North Ala.",
      "Cl": "Jr.",
@@ -950,17 +961,6 @@
      "S": "50",
      "Assists": "509",
      "Per Set": "10.18"
-    },
-    {
-     "Rank": "36",
-     "Name": "Ellie Stiernagle",
-     "Team": "Northwestern",
-     "Cl": "Fr.",
-     "Height": "6-2",
-     "Position": "S",
-     "S": "48",
-     "Assists": "488",
-     "Per Set": "10.17"
     },
     {
      "Rank": "37",
@@ -986,17 +986,6 @@
     },
     {
      "Rank": "39",
-     "Name": "Avery Van Hook",
-     "Team": "South Dakota",
-     "Cl": "Sr.",
-     "Height": "5-9",
-     "Position": "S",
-     "S": "33",
-     "Assists": "335",
-     "Per Set": "10.15"
-    },
-    {
-     "Rank": "40",
      "Name": "Logan Parks",
      "Team": "Stanford",
      "Cl": "So.",
@@ -1007,7 +996,7 @@
      "Per Set": "10.13"
     },
     {
-     "Rank": "41",
+     "Rank": "40",
      "Name": "Lexi Thatcher",
      "Team": "Winthrop",
      "Cl": "Sr.",
@@ -1015,6 +1004,17 @@
      "Position": "S",
      "S": "33",
      "Assists": "334",
+     "Per Set": "10.12"
+    },
+    {
+     "Rank": "41",
+     "Name": "Deniz Dakak",
+     "Team": "American",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "S",
+     "S": "50",
+     "Assists": "506",
      "Per Set": "10.12"
     },
     {
@@ -1052,17 +1052,6 @@
     },
     {
      "Rank": "45",
-     "Name": "Reese Booth",
-     "Team": "UNI",
-     "Cl": "Jr.",
-     "Height": "5-9",
-     "Position": "S",
-     "S": "47",
-     "Assists": "471",
-     "Per Set": "10.02"
-    },
-    {
-     "Rank": "46",
      "Name": "Eva Long",
      "Team": "NC State",
      "Cl": "Fr.",
@@ -1073,7 +1062,7 @@
      "Per Set": "10.02"
     },
     {
-     "Rank": "47",
+     "Rank": "46",
      "Name": "Maria Drapp",
      "Team": "Bradley",
      "Cl": "Jr.",
@@ -1084,29 +1073,7 @@
      "Per Set": "9.98"
     },
     {
-     "Rank": "48",
-     "Name": "Alison Ohlinger",
-     "Team": "Samford",
-     "Cl": "Fr.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "47",
-     "Assists": "469",
-     "Per Set": "9.98"
-    },
-    {
-     "Rank": "49",
-     "Name": "Deniz Dakak",
-     "Team": "American",
-     "Cl": "Jr.",
-     "Height": "6-0",
-     "Position": "S",
-     "S": "45",
-     "Assists": "449",
-     "Per Set": "9.98"
-    },
-    {
-     "Rank": "50",
+     "Rank": "47",
      "Name": "Izora Gragg",
      "Team": "UNC Greensboro",
      "Cl": "Sr.",
@@ -1115,6 +1082,39 @@
      "S": "52",
      "Assists": "518",
      "Per Set": "9.96"
+    },
+    {
+     "Rank": "48",
+     "Name": "Alexis Haury",
+     "Team": "Cal Poly",
+     "Cl": "Jr.",
+     "Height": "5-10",
+     "Position": "S",
+     "S": "48",
+     "Assists": "477",
+     "Per Set": "9.94"
+    },
+    {
+     "Rank": "49",
+     "Name": "Marina Crownover",
+     "Team": "Oregon",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "43",
+     "Assists": "427",
+     "Per Set": "9.93"
+    },
+    {
+     "Rank": "50",
+     "Name": "Hannah Parant",
+     "Team": "Alabama",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "S",
+     "S": "41",
+     "Assists": "407",
+     "Per Set": "9.93"
     }
    ]
   },
@@ -1122,7 +1122,7 @@
    "id": "890",
    "name": "Attacks Per Set",
    "title": "Attacks Per Set",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -1144,11 +1144,11 @@
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "S": "55",
-     "Kills": "236",
-     "Errors": "79",
-     "Total Attacks": "717",
-     "Per Set": "13.04"
+     "S": "59",
+     "Kills": "258",
+     "Errors": "87",
+     "Total Attacks": "779",
+     "Per Set": "13.20"
     },
     {
      "Rank": "3",
@@ -1170,11 +1170,11 @@
      "Cl": "Sr.",
      "Height": "6-1",
      "Position": "OH",
-     "S": "54",
-     "Kills": "192",
-     "Errors": "64",
-     "Total Attacks": "659",
-     "Per Set": "12.20"
+     "S": "57",
+     "Kills": "204",
+     "Errors": "70",
+     "Total Attacks": "701",
+     "Per Set": "12.30"
     },
     {
      "Rank": "5",
@@ -1183,11 +1183,11 @@
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "S": "50",
-     "Kills": "204",
-     "Errors": "79",
-     "Total Attacks": "608",
-     "Per Set": "12.16"
+     "S": "54",
+     "Kills": "215",
+     "Errors": "88",
+     "Total Attacks": "654",
+     "Per Set": "12.11"
     },
     {
      "Rank": "6",
@@ -1196,14 +1196,27 @@
      "Cl": "Sr.",
      "Height": "6-1",
      "Position": "OH",
-     "S": "47",
-     "Kills": "168",
-     "Errors": "64",
-     "Total Attacks": "568",
-     "Per Set": "12.09"
+     "S": "51",
+     "Kills": "178",
+     "Errors": "70",
+     "Total Attacks": "615",
+     "Per Set": "12.06"
     },
     {
      "Rank": "7",
+     "Name": "Cassidy Hartman",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "50",
+     "Kills": "215",
+     "Errors": "102",
+     "Total Attacks": "598",
+     "Per Set": "11.96"
+    },
+    {
+     "Rank": "8",
      "Name": "Suli Davis",
      "Team": "SMU",
      "Cl": "So.",
@@ -1216,33 +1229,33 @@
      "Per Set": "11.96"
     },
     {
-     "Rank": "8",
+     "Rank": "9",
      "Name": "Molly Creech",
      "Team": "Miami (OH)",
      "Cl": "So.",
      "Height": "5-9",
      "Position": "OH",
-     "S": "45",
-     "Kills": "174",
-     "Errors": "61",
-     "Total Attacks": "537",
-     "Per Set": "11.93"
+     "S": "48",
+     "Kills": "186",
+     "Errors": "66",
+     "Total Attacks": "573",
+     "Per Set": "11.94"
     },
     {
-     "Rank": "9",
-     "Name": "Cassidy Hartman",
+     "Rank": "10",
+     "Name": "Lily Dykstra",
      "Team": "UNI",
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "S": "47",
-     "Kills": "204",
-     "Errors": "98",
-     "Total Attacks": "560",
-     "Per Set": "11.91"
+     "S": "50",
+     "Kills": "207",
+     "Errors": "88",
+     "Total Attacks": "589",
+     "Per Set": "11.78"
     },
     {
-     "Rank": "10",
+     "Rank": "11",
      "Name": "Auma Mbeche-Odhiambo",
      "Team": "Lafayette",
      "Cl": "Jr.",
@@ -1253,19 +1266,6 @@
      "Errors": "66",
      "Total Attacks": "493",
      "Per Set": "11.74"
-    },
-    {
-     "Rank": "11",
-     "Name": "Lily Dykstra",
-     "Team": "UNI",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "47",
-     "Kills": "192",
-     "Errors": "79",
-     "Total Attacks": "549",
-     "Per Set": "11.68"
     },
     {
      "Rank": "12",
@@ -1308,19 +1308,6 @@
     },
     {
      "Rank": "15",
-     "Name": "Olivia Keckler",
-     "Team": "Central Conn. St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "OPP",
-     "S": "43",
-     "Kills": "161",
-     "Errors": "67",
-     "Total Attacks": "495",
-     "Per Set": "11.51"
-    },
-    {
-     "Rank": "16",
      "Name": "Kennedi Rogers",
      "Team": "Tennessee",
      "Cl": "So.",
@@ -1333,20 +1320,20 @@
      "Per Set": "11.50"
     },
     {
-     "Rank": "17",
-     "Name": "Mckenna Wucherer",
-     "Team": "Minnesota",
-     "Cl": "Sr.",
+     "Rank": "16",
+     "Name": "Olivia Keckler",
+     "Team": "Central Conn. St.",
+     "Cl": "Jr.",
      "Height": "6-1",
-     "Position": "OH",
-     "S": "36",
-     "Kills": "179",
-     "Errors": "43",
-     "Total Attacks": "410",
-     "Per Set": "11.39"
+     "Position": "OPP",
+     "S": "48",
+     "Kills": "180",
+     "Errors": "74",
+     "Total Attacks": "548",
+     "Per Set": "11.42"
     },
     {
-     "Rank": "18",
+     "Rank": "17",
      "Name": "Ashby Willis",
      "Team": "Southern Ind.",
      "Cl": "Sr.",
@@ -1359,7 +1346,7 @@
      "Per Set": "11.38"
     },
     {
-     "Rank": "19",
+     "Rank": "18",
      "Name": "Riley Rosneck",
      "Team": "Purdue Fort Wayne",
      "Cl": "Jr.",
@@ -1372,7 +1359,7 @@
      "Per Set": "11.37"
     },
     {
-     "Rank": "20",
+     "Rank": "19",
      "Name": "Audrey Ross",
      "Team": "Boston College",
      "Cl": "Sr.",
@@ -1385,7 +1372,7 @@
      "Per Set": "11.20"
     },
     {
-     "Rank": "21",
+     "Rank": "20",
      "Name": "Sadie McAda",
      "Team": "Southern Miss.",
      "Cl": "Sr.",
@@ -1396,6 +1383,19 @@
      "Errors": "86",
      "Total Attacks": "513",
      "Per Set": "11.15"
+    },
+    {
+     "Rank": "21",
+     "Name": "Mckenna Wucherer",
+     "Team": "Minnesota",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "39",
+     "Kills": "189",
+     "Errors": "44",
+     "Total Attacks": "434",
+     "Per Set": "11.13"
     },
     {
      "Rank": "22",
@@ -1490,6 +1490,19 @@
     },
     {
      "Rank": "29",
+     "Name": "Sylvie Zgonc",
+     "Team": "South Dakota St.",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "OH",
+     "S": "49",
+     "Kills": "230",
+     "Errors": "71",
+     "Total Attacks": "537",
+     "Per Set": "10.96"
+    },
+    {
+     "Rank": "30",
      "Name": "Belle Patrick",
      "Team": "Auburn",
      "Cl": "Jr.",
@@ -1502,7 +1515,7 @@
      "Per Set": "10.93"
     },
     {
-     "Rank": "30",
+     "Rank": "31",
      "Name": "Sydnee Peterson",
      "Team": "Rice",
      "Cl": "So.",
@@ -1515,7 +1528,7 @@
      "Per Set": "10.91"
     },
     {
-     "Rank": "31",
+     "Rank": "32",
      "Name": "Summer Kohler",
      "Team": "USC Upstate",
      "Cl": "So.",
@@ -1526,19 +1539,6 @@
      "Errors": "71",
      "Total Attacks": "523",
      "Per Set": "10.90"
-    },
-    {
-     "Rank": "32",
-     "Name": "Cortnee Smith",
-     "Team": "Oral Roberts",
-     "Cl": "Jr.",
-     "Height": "5-10",
-     "Position": "OH",
-     "S": "40",
-     "Kills": "158",
-     "Errors": "71",
-     "Total Attacks": "435",
-     "Per Set": "10.88"
     },
     {
      "Rank": "33",
@@ -1606,20 +1606,7 @@
      "Per Set": "10.75"
     },
     {
-     "Rank": "-",
-     "Name": "Sylvie Zgonc",
-     "Team": "South Dakota St.",
-     "Cl": "Sr.",
-     "Height": "5-11",
-     "Position": "OH",
-     "S": "44",
-     "Kills": "209",
-     "Errors": "57",
-     "Total Attacks": "473",
-     "Per Set": "10.75"
-    },
-    {
-     "Rank": "39",
+     "Rank": "38",
      "Name": "Emma Sorensen",
      "Team": "Holy Cross",
      "Cl": "So.",
@@ -1630,6 +1617,19 @@
      "Errors": "81",
      "Total Attacks": "634",
      "Per Set": "10.75"
+    },
+    {
+     "Rank": "39",
+     "Name": "Lauren Medeck",
+     "Team": "South Dakota",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "46",
+     "Kills": "160",
+     "Errors": "60",
+     "Total Attacks": "493",
+     "Per Set": "10.72"
     },
     {
      "Rank": "40",
@@ -1651,11 +1651,11 @@
      "Cl": "Jr.",
      "Height": "6-1",
      "Position": "OH",
-     "S": "54",
-     "Kills": "219",
-     "Errors": "103",
-     "Total Attacks": "577",
-     "Per Set": "10.69"
+     "S": "57",
+     "Kills": "226",
+     "Errors": "113",
+     "Total Attacks": "609",
+     "Per Set": "10.68"
     },
     {
      "Rank": "42",
@@ -1698,19 +1698,32 @@
     },
     {
      "Rank": "45",
-     "Name": "Lauren Medeck",
-     "Team": "South Dakota",
+     "Name": "Cortnee Smith",
+     "Team": "Oral Roberts",
      "Cl": "Jr.",
-     "Height": "6-0",
+     "Height": "5-10",
      "Position": "OH",
      "S": "43",
-     "Kills": "150",
-     "Errors": "53",
+     "Kills": "163",
+     "Errors": "76",
      "Total Attacks": "456",
      "Per Set": "10.60"
     },
     {
      "Rank": "46",
+     "Name": "Maria Tabacuks",
+     "Team": "LMU (CA)",
+     "Cl": "Fr.",
+     "Height": "6-4",
+     "Position": "OH",
+     "S": "55",
+     "Kills": "211",
+     "Errors": "68",
+     "Total Attacks": "582",
+     "Per Set": "10.58"
+    },
+    {
+     "Rank": "47",
      "Name": "Alayna Pierce",
      "Team": "Tennessee Tech",
      "Cl": "Jr.",
@@ -1723,20 +1736,20 @@
      "Per Set": "10.57"
     },
     {
-     "Rank": "47",
+     "Rank": "48",
      "Name": "Kennedy Louisell",
      "Team": "James Madison",
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "S": "44",
-     "Kills": "187",
-     "Errors": "59",
-     "Total Attacks": "464",
+     "S": "47",
+     "Kills": "205",
+     "Errors": "62",
+     "Total Attacks": "496",
      "Per Set": "10.55"
     },
     {
-     "Rank": "48",
+     "Rank": "49",
      "Name": "Kendall Timme",
      "Team": "DePaul",
      "Cl": "So.",
@@ -1749,30 +1762,17 @@
      "Per Set": "10.54"
     },
     {
-     "Rank": "49",
-     "Name": "Maria Tabacuks",
-     "Team": "LMU (CA)",
-     "Cl": "Fr.",
-     "Height": "6-4",
-     "Position": "OH",
-     "S": "52",
-     "Kills": "194",
-     "Errors": "65",
-     "Total Attacks": "548",
-     "Per Set": "10.54"
-    },
-    {
      "Rank": "50",
-     "Name": "Lauren Jansen",
-     "Team": "North Dakota St.",
-     "Cl": "Sr.",
-     "Height": "5-11",
+     "Name": "Taylor Cripe",
+     "Team": "Central Mich.",
+     "Cl": "So.",
+     "Height": "5-8",
      "Position": "OH",
-     "S": "38",
-     "Kills": "149",
-     "Errors": "63",
-     "Total Attacks": "399",
-     "Per Set": "10.50"
+     "S": "50",
+     "Kills": "163",
+     "Errors": "94",
+     "Total Attacks": "524",
+     "Per Set": "10.48"
     }
    ]
   },
@@ -1780,7 +1780,7 @@
    "id": "43",
    "name": "Blocks Per Set",
    "title": "Blocks Per Set",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -1789,11 +1789,11 @@
      "Cl": "Sr.",
      "Height": "6-2",
      "Position": "MB",
-     "S": "35",
+     "S": "39",
      "Block Solos": "2",
-     "Block Assists": "61",
-     "Total": "63",
-     "Per Set": "1.80"
+     "Block Assists": "71",
+     "Total": "73",
+     "Per Set": "1.87"
     },
     {
      "Rank": "2",
@@ -1815,11 +1815,11 @@
      "Cl": "Sr.",
      "Height": "6-3",
      "Position": "MB",
-     "S": "44",
+     "S": "47",
      "Block Solos": "5",
-     "Block Assists": "71",
-     "Total": "76",
-     "Per Set": "1.73"
+     "Block Assists": "75",
+     "Total": "80",
+     "Per Set": "1.70"
     },
     {
      "Rank": "4",
@@ -1880,10 +1880,10 @@
      "Cl": "Jr.",
      "Height": "6-2",
      "Position": "MB",
-     "S": "44",
+     "S": "47",
      "Block Solos": "9",
-     "Block Assists": "59",
-     "Total": "68",
+     "Block Assists": "64",
+     "Total": "73",
      "Per Set": "1.55"
     },
     {
@@ -1906,11 +1906,11 @@
      "Cl": "Jr.",
      "Height": "6-3",
      "Position": "MB",
-     "S": "52",
-     "Block Solos": "7",
-     "Block Assists": "72",
-     "Total": "79",
-     "Per Set": "1.52"
+     "S": "55",
+     "Block Solos": "10",
+     "Block Assists": "74",
+     "Total": "84",
+     "Per Set": "1.53"
     },
     {
      "Rank": "11",
@@ -1927,19 +1927,6 @@
     },
     {
      "Rank": "12",
-     "Name": "Helen Wilford",
-     "Team": "Bowling Green",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "50",
-     "Block Solos": "15",
-     "Block Assists": "59",
-     "Total": "74",
-     "Per Set": "1.48"
-    },
-    {
-     "Rank": "13",
      "Name": "Favor Anyanwu",
      "Team": "SMU",
      "Cl": "Jr.",
@@ -1952,20 +1939,7 @@
      "Per Set": "1.48"
     },
     {
-     "Rank": "14",
-     "Name": "Kekua Richards",
-     "Team": "Colorado St.",
-     "Cl": "Jr.",
-     "Height": "6-7",
-     "Position": "MB",
-     "S": "42",
-     "Block Solos": "8",
-     "Block Assists": "54",
-     "Total": "62",
-     "Per Set": "1.48"
-    },
-    {
-     "Rank": "15",
+     "Rank": "13",
      "Name": "Mia Tvrdy",
      "Team": "Southern California",
      "Cl": "Jr.",
@@ -1978,7 +1952,7 @@
      "Per Set": "1.48"
     },
     {
-     "Rank": "16",
+     "Rank": "14",
      "Name": "Cari Bohm",
      "Team": "California",
      "Cl": "Sr.",
@@ -1991,7 +1965,7 @@
      "Per Set": "1.47"
     },
     {
-     "Rank": "17",
+     "Rank": "15",
      "Name": "Aubrey Easterwood",
      "Team": "Providence",
      "Cl": "Fr.",
@@ -2004,7 +1978,20 @@
      "Per Set": "1.47"
     },
     {
-     "Rank": "18",
+     "Rank": "16",
+     "Name": "Ziya Munyer",
+     "Team": "Weber St.",
+     "Cl": "So.",
+     "Height": "6-1",
+     "Position": "MB",
+     "S": "51",
+     "Block Solos": "19",
+     "Block Assists": "55",
+     "Total": "74",
+     "Per Set": "1.45"
+    },
+    {
+     "Rank": "17",
      "Name": "Sydney Davis",
      "Team": "South Carolina",
      "Cl": "So.",
@@ -2017,7 +2004,7 @@
      "Per Set": "1.45"
     },
     {
-     "Rank": "19",
+     "Rank": "18",
      "Name": "Jackie Taylor",
      "Team": "North Carolina",
      "Cl": "Jr.",
@@ -2030,7 +2017,7 @@
      "Per Set": "1.45"
     },
     {
-     "Rank": "20",
+     "Rank": "19",
      "Name": "Sasha Cohen",
      "Team": "UCF",
      "Cl": "Jr.",
@@ -2043,7 +2030,7 @@
      "Per Set": "1.44"
     },
     {
-     "Rank": "21",
+     "Rank": "20",
      "Name": "Talia Francom",
      "Team": "NC State",
      "Cl": "So.",
@@ -2056,20 +2043,20 @@
      "Per Set": "1.44"
     },
     {
-     "Rank": "22",
-     "Name": "Hazel Slusher",
-     "Team": "Samford",
-     "Cl": "Fr.",
-     "Height": "6-0",
+     "Rank": "21",
+     "Name": "Helen Wilford",
+     "Team": "Bowling Green",
+     "Cl": "Jr.",
+     "Height": "6-2",
      "Position": "MB",
-     "S": "46",
-     "Block Solos": "9",
-     "Block Assists": "57",
-     "Total": "66",
+     "S": "53",
+     "Block Solos": "15",
+     "Block Assists": "61",
+     "Total": "76",
      "Per Set": "1.43"
     },
     {
-     "Rank": "23",
+     "Rank": "22",
      "Name": "Maaike Heilig",
      "Team": "Pittsburgh",
      "Cl": "Fr.",
@@ -2082,7 +2069,7 @@
      "Per Set": "1.43"
     },
     {
-     "Rank": "24",
+     "Rank": "23",
      "Name": "Julia Amorim",
      "Team": "Hofstra",
      "Cl": "So.",
@@ -2095,7 +2082,7 @@
      "Per Set": "1.43"
     },
     {
-     "Rank": "25",
+     "Rank": "24",
      "Name": "Emily Fowler",
      "Team": "Virginia",
      "Cl": "Sr.",
@@ -2121,7 +2108,7 @@
      "Per Set": "1.43"
     },
     {
-     "Rank": "27",
+     "Rank": "26",
      "Name": "Angela Marchetto",
      "Team": "FDU",
      "Cl": "Jr.",
@@ -2134,20 +2121,20 @@
      "Per Set": "1.43"
     },
     {
-     "Rank": "28",
-     "Name": "Jordan Taylor",
-     "Team": "Minnesota",
-     "Cl": "So.",
-     "Height": "6-5",
+     "Rank": "27",
+     "Name": "Hazel Slusher",
+     "Team": "Samford",
+     "Cl": "Fr.",
+     "Height": "6-0",
      "Position": "MB",
-     "S": "24",
-     "Block Solos": "4",
-     "Block Assists": "30",
-     "Total": "34",
+     "S": "50",
+     "Block Solos": "9",
+     "Block Assists": "62",
+     "Total": "71",
      "Per Set": "1.42"
     },
     {
-     "Rank": "29",
+     "Rank": "28",
      "Name": "Addison Makun",
      "Team": "Louisville",
      "Cl": "So.",
@@ -2158,6 +2145,19 @@
      "Block Assists": "48",
      "Total": "55",
      "Per Set": "1.41"
+    },
+    {
+     "Rank": "29",
+     "Name": "Kekua Richards",
+     "Team": "Colorado St.",
+     "Cl": "Jr.",
+     "Height": "6-7",
+     "Position": "MB",
+     "S": "47",
+     "Block Solos": "8",
+     "Block Assists": "58",
+     "Total": "66",
+     "Per Set": "1.40"
     },
     {
      "Rank": "30",
@@ -2174,32 +2174,19 @@
     },
     {
      "Rank": "31",
-     "Name": "Addie Norman",
-     "Team": "James Madison",
-     "Cl": "So.",
-     "Height": "6-4",
-     "Position": "OH",
-     "S": "41",
-     "Block Solos": "4",
-     "Block Assists": "53",
-     "Total": "57",
-     "Per Set": "1.39"
-    },
-    {
-     "Rank": "32",
      "Name": "Kendall Hastings",
      "Team": "Boise St.",
      "Cl": "Sr.",
      "Height": "6-2",
      "Position": "MB",
-     "S": "49",
+     "S": "53",
      "Block Solos": "10",
-     "Block Assists": "58",
-     "Total": "68",
-     "Per Set": "1.39"
+     "Block Assists": "64",
+     "Total": "74",
+     "Per Set": "1.40"
     },
     {
-     "Rank": "33",
+     "Rank": "32",
      "Name": "Reagan Hope",
      "Team": "Long Beach St.",
      "Cl": "Sr.",
@@ -2212,7 +2199,7 @@
      "Per Set": "1.39"
     },
     {
-     "Rank": "34",
+     "Rank": "33",
      "Name": "Hannah Olmstead",
      "Team": "Binghamton",
      "Cl": "So.",
@@ -2225,20 +2212,20 @@
      "Per Set": "1.38"
     },
     {
-     "Rank": "35",
-     "Name": "Ziya Munyer",
-     "Team": "Weber St.",
-     "Cl": "So.",
+     "Rank": "34",
+     "Name": "Maryn Bixby",
+     "Team": "UNI",
+     "Cl": "Jr.",
      "Height": "6-1",
      "Position": "MB",
-     "S": "47",
-     "Block Solos": "18",
-     "Block Assists": "47",
-     "Total": "65",
+     "S": "34",
+     "Block Solos": "7",
+     "Block Assists": "40",
+     "Total": "47",
      "Per Set": "1.38"
     },
     {
-     "Rank": "36",
+     "Rank": "35",
      "Name": "Alec Rothe",
      "Team": "Florida",
      "Cl": "Jr.",
@@ -2251,7 +2238,7 @@
      "Per Set": "1.38"
     },
     {
-     "Rank": "37",
+     "Rank": "36",
      "Name": "Kayla Jansen",
      "Team": "Saint Louis",
      "Cl": "Jr.",
@@ -2264,20 +2251,20 @@
      "Per Set": "1.37"
     },
     {
-     "Rank": "38",
-     "Name": "Jaydin Watts",
-     "Team": "Idaho St.",
-     "Cl": "Sr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "49",
-     "Block Solos": "14",
-     "Block Assists": "53",
-     "Total": "67",
-     "Per Set": "1.37"
+     "Rank": "37",
+     "Name": "Addie Norman",
+     "Team": "James Madison",
+     "Cl": "So.",
+     "Height": "6-4",
+     "Position": "OH",
+     "S": "44",
+     "Block Solos": "4",
+     "Block Assists": "56",
+     "Total": "60",
+     "Per Set": "1.36"
     },
     {
-     "Rank": "39",
+     "Rank": "-",
      "Name": "Cayla Payne",
      "Team": "Colorado",
      "Cl": "Sr.",
@@ -2290,7 +2277,7 @@
      "Per Set": "1.36"
     },
     {
-     "Rank": "40",
+     "Rank": "39",
      "Name": "Kayden Cupid",
      "Team": "Coppin St.",
      "Cl": "Jr.",
@@ -2300,6 +2287,19 @@
      "Block Solos": "18",
      "Block Assists": "61",
      "Total": "79",
+     "Per Set": "1.36"
+    },
+    {
+     "Rank": "40",
+     "Name": "Andi Jackson",
+     "Team": "Nebraska",
+     "Cl": "Sr.",
+     "Height": "6-3",
+     "Position": "MB",
+     "S": "39",
+     "Block Solos": "9",
+     "Block Assists": "44",
+     "Total": "53",
      "Per Set": "1.36"
     },
     {
@@ -2356,6 +2356,32 @@
     },
     {
      "Rank": "45",
+     "Name": "Jordan Taylor",
+     "Team": "Minnesota",
+     "Cl": "So.",
+     "Height": "6-5",
+     "Position": "MB",
+     "S": "26",
+     "Block Solos": "4",
+     "Block Assists": "31",
+     "Total": "35",
+     "Per Set": "1.35"
+    },
+    {
+     "Rank": "-",
+     "Name": "Jaydin Watts",
+     "Team": "Idaho St.",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "52",
+     "Block Solos": "14",
+     "Block Assists": "56",
+     "Total": "70",
+     "Per Set": "1.35"
+    },
+    {
+     "Rank": "47",
      "Name": "Aleki Alexander",
      "Team": "Arkansas",
      "Cl": "Jr.",
@@ -2368,7 +2394,7 @@
      "Per Set": "1.34"
     },
     {
-     "Rank": "46",
+     "Rank": "48",
      "Name": "Meghan Scholz",
      "Team": "San Diego",
      "Cl": "Sr.",
@@ -2381,7 +2407,7 @@
      "Per Set": "1.34"
     },
     {
-     "Rank": "47",
+     "Rank": "49",
      "Name": "Kayla Knowles",
      "Team": "Ga. Southern",
      "Cl": "Sr.",
@@ -2394,20 +2420,7 @@
      "Per Set": "1.34"
     },
     {
-     "Rank": "48",
-     "Name": "OMONIGHO PRINCESS ATAMAH",
-     "Team": "Utah",
-     "Cl": "Fr.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "39",
-     "Block Solos": "8",
-     "Block Assists": "44",
-     "Total": "52",
-     "Per Set": "1.33"
-    },
-    {
-     "Rank": "-",
+     "Rank": "50",
      "Name": "Chelsea Sutton",
      "Team": "Tennessee",
      "Cl": "Jr.",
@@ -2418,19 +2431,6 @@
      "Block Assists": "34",
      "Total": "36",
      "Per Set": "1.33"
-    },
-    {
-     "Rank": "-",
-     "Name": "Tatiana Turgeon",
-     "Team": "CSUN",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "MB",
-     "S": "48",
-     "Block Solos": "11",
-     "Block Assists": "53",
-     "Total": "64",
-     "Per Set": "1.33"
     }
    ]
   },
@@ -2438,7 +2438,7 @@
    "id": "44",
    "name": "Digs Per Set",
    "title": "Digs Per Set",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -2464,17 +2464,6 @@
     },
     {
      "Rank": "3",
-     "Name": "Sophia Tocmo",
-     "Team": "McNeese",
-     "Cl": "Fr.",
-     "Height": "5-3",
-     "Position": "L/DS",
-     "S": "42",
-     "Digs": "227",
-     "Per Set": "5.40"
-    },
-    {
-     "Rank": "4",
      "Name": "Addison Pollock",
      "Team": "Penn",
      "Cl": "So.",
@@ -2483,6 +2472,17 @@
      "S": "45",
      "Digs": "243",
      "Per Set": "5.40"
+    },
+    {
+     "Rank": "4",
+     "Name": "Sophia Tocmo",
+     "Team": "McNeese",
+     "Cl": "Fr.",
+     "Height": "5-3",
+     "Position": "L/DS",
+     "S": "46",
+     "Digs": "248",
+     "Per Set": "5.39"
     },
     {
      "Rank": "5",
@@ -2502,9 +2502,9 @@
      "Cl": "So.",
      "Height": "5-1",
      "Position": "L",
-     "S": "54",
-     "Digs": "279",
-     "Per Set": "5.17"
+     "S": "57",
+     "Digs": "292",
+     "Per Set": "5.12"
     },
     {
      "Rank": "7",
@@ -2519,28 +2519,6 @@
     },
     {
      "Rank": "8",
-     "Name": "Emmarie McFarland",
-     "Team": "Northwestern St.",
-     "Cl": "So.",
-     "Height": "5-10",
-     "Position": "L",
-     "S": "61",
-     "Digs": "304",
-     "Per Set": "4.98"
-    },
-    {
-     "Rank": "9",
-     "Name": "Reagan Anderson",
-     "Team": "Austin Peay",
-     "Cl": "Sr.",
-     "Height": "5-5",
-     "Position": "L/DS",
-     "S": "58",
-     "Digs": "288",
-     "Per Set": "4.97"
-    },
-    {
-     "Rank": "10",
      "Name": "Najah Harris",
      "Team": "Southern U.",
      "Cl": "Sr.",
@@ -2551,18 +2529,29 @@
      "Per Set": "4.94"
     },
     {
-     "Rank": "11",
+     "Rank": "-",
      "Name": "Jadyn Petersen",
      "Team": "UNI",
      "Cl": "Jr.",
      "Height": "5-8",
      "Position": "DS",
-     "S": "47",
-     "Digs": "232",
+     "S": "50",
+     "Digs": "247",
      "Per Set": "4.94"
     },
     {
-     "Rank": "12",
+     "Rank": "10",
+     "Name": "Emmarie McFarland",
+     "Team": "Northwestern St.",
+     "Cl": "So.",
+     "Height": "5-10",
+     "Position": "L",
+     "S": "66",
+     "Digs": "323",
+     "Per Set": "4.89"
+    },
+    {
+     "Rank": "11",
      "Name": "Madison Winkler",
      "Team": "Denver",
      "Cl": "So.",
@@ -2573,7 +2562,7 @@
      "Per Set": "4.87"
     },
     {
-     "Rank": "13",
+     "Rank": "12",
      "Name": "Ava Martindale",
      "Team": "North Ala.",
      "Cl": "Sr.",
@@ -2582,6 +2571,17 @@
      "S": "52",
      "Digs": "253",
      "Per Set": "4.87"
+    },
+    {
+     "Rank": "13",
+     "Name": "Reagan Anderson",
+     "Team": "Austin Peay",
+     "Cl": "Sr.",
+     "Height": "5-5",
+     "Position": "L/DS",
+     "S": "61",
+     "Digs": "296",
+     "Per Set": "4.85"
     },
     {
      "Rank": "14",
@@ -2618,17 +2618,6 @@
     },
     {
      "Rank": "17",
-     "Name": "Riley Steubing",
-     "Team": "Louisiana Tech",
-     "Cl": "Sr.",
-     "Height": "5-7",
-     "Position": "L/DS",
-     "S": "54",
-     "Digs": "257",
-     "Per Set": "4.76"
-    },
-    {
-     "Rank": "18",
      "Name": "MeMe Davis",
      "Team": "App State",
      "Cl": "Jr.",
@@ -2639,18 +2628,18 @@
      "Per Set": "4.75"
     },
     {
-     "Rank": "19",
-     "Name": "Leddy Rae Guinn",
-     "Team": "Tarleton St.",
-     "Cl": "Jr.",
-     "Height": "5-5",
-     "Position": "DS",
-     "S": "54",
-     "Digs": "255",
-     "Per Set": "4.72"
+     "Rank": "18",
+     "Name": "Aspen Boice",
+     "Team": "Idaho St.",
+     "Cl": "Fr.",
+     "Height": "6-0",
+     "Position": "L",
+     "S": "51",
+     "Digs": "241",
+     "Per Set": "4.73"
     },
     {
-     "Rank": "20",
+     "Rank": "19",
      "Name": "Ainoah Cruz",
      "Team": "Missouri",
      "Cl": "Sr.",
@@ -2659,6 +2648,17 @@
      "S": "49",
      "Digs": "231",
      "Per Set": "4.71"
+    },
+    {
+     "Rank": "20",
+     "Name": "Riley Steubing",
+     "Team": "Louisiana Tech",
+     "Cl": "Sr.",
+     "Height": "5-7",
+     "Position": "L/DS",
+     "S": "57",
+     "Digs": "268",
+     "Per Set": "4.70"
     },
     {
      "Rank": "21",
@@ -2695,6 +2695,17 @@
     },
     {
      "Rank": "24",
+     "Name": "Leddy Rae Guinn",
+     "Team": "Tarleton St.",
+     "Cl": "Jr.",
+     "Height": "5-5",
+     "Position": "DS",
+     "S": "57",
+     "Digs": "266",
+     "Per Set": "4.67"
+    },
+    {
+     "Rank": "25",
      "Name": "Celeste Ocampo",
      "Team": "Binghamton",
      "Cl": "So.",
@@ -2705,7 +2716,7 @@
      "Per Set": "4.63"
     },
     {
-     "Rank": "25",
+     "Rank": "26",
      "Name": "Carrina Barron",
      "Team": "Bryant",
      "Cl": "Sr.",
@@ -2716,18 +2727,18 @@
      "Per Set": "4.63"
     },
     {
-     "Rank": "26",
-     "Name": "Ashton Rogers",
-     "Team": "UIW",
+     "Rank": "27",
+     "Name": "Jade Washington",
+     "Team": "East Texas A&M",
      "Cl": "So.",
-     "Height": "5-6",
-     "Position": "L",
-     "S": "43",
-     "Digs": "199",
+     "Height": "5-1",
+     "Position": "L/DS",
+     "S": "65",
+     "Digs": "301",
      "Per Set": "4.63"
     },
     {
-     "Rank": "27",
+     "Rank": "28",
      "Name": "Asialin Powell",
      "Team": "Grambling",
      "Cl": "Jr.",
@@ -2738,7 +2749,7 @@
      "Per Set": "4.63"
     },
     {
-     "Rank": "28",
+     "Rank": "29",
      "Name": "Rachel Van Gorp",
      "Team": "Iowa St.",
      "Cl": "Jr.",
@@ -2749,29 +2760,29 @@
      "Per Set": "4.62"
     },
     {
-     "Rank": "29",
-     "Name": "Aspen Boice",
-     "Team": "Idaho St.",
-     "Cl": "Fr.",
-     "Height": "6-0",
+     "Rank": "30",
+     "Name": "Ashton Rogers",
+     "Team": "UIW",
+     "Cl": "So.",
+     "Height": "5-6",
      "Position": "L",
-     "S": "48",
-     "Digs": "220",
-     "Per Set": "4.58"
+     "S": "47",
+     "Digs": "217",
+     "Per Set": "4.62"
     },
     {
-     "Rank": "-",
+     "Rank": "31",
      "Name": "Chloe Kaminski",
      "Team": "Kansas City",
      "Cl": "Sr.",
      "Height": "5-8",
      "Position": "L/DS",
-     "S": "48",
-     "Digs": "220",
-     "Per Set": "4.58"
+     "S": "51",
+     "Digs": "234",
+     "Per Set": "4.59"
     },
     {
-     "Rank": "31",
+     "Rank": "32",
      "Name": "Maya Evens",
      "Team": "Notre Dame",
      "Cl": "So.",
@@ -2782,7 +2793,7 @@
      "Per Set": "4.53"
     },
     {
-     "Rank": "32",
+     "Rank": "33",
      "Name": "Shaelin White",
      "Team": "Sam Houston",
      "Cl": "Jr.",
@@ -2791,17 +2802,6 @@
      "S": "54",
      "Digs": "244",
      "Per Set": "4.52"
-    },
-    {
-     "Rank": "33",
-     "Name": "Jade Washington",
-     "Team": "East Texas A&M",
-     "Cl": "So.",
-     "Height": "5-1",
-     "Position": "L/DS",
-     "S": "61",
-     "Digs": "274",
-     "Per Set": "4.49"
     },
     {
      "Rank": "34",
@@ -2882,28 +2882,17 @@
     },
     {
      "Rank": "41",
-     "Name": "Laine Briggs",
-     "Team": "Pepperdine",
-     "Cl": "Sr.",
-     "Height": "5-11",
+     "Name": "Ella Vogel",
+     "Team": "Air Force",
+     "Cl": "Fr.",
+     "Height": "5-7",
      "Position": "L/DS",
-     "S": "52",
-     "Digs": "230",
-     "Per Set": "4.42"
+     "S": "47",
+     "Digs": "208",
+     "Per Set": "4.43"
     },
     {
-     "Rank": "-",
-     "Name": "Lani Toutai",
-     "Team": "Utah Valley",
-     "Cl": "Sr.",
-     "Height": "5-6",
-     "Position": "L/DS",
-     "S": "52",
-     "Digs": "230",
-     "Per Set": "4.42"
-    },
-    {
-     "Rank": "43",
+     "Rank": "42",
      "Name": "Alyssa Chu",
      "Team": "Lafayette",
      "Cl": "Fr.",
@@ -2914,18 +2903,7 @@
      "Per Set": "4.42"
     },
     {
-     "Rank": "-",
-     "Name": "Mia Lopez",
-     "Team": "LSU New Orleans",
-     "Cl": "Fr.",
-     "Height": "5-4",
-     "Position": "L/DS",
-     "S": "53",
-     "Digs": "234",
-     "Per Set": "4.42"
-    },
-    {
-     "Rank": "45",
+     "Rank": "43",
      "Name": "Surabhi Srinivasan",
      "Team": "Eastern Mich.",
      "Cl": "Sr.",
@@ -2936,7 +2914,7 @@
      "Per Set": "4.41"
     },
     {
-     "Rank": "46",
+     "Rank": "44",
      "Name": "Lauren Lynch",
      "Team": "San Diego",
      "Cl": "So.",
@@ -2947,7 +2925,18 @@
      "Per Set": "4.40"
     },
     {
-     "Rank": "47",
+     "Rank": "-",
+     "Name": "Lani Toutai",
+     "Team": "Utah Valley",
+     "Cl": "Sr.",
+     "Height": "5-6",
+     "Position": "L/DS",
+     "S": "55",
+     "Digs": "242",
+     "Per Set": "4.40"
+    },
+    {
+     "Rank": "46",
      "Name": "Jumana Martin",
      "Team": "Col. of Charleston",
      "Cl": "So.",
@@ -2958,7 +2947,7 @@
      "Per Set": "4.39"
     },
     {
-     "Rank": "48",
+     "Rank": "47",
      "Name": "Hannah Howard",
      "Team": "UMBC",
      "Cl": "Sr.",
@@ -2980,14 +2969,25 @@
      "Per Set": "4.38"
     },
     {
+     "Rank": "49",
+     "Name": "Mia Lopez",
+     "Team": "LSU New Orleans",
+     "Cl": "Fr.",
+     "Height": "5-4",
+     "Position": "L/DS",
+     "S": "57",
+     "Digs": "249",
+     "Per Set": "4.37"
+    },
+    {
      "Rank": "50",
      "Name": "Caiti Barthel",
      "Team": "Chattanooga",
      "Cl": "Sr.",
      "Height": "5-9",
      "Position": "L/DS",
-     "S": "53",
-     "Digs": "231",
+     "S": "58",
+     "Digs": "253",
      "Per Set": "4.36"
     }
    ]
@@ -2996,7 +2996,7 @@
    "id": "1",
    "name": "Hitting Percentage",
    "title": "Hitting Percentage",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -3018,11 +3018,11 @@
      "Cl": "Sr.",
      "Height": "6-1",
      "Position": "MB",
-     "S": "39",
-     "Kills": "101",
-     "Errors": "13",
-     "Total Attacks": "167",
-     "Pct.": ".527"
+     "S": "42",
+     "Kills": "107",
+     "Errors": "14",
+     "Total Attacks": "184",
+     "Pct.": ".505"
     },
     {
      "Rank": "3",
@@ -3031,11 +3031,11 @@
      "Cl": "Sr.",
      "Height": "6-3",
      "Position": "MB",
-     "S": "36",
-     "Kills": "92",
-     "Errors": "18",
-     "Total Attacks": "151",
-     "Pct.": ".490"
+     "S": "39",
+     "Kills": "103",
+     "Errors": "19",
+     "Total Attacks": "167",
+     "Pct.": ".503"
     },
     {
      "Rank": "4",
@@ -3117,6 +3117,19 @@
     },
     {
      "Rank": "10",
+     "Name": "Eva Rohrbach",
+     "Team": "Maryland",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "45",
+     "Kills": "106",
+     "Errors": "17",
+     "Total Attacks": "194",
+     "Pct.": ".459"
+    },
+    {
+     "Rank": "11",
      "Name": "Addison Engel",
      "Team": "Alabama",
      "Cl": "Jr.",
@@ -3129,7 +3142,7 @@
      "Pct.": ".458"
     },
     {
-     "Rank": "11",
+     "Rank": "12",
      "Name": "Carmen Waye",
      "Team": "Michigan St.",
      "Cl": "Jr.",
@@ -3142,7 +3155,7 @@
      "Pct.": ".447"
     },
     {
-     "Rank": "12",
+     "Rank": "13",
      "Name": "Kristina Starostenko",
      "Team": "Illinois",
      "Cl": "Jr.",
@@ -3155,7 +3168,7 @@
      "Pct.": ".447"
     },
     {
-     "Rank": "13",
+     "Rank": "14",
      "Name": "Adell Murray",
      "Team": "Penn",
      "Cl": "Jr.",
@@ -3168,7 +3181,7 @@
      "Pct.": ".443"
     },
     {
-     "Rank": "14",
+     "Rank": "15",
      "Name": "Lizzy Andrew",
      "Team": "Stanford",
      "Cl": "Jr.",
@@ -3179,19 +3192,6 @@
      "Errors": "13",
      "Total Attacks": "249",
      "Pct.": ".442"
-    },
-    {
-     "Rank": "15",
-     "Name": "Manaia Ogbechie",
-     "Team": "Nebraska",
-     "Cl": "So.",
-     "Height": "6-3",
-     "Position": "MB",
-     "S": "37",
-     "Kills": "83",
-     "Errors": "19",
-     "Total Attacks": "146",
-     "Pct.": ".438"
     },
     {
      "Rank": "16",
@@ -3208,32 +3208,19 @@
     },
     {
      "Rank": "17",
-     "Name": "Hannah Sanders",
-     "Team": "Delaware St.",
-     "Cl": "Sr.",
-     "Height": "6-0",
+     "Name": "Manaia Ogbechie",
+     "Team": "Nebraska",
+     "Cl": "So.",
+     "Height": "6-3",
      "Position": "MB",
-     "S": "56",
-     "Kills": "109",
-     "Errors": "24",
-     "Total Attacks": "196",
-     "Pct.": ".434"
+     "S": "40",
+     "Kills": "89",
+     "Errors": "21",
+     "Total Attacks": "159",
+     "Pct.": ".428"
     },
     {
      "Rank": "18",
-     "Name": "Eva Rohrbach",
-     "Team": "Maryland",
-     "Cl": "Sr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "40",
-     "Kills": "93",
-     "Errors": "17",
-     "Total Attacks": "176",
-     "Pct.": ".432"
-    },
-    {
-     "Rank": "19",
      "Name": "Alaina Lester",
      "Team": "Southeast Mo. St.",
      "Cl": "Jr.",
@@ -3244,6 +3231,19 @@
      "Errors": "12",
      "Total Attacks": "184",
      "Pct.": ".424"
+    },
+    {
+     "Rank": "19",
+     "Name": "Hannah Sanders",
+     "Team": "Delaware St.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "MB",
+     "S": "60",
+     "Kills": "112",
+     "Errors": "26",
+     "Total Attacks": "204",
+     "Pct.": ".422"
     },
     {
      "Rank": "20",
@@ -3260,6 +3260,19 @@
     },
     {
      "Rank": "21",
+     "Name": "Taelyn Bentley",
+     "Team": "San Diego St.",
+     "Cl": "So.",
+     "Height": "6-0",
+     "Position": "MB",
+     "S": "45",
+     "Kills": "83",
+     "Errors": "17",
+     "Total Attacks": "158",
+     "Pct.": ".418"
+    },
+    {
+     "Rank": "22",
      "Name": "Grace Havlicek",
      "Team": "Auburn",
      "Cl": "Jr.",
@@ -3272,7 +3285,7 @@
      "Pct.": ".417"
     },
     {
-     "Rank": "22",
+     "Rank": "23",
      "Name": "Haley Kerstetter",
      "Team": "Penn",
      "Cl": "So.",
@@ -3285,7 +3298,7 @@
      "Pct.": ".416"
     },
     {
-     "Rank": "23",
+     "Rank": "24",
      "Name": "Brooke Harwood",
      "Team": "UCLA",
      "Cl": "Fr.",
@@ -3296,19 +3309,6 @@
      "Errors": "24",
      "Total Attacks": "231",
      "Pct.": ".416"
-    },
-    {
-     "Rank": "24",
-     "Name": "Taelyn Bentley",
-     "Team": "San Diego St.",
-     "Cl": "So.",
-     "Height": "6-0",
-     "Position": "MB",
-     "S": "41",
-     "Kills": "74",
-     "Errors": "15",
-     "Total Attacks": "142",
-     "Pct.": ".415"
     },
     {
      "Rank": "25",
@@ -3351,19 +3351,6 @@
     },
     {
      "Rank": "28",
-     "Name": "Eve Wilson",
-     "Team": "Colorado St.",
-     "Cl": "Sr.",
-     "Height": "6-3",
-     "Position": "MB",
-     "S": "43",
-     "Kills": "110",
-     "Errors": "26",
-     "Total Attacks": "204",
-     "Pct.": ".412"
-    },
-    {
-     "Rank": "29",
      "Name": "Laney Daniell",
      "Team": "Liberty",
      "Cl": "So.",
@@ -3376,7 +3363,7 @@
      "Pct.": ".411"
     },
     {
-     "Rank": "30",
+     "Rank": "29",
      "Name": "Campbell McKinnon",
      "Team": "Villanova",
      "Cl": "Jr.",
@@ -3389,20 +3376,7 @@
      "Pct.": ".411"
     },
     {
-     "Rank": "31",
-     "Name": "Nikola Gamlin",
-     "Team": "Sacramento St.",
-     "Cl": "Fr.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "52",
-     "Kills": "101",
-     "Errors": "22",
-     "Total Attacks": "193",
-     "Pct.": ".409"
-    },
-    {
-     "Rank": "32",
+     "Rank": "30",
      "Name": "Laurece Abraham",
      "Team": "Yale",
      "Cl": "Sr.",
@@ -3415,7 +3389,7 @@
      "Pct.": ".408"
     },
     {
-     "Rank": "33",
+     "Rank": "31",
      "Name": "Nya Bunton",
      "Team": "Texas",
      "Cl": "Sr.",
@@ -3428,20 +3402,7 @@
      "Pct.": ".408"
     },
     {
-     "Rank": "-",
-     "Name": "Hannah Whittingstall",
-     "Team": "Iowa",
-     "Cl": "Sr.",
-     "Height": "6-2",
-     "Position": "MH",
-     "S": "58",
-     "Kills": "150",
-     "Errors": "22",
-     "Total Attacks": "314",
-     "Pct.": ".408"
-    },
-    {
-     "Rank": "35",
+     "Rank": "32",
      "Name": "Ashlynn Axtell",
      "Team": "Troy",
      "Cl": "Jr.",
@@ -3454,7 +3415,7 @@
      "Pct.": ".408"
     },
     {
-     "Rank": "36",
+     "Rank": "33",
      "Name": "Chidera Ozoh",
      "Team": "Akron",
      "Cl": "Sr.",
@@ -3467,7 +3428,7 @@
      "Pct.": ".406"
     },
     {
-     "Rank": "37",
+     "Rank": "34",
      "Name": "Lauren Larkin",
      "Team": "Missouri",
      "Cl": "So.",
@@ -3480,7 +3441,7 @@
      "Pct.": ".403"
     },
     {
-     "Rank": "38",
+     "Rank": "35",
      "Name": "Tori Harper",
      "Team": "Georgia",
      "Cl": "Sr.",
@@ -3506,20 +3467,20 @@
      "Pct.": ".400"
     },
     {
-     "Rank": "40",
-     "Name": "Olivia Lasee",
-     "Team": "Lehigh",
-     "Cl": "Sr.",
-     "Height": "6-2",
+     "Rank": "37",
+     "Name": "Nikola Gamlin",
+     "Team": "Sacramento St.",
+     "Cl": "Fr.",
+     "Height": "6-1",
      "Position": "MB",
-     "S": "40",
-     "Kills": "77",
-     "Errors": "12",
-     "Total Attacks": "163",
-     "Pct.": ".399"
+     "S": "55",
+     "Kills": "104",
+     "Errors": "24",
+     "Total Attacks": "201",
+     "Pct.": ".398"
     },
     {
-     "Rank": "41",
+     "Rank": "38",
      "Name": "Eliza McKnight",
      "Team": "Western Ky.",
      "Cl": "Fr.",
@@ -3532,7 +3493,20 @@
      "Pct.": ".397"
     },
     {
-     "Rank": "42",
+     "Rank": "39",
+     "Name": "Ally Chandler",
+     "Team": "UC Davis",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "57",
+     "Kills": "142",
+     "Errors": "28",
+     "Total Attacks": "288",
+     "Pct.": ".396"
+    },
+    {
+     "Rank": "-",
      "Name": "Gabby Weihe",
      "Team": "Western Mich.",
      "Cl": "Sr.",
@@ -3545,7 +3519,7 @@
      "Pct.": ".396"
     },
     {
-     "Rank": "43",
+     "Rank": "41",
      "Name": "Ashley Herman",
      "Team": "New Mexico St.",
      "Cl": "Sr.",
@@ -3558,7 +3532,7 @@
      "Pct.": ".396"
     },
     {
-     "Rank": "44",
+     "Rank": "42",
      "Name": "Karolina T. Rodriguez Mendez",
      "Team": "Saint Peter's",
      "Cl": "Sr.",
@@ -3571,20 +3545,7 @@
      "Pct.": ".395"
     },
     {
-     "Rank": "45",
-     "Name": "Alyssa Dinh",
-     "Team": "Tarleton St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "52",
-     "Kills": "99",
-     "Errors": "17",
-     "Total Attacks": "208",
-     "Pct.": ".394"
-    },
-    {
-     "Rank": "46",
+     "Rank": "43",
      "Name": "Noella Obi",
      "Team": "Mississippi St.",
      "Cl": "Jr.",
@@ -3597,7 +3558,20 @@
      "Pct.": ".394"
     },
     {
-     "Rank": "47",
+     "Rank": "44",
+     "Name": "Eve Wilson",
+     "Team": "Colorado St.",
+     "Cl": "Sr.",
+     "Height": "6-3",
+     "Position": "MB",
+     "S": "48",
+     "Kills": "124",
+     "Errors": "32",
+     "Total Attacks": "234",
+     "Pct.": ".393"
+    },
+    {
+     "Rank": "45",
      "Name": "Anna Hartman",
      "Team": "Fla. Atlantic",
      "Cl": "Sr.",
@@ -3610,7 +3584,20 @@
      "Pct.": ".393"
     },
     {
-     "Rank": "48",
+     "Rank": "46",
+     "Name": "Hannah Whittingstall",
+     "Team": "Iowa",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MH",
+     "S": "63",
+     "Kills": "160",
+     "Errors": "26",
+     "Total Attacks": "343",
+     "Pct.": ".391"
+    },
+    {
+     "Rank": "47",
      "Name": "Olivia Burrage",
      "Team": "Kennesaw St.",
      "Cl": "Sr.",
@@ -3623,7 +3610,7 @@
      "Pct.": ".390"
     },
     {
-     "Rank": "49",
+     "Rank": "48",
      "Name": "Sawyer Thomsen",
      "Team": "California",
      "Cl": "Sr.",
@@ -3636,7 +3623,7 @@
      "Pct.": ".390"
     },
     {
-     "Rank": "50",
+     "Rank": "49",
      "Name": "Lilly Merk",
      "Team": "Toledo",
      "Cl": "Jr.",
@@ -3647,6 +3634,19 @@
      "Errors": "11",
      "Total Attacks": "111",
      "Pct.": ".387"
+    },
+    {
+     "Rank": "50",
+     "Name": "Malinah Purcell-Telefoni",
+     "Team": "Towson",
+     "Cl": "So.",
+     "Height": "6-1",
+     "Position": "OPP",
+     "S": "46",
+     "Kills": "90",
+     "Errors": "20",
+     "Total Attacks": "182",
+     "Pct.": ".385"
     }
    ]
   },
@@ -3654,7 +3654,7 @@
    "id": "2",
    "name": "Kills Per Set",
    "title": "Kills Per Set",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -3680,17 +3680,6 @@
     },
     {
      "Rank": "3",
-     "Name": "Mckenna Wucherer",
-     "Team": "Minnesota",
-     "Cl": "Sr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "S": "36",
-     "Kills": "179",
-     "Per Set": "4.97"
-    },
-    {
-     "Rank": "4",
      "Name": "Allie Sweet",
      "Team": "UNC Greensboro",
      "Cl": "Jr.",
@@ -3698,6 +3687,17 @@
      "Position": "OH",
      "S": "52",
      "Kills": "252",
+     "Per Set": "4.85"
+    },
+    {
+     "Rank": "-",
+     "Name": "Mckenna Wucherer",
+     "Team": "Minnesota",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "39",
+     "Kills": "189",
      "Per Set": "4.85"
     },
     {
@@ -3718,23 +3718,12 @@
      "Cl": "Fr.",
      "Height": "6-3",
      "Position": "OH",
-     "S": "41",
-     "Kills": "195",
-     "Per Set": "4.76"
+     "S": "44",
+     "Kills": "208",
+     "Per Set": "4.73"
     },
     {
      "Rank": "7",
-     "Name": "Sylvie Zgonc",
-     "Team": "South Dakota St.",
-     "Cl": "Sr.",
-     "Height": "5-11",
-     "Position": "OH",
-     "S": "44",
-     "Kills": "209",
-     "Per Set": "4.75"
-    },
-    {
-     "Rank": "8",
      "Name": "Suli Davis",
      "Team": "SMU",
      "Cl": "So.",
@@ -3743,6 +3732,17 @@
      "S": "46",
      "Kills": "217",
      "Per Set": "4.72"
+    },
+    {
+     "Rank": "8",
+     "Name": "Sylvie Zgonc",
+     "Team": "South Dakota St.",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "OH",
+     "S": "49",
+     "Kills": "230",
+     "Per Set": "4.69"
     },
     {
      "Rank": "9",
@@ -3801,6 +3801,28 @@
     },
     {
      "Rank": "14",
+     "Name": "Kalista Lukovich",
+     "Team": "Eastern Wash.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "59",
+     "Kills": "258",
+     "Per Set": "4.37"
+    },
+    {
+     "Rank": "15",
+     "Name": "Kennedy Louisell",
+     "Team": "James Madison",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "47",
+     "Kills": "205",
+     "Per Set": "4.36"
+    },
+    {
+     "Rank": "16",
      "Name": "Carson Tyler",
      "Team": "Marquette",
      "Cl": "Jr.",
@@ -3811,18 +3833,18 @@
      "Per Set": "4.36"
     },
     {
-     "Rank": "15",
-     "Name": "Cassidy Hartman",
-     "Team": "UNI",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "47",
-     "Kills": "204",
-     "Per Set": "4.34"
+     "Rank": "17",
+     "Name": "Addison Massey",
+     "Team": "Kansas St.",
+     "Cl": "Fr.",
+     "Height": "6-1",
+     "Position": "OPP",
+     "S": "42",
+     "Kills": "183",
+     "Per Set": "4.36"
     },
     {
-     "Rank": "16",
+     "Rank": "18",
      "Name": "Nataly Moravec",
      "Team": "Duke",
      "Cl": "Sr.",
@@ -3833,7 +3855,7 @@
      "Per Set": "4.32"
     },
     {
-     "Rank": "17",
+     "Rank": "19",
      "Name": "Ella Demetrician",
      "Team": "Michigan",
      "Cl": "Jr.",
@@ -3844,18 +3866,18 @@
      "Per Set": "4.30"
     },
     {
-     "Rank": "18",
-     "Name": "Morgan Hayes",
-     "Team": "Santa Clara",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "OPP",
-     "S": "57",
-     "Kills": "245",
+     "Rank": "20",
+     "Name": "Cassidy Hartman",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "50",
+     "Kills": "215",
      "Per Set": "4.30"
     },
     {
-     "Rank": "19",
+     "Rank": "21",
      "Name": "Brooklyn DeLeye",
      "Team": "Kentucky",
      "Cl": "Sr.",
@@ -3866,18 +3888,18 @@
      "Per Set": "4.29"
     },
     {
-     "Rank": "20",
-     "Name": "Kalista Lukovich",
-     "Team": "Eastern Wash.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "55",
-     "Kills": "236",
-     "Per Set": "4.29"
+     "Rank": "22",
+     "Name": "Morgan Hayes",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OPP",
+     "S": "60",
+     "Kills": "257",
+     "Per Set": "4.28"
     },
     {
-     "Rank": "21",
+     "Rank": "23",
      "Name": "Paige Bennett",
      "Team": "Winthrop",
      "Cl": "Jr.",
@@ -3888,7 +3910,7 @@
      "Per Set": "4.28"
     },
     {
-     "Rank": "22",
+     "Rank": "24",
      "Name": "Kiera Hamilton",
      "Team": "George Mason",
      "Cl": "So.",
@@ -3899,18 +3921,7 @@
      "Per Set": "4.27"
     },
     {
-     "Rank": "23",
-     "Name": "Kennedy Louisell",
-     "Team": "James Madison",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "44",
-     "Kills": "187",
-     "Per Set": "4.25"
-    },
-    {
-     "Rank": "24",
+     "Rank": "25",
      "Name": "Carola Tesoro",
      "Team": "St. John's (NY)",
      "Cl": "Fr.",
@@ -3919,17 +3930,6 @@
      "S": "54",
      "Kills": "229",
      "Per Set": "4.24"
-    },
-    {
-     "Rank": "25",
-     "Name": "Addison Massey",
-     "Team": "Kansas St.",
-     "Cl": "Fr.",
-     "Height": "6-1",
-     "Position": "OPP",
-     "S": "38",
-     "Kills": "160",
-     "Per Set": "4.21"
     },
     {
      "Rank": "26",
@@ -3977,6 +3977,17 @@
     },
     {
      "Rank": "30",
+     "Name": "Lily Dykstra",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "50",
+     "Kills": "207",
+     "Per Set": "4.14"
+    },
+    {
+     "Rank": "31",
      "Name": "Evan Hendrix",
      "Team": "TCU",
      "Cl": "Jr.",
@@ -3987,7 +3998,18 @@
      "Per Set": "4.14"
     },
     {
-     "Rank": "31",
+     "Rank": "32",
+     "Name": "Kennedy Martin",
+     "Team": "Penn St.",
+     "Cl": "Sr.",
+     "Height": "6-6",
+     "Position": "RS",
+     "S": "43",
+     "Kills": "177",
+     "Per Set": "4.12"
+    },
+    {
+     "Rank": "33",
      "Name": "Emersen Schrom",
      "Team": "Duquesne",
      "Cl": "Jr.",
@@ -3998,7 +4020,7 @@
      "Per Set": "4.11"
     },
     {
-     "Rank": "32",
+     "Rank": "34",
      "Name": "Chloe Chicoine",
      "Team": "Louisville",
      "Cl": "Sr.",
@@ -4009,7 +4031,7 @@
      "Per Set": "4.10"
     },
     {
-     "Rank": "33",
+     "Rank": "35",
      "Name": "Caitlyn Little",
      "Team": "Memphis",
      "Cl": "Sr.",
@@ -4020,7 +4042,7 @@
      "Per Set": "4.09"
     },
     {
-     "Rank": "34",
+     "Rank": "36",
      "Name": "Chloe Monson",
      "Team": "Sam Houston",
      "Cl": "So.",
@@ -4029,28 +4051,6 @@
      "S": "54",
      "Kills": "221",
      "Per Set": "4.09"
-    },
-    {
-     "Rank": "35",
-     "Name": "Lily Dykstra",
-     "Team": "UNI",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "47",
-     "Kills": "192",
-     "Per Set": "4.09"
-    },
-    {
-     "Rank": "36",
-     "Name": "Jenna Legault",
-     "Team": "Fresno St.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "50",
-     "Kills": "204",
-     "Per Set": "4.08"
     },
     {
      "Rank": "37",
@@ -4065,17 +4065,6 @@
     },
     {
      "Rank": "38",
-     "Name": "Victoria Marthaler",
-     "Team": "Sacramento St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "S": "54",
-     "Kills": "219",
-     "Per Set": "4.06"
-    },
-    {
-     "Rank": "39",
      "Name": "Tyne Ross",
      "Team": "N.C. A&T",
      "Cl": "Jr.",
@@ -4086,7 +4075,7 @@
      "Per Set": "4.04"
     },
     {
-     "Rank": "40",
+     "Rank": "39",
      "Name": "Mallory Reck",
      "Team": "Marist",
      "Cl": "So.",
@@ -4097,7 +4086,7 @@
      "Per Set": "4.03"
     },
     {
-     "Rank": "41",
+     "Rank": "40",
      "Name": "Kaili Doctor",
      "Team": "North Florida",
      "Cl": "Sr.",
@@ -4119,29 +4108,18 @@
      "Per Set": "4.00"
     },
     {
-     "Rank": "-",
-     "Name": "Kennedy Martin",
-     "Team": "Penn St.",
+     "Rank": "42",
+     "Name": "Jenna Legault",
+     "Team": "Fresno St.",
      "Cl": "Sr.",
-     "Height": "6-6",
-     "Position": "RS",
-     "S": "40",
-     "Kills": "160",
-     "Per Set": "4.00"
-    },
-    {
-     "Rank": "44",
-     "Name": "Claire Wagstaff",
-     "Team": "Gonzaga",
-     "Cl": "Jr.",
-     "Height": "6-4",
-     "Position": "RS",
-     "S": "53",
-     "Kills": "211",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "54",
+     "Kills": "215",
      "Per Set": "3.98"
     },
     {
-     "Rank": "45",
+     "Rank": "43",
      "Name": "Reagan Barth",
      "Team": "Ga. Southern",
      "Cl": "Sr.",
@@ -4152,7 +4130,7 @@
      "Per Set": "3.98"
     },
     {
-     "Rank": "46",
+     "Rank": "44",
      "Name": "Hailey Brockway",
      "Team": "CSUN",
      "Cl": "Sr.",
@@ -4163,7 +4141,7 @@
      "Per Set": "3.98"
     },
     {
-     "Rank": "47",
+     "Rank": "45",
      "Name": "Morgan Gaerte",
      "Team": "Kentucky",
      "Cl": "Jr.",
@@ -4174,7 +4152,18 @@
      "Per Set": "3.97"
     },
     {
-     "Rank": "48",
+     "Rank": "46",
+     "Name": "Victoria Marthaler",
+     "Team": "Sacramento St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "57",
+     "Kills": "226",
+     "Per Set": "3.96"
+    },
+    {
+     "Rank": "-",
      "Name": "Riley Rosneck",
      "Team": "Purdue Fort Wayne",
      "Cl": "Jr.",
@@ -4182,6 +4171,17 @@
      "Position": "OH",
      "S": "57",
      "Kills": "226",
+     "Per Set": "3.96"
+    },
+    {
+     "Rank": "48",
+     "Name": "AC Froehlich",
+     "Team": "Oregon St.",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "45",
+     "Kills": "178",
      "Per Set": "3.96"
     },
     {
@@ -4197,13 +4197,13 @@
     },
     {
      "Rank": "50",
-     "Name": "Cortnee Smith",
-     "Team": "Oral Roberts",
-     "Cl": "Jr.",
-     "Height": "5-10",
+     "Name": "Torrey Stafford",
+     "Team": "Texas",
+     "Cl": "Sr.",
+     "Height": "6-2",
      "Position": "OH",
-     "S": "40",
-     "Kills": "158",
+     "S": "38",
+     "Kills": "150",
      "Per Set": "3.95"
     }
    ]
@@ -4212,7 +4212,7 @@
    "id": "553",
    "name": "Points",
    "title": "Points",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -4229,6 +4229,19 @@
     },
     {
      "Rank": "2",
+     "Name": "Kalista Lukovich",
+     "Team": "Eastern Wash.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "Kills": "258",
+     "Aces": "17",
+     "Block Solos": "5",
+     "Block Assists": "22",
+     "Pts": "291.0"
+    },
+    {
+     "Rank": "3",
      "Name": "Mallory Reck",
      "Team": "Marist",
      "Cl": "So.",
@@ -4241,7 +4254,20 @@
      "Pts": "289.0"
     },
     {
-     "Rank": "3",
+     "Rank": "4",
+     "Name": "Morgan Hayes",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OPP",
+     "Kills": "257",
+     "Aces": "10",
+     "Block Solos": "1",
+     "Block Assists": "36",
+     "Pts": "286.0"
+    },
+    {
+     "Rank": "5",
      "Name": "Jurnee Robinson",
      "Team": "LSU",
      "Cl": "Sr.",
@@ -4254,20 +4280,20 @@
      "Pts": "283.0"
     },
     {
-     "Rank": "4",
-     "Name": "Morgan Hayes",
-     "Team": "Santa Clara",
+     "Rank": "6",
+     "Name": "Claire Wagstaff",
+     "Team": "Gonzaga",
      "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "OPP",
-     "Kills": "245",
-     "Aces": "10",
-     "Block Solos": "1",
-     "Block Assists": "35",
-     "Pts": "273.5"
+     "Height": "6-4",
+     "Position": "RS",
+     "Kills": "226",
+     "Aces": "26",
+     "Block Solos": "8",
+     "Block Assists": "43",
+     "Pts": "281.5"
     },
     {
-     "Rank": "-",
+     "Rank": "7",
      "Name": "Sarah Wadsworth",
      "Team": "UNC Asheville",
      "Cl": "Jr.",
@@ -4280,33 +4306,20 @@
      "Pts": "273.5"
     },
     {
-     "Rank": "6",
-     "Name": "Kalista Lukovich",
-     "Team": "Eastern Wash.",
+     "Rank": "8",
+     "Name": "Jenna Legault",
+     "Team": "Fresno St.",
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "Kills": "236",
-     "Aces": "17",
-     "Block Solos": "5",
-     "Block Assists": "21",
-     "Pts": "268.5"
+     "Kills": "215",
+     "Aces": "35",
+     "Block Solos": "9",
+     "Block Assists": "17",
+     "Pts": "267.5"
     },
     {
-     "Rank": "7",
-     "Name": "Claire Wagstaff",
-     "Team": "Gonzaga",
-     "Cl": "Jr.",
-     "Height": "6-4",
-     "Position": "RS",
-     "Kills": "211",
-     "Aces": "25",
-     "Block Solos": "6",
-     "Block Assists": "40",
-     "Pts": "262.0"
-    },
-    {
-     "Rank": "8",
+     "Rank": "9",
      "Name": "Riley Rosneck",
      "Team": "Purdue Fort Wayne",
      "Cl": "Jr.",
@@ -4319,7 +4332,20 @@
      "Pts": "258.0"
     },
     {
-     "Rank": "9",
+     "Rank": "10",
+     "Name": "Victoria Marthaler",
+     "Team": "Sacramento St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "Kills": "226",
+     "Aces": "18",
+     "Block Solos": "1",
+     "Block Assists": "20",
+     "Pts": "255.0"
+    },
+    {
+     "Rank": "11",
      "Name": "Carson Tyler",
      "Team": "Marquette",
      "Cl": "Jr.",
@@ -4345,20 +4371,7 @@
      "Pts": "254.0"
     },
     {
-     "Rank": "11",
-     "Name": "Jenna Legault",
-     "Team": "Fresno St.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "Kills": "204",
-     "Aces": "32",
-     "Block Solos": "9",
-     "Block Assists": "16",
-     "Pts": "253.0"
-    },
-    {
-     "Rank": "12",
+     "Rank": "13",
      "Name": "Carola Tesoro",
      "Team": "St. John's (NY)",
      "Cl": "Fr.",
@@ -4371,7 +4384,20 @@
      "Pts": "252.5"
     },
     {
-     "Rank": "13",
+     "Rank": "14",
+     "Name": "Sylvie Zgonc",
+     "Team": "South Dakota St.",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "OH",
+     "Kills": "230",
+     "Aces": "11",
+     "Block Solos": "4",
+     "Block Assists": "14",
+     "Pts": "252.0"
+    },
+    {
+     "Rank": "15",
      "Name": "Caitlyn Little",
      "Team": "Memphis",
      "Cl": "Sr.",
@@ -4384,20 +4410,46 @@
      "Pts": "251.5"
     },
     {
-     "Rank": "14",
-     "Name": "Victoria Marthaler",
-     "Team": "Sacramento St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "Kills": "219",
-     "Aces": "18",
-     "Block Solos": "1",
-     "Block Assists": "18",
-     "Pts": "247.0"
+     "Rank": "16",
+     "Name": "Akira Burt",
+     "Team": "Georgia St.",
+     "Cl": "Sr.",
+     "Height": "5-10",
+     "Position": "MB",
+     "Kills": "213",
+     "Aces": "13",
+     "Block Solos": "3",
+     "Block Assists": "43",
+     "Pts": "250.5"
     },
     {
-     "Rank": "15",
+     "Rank": "17",
+     "Name": "Taylor Stanley",
+     "Team": "Kansas",
+     "Cl": "Fr.",
+     "Height": "6-3",
+     "Position": "OH",
+     "Kills": "208",
+     "Aces": "19",
+     "Block Solos": "1",
+     "Block Assists": "44",
+     "Pts": "250.0"
+    },
+    {
+     "Rank": "18",
+     "Name": "Kennedy Louisell",
+     "Team": "James Madison",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "Kills": "205",
+     "Aces": "27",
+     "Block Solos": "4",
+     "Block Assists": "23",
+     "Pts": "247.5"
+    },
+    {
+     "Rank": "19",
      "Name": "Ava Helming",
      "Team": "Valparaiso",
      "Cl": "Jr.",
@@ -4423,7 +4475,33 @@
      "Pts": "245.5"
     },
     {
-     "Rank": "17",
+     "Rank": "21",
+     "Name": "Antonie Kelnárová",
+     "Team": "Saint Mary's (CA)",
+     "Cl": "Jr.",
+     "Height": "5-10",
+     "Position": "OH",
+     "Kills": "195",
+     "Aces": "39",
+     "Block Solos": "2",
+     "Block Assists": "18",
+     "Pts": "245.0"
+    },
+    {
+     "Rank": "22",
+     "Name": "Molly McCluskey",
+     "Team": "UC San Diego",
+     "Cl": "Jr.",
+     "Height": "6-3",
+     "Position": "OH",
+     "Kills": "206",
+     "Aces": "16",
+     "Block Solos": "3",
+     "Block Assists": "38",
+     "Pts": "244.0"
+    },
+    {
+     "Rank": "-",
      "Name": "Chloe Monson",
      "Team": "Sam Houston",
      "Cl": "So.",
@@ -4436,20 +4514,20 @@
      "Pts": "244.0"
     },
     {
-     "Rank": "18",
-     "Name": "Akira Burt",
-     "Team": "Georgia St.",
-     "Cl": "Sr.",
-     "Height": "5-10",
-     "Position": "MB",
-     "Kills": "206",
-     "Aces": "13",
-     "Block Solos": "3",
-     "Block Assists": "42",
-     "Pts": "243.0"
+     "Rank": "-",
+     "Name": "Maria Tabacuks",
+     "Team": "LMU (CA)",
+     "Cl": "Fr.",
+     "Height": "6-4",
+     "Position": "OH",
+     "Kills": "211",
+     "Aces": "15",
+     "Block Solos": "4",
+     "Block Assists": "28",
+     "Pts": "244.0"
     },
     {
-     "Rank": "19",
+     "Rank": "25",
      "Name": "Suli Davis",
      "Team": "SMU",
      "Cl": "So.",
@@ -4462,7 +4540,20 @@
      "Pts": "242.0"
     },
     {
-     "Rank": "20",
+     "Rank": "-",
+     "Name": "Petra Fritz",
+     "Team": "San Francisco",
+     "Cl": "So.",
+     "Height": "-",
+     "Position": "OH",
+     "Kills": "213",
+     "Aces": "16",
+     "Block Solos": "6",
+     "Block Assists": "14",
+     "Pts": "242.0"
+    },
+    {
+     "Rank": "27",
      "Name": "Chloe Smith",
      "Team": "Wofford",
      "Cl": "Jr.",
@@ -4475,20 +4566,7 @@
      "Pts": "240.5"
     },
     {
-     "Rank": "21",
-     "Name": "Antonie Kelnárová",
-     "Team": "Saint Mary's (CA)",
-     "Cl": "Jr.",
-     "Height": "5-10",
-     "Position": "OH",
-     "Kills": "190",
-     "Aces": "39",
-     "Block Solos": "2",
-     "Block Assists": "16",
-     "Pts": "239.0"
-    },
-    {
-     "Rank": "22",
+     "Rank": "28",
      "Name": "Olivia Babcock",
      "Team": "Pittsburgh",
      "Cl": "Sr.",
@@ -4501,7 +4579,33 @@
      "Pts": "238.5"
     },
     {
-     "Rank": "23",
+     "Rank": "29",
+     "Name": "Cassidy Hartman",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "Kills": "215",
+     "Aces": "6",
+     "Block Solos": "3",
+     "Block Assists": "28",
+     "Pts": "238.0"
+    },
+    {
+     "Rank": "30",
+     "Name": "Ariana Brown",
+     "Team": "East Texas A&M",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "Kills": "201",
+     "Aces": "26",
+     "Block Solos": "2",
+     "Block Assists": "15",
+     "Pts": "236.5"
+    },
+    {
+     "Rank": "31",
      "Name": "Bella Hutchens",
      "Team": "App State",
      "Cl": "Jr.",
@@ -4514,20 +4618,7 @@
      "Pts": "236.0"
     },
     {
-     "Rank": "-",
-     "Name": "Taylor Stanley",
-     "Team": "Kansas",
-     "Cl": "Fr.",
-     "Height": "6-3",
-     "Position": "OH",
-     "Kills": "195",
-     "Aces": "19",
-     "Block Solos": "1",
-     "Block Assists": "42",
-     "Pts": "236.0"
-    },
-    {
-     "Rank": "25",
+     "Rank": "32",
      "Name": "Jillian Tippmann",
      "Team": "IU Indy",
      "Cl": "So.",
@@ -4540,20 +4631,7 @@
      "Pts": "235.0"
     },
     {
-     "Rank": "26",
-     "Name": "Petra Fritz",
-     "Team": "San Francisco",
-     "Cl": "So.",
-     "Height": "-",
-     "Position": "OH",
-     "Kills": "206",
-     "Aces": "16",
-     "Block Solos": "5",
-     "Block Assists": "14",
-     "Pts": "234.0"
-    },
-    {
-     "Rank": "27",
+     "Rank": "33",
      "Name": "Ellie Rink",
      "Team": "Saint Louis",
      "Cl": "So.",
@@ -4566,7 +4644,7 @@
      "Pts": "233.0"
     },
     {
-     "Rank": "28",
+     "Rank": "34",
      "Name": "Audrey Ross",
      "Team": "Boston College",
      "Cl": "Sr.",
@@ -4592,7 +4670,7 @@
      "Pts": "232.5"
     },
     {
-     "Rank": "30",
+     "Rank": "36",
      "Name": "Gabrielle Gilbert",
      "Team": "Norfolk St.",
      "Cl": "Sr.",
@@ -4605,7 +4683,33 @@
      "Pts": "231.5"
     },
     {
-     "Rank": "31",
+     "Rank": "-",
+     "Name": "Cate Shanahan",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OH",
+     "Kills": "207",
+     "Aces": "10",
+     "Block Solos": "3",
+     "Block Assists": "23",
+     "Pts": "231.5"
+    },
+    {
+     "Rank": "-",
+     "Name": "Hanah Stoddard",
+     "Team": "Northern Ariz.",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "Kills": "204",
+     "Aces": "11",
+     "Block Solos": "5",
+     "Block Assists": "23",
+     "Pts": "231.5"
+    },
+    {
+     "Rank": "39",
      "Name": "Ana Burilovic",
      "Team": "Colorado",
      "Cl": "Sr.",
@@ -4631,7 +4735,59 @@
      "Pts": "231.0"
     },
     {
-     "Rank": "33",
+     "Rank": "41",
+     "Name": "Kiana Greer",
+     "Team": "Idaho",
+     "Cl": "So.",
+     "Height": "5-8",
+     "Position": "OH",
+     "Kills": "198",
+     "Aces": "19",
+     "Block Solos": "6",
+     "Block Assists": "14",
+     "Pts": "230.0"
+    },
+    {
+     "Rank": "42",
+     "Name": "Lily Dykstra",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "Kills": "207",
+     "Aces": "10",
+     "Block Solos": "2",
+     "Block Assists": "21",
+     "Pts": "229.5"
+    },
+    {
+     "Rank": "43",
+     "Name": "Ema Petkovic",
+     "Team": "UTRGV",
+     "Cl": "So.",
+     "Height": "6-2",
+     "Position": "RS",
+     "Kills": "182",
+     "Aces": "35",
+     "Block Solos": "1",
+     "Block Assists": "21",
+     "Pts": "228.5"
+    },
+    {
+     "Rank": "-",
+     "Name": "Mckenna Wucherer",
+     "Team": "Minnesota",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "Kills": "189",
+     "Aces": "28",
+     "Block Solos": "0",
+     "Block Assists": "23",
+     "Pts": "228.5"
+    },
+    {
+     "Rank": "45",
      "Name": "Gracie Furlong",
      "Team": "Bradley",
      "Cl": "So.",
@@ -4657,20 +4813,20 @@
      "Pts": "227.5"
     },
     {
-     "Rank": "-",
-     "Name": "Sylvie Zgonc",
-     "Team": "South Dakota St.",
+     "Rank": "47",
+     "Name": "Izzy Castelloe",
+     "Team": "Furman",
      "Cl": "Sr.",
-     "Height": "5-11",
-     "Position": "OH",
-     "Kills": "209",
-     "Aces": "10",
-     "Block Solos": "4",
-     "Block Assists": "9",
-     "Pts": "227.5"
+     "Height": "6-1",
+     "Position": "MB",
+     "Kills": "199",
+     "Aces": "9",
+     "Block Solos": "2",
+     "Block Assists": "31",
+     "Pts": "225.5"
     },
     {
-     "Rank": "36",
+     "Rank": "-",
      "Name": "Chloe Chicoine",
      "Team": "Louisville",
      "Cl": "Sr.",
@@ -4697,19 +4853,6 @@
     },
     {
      "Rank": "-",
-     "Name": "Cassidy Hartman",
-     "Team": "UNI",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "Kills": "204",
-     "Aces": "5",
-     "Block Solos": "3",
-     "Block Assists": "27",
-     "Pts": "225.5"
-    },
-    {
-     "Rank": "-",
      "Name": "Bianna Muoneke",
      "Team": "Georgia",
      "Cl": "Sr.",
@@ -4720,149 +4863,714 @@
      "Block Solos": "0",
      "Block Assists": "27",
      "Pts": "225.5"
+    }
+   ]
+  },
+  {
+   "id": "552",
+   "name": "Points Per Set",
+   "title": "Points Per Set",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
+   "rows": [
+    {
+     "Rank": "1",
+     "Name": "Olivia Babcock",
+     "Team": "Pittsburgh",
+     "Cl": "Sr.",
+     "Height": "6-4",
+     "Position": "RS",
+     "S": "39",
+     "Kills": "202",
+     "Aces": "15",
+     "Block Solos": "1",
+     "Block Assists": "41",
+     "Per Set": "6.12"
     },
     {
-     "Rank": "40",
+     "Rank": "2",
+     "Name": "Mckenna Wucherer",
+     "Team": "Minnesota",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "39",
+     "Kills": "189",
+     "Aces": "28",
+     "Block Solos": "0",
+     "Block Assists": "23",
+     "Per Set": "5.86"
+    },
+    {
+     "Rank": "3",
+     "Name": "Jurnee Robinson",
+     "Team": "LSU",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "49",
+     "Kills": "250",
+     "Aces": "10",
+     "Block Solos": "11",
+     "Block Assists": "24",
+     "Per Set": "5.78"
+    },
+    {
+     "Rank": "4",
+     "Name": "Taylor Stanley",
+     "Team": "Kansas",
+     "Cl": "Fr.",
+     "Height": "6-3",
+     "Position": "OH",
+     "S": "44",
+     "Kills": "208",
+     "Aces": "19",
+     "Block Solos": "1",
+     "Block Assists": "44",
+     "Per Set": "5.68"
+    },
+    {
+     "Rank": "5",
+     "Name": "Allie Sweet",
+     "Team": "UNC Greensboro",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OH",
+     "S": "52",
+     "Kills": "252",
+     "Aces": "22",
+     "Block Solos": "8",
+     "Block Assists": "24",
+     "Per Set": "5.65"
+    },
+    {
+     "Rank": "6",
      "Name": "Kennedy Louisell",
      "Team": "James Madison",
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "Kills": "187",
-     "Aces": "24",
+     "S": "47",
+     "Kills": "205",
+     "Aces": "27",
      "Block Solos": "4",
-     "Block Assists": "20",
-     "Pts": "225.0"
+     "Block Assists": "23",
+     "Per Set": "5.27"
     },
     {
-     "Rank": "-",
-     "Name": "Alayna Pierce",
-     "Team": "Tennessee Tech",
-     "Cl": "Jr.",
-     "Height": "5-11",
+     "Rank": "7",
+     "Name": "Suli Davis",
+     "Team": "SMU",
+     "Cl": "So.",
+     "Height": "6-2",
      "Position": "OH",
-     "Kills": "204",
-     "Aces": "16",
-     "Block Solos": "1",
-     "Block Assists": "8",
-     "Pts": "225.0"
-    },
-    {
-     "Rank": "42",
-     "Name": "Maria Tabacuks",
-     "Team": "LMU (CA)",
-     "Cl": "Fr.",
-     "Height": "6-4",
-     "Position": "OH",
-     "Kills": "194",
-     "Aces": "13",
+     "S": "46",
+     "Kills": "217",
+     "Aces": "11",
      "Block Solos": "3",
-     "Block Assists": "27",
-     "Pts": "223.5"
+     "Block Assists": "22",
+     "Per Set": "5.26"
     },
     {
-     "Rank": "43",
-     "Name": "Molly McCluskey",
-     "Team": "UC San Diego",
-     "Cl": "Jr.",
-     "Height": "6-3",
-     "Position": "OH",
-     "Kills": "187",
-     "Aces": "15",
-     "Block Solos": "3",
-     "Block Assists": "35",
-     "Pts": "222.5"
-    },
-    {
-     "Rank": "-",
-     "Name": "Diane Pichelman",
-     "Team": "Green Bay",
-     "Cl": "Jr.",
+     "Rank": "8",
+     "Name": "Ana Burilovic",
+     "Team": "Colorado",
+     "Cl": "Sr.",
      "Height": "6-1",
-     "Position": "MB",
-     "Kills": "174",
-     "Aces": "24",
-     "Block Solos": "4",
-     "Block Assists": "41",
-     "Pts": "222.5"
+     "Position": "OH",
+     "S": "44",
+     "Kills": "193",
+     "Aces": "22",
+     "Block Solos": "5",
+     "Block Assists": "22",
+     "Per Set": "5.25"
     },
     {
-     "Rank": "45",
-     "Name": "Sara Bowcutt",
-     "Team": "Texas Tech",
-     "Cl": "Fr.",
+     "Rank": "9",
+     "Name": "Bianna Muoneke",
+     "Team": "Georgia",
+     "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "Kills": "196",
-     "Aces": "17",
-     "Block Solos": "1",
-     "Block Assists": "16",
-     "Pts": "222.0"
+     "S": "43",
+     "Kills": "199",
+     "Aces": "13",
+     "Block Solos": "0",
+     "Block Assists": "27",
+     "Per Set": "5.24"
     },
     {
-     "Rank": "-",
-     "Name": "Kaili Doctor",
-     "Team": "North Florida",
+     "Rank": "10",
+     "Name": "Ksenia Rakhmanchik",
+     "Team": "Baylor",
+     "Cl": "So.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "41",
+     "Kills": "196",
+     "Aces": "8",
+     "Block Solos": "3",
+     "Block Assists": "10",
+     "Per Set": "5.17"
+    },
+    {
+     "Rank": "11",
+     "Name": "Audrey Ross",
+     "Team": "Boston College",
+     "Cl": "Sr.",
+     "Height": "6-3",
+     "Position": "OH",
+     "S": "45",
+     "Kills": "203",
+     "Aces": "8",
+     "Block Solos": "12",
+     "Block Assists": "19",
+     "Per Set": "5.17"
+    },
+    {
+     "Rank": "12",
+     "Name": "Sylvie Zgonc",
+     "Team": "South Dakota St.",
      "Cl": "Sr.",
      "Height": "5-11",
      "Position": "OH",
-     "Kills": "200",
-     "Aces": "12",
+     "S": "49",
+     "Kills": "230",
+     "Aces": "11",
      "Block Solos": "4",
-     "Block Assists": "12",
-     "Pts": "222.0"
+     "Block Assists": "14",
+     "Per Set": "5.14"
     },
     {
-     "Rank": "47",
+     "Rank": "13",
+     "Name": "Carson Tyler",
+     "Team": "Marquette",
+     "Cl": "Jr.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "50",
+     "Kills": "218",
+     "Aces": "22",
+     "Block Solos": "2",
+     "Block Assists": "24",
+     "Per Set": "5.08"
+    },
+    {
+     "Rank": "14",
+     "Name": "Kennedi Rogers",
+     "Team": "Tennessee",
+     "Cl": "So.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "30",
+     "Kills": "134",
+     "Aces": "5",
+     "Block Solos": "4",
+     "Block Assists": "17",
+     "Per Set": "5.05"
+    },
+    {
+     "Rank": "15",
+     "Name": "Addison Massey",
+     "Team": "Kansas St.",
+     "Cl": "Fr.",
+     "Height": "6-1",
+     "Position": "OPP",
+     "S": "42",
+     "Kills": "183",
+     "Aces": "10",
+     "Block Solos": "10",
+     "Block Assists": "12",
+     "Per Set": "4.98"
+    },
+    {
+     "Rank": "16",
+     "Name": "Jenna Legault",
+     "Team": "Fresno St.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "54",
+     "Kills": "215",
+     "Aces": "35",
+     "Block Solos": "9",
+     "Block Assists": "17",
+     "Per Set": "4.95"
+    },
+    {
+     "Rank": "17",
+     "Name": "Emersen Schrom",
+     "Team": "Duquesne",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "47",
+     "Kills": "193",
+     "Aces": "34",
+     "Block Solos": "1",
+     "Block Assists": "9",
+     "Per Set": "4.95"
+    },
+    {
+     "Rank": "18",
+     "Name": "Brooklyn DeLeye",
+     "Team": "Kentucky",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "OH",
+     "S": "41",
+     "Kills": "176",
+     "Aces": "18",
+     "Block Solos": "4",
+     "Block Assists": "9",
+     "Per Set": "4.94"
+    },
+    {
+     "Rank": "19",
+     "Name": "Kalista Lukovich",
+     "Team": "Eastern Wash.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "59",
+     "Kills": "258",
+     "Aces": "17",
+     "Block Solos": "5",
+     "Block Assists": "22",
+     "Per Set": "4.93"
+    },
+    {
+     "Rank": "20",
+     "Name": "Claire Wagstaff",
+     "Team": "Gonzaga",
+     "Cl": "Jr.",
+     "Height": "6-4",
+     "Position": "RS",
+     "S": "58",
+     "Kills": "226",
+     "Aces": "26",
+     "Block Solos": "8",
+     "Block Assists": "43",
+     "Per Set": "4.85"
+    },
+    {
+     "Rank": "21",
+     "Name": "Nataly Moravec",
+     "Team": "Duke",
+     "Cl": "Sr.",
+     "Height": "6-3",
+     "Position": "OH",
+     "S": "41",
+     "Kills": "177",
+     "Aces": "10",
+     "Block Solos": "2",
+     "Block Assists": "15",
+     "Per Set": "4.79"
+    },
+    {
+     "Rank": "22",
+     "Name": "Paige Bennett",
+     "Team": "Winthrop",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "40",
+     "Kills": "171",
+     "Aces": "16",
+     "Block Solos": "1",
+     "Block Assists": "7",
+     "Per Set": "4.79"
+    },
+    {
+     "Rank": "23",
+     "Name": "Morgan Hayes",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OPP",
+     "S": "60",
+     "Kills": "257",
+     "Aces": "10",
+     "Block Solos": "1",
+     "Block Assists": "36",
+     "Per Set": "4.77"
+    },
+    {
+     "Rank": "24",
+     "Name": "Cassidy Hartman",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "50",
+     "Kills": "215",
+     "Aces": "6",
+     "Block Solos": "3",
+     "Block Assists": "28",
+     "Per Set": "4.76"
+    },
+    {
+     "Rank": "25",
+     "Name": "Sara van Gisteren",
+     "Team": "LIU",
+     "Cl": "Sr.",
+     "Height": "6-3",
+     "Position": "OH",
+     "S": "38",
+     "Kills": "148",
+     "Aces": "13",
+     "Block Solos": "7",
+     "Block Assists": "25",
+     "Per Set": "4.75"
+    },
+    {
+     "Rank": "26",
+     "Name": "Caitlyn Little",
+     "Team": "Memphis",
+     "Cl": "Sr.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "53",
+     "Kills": "217",
+     "Aces": "21",
+     "Block Solos": "1",
+     "Block Assists": "25",
+     "Per Set": "4.75"
+    },
+    {
+     "Rank": "27",
+     "Name": "Kiera Hamilton",
+     "Team": "George Mason",
+     "Cl": "So.",
+     "Height": "6-2",
+     "Position": "OH",
+     "S": "45",
+     "Kills": "192",
+     "Aces": "11",
+     "Block Solos": "4",
+     "Block Assists": "12",
+     "Per Set": "4.73"
+    },
+    {
+     "Rank": "28",
+     "Name": "Ashby Zubchevich",
+     "Team": "Duke",
+     "Cl": "So.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "43",
+     "Kills": "168",
+     "Aces": "28",
+     "Block Solos": "0",
+     "Block Assists": "15",
+     "Per Set": "4.73"
+    },
+    {
+     "Rank": "29",
+     "Name": "Becca Kelley",
+     "Team": "TCU",
+     "Cl": "Jr.",
+     "Height": "6-3",
+     "Position": "OH",
+     "S": "46",
+     "Kills": "191",
+     "Aces": "8",
+     "Block Solos": "6",
+     "Block Assists": "25",
+     "Per Set": "4.73"
+    },
+    {
+     "Rank": "30",
+     "Name": "Sydney Jones",
+     "Team": "Houston",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OH",
+     "S": "45",
+     "Kills": "202",
+     "Aces": "5",
+     "Block Solos": "0",
+     "Block Assists": "9",
+     "Per Set": "4.70"
+    },
+    {
+     "Rank": "31",
+     "Name": "Carola Tesoro",
+     "Team": "St. John's (NY)",
+     "Cl": "Fr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "54",
+     "Kills": "229",
+     "Aces": "16",
+     "Block Solos": "0",
+     "Block Assists": "15",
+     "Per Set": "4.68"
+    },
+    {
+     "Rank": "32",
+     "Name": "Kennedy Martin",
+     "Team": "Penn St.",
+     "Cl": "Sr.",
+     "Height": "6-6",
+     "Position": "RS",
+     "S": "43",
+     "Kills": "177",
+     "Aces": "8",
+     "Block Solos": "1",
+     "Block Assists": "30",
+     "Per Set": "4.67"
+    },
+    {
+     "Rank": "33",
+     "Name": "Ella Demetrician",
+     "Team": "Michigan",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OH",
+     "S": "46",
+     "Kills": "198",
+     "Aces": "5",
+     "Block Solos": "5",
+     "Block Assists": "14",
+     "Per Set": "4.67"
+    },
+    {
+     "Rank": "34",
+     "Name": "Belle Patrick",
+     "Team": "Auburn",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "44",
+     "Kills": "179",
+     "Aces": "18",
+     "Block Solos": "0",
+     "Block Assists": "16",
+     "Per Set": "4.66"
+    },
+    {
+     "Rank": "35",
+     "Name": "Lindsey Mangelson",
+     "Team": "Mississippi St.",
+     "Cl": "So.",
+     "Height": "6-2",
+     "Position": "OH",
+     "S": "42",
+     "Kills": "166",
+     "Aces": "20",
+     "Block Solos": "1",
+     "Block Assists": "17",
+     "Per Set": "4.65"
+    },
+    {
+     "Rank": "36",
+     "Name": "Alida Bennour",
+     "Team": "Georgia Tech",
+     "Cl": "Fr.",
+     "Height": "6-2",
+     "Position": "OH",
+     "S": "45",
+     "Kills": "161",
+     "Aces": "28",
+     "Block Solos": "1",
+     "Block Assists": "35",
+     "Per Set": "4.61"
+    },
+    {
+     "Rank": "37",
+     "Name": "Sadie McAda",
+     "Team": "Southern Miss.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "46",
+     "Kills": "192",
+     "Aces": "10",
+     "Block Solos": "2",
+     "Block Assists": "15",
+     "Per Set": "4.60"
+    },
+    {
+     "Rank": "38",
      "Name": "Kyleene Filimaua",
      "Team": "Florida St.",
      "Cl": "Sr.",
      "Height": "6-1",
      "Position": "OH",
+     "S": "48",
      "Kills": "186",
      "Aces": "22",
      "Block Solos": "3",
      "Block Assists": "19",
-     "Pts": "220.5"
+     "Per Set": "4.59"
     },
     {
-     "Rank": "48",
-     "Name": "Reagan Nelson",
-     "Team": "Southeast Mo. St.",
-     "Cl": "So.",
-     "Height": "6-0",
-     "Position": "OH",
-     "Kills": "197",
-     "Aces": "17",
-     "Block Solos": "3",
-     "Block Assists": "6",
-     "Pts": "220.0"
-    },
-    {
-     "Rank": "49",
-     "Name": "Ariana Brown",
-     "Team": "East Texas A&M",
+     "Rank": "39",
+     "Name": "Lily Dykstra",
+     "Team": "UNI",
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "Kills": "186",
-     "Aces": "24",
+     "S": "50",
+     "Kills": "207",
+     "Aces": "10",
      "Block Solos": "2",
-     "Block Assists": "15",
-     "Pts": "219.5"
+     "Block Assists": "21",
+     "Per Set": "4.59"
+    },
+    {
+     "Rank": "40",
+     "Name": "Mallory Reck",
+     "Team": "Marist",
+     "Cl": "So.",
+     "Height": "5-11",
+     "Position": "OH",
+     "S": "63",
+     "Kills": "254",
+     "Aces": "24",
+     "Block Solos": "3",
+     "Block Assists": "16",
+     "Per Set": "4.59"
+    },
+    {
+     "Rank": "41",
+     "Name": "Avah Armour",
+     "Team": "UCF",
+     "Cl": "Sr.",
+     "Height": "6-5",
+     "Position": "OH",
+     "S": "43",
+     "Kills": "168",
+     "Aces": "12",
+     "Block Solos": "4",
+     "Block Assists": "26",
+     "Per Set": "4.58"
+    },
+    {
+     "Rank": "42",
+     "Name": "Morgan Gaerte",
+     "Team": "Kentucky",
+     "Cl": "Jr.",
+     "Height": "6-5",
+     "Position": "OH",
+     "S": "38",
+     "Kills": "151",
+     "Aces": "1",
+     "Block Solos": "3",
+     "Block Assists": "37",
+     "Per Set": "4.57"
+    },
+    {
+     "Rank": "43",
+     "Name": "Reagan Barth",
+     "Team": "Ga. Southern",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "43",
+     "Kills": "171",
+     "Aces": "9",
+     "Block Solos": "5",
+     "Block Assists": "22",
+     "Per Set": "4.56"
+    },
+    {
+     "Rank": "44",
+     "Name": "Hailey Brockway",
+     "Team": "CSUN",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "OH",
+     "S": "40",
+     "Kills": "159",
+     "Aces": "13",
+     "Block Solos": "2",
+     "Block Assists": "16",
+     "Per Set": "4.55"
+    },
+    {
+     "Rank": "45",
+     "Name": "Ashby Willis",
+     "Team": "Southern Ind.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "56",
+     "Kills": "221",
+     "Aces": "21",
+     "Block Solos": "2",
+     "Block Assists": "20",
+     "Per Set": "4.54"
+    },
+    {
+     "Rank": "46",
+     "Name": "Tyne Ross",
+     "Team": "N.C. A&T",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "51",
+     "Kills": "206",
+     "Aces": "9",
+     "Block Solos": "8",
+     "Block Assists": "16",
+     "Per Set": "4.53"
+    },
+    {
+     "Rank": "47",
+     "Name": "Riley Rosneck",
+     "Team": "Purdue Fort Wayne",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "57",
+     "Kills": "226",
+     "Aces": "15",
+     "Block Solos": "4",
+     "Block Assists": "26",
+     "Per Set": "4.53"
+    },
+    {
+     "Rank": "48",
+     "Name": "Chloe Monson",
+     "Team": "Sam Houston",
+     "Cl": "So.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "54",
+     "Kills": "221",
+     "Aces": "12",
+     "Block Solos": "1",
+     "Block Assists": "20",
+     "Per Set": "4.52"
+    },
+    {
+     "Rank": "49",
+     "Name": "Sydney Nolan",
+     "Team": "Cincinnati",
+     "Cl": "Sr.",
+     "Height": "6-4",
+     "Position": "OH",
+     "S": "38",
+     "Kills": "158",
+     "Aces": "9",
+     "Block Solos": "1",
+     "Block Assists": "7",
+     "Per Set": "4.51"
     },
     {
      "Rank": "50",
-     "Name": "Ella Sanders",
-     "Team": "Stony Brook",
-     "Cl": "Jr.",
+     "Name": "Chloe Chicoine",
+     "Team": "Louisville",
+     "Cl": "Sr.",
      "Height": "5-10",
      "Position": "OH",
-     "Kills": "189",
-     "Aces": "13",
-     "Block Solos": "1",
-     "Block Assists": "31",
-     "Pts": "218.5"
+     "S": "50",
+     "Kills": "205",
+     "Aces": "11",
+     "Block Solos": "3",
+     "Block Assists": "13",
+     "Per Set": "4.51"
     }
    ]
   },
@@ -4870,7 +5578,7 @@
    "id": "883",
    "name": "Service Aces",
    "title": "Service Aces",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -4899,7 +5607,7 @@
      "Cl": "Jr.",
      "Height": "5-10",
      "Position": "OH",
-     "S": "56",
+     "S": "59",
      "Aces": "39"
     },
     {
@@ -4914,16 +5622,26 @@
     },
     {
      "Rank": "5",
+     "Name": "Jenna Legault",
+     "Team": "Fresno St.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "54",
+     "Aces": "35"
+    },
+    {
+     "Rank": "-",
      "Name": "Ema Petkovic",
      "Team": "UTRGV",
      "Cl": "So.",
      "Height": "6-2",
      "Position": "RS",
-     "S": "47",
+     "S": "51",
      "Aces": "35"
     },
     {
-     "Rank": "6",
+     "Rank": "7",
      "Name": "Emersen Schrom",
      "Team": "Duquesne",
      "Cl": "Jr.",
@@ -4933,23 +5651,13 @@
      "Aces": "34"
     },
     {
-     "Rank": "7",
+     "Rank": "8",
      "Name": "Natasha Casey",
      "Team": "UCF",
      "Cl": "Fr.",
      "Height": "6-2",
      "Position": "OPP",
      "S": "42",
-     "Aces": "32"
-    },
-    {
-     "Rank": "-",
-     "Name": "Jenna Legault",
-     "Team": "Fresno St.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "50",
      "Aces": "32"
     },
     {
@@ -4964,6 +5672,26 @@
     },
     {
      "Rank": "10",
+     "Name": "Courtney Nix",
+     "Team": "Delaware St.",
+     "Cl": "Sr.",
+     "Height": "5-8",
+     "Position": "L/DS",
+     "S": "58",
+     "Aces": "31"
+    },
+    {
+     "Rank": "-",
+     "Name": "Lauren Perry",
+     "Team": "UTEP",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "59",
+     "Aces": "31"
+    },
+    {
+     "Rank": "-",
      "Name": "Leonor Polezzi",
      "Team": "DePaul",
      "Cl": "Sr.",
@@ -4993,33 +5721,13 @@
      "Aces": "31"
     },
     {
-     "Rank": "13",
+     "Rank": "15",
      "Name": "Reagan Anderson",
      "Team": "Austin Peay",
      "Cl": "Sr.",
      "Height": "5-5",
      "Position": "L/DS",
-     "S": "58",
-     "Aces": "30"
-    },
-    {
-     "Rank": "-",
-     "Name": "Courtney Nix",
-     "Team": "Delaware St.",
-     "Cl": "Sr.",
-     "Height": "5-8",
-     "Position": "L/DS",
-     "S": "54",
-     "Aces": "30"
-    },
-    {
-     "Rank": "-",
-     "Name": "Lauren Perry",
-     "Team": "UTEP",
-     "Cl": "Jr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "56",
+     "S": "61",
      "Aces": "30"
     },
     {
@@ -5114,6 +5822,16 @@
     },
     {
      "Rank": "-",
+     "Name": "Mckenna Wucherer",
+     "Team": "Minnesota",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "39",
+     "Aces": "28"
+    },
+    {
+     "Rank": "-",
      "Name": "Ashby Zubchevich",
      "Team": "Duke",
      "Cl": "So.",
@@ -5123,7 +5841,7 @@
      "Aces": "28"
     },
     {
-     "Rank": "26",
+     "Rank": "27",
      "Name": "Giada Ianuale",
      "Team": "Fordham",
      "Cl": "Fr.",
@@ -5144,6 +5862,36 @@
     },
     {
      "Rank": "-",
+     "Name": "Kennedy Louisell",
+     "Team": "James Madison",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "47",
+     "Aces": "27"
+    },
+    {
+     "Rank": "-",
+     "Name": "Haley Mullaney",
+     "Team": "East Texas A&M",
+     "Cl": "Sr.",
+     "Height": "5-9",
+     "Position": "S",
+     "S": "65",
+     "Aces": "27"
+    },
+    {
+     "Rank": "-",
+     "Name": "Emma Neukirchen",
+     "Team": "San Francisco",
+     "Cl": "Fr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "60",
+     "Aces": "27"
+    },
+    {
+     "Rank": "-",
      "Name": "Chloe Smith",
      "Team": "Wofford",
      "Cl": "Jr.",
@@ -5159,11 +5907,41 @@
      "Cl": "Jr.",
      "Height": "6-3",
      "Position": "OPP",
-     "S": "39",
+     "S": "42",
      "Aces": "27"
     },
     {
-     "Rank": "30",
+     "Rank": "34",
+     "Name": "Ava Blascziek",
+     "Team": "Portland St.",
+     "Cl": "Sr.",
+     "Height": "5-10",
+     "Position": "S",
+     "S": "51",
+     "Aces": "26"
+    },
+    {
+     "Rank": "-",
+     "Name": "Lily Bolen",
+     "Team": "Rutgers",
+     "Cl": "Jr.",
+     "Height": "5-7",
+     "Position": "S",
+     "S": "57",
+     "Aces": "26"
+    },
+    {
+     "Rank": "-",
+     "Name": "Ariana Brown",
+     "Team": "East Texas A&M",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "65",
+     "Aces": "26"
+    },
+    {
+     "Rank": "-",
      "Name": "Kaitlin Curran",
      "Team": "Bryant",
      "Cl": "So.",
@@ -5243,23 +6021,23 @@
      "Aces": "26"
     },
     {
-     "Rank": "38",
+     "Rank": "-",
+     "Name": "Claire Wagstaff",
+     "Team": "Gonzaga",
+     "Cl": "Jr.",
+     "Height": "6-4",
+     "Position": "RS",
+     "S": "58",
+     "Aces": "26"
+    },
+    {
+     "Rank": "46",
      "Name": "Ana Appel",
      "Team": "Oral Roberts",
      "Cl": "Fr.",
      "Height": "5-9",
      "Position": "S",
-     "S": "48",
-     "Aces": "25"
-    },
-    {
-     "Rank": "-",
-     "Name": "Lily Bolen",
-     "Team": "Rutgers",
-     "Cl": "Jr.",
-     "Height": "5-7",
-     "Position": "S",
-     "S": "54",
+     "S": "49",
      "Aces": "25"
     },
     {
@@ -5301,76 +6079,6 @@
      "Position": "S",
      "S": "44",
      "Aces": "25"
-    },
-    {
-     "Rank": "-",
-     "Name": "Claire Wagstaff",
-     "Team": "Gonzaga",
-     "Cl": "Jr.",
-     "Height": "6-4",
-     "Position": "RS",
-     "S": "53",
-     "Aces": "25"
-    },
-    {
-     "Rank": "-",
-     "Name": "Taylor Williams",
-     "Team": "Alabama St.",
-     "Cl": "Jr.",
-     "Height": "5-10",
-     "Position": "OH",
-     "S": "53",
-     "Aces": "25"
-    },
-    {
-     "Rank": "-",
-     "Name": "Mckenna Wucherer",
-     "Team": "Minnesota",
-     "Cl": "Sr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "S": "36",
-     "Aces": "25"
-    },
-    {
-     "Rank": "47",
-     "Name": "Ava Blascziek",
-     "Team": "Portland St.",
-     "Cl": "Sr.",
-     "Height": "5-10",
-     "Position": "S",
-     "S": "47",
-     "Aces": "24"
-    },
-    {
-     "Rank": "-",
-     "Name": "Ariana Brown",
-     "Team": "East Texas A&M",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "61",
-     "Aces": "24"
-    },
-    {
-     "Rank": "-",
-     "Name": "Jazen Debina",
-     "Team": "Cleveland St.",
-     "Cl": "Jr.",
-     "Height": "6-0",
-     "Position": "MB",
-     "S": "45",
-     "Aces": "24"
-    },
-    {
-     "Rank": "-",
-     "Name": "Michaela Dlouhá",
-     "Team": "Middle Tenn.",
-     "Cl": "Sr.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "57",
-     "Aces": "24"
     }
    ]
   },
@@ -5378,7 +6086,7 @@
    "id": "880",
    "name": "Total Assists",
    "title": "Total Assists",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -5387,11 +6095,21 @@
      "Cl": "Jr.",
      "Height": "6-1",
      "Position": "S",
-     "S": "59",
-     "Assists": "662"
+     "S": "64",
+     "Assists": "706"
     },
     {
      "Rank": "2",
+     "Name": "Macy Hinshaw",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "5-9",
+     "Position": "S",
+     "S": "60",
+     "Assists": "633"
+    },
+    {
+     "Rank": "3",
      "Name": "Caelyn Dumas",
      "Team": "Marist",
      "Cl": "So.",
@@ -5401,7 +6119,7 @@
      "Assists": "616"
     },
     {
-     "Rank": "3",
+     "Rank": "4",
      "Name": "Eva Rovello",
      "Team": "Coppin St.",
      "Cl": "Jr.",
@@ -5411,17 +6129,27 @@
      "Assists": "613"
     },
     {
-     "Rank": "4",
-     "Name": "Macy Hinshaw",
-     "Team": "Santa Clara",
-     "Cl": "Jr.",
-     "Height": "5-9",
+     "Rank": "5",
+     "Name": "Katie Boney",
+     "Team": "Western Caro.",
+     "Cl": "Sr.",
+     "Height": "6-0",
      "Position": "S",
-     "S": "57",
-     "Assists": "596"
+     "S": "66",
+     "Assists": "604"
     },
     {
-     "Rank": "5",
+     "Rank": "6",
+     "Name": "Jade Longlad",
+     "Team": "Northwestern St.",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "61",
+     "Assists": "572"
+    },
+    {
+     "Rank": "7",
      "Name": "Maria Drapp",
      "Team": "Bradley",
      "Cl": "Jr.",
@@ -5441,17 +6169,7 @@
      "Assists": "569"
     },
     {
-     "Rank": "7",
-     "Name": "Katie Boney",
-     "Team": "Western Caro.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "S",
-     "S": "62",
-     "Assists": "566"
-    },
-    {
-     "Rank": "8",
+     "Rank": "9",
      "Name": "Alexa Hernandez",
      "Team": "Green Bay",
      "Cl": "So.",
@@ -5461,7 +6179,37 @@
      "Assists": "561"
     },
     {
-     "Rank": "9",
+     "Rank": "10",
+     "Name": "Rachel Koss",
+     "Team": "Abilene Christian",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "57",
+     "Assists": "560"
+    },
+    {
+     "Rank": "11",
+     "Name": "Mia Starr",
+     "Team": "UC Davis",
+     "Cl": "Sr.",
+     "Height": "5-10",
+     "Position": "S",
+     "S": "57",
+     "Assists": "559"
+    },
+    {
+     "Rank": "12",
+     "Name": "Charlie Fuerbringer",
+     "Team": "Wisconsin",
+     "Cl": "Jr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "50",
+     "Assists": "555"
+    },
+    {
+     "Rank": "13",
      "Name": "Grace Purichia",
      "Team": "IU Indy",
      "Cl": "Sr.",
@@ -5471,7 +6219,27 @@
      "Assists": "545"
     },
     {
-     "Rank": "10",
+     "Rank": "-",
+     "Name": "Enisilina Savelio",
+     "Team": "Houston Christian",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "60",
+     "Assists": "545"
+    },
+    {
+     "Rank": "15",
+     "Name": "Nerea Alvarez-Jorge",
+     "Team": "Northern Colo.",
+     "Cl": "Sr.",
+     "Height": "5-10",
+     "Position": "S",
+     "S": "55",
+     "Assists": "544"
+    },
+    {
+     "Rank": "-",
      "Name": "Kate Rush",
      "Team": "Western Ky.",
      "Cl": "So.",
@@ -5481,7 +6249,7 @@
      "Assists": "544"
     },
     {
-     "Rank": "11",
+     "Rank": "17",
      "Name": "Anna Flores",
      "Team": "California",
      "Cl": "Fr.",
@@ -5491,7 +6259,27 @@
      "Assists": "534"
     },
     {
-     "Rank": "12",
+     "Rank": "18",
+     "Name": "Delfina Schuh",
+     "Team": "LMU (CA)",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "S",
+     "S": "55",
+     "Assists": "532"
+    },
+    {
+     "Rank": "-",
+     "Name": "Maddie Stuesser",
+     "Team": "Omaha",
+     "Cl": "Jr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "50",
+     "Assists": "532"
+    },
+    {
+     "Rank": "20",
      "Name": "Abbigail Pickard",
      "Team": "Northern Ky.",
      "Cl": "So.",
@@ -5511,7 +6299,7 @@
      "Assists": "531"
     },
     {
-     "Rank": "14",
+     "Rank": "22",
      "Name": "Kaci Johnson",
      "Team": "Lindenwood",
      "Cl": "Jr.",
@@ -5521,27 +6309,7 @@
      "Assists": "525"
     },
     {
-     "Rank": "-",
-     "Name": "Jade Longlad",
-     "Team": "Northwestern St.",
-     "Cl": "Sr.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "56",
-     "Assists": "525"
-    },
-    {
-     "Rank": "16",
-     "Name": "Rachel Koss",
-     "Team": "Abilene Christian",
-     "Cl": "Sr.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "54",
-     "Assists": "520"
-    },
-    {
-     "Rank": "17",
+     "Rank": "23",
      "Name": "Izora Gragg",
      "Team": "UNC Greensboro",
      "Cl": "Sr.",
@@ -5551,7 +6319,7 @@
      "Assists": "518"
     },
     {
-     "Rank": "18",
+     "Rank": "24",
      "Name": "Jetta Brenning",
      "Team": "Saint Louis",
      "Cl": "So.",
@@ -5561,7 +6329,7 @@
      "Assists": "514"
     },
     {
-     "Rank": "19",
+     "Rank": "25",
      "Name": "Leah Richmond",
      "Team": "Western Mich.",
      "Cl": "So.",
@@ -5571,17 +6339,17 @@
      "Assists": "513"
     },
     {
-     "Rank": "-",
-     "Name": "Mia Starr",
-     "Team": "UC Davis",
-     "Cl": "Sr.",
-     "Height": "5-10",
+     "Rank": "26",
+     "Name": "Anabelle Cerny",
+     "Team": "South Alabama",
+     "Cl": "Fr.",
+     "Height": "6-0",
      "Position": "S",
-     "S": "54",
-     "Assists": "513"
+     "S": "56",
+     "Assists": "511"
     },
     {
-     "Rank": "21",
+     "Rank": "27",
      "Name": "Kinslee McGowan",
      "Team": "North Ala.",
      "Cl": "Jr.",
@@ -5591,27 +6359,27 @@
      "Assists": "509"
     },
     {
-     "Rank": "22",
-     "Name": "Charlie Fuerbringer",
-     "Team": "Wisconsin",
+     "Rank": "28",
+     "Name": "Deniz Dakak",
+     "Team": "American",
      "Cl": "Jr.",
-     "Height": "5-11",
+     "Height": "6-0",
      "Position": "S",
-     "S": "45",
-     "Assists": "508"
+     "S": "50",
+     "Assists": "506"
     },
     {
-     "Rank": "-",
-     "Name": "Enisilina Savelio",
-     "Team": "Houston Christian",
-     "Cl": "Sr.",
-     "Height": "5-11",
+     "Rank": "29",
+     "Name": "Tristen Raymond",
+     "Team": "Pepperdine",
+     "Cl": "So.",
+     "Height": "5-10",
      "Position": "S",
-     "S": "57",
-     "Assists": "508"
+     "S": "55",
+     "Assists": "505"
     },
     {
-     "Rank": "24",
+     "Rank": "30",
      "Name": "Sammi Bergjans",
      "Team": "Mercer",
      "Cl": "Jr.",
@@ -5641,17 +6409,27 @@
      "Assists": "504"
     },
     {
-     "Rank": "27",
-     "Name": "Delfina Schuh",
-     "Team": "LMU (CA)",
-     "Cl": "Jr.",
-     "Height": "6-0",
+     "Rank": "33",
+     "Name": "Ellie Stiernagle",
+     "Team": "Northwestern",
+     "Cl": "Fr.",
+     "Height": "6-2",
      "Position": "S",
-     "S": "52",
+     "S": "51",
      "Assists": "503"
     },
     {
-     "Rank": "28",
+     "Rank": "34",
+     "Name": "Alison Ohlinger",
+     "Team": "Samford",
+     "Cl": "Fr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "51",
+     "Assists": "502"
+    },
+    {
+     "Rank": "-",
      "Name": "Morgan Petelin",
      "Team": "Tennessee Tech",
      "Cl": "Fr.",
@@ -5661,7 +6439,17 @@
      "Assists": "502"
     },
     {
-     "Rank": "29",
+     "Rank": "-",
+     "Name": "Sara Toth",
+     "Team": "Maryland",
+     "Cl": "So.",
+     "Height": "6-0",
+     "Position": "S",
+     "S": "45",
+     "Assists": "502"
+    },
+    {
+     "Rank": "37",
      "Name": "Eva Long",
      "Team": "NC State",
      "Cl": "Fr.",
@@ -5671,17 +6459,17 @@
      "Assists": "501"
     },
     {
-     "Rank": "30",
-     "Name": "Nerea Alvarez-Jorge",
-     "Team": "Northern Colo.",
-     "Cl": "Sr.",
-     "Height": "5-10",
+     "Rank": "38",
+     "Name": "Makenna Wiepert",
+     "Team": "Sacramento St.",
+     "Cl": "Jr.",
+     "Height": "5-11",
      "Position": "S",
-     "S": "51",
+     "S": "57",
      "Assists": "500"
     },
     {
-     "Rank": "31",
+     "Rank": "39",
      "Name": "Chloe Wilmot",
      "Team": "Duquesne",
      "Cl": "Sr.",
@@ -5691,7 +6479,17 @@
      "Assists": "498"
     },
     {
-     "Rank": "32",
+     "Rank": "40",
+     "Name": "Reese Booth",
+     "Team": "UNI",
+     "Cl": "Jr.",
+     "Height": "5-9",
+     "Position": "S",
+     "S": "50",
+     "Assists": "496"
+    },
+    {
+     "Rank": "41",
      "Name": "Kassie O'Brien",
      "Team": "Kentucky",
      "Cl": "So.",
@@ -5721,7 +6519,17 @@
      "Assists": "495"
     },
     {
-     "Rank": "35",
+     "Rank": "44",
+     "Name": "Erin Debiec",
+     "Team": "Colorado St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "S",
+     "S": "48",
+     "Assists": "494"
+    },
+    {
+     "Rank": "-",
      "Name": "Allie Hazelwood",
      "Team": "Southern Miss.",
      "Cl": "Sr.",
@@ -5731,7 +6539,7 @@
      "Assists": "494"
     },
     {
-     "Rank": "36",
+     "Rank": "46",
      "Name": "Kenlee Barnard",
      "Team": "Robert Morris",
      "Cl": "Fr.",
@@ -5741,27 +6549,7 @@
      "Assists": "488"
     },
     {
-     "Rank": "-",
-     "Name": "Anabelle Cerny",
-     "Team": "South Alabama",
-     "Cl": "Fr.",
-     "Height": "6-0",
-     "Position": "S",
-     "S": "53",
-     "Assists": "488"
-    },
-    {
-     "Rank": "-",
-     "Name": "Ellie Stiernagle",
-     "Team": "Northwestern",
-     "Cl": "Fr.",
-     "Height": "6-2",
-     "Position": "S",
-     "S": "48",
-     "Assists": "488"
-    },
-    {
-     "Rank": "39",
+     "Rank": "47",
      "Name": "Katelyn Cochran",
      "Team": "Texas Tech",
      "Cl": "Sr.",
@@ -5781,7 +6569,7 @@
      "Assists": "486"
     },
     {
-     "Rank": "41",
+     "Rank": "49",
      "Name": "Sofia Dawson",
      "Team": "North Florida",
      "Cl": "So.",
@@ -5799,86 +6587,6 @@
      "Position": "S",
      "S": "50",
      "Assists": "485"
-    },
-    {
-     "Rank": "43",
-     "Name": "Makenna Wiepert",
-     "Team": "Sacramento St.",
-     "Cl": "Jr.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "54",
-     "Assists": "484"
-    },
-    {
-     "Rank": "44",
-     "Name": "Kennedi Inman",
-     "Team": "Delaware",
-     "Cl": "Sr.",
-     "Height": "5-10",
-     "Position": "S",
-     "S": "47",
-     "Assists": "481"
-    },
-    {
-     "Rank": "45",
-     "Name": "Adrianna Arquette",
-     "Team": "Hawaii",
-     "Cl": "Jr.",
-     "Height": "5-10",
-     "Position": "S",
-     "S": "50",
-     "Assists": "480"
-    },
-    {
-     "Rank": "46",
-     "Name": "Maddie Stuesser",
-     "Team": "Omaha",
-     "Cl": "Jr.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "45",
-     "Assists": "479"
-    },
-    {
-     "Rank": "47",
-     "Name": "Tristen Raymond",
-     "Team": "Pepperdine",
-     "Cl": "So.",
-     "Height": "5-10",
-     "Position": "S",
-     "S": "52",
-     "Assists": "478"
-    },
-    {
-     "Rank": "-",
-     "Name": "Katherine Sandt",
-     "Team": "Clemson",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "S",
-     "S": "60",
-     "Assists": "478"
-    },
-    {
-     "Rank": "49",
-     "Name": "Hannah Beauford",
-     "Team": "SMU",
-     "Cl": "Fr.",
-     "Height": "5-11",
-     "Position": "S",
-     "S": "46",
-     "Assists": "477"
-    },
-    {
-     "Rank": "50",
-     "Name": "Carsyn Kelley",
-     "Team": "Evansville",
-     "Cl": "Fr.",
-     "Height": "6-0",
-     "Position": "S",
-     "S": "55",
-     "Assists": "474"
     }
    ]
   },
@@ -5886,7 +6594,7 @@
    "id": "889",
    "name": "Total Attacks",
    "title": "Total Attacks",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -5895,13 +6603,25 @@
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "S": "55",
-     "Kills": "236",
-     "Errors": "79",
-     "Total Attacks": "717"
+     "S": "59",
+     "Kills": "258",
+     "Errors": "87",
+     "Total Attacks": "779"
     },
     {
      "Rank": "2",
+     "Name": "Hanah Stoddard",
+     "Team": "Northern Ariz.",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "57",
+     "Kills": "204",
+     "Errors": "70",
+     "Total Attacks": "701"
+    },
+    {
+     "Rank": "3",
      "Name": "Allie Sweet",
      "Team": "UNC Greensboro",
      "Cl": "Jr.",
@@ -5913,7 +6633,7 @@
      "Total Attacks": "698"
     },
     {
-     "Rank": "3",
+     "Rank": "4",
      "Name": "Mallory Reck",
      "Team": "Marist",
      "Cl": "So.",
@@ -5925,19 +6645,19 @@
      "Total Attacks": "659"
     },
     {
-     "Rank": "-",
-     "Name": "Hanah Stoddard",
-     "Team": "Northern Ariz.",
+     "Rank": "5",
+     "Name": "Jenna Legault",
+     "Team": "Fresno St.",
      "Cl": "Sr.",
-     "Height": "6-1",
+     "Height": "6-0",
      "Position": "OH",
      "S": "54",
-     "Kills": "192",
-     "Errors": "64",
-     "Total Attacks": "659"
+     "Kills": "215",
+     "Errors": "88",
+     "Total Attacks": "654"
     },
     {
-     "Rank": "5",
+     "Rank": "6",
      "Name": "Riley Rosneck",
      "Team": "Purdue Fort Wayne",
      "Cl": "Jr.",
@@ -5949,7 +6669,7 @@
      "Total Attacks": "648"
     },
     {
-     "Rank": "6",
+     "Rank": "7",
      "Name": "Ashby Willis",
      "Team": "Southern Ind.",
      "Cl": "Sr.",
@@ -5961,7 +6681,7 @@
      "Total Attacks": "637"
     },
     {
-     "Rank": "7",
+     "Rank": "8",
      "Name": "Emma Sorensen",
      "Team": "Holy Cross",
      "Cl": "So.",
@@ -5973,7 +6693,31 @@
      "Total Attacks": "634"
     },
     {
-     "Rank": "8",
+     "Rank": "9",
+     "Name": "Ally Cordes",
+     "Team": "Samford",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "51",
+     "Kills": "178",
+     "Errors": "70",
+     "Total Attacks": "615"
+    },
+    {
+     "Rank": "-",
+     "Name": "Elsie Sanchez",
+     "Team": "Northwestern St.",
+     "Cl": "So.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "60",
+     "Kills": "198",
+     "Errors": "92",
+     "Total Attacks": "615"
+    },
+    {
+     "Rank": "11",
      "Name": "Jurnee Robinson",
      "Team": "LSU",
      "Cl": "Sr.",
@@ -5985,19 +6729,31 @@
      "Total Attacks": "612"
     },
     {
-     "Rank": "9",
-     "Name": "Jenna Legault",
-     "Team": "Fresno St.",
+     "Rank": "12",
+     "Name": "Zoe Zudans",
+     "Team": "Western Caro.",
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
-     "S": "50",
-     "Kills": "204",
-     "Errors": "79",
-     "Total Attacks": "608"
+     "S": "62",
+     "Kills": "179",
+     "Errors": "66",
+     "Total Attacks": "610"
     },
     {
-     "Rank": "10",
+     "Rank": "13",
+     "Name": "Victoria Marthaler",
+     "Team": "Sacramento St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "S": "57",
+     "Kills": "226",
+     "Errors": "113",
+     "Total Attacks": "609"
+    },
+    {
+     "Rank": "14",
      "Name": "Chloe Smith",
      "Team": "Wofford",
      "Cl": "Jr.",
@@ -6009,7 +6765,91 @@
      "Total Attacks": "606"
     },
     {
-     "Rank": "11",
+     "Rank": "15",
+     "Name": "Cassidy Hartman",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "50",
+     "Kills": "215",
+     "Errors": "102",
+     "Total Attacks": "598"
+    },
+    {
+     "Rank": "16",
+     "Name": "Morgan Hayes",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OPP",
+     "S": "60",
+     "Kills": "257",
+     "Errors": "100",
+     "Total Attacks": "594"
+    },
+    {
+     "Rank": "17",
+     "Name": "Lily Dykstra",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "50",
+     "Kills": "207",
+     "Errors": "88",
+     "Total Attacks": "589"
+    },
+    {
+     "Rank": "18",
+     "Name": "Antonie Kelnárová",
+     "Team": "Saint Mary's (CA)",
+     "Cl": "Jr.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "59",
+     "Kills": "195",
+     "Errors": "110",
+     "Total Attacks": "587"
+    },
+    {
+     "Rank": "19",
+     "Name": "Maria Tabacuks",
+     "Team": "LMU (CA)",
+     "Cl": "Fr.",
+     "Height": "6-4",
+     "Position": "OH",
+     "S": "55",
+     "Kills": "211",
+     "Errors": "68",
+     "Total Attacks": "582"
+    },
+    {
+     "Rank": "20",
+     "Name": "Ariana Brown",
+     "Team": "East Texas A&M",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "65",
+     "Kills": "201",
+     "Errors": "61",
+     "Total Attacks": "581"
+    },
+    {
+     "Rank": "21",
+     "Name": "Akira Burt",
+     "Team": "Georgia St.",
+     "Cl": "Sr.",
+     "Height": "5-10",
+     "Position": "MB",
+     "S": "59",
+     "Kills": "213",
+     "Errors": "94",
+     "Total Attacks": "580"
+    },
+    {
+     "Rank": "22",
      "Name": "Suelen Lima",
      "Team": "CSU Bakersfield",
      "Cl": "Jr.",
@@ -6021,7 +6861,7 @@
      "Total Attacks": "579"
     },
     {
-     "Rank": "12",
+     "Rank": "23",
      "Name": "Sydnee Peterson",
      "Team": "Rice",
      "Cl": "So.",
@@ -6033,19 +6873,7 @@
      "Total Attacks": "578"
     },
     {
-     "Rank": "13",
-     "Name": "Victoria Marthaler",
-     "Team": "Sacramento St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "S": "54",
-     "Kills": "219",
-     "Errors": "103",
-     "Total Attacks": "577"
-    },
-    {
-     "Rank": "14",
+     "Rank": "24",
      "Name": "Sarah Wadsworth",
      "Team": "UNC Asheville",
      "Cl": "Jr.",
@@ -6057,7 +6885,31 @@
      "Total Attacks": "575"
     },
     {
-     "Rank": "15",
+     "Rank": "25",
+     "Name": "Molly Creech",
+     "Team": "Miami (OH)",
+     "Cl": "So.",
+     "Height": "5-9",
+     "Position": "OH",
+     "S": "48",
+     "Kills": "186",
+     "Errors": "66",
+     "Total Attacks": "573"
+    },
+    {
+     "Rank": "-",
+     "Name": "Basia Latos",
+     "Team": "UNLV",
+     "Cl": "Jr.",
+     "Height": "5-11",
+     "Position": "OH",
+     "S": "57",
+     "Kills": "196",
+     "Errors": "92",
+     "Total Attacks": "573"
+    },
+    {
+     "Rank": "27",
      "Name": "Gracie Furlong",
      "Team": "Bradley",
      "Cl": "So.",
@@ -6081,31 +6933,19 @@
      "Total Attacks": "571"
     },
     {
-     "Rank": "17",
-     "Name": "Morgan Hayes",
-     "Team": "Santa Clara",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "OPP",
-     "S": "57",
-     "Kills": "245",
-     "Errors": "96",
-     "Total Attacks": "570"
-    },
-    {
-     "Rank": "18",
-     "Name": "Ally Cordes",
-     "Team": "Samford",
+     "Rank": "29",
+     "Name": "Izzy Castelloe",
+     "Team": "Furman",
      "Cl": "Sr.",
      "Height": "6-1",
-     "Position": "OH",
-     "S": "47",
-     "Kills": "168",
+     "Position": "MB",
+     "S": "58",
+     "Kills": "199",
      "Errors": "64",
      "Total Attacks": "568"
     },
     {
-     "Rank": "19",
+     "Rank": "30",
      "Name": "LaDonna Trantham",
      "Team": "Florida A&M",
      "Cl": "So.",
@@ -6117,19 +6957,7 @@
      "Total Attacks": "566"
     },
     {
-     "Rank": "20",
-     "Name": "Antonie Kelnárová",
-     "Team": "Saint Mary's (CA)",
-     "Cl": "Jr.",
-     "Height": "5-10",
-     "Position": "OH",
-     "S": "56",
-     "Kills": "190",
-     "Errors": "105",
-     "Total Attacks": "563"
-    },
-    {
-     "Rank": "-",
+     "Rank": "31",
      "Name": "Ellie Pate",
      "Team": "East Carolina",
      "Cl": "Sr.",
@@ -6141,7 +6969,7 @@
      "Total Attacks": "563"
     },
     {
-     "Rank": "22",
+     "Rank": "32",
      "Name": "Chloe Monson",
      "Team": "Sam Houston",
      "Cl": "So.",
@@ -6165,31 +6993,7 @@
      "Total Attacks": "562"
     },
     {
-     "Rank": "24",
-     "Name": "Cassidy Hartman",
-     "Team": "UNI",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "47",
-     "Kills": "204",
-     "Errors": "98",
-     "Total Attacks": "560"
-    },
-    {
-     "Rank": "25",
-     "Name": "Elsie Sanchez",
-     "Team": "Northwestern St.",
-     "Cl": "So.",
-     "Height": "5-10",
-     "Position": "OH",
-     "S": "55",
-     "Kills": "180",
-     "Errors": "86",
-     "Total Attacks": "558"
-    },
-    {
-     "Rank": "26",
+     "Rank": "34",
      "Name": "Gabrielle Gilbert",
      "Team": "Norfolk St.",
      "Cl": "Sr.",
@@ -6201,7 +7005,19 @@
      "Total Attacks": "556"
     },
     {
-     "Rank": "27",
+     "Rank": "35",
+     "Name": "Petra Fritz",
+     "Team": "San Francisco",
+     "Cl": "So.",
+     "Height": "-",
+     "Position": "OH",
+     "S": "60",
+     "Kills": "213",
+     "Errors": "83",
+     "Total Attacks": "555"
+    },
+    {
+     "Rank": "-",
      "Name": "Paige Thies",
      "Team": "Nevada",
      "Cl": "Fr.",
@@ -6213,31 +7029,7 @@
      "Total Attacks": "555"
     },
     {
-     "Rank": "-",
-     "Name": "Zoe Zudans",
-     "Team": "Western Caro.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "58",
-     "Kills": "165",
-     "Errors": "63",
-     "Total Attacks": "555"
-    },
-    {
-     "Rank": "29",
-     "Name": "Basia Latos",
-     "Team": "UNLV",
-     "Cl": "Jr.",
-     "Height": "5-11",
-     "Position": "OH",
-     "S": "54",
-     "Kills": "192",
-     "Errors": "87",
-     "Total Attacks": "554"
-    },
-    {
-     "Rank": "30",
+     "Rank": "37",
      "Name": "Suli Davis",
      "Team": "SMU",
      "Cl": "So.",
@@ -6261,31 +7053,7 @@
      "Total Attacks": "550"
     },
     {
-     "Rank": "32",
-     "Name": "Akira Burt",
-     "Team": "Georgia St.",
-     "Cl": "Sr.",
-     "Height": "5-10",
-     "Position": "MB",
-     "S": "56",
-     "Kills": "206",
-     "Errors": "90",
-     "Total Attacks": "549"
-    },
-    {
-     "Rank": "-",
-     "Name": "Lily Dykstra",
-     "Team": "UNI",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "47",
-     "Kills": "192",
-     "Errors": "79",
-     "Total Attacks": "549"
-    },
-    {
-     "Rank": "-",
+     "Rank": "39",
      "Name": "Ella Sanders",
      "Team": "Stony Brook",
      "Cl": "Jr.",
@@ -6297,19 +7065,19 @@
      "Total Attacks": "549"
     },
     {
-     "Rank": "35",
-     "Name": "Maria Tabacuks",
-     "Team": "LMU (CA)",
-     "Cl": "Fr.",
-     "Height": "6-4",
-     "Position": "OH",
-     "S": "52",
-     "Kills": "194",
-     "Errors": "65",
+     "Rank": "40",
+     "Name": "Olivia Keckler",
+     "Team": "Central Conn. St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OPP",
+     "S": "48",
+     "Kills": "180",
+     "Errors": "74",
      "Total Attacks": "548"
     },
     {
-     "Rank": "36",
+     "Rank": "41",
      "Name": "Ava Helming",
      "Team": "Valparaiso",
      "Cl": "Jr.",
@@ -6333,7 +7101,19 @@
      "Total Attacks": "546"
     },
     {
-     "Rank": "38",
+     "Rank": "43",
+     "Name": "Claire Wagstaff",
+     "Team": "Gonzaga",
+     "Cl": "Jr.",
+     "Height": "6-4",
+     "Position": "RS",
+     "S": "58",
+     "Kills": "226",
+     "Errors": "107",
+     "Total Attacks": "544"
+    },
+    {
+     "Rank": "44",
      "Name": "Cherisse Atilano",
      "Team": "Coppin St.",
      "Cl": "So.",
@@ -6345,19 +7125,7 @@
      "Total Attacks": "541"
     },
     {
-     "Rank": "39",
-     "Name": "Ariana Brown",
-     "Team": "East Texas A&M",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "61",
-     "Kills": "186",
-     "Errors": "55",
-     "Total Attacks": "539"
-    },
-    {
-     "Rank": "40",
+     "Rank": "45",
      "Name": "Jordyn Gove",
      "Team": "Valparaiso",
      "Cl": "Jr.",
@@ -6369,19 +7137,31 @@
      "Total Attacks": "538"
     },
     {
-     "Rank": "41",
-     "Name": "Molly Creech",
-     "Team": "Miami (OH)",
-     "Cl": "So.",
-     "Height": "5-9",
+     "Rank": "46",
+     "Name": "Sylvie Zgonc",
+     "Team": "South Dakota St.",
+     "Cl": "Sr.",
+     "Height": "5-11",
      "Position": "OH",
-     "S": "45",
-     "Kills": "174",
-     "Errors": "61",
+     "S": "49",
+     "Kills": "230",
+     "Errors": "71",
      "Total Attacks": "537"
     },
     {
-     "Rank": "42",
+     "Rank": "47",
+     "Name": "Katy Barger",
+     "Team": "Houston Christian",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "S": "60",
+     "Kills": "168",
+     "Errors": "98",
+     "Total Attacks": "534"
+    },
+    {
+     "Rank": "48",
      "Name": "Sara Bowcutt",
      "Team": "Texas Tech",
      "Cl": "Fr.",
@@ -6393,100 +7173,28 @@
      "Total Attacks": "532"
     },
     {
-     "Rank": "-",
-     "Name": "Petra Fritz",
-     "Team": "San Francisco",
-     "Cl": "So.",
-     "Height": "-",
+     "Rank": "49",
+     "Name": "Cate Shanahan",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "6-2",
      "Position": "OH",
      "S": "57",
-     "Kills": "206",
-     "Errors": "80",
-     "Total Attacks": "532"
-    },
-    {
-     "Rank": "44",
-     "Name": "Izzy Castelloe",
-     "Team": "Furman",
-     "Cl": "Sr.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "53",
-     "Kills": "183",
-     "Errors": "59",
-     "Total Attacks": "528"
-    },
-    {
-     "Rank": "45",
-     "Name": "Caitlyn Little",
-     "Team": "Memphis",
-     "Cl": "Sr.",
-     "Height": "5-10",
-     "Position": "OH",
-     "S": "53",
-     "Kills": "217",
-     "Errors": "88",
-     "Total Attacks": "527"
-    },
-    {
-     "Rank": "-",
-     "Name": "Kendall Timme",
-     "Team": "DePaul",
-     "Cl": "So.",
-     "Height": "6-1",
-     "Position": "OH",
-     "S": "50",
-     "Kills": "178",
-     "Errors": "70",
-     "Total Attacks": "527"
-    },
-    {
-     "Rank": "47",
-     "Name": "Tyne Ross",
-     "Team": "N.C. A&T",
-     "Cl": "Jr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "51",
-     "Kills": "206",
-     "Errors": "59",
-     "Total Attacks": "526"
-    },
-    {
-     "Rank": "48",
-     "Name": "Carola Tesoro",
-     "Team": "St. John's (NY)",
-     "Cl": "Fr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "54",
-     "Kills": "229",
-     "Errors": "84",
-     "Total Attacks": "525"
-    },
-    {
-     "Rank": "49",
-     "Name": "Taylor Cripe",
-     "Team": "Central Mich.",
-     "Cl": "So.",
-     "Height": "5-8",
-     "Position": "OH",
-     "S": "50",
-     "Kills": "163",
-     "Errors": "94",
-     "Total Attacks": "524"
-    },
-    {
-     "Rank": "-",
-     "Name": "Sophia Henry",
-     "Team": "Middle Tenn.",
-     "Cl": "Jr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "S": "55",
-     "Kills": "192",
+     "Kills": "207",
      "Errors": "85",
-     "Total Attacks": "524"
+     "Total Attacks": "529"
+    },
+    {
+     "Rank": "50",
+     "Name": "Ireland McNees",
+     "Team": "UC San Diego",
+     "Cl": "Sr.",
+     "Height": "5-9",
+     "Position": "S",
+     "S": "57",
+     "Kills": "185",
+     "Errors": "71",
+     "Total Attacks": "528"
     }
    ]
   },
@@ -6494,7 +7202,7 @@
    "id": "887",
    "name": "Total Blocks",
    "title": "Total Blocks",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -6509,7 +7217,19 @@
      "TB": "84.0"
     },
     {
-     "Rank": "2",
+     "Rank": "-",
+     "Name": "Ella Piskorz",
+     "Team": "Pepperdine",
+     "Cl": "Jr.",
+     "Height": "6-3",
+     "Position": "MB",
+     "S": "55",
+     "Block Solos": "10",
+     "Block Assists": "74",
+     "TB": "84.0"
+    },
+    {
+     "Rank": "3",
      "Name": "Kayla Jansen",
      "Team": "Saint Louis",
      "Cl": "Jr.",
@@ -6521,7 +7241,19 @@
      "TB": "81.0"
     },
     {
-     "Rank": "3",
+     "Rank": "4",
+     "Name": "Anna Wilson",
+     "Team": "James Madison",
+     "Cl": "Sr.",
+     "Height": "6-3",
+     "Position": "MB",
+     "S": "47",
+     "Block Solos": "5",
+     "Block Assists": "75",
+     "TB": "80.0"
+    },
+    {
+     "Rank": "5",
      "Name": "Kayden Cupid",
      "Team": "Coppin St.",
      "Cl": "Jr.",
@@ -6533,19 +7265,7 @@
      "TB": "79.0"
     },
     {
-     "Rank": "-",
-     "Name": "Ella Piskorz",
-     "Team": "Pepperdine",
-     "Cl": "Jr.",
-     "Height": "6-3",
-     "Position": "MB",
-     "S": "52",
-     "Block Solos": "7",
-     "Block Assists": "72",
-     "TB": "79.0"
-    },
-    {
-     "Rank": "5",
+     "Rank": "6",
      "Name": "Michaela Dlouhá",
      "Team": "Middle Tenn.",
      "Cl": "Sr.",
@@ -6569,19 +7289,43 @@
      "TB": "77.0"
     },
     {
-     "Rank": "7",
-     "Name": "Anna Wilson",
-     "Team": "James Madison",
-     "Cl": "Sr.",
-     "Height": "6-3",
+     "Rank": "8",
+     "Name": "Helen Wilford",
+     "Team": "Bowling Green",
+     "Cl": "Jr.",
+     "Height": "6-2",
      "Position": "MB",
-     "S": "44",
-     "Block Solos": "5",
-     "Block Assists": "71",
+     "S": "53",
+     "Block Solos": "15",
+     "Block Assists": "61",
      "TB": "76.0"
     },
     {
-     "Rank": "8",
+     "Rank": "9",
+     "Name": "Kendall Hastings",
+     "Team": "Boise St.",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "53",
+     "Block Solos": "10",
+     "Block Assists": "64",
+     "TB": "74.0"
+    },
+    {
+     "Rank": "-",
+     "Name": "Ziya Munyer",
+     "Team": "Weber St.",
+     "Cl": "So.",
+     "Height": "6-1",
+     "Position": "MB",
+     "S": "51",
+     "Block Solos": "19",
+     "Block Assists": "55",
+     "TB": "74.0"
+    },
+    {
+     "Rank": "-",
      "Name": "Olivia Neumann",
      "Team": "Green Bay",
      "Cl": "Jr.",
@@ -6605,19 +7349,31 @@
      "TB": "74.0"
     },
     {
+     "Rank": "13",
+     "Name": "Kelli Jo Burgess",
+     "Team": "BYU",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "39",
+     "Block Solos": "2",
+     "Block Assists": "71",
+     "TB": "73.0"
+    },
+    {
      "Rank": "-",
-     "Name": "Helen Wilford",
-     "Team": "Bowling Green",
+     "Name": "Ayen Nhial",
+     "Team": "James Madison",
      "Cl": "Jr.",
      "Height": "6-2",
      "Position": "MB",
-     "S": "50",
-     "Block Solos": "15",
-     "Block Assists": "59",
-     "TB": "74.0"
+     "S": "47",
+     "Block Solos": "9",
+     "Block Assists": "64",
+     "TB": "73.0"
     },
     {
-     "Rank": "11",
+     "Rank": "15",
      "Name": "Cari Bohm",
      "Team": "California",
      "Cl": "Sr.",
@@ -6641,7 +7397,55 @@
      "TB": "72.0"
     },
     {
-     "Rank": "13",
+     "Rank": "-",
+     "Name": "Gigi Greenlee",
+     "Team": "Northern Ariz.",
+     "Cl": "Jr.",
+     "Height": "6-3",
+     "Position": "MB",
+     "S": "58",
+     "Block Solos": "12",
+     "Block Assists": "60",
+     "TB": "72.0"
+    },
+    {
+     "Rank": "18",
+     "Name": "Sidney Gray",
+     "Team": "Eastern Wash.",
+     "Cl": "So.",
+     "Height": "6-1",
+     "Position": "MB",
+     "S": "58",
+     "Block Solos": "12",
+     "Block Assists": "59",
+     "TB": "71.0"
+    },
+    {
+     "Rank": "-",
+     "Name": "Hazel Slusher",
+     "Team": "Samford",
+     "Cl": "Fr.",
+     "Height": "6-0",
+     "Position": "MB",
+     "S": "50",
+     "Block Solos": "9",
+     "Block Assists": "62",
+     "TB": "71.0"
+    },
+    {
+     "Rank": "-",
+     "Name": "Emily Williams",
+     "Team": "Louisiana",
+     "Cl": "So.",
+     "Height": "6-1",
+     "Position": "MB",
+     "S": "63",
+     "Block Solos": "8",
+     "Block Assists": "63",
+     "TB": "71.0"
+    },
+    {
+     "Rank": "21",
      "Name": "Ava Bogan",
      "Team": "Cornell",
      "Cl": "Sr.",
@@ -6677,7 +7481,19 @@
      "TB": "70.0"
     },
     {
-     "Rank": "16",
+     "Rank": "-",
+     "Name": "Jaydin Watts",
+     "Team": "Idaho St.",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "52",
+     "Block Solos": "14",
+     "Block Assists": "56",
+     "TB": "70.0"
+    },
+    {
+     "Rank": "25",
      "Name": "Talia Francom",
      "Team": "NC State",
      "Cl": "So.",
@@ -6701,19 +7517,7 @@
      "TB": "69.0"
     },
     {
-     "Rank": "-",
-     "Name": "Emily Williams",
-     "Team": "Louisiana",
-     "Cl": "So.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "59",
-     "Block Solos": "8",
-     "Block Assists": "61",
-     "TB": "69.0"
-    },
-    {
-     "Rank": "19",
+     "Rank": "27",
      "Name": "Favor Anyanwu",
      "Team": "SMU",
      "Cl": "Jr.",
@@ -6725,31 +7529,7 @@
      "TB": "68.0"
     },
     {
-     "Rank": "-",
-     "Name": "Kendall Hastings",
-     "Team": "Boise St.",
-     "Cl": "Sr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "49",
-     "Block Solos": "10",
-     "Block Assists": "58",
-     "TB": "68.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Ayen Nhial",
-     "Team": "James Madison",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "44",
-     "Block Solos": "9",
-     "Block Assists": "59",
-     "TB": "68.0"
-    },
-    {
-     "Rank": "22",
+     "Rank": "28",
      "Name": "Angela Marchetto",
      "Team": "FDU",
      "Cl": "Jr.",
@@ -6762,18 +7542,42 @@
     },
     {
      "Rank": "-",
-     "Name": "Jaydin Watts",
-     "Team": "Idaho St.",
+     "Name": "Hannah Sanders",
+     "Team": "Delaware St.",
      "Cl": "Sr.",
-     "Height": "6-2",
+     "Height": "6-0",
      "Position": "MB",
-     "S": "49",
-     "Block Solos": "14",
-     "Block Assists": "53",
+     "S": "60",
+     "Block Solos": "13",
+     "Block Assists": "54",
      "TB": "67.0"
     },
     {
-     "Rank": "24",
+     "Rank": "-",
+     "Name": "Tatum Sharp",
+     "Team": "Western Caro.",
+     "Cl": "So.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "66",
+     "Block Solos": "6",
+     "Block Assists": "61",
+     "TB": "67.0"
+    },
+    {
+     "Rank": "-",
+     "Name": "Hannah Whittingstall",
+     "Team": "Iowa",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MH",
+     "S": "63",
+     "Block Solos": "7",
+     "Block Assists": "60",
+     "TB": "67.0"
+    },
+    {
+     "Rank": "32",
      "Name": "Aubrey Easterwood",
      "Team": "Providence",
      "Cl": "Fr.",
@@ -6798,30 +7602,42 @@
     },
     {
      "Rank": "-",
-     "Name": "Gigi Greenlee",
-     "Team": "Northern Ariz.",
+     "Name": "Kekua Richards",
+     "Team": "Colorado St.",
      "Cl": "Jr.",
-     "Height": "6-3",
+     "Height": "6-7",
      "Position": "MB",
-     "S": "55",
-     "Block Solos": "11",
-     "Block Assists": "55",
+     "S": "47",
+     "Block Solos": "8",
+     "Block Assists": "58",
      "TB": "66.0"
+    },
+    {
+     "Rank": "35",
+     "Name": "Jayden Eaker",
+     "Team": "Georgia St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OPP",
+     "S": "57",
+     "Block Solos": "6",
+     "Block Assists": "59",
+     "TB": "65.0"
     },
     {
      "Rank": "-",
-     "Name": "Hazel Slusher",
-     "Team": "Samford",
-     "Cl": "Fr.",
-     "Height": "6-0",
+     "Name": "Imani Howell",
+     "Team": "Rutgers",
+     "Cl": "So.",
+     "Height": "6-2",
      "Position": "MB",
-     "S": "46",
-     "Block Solos": "9",
-     "Block Assists": "57",
-     "TB": "66.0"
+     "S": "49",
+     "Block Solos": "12",
+     "Block Assists": "53",
+     "TB": "65.0"
     },
     {
-     "Rank": "28",
+     "Rank": "-",
      "Name": "Chloe Judd",
      "Team": "Missouri St.",
      "Cl": "So.",
@@ -6846,18 +7662,6 @@
     },
     {
      "Rank": "-",
-     "Name": "Ziya Munyer",
-     "Team": "Weber St.",
-     "Cl": "So.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "47",
-     "Block Solos": "18",
-     "Block Assists": "47",
-     "TB": "65.0"
-    },
-    {
-     "Rank": "-",
      "Name": "Lacey Murphy",
      "Team": "Holy Cross",
      "Cl": "Jr.",
@@ -6870,14 +7674,14 @@
     },
     {
      "Rank": "-",
-     "Name": "Hannah Sanders",
-     "Team": "Delaware St.",
-     "Cl": "Sr.",
+     "Name": "Cecily Waynar",
+     "Team": "Bowling Green",
+     "Cl": "So.",
      "Height": "6-0",
-     "Position": "MB",
-     "S": "56",
-     "Block Solos": "13",
-     "Block Assists": "52",
+     "Position": "OPP",
+     "S": "51",
+     "Block Solos": "6",
+     "Block Assists": "59",
      "TB": "65.0"
     },
     {
@@ -6893,27 +7697,51 @@
      "TB": "65.0"
     },
     {
-     "Rank": "34",
-     "Name": "Sidney Gray",
-     "Team": "Eastern Wash.",
-     "Cl": "So.",
-     "Height": "6-1",
+     "Rank": "42",
+     "Name": "Dalayla Blackwell",
+     "Team": "South Alabama",
+     "Cl": "Sr.",
+     "Height": "5-11",
      "Position": "MB",
-     "S": "54",
-     "Block Solos": "10",
-     "Block Assists": "54",
+     "S": "56",
+     "Block Solos": "14",
+     "Block Assists": "50",
      "TB": "64.0"
     },
     {
      "Rank": "-",
-     "Name": "Tatum Sharp",
-     "Team": "Western Caro.",
+     "Name": "Caitlyn Flees",
+     "Team": "Eastern Ky.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "MB",
+     "S": "59",
+     "Block Solos": "5",
+     "Block Assists": "59",
+     "TB": "64.0"
+    },
+    {
+     "Rank": "-",
+     "Name": "Skyler Gartin",
+     "Team": "Sacramento St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "MB",
+     "S": "56",
+     "Block Solos": "8",
+     "Block Assists": "56",
+     "TB": "64.0"
+    },
+    {
+     "Rank": "-",
+     "Name": "Josie Noble",
+     "Team": "Milwaukee",
      "Cl": "So.",
      "Height": "6-2",
      "Position": "MB",
-     "S": "62",
-     "Block Solos": "5",
-     "Block Assists": "59",
+     "S": "64",
+     "Block Solos": "4",
+     "Block Assists": "60",
      "TB": "64.0"
     },
     {
@@ -6941,19 +7769,7 @@
      "TB": "64.0"
     },
     {
-     "Rank": "-",
-     "Name": "Hannah Whittingstall",
-     "Team": "Iowa",
-     "Cl": "Sr.",
-     "Height": "6-2",
-     "Position": "MH",
-     "S": "58",
-     "Block Solos": "6",
-     "Block Assists": "58",
-     "TB": "64.0"
-    },
-    {
-     "Rank": "39",
+     "Rank": "48",
      "Name": "Julia Amorim",
      "Team": "Hofstra",
      "Cl": "So.",
@@ -6966,135 +7782,27 @@
     },
     {
      "Rank": "-",
-     "Name": "Dalayla Blackwell",
-     "Team": "South Alabama",
-     "Cl": "Sr.",
-     "Height": "5-11",
-     "Position": "MB",
-     "S": "53",
-     "Block Solos": "14",
-     "Block Assists": "49",
-     "TB": "63.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Kelli Jo Burgess",
-     "Team": "BYU",
-     "Cl": "Sr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "35",
-     "Block Solos": "2",
-     "Block Assists": "61",
-     "TB": "63.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Skyler Gartin",
-     "Team": "Sacramento St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "53",
-     "Block Solos": "8",
-     "Block Assists": "55",
-     "TB": "63.0"
-    },
-    {
-     "Rank": "43",
-     "Name": "Sasha Cohen",
-     "Team": "UCF",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "43",
-     "Block Solos": "14",
-     "Block Assists": "48",
-     "TB": "62.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Jayden Eaker",
-     "Team": "Georgia St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "OPP",
-     "S": "54",
-     "Block Solos": "6",
-     "Block Assists": "56",
-     "TB": "62.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Azra Eriç",
-     "Team": "Eastern Mich.",
-     "Cl": "Sr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "51",
-     "Block Solos": "7",
-     "Block Assists": "55",
-     "TB": "62.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Caitlyn Flees",
-     "Team": "Eastern Ky.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "56",
-     "Block Solos": "5",
-     "Block Assists": "57",
-     "TB": "62.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Sophia Krichev",
-     "Team": "UT Arlington",
-     "Cl": "So.",
-     "Height": "6-3",
-     "Position": "MB",
-     "S": "46",
-     "Block Solos": "11",
-     "Block Assists": "51",
-     "TB": "62.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Meredith Reisman",
-     "Team": "Presbyterian",
-     "Cl": "Sr.",
-     "Height": "6-1",
-     "Position": "MB",
-     "S": "53",
-     "Block Solos": "15",
-     "Block Assists": "47",
-     "TB": "62.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Kekua Richards",
-     "Team": "Colorado St.",
-     "Cl": "Jr.",
-     "Height": "6-7",
-     "Position": "MB",
-     "S": "42",
-     "Block Solos": "8",
-     "Block Assists": "54",
-     "TB": "62.0"
-    },
-    {
-     "Rank": "50",
-     "Name": "Hannah Crowe",
+     "Name": "Luvina Oguntimehin",
      "Team": "UTEP",
      "Cl": "Jr.",
-     "Height": "6-2",
+     "Height": "6-1",
+     "Position": "RS",
+     "S": "57",
+     "Block Solos": "12",
+     "Block Assists": "51",
+     "TB": "63.0"
+    },
+    {
+     "Rank": "-",
+     "Name": "Eve Wilson",
+     "Team": "Colorado St.",
+     "Cl": "Sr.",
+     "Height": "6-3",
      "Position": "MB",
-     "S": "54",
-     "Block Solos": "7",
-     "Block Assists": "54",
-     "TB": "61.0"
+     "S": "48",
+     "Block Solos": "10",
+     "Block Assists": "53",
+     "TB": "63.0"
     }
    ]
   },
@@ -7102,10 +7810,20 @@
    "id": "885",
    "name": "Total Digs",
    "title": "Total Digs",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
+     "Name": "Emmarie McFarland",
+     "Team": "Northwestern St.",
+     "Cl": "So.",
+     "Height": "5-10",
+     "Position": "L",
+     "S": "66",
+     "Digs": "323"
+    },
+    {
+     "Rank": "-",
      "Name": "Rashanny Solano Smith",
      "Team": "St. John's (NY)",
      "Cl": "Sr.",
@@ -7115,7 +7833,7 @@
      "Digs": "323"
     },
     {
-     "Rank": "2",
+     "Rank": "3",
      "Name": "MeMe Davis",
      "Team": "App State",
      "Cl": "Jr.",
@@ -7125,17 +7843,17 @@
      "Digs": "304"
     },
     {
-     "Rank": "-",
-     "Name": "Emmarie McFarland",
-     "Team": "Northwestern St.",
+     "Rank": "4",
+     "Name": "Jade Washington",
+     "Team": "East Texas A&M",
      "Cl": "So.",
-     "Height": "5-10",
-     "Position": "L",
-     "S": "61",
-     "Digs": "304"
+     "Height": "5-1",
+     "Position": "L/DS",
+     "S": "65",
+     "Digs": "301"
     },
     {
-     "Rank": "4",
+     "Rank": "5",
      "Name": "Laney Klika",
      "Team": "Wofford",
      "Cl": "Sr.",
@@ -7145,27 +7863,27 @@
      "Digs": "300"
     },
     {
-     "Rank": "5",
+     "Rank": "6",
      "Name": "Reagan Anderson",
      "Team": "Austin Peay",
      "Cl": "Sr.",
      "Height": "5-5",
      "Position": "L/DS",
-     "S": "58",
-     "Digs": "288"
+     "S": "61",
+     "Digs": "296"
     },
     {
-     "Rank": "6",
+     "Rank": "7",
      "Name": "Brennan Ramirez",
      "Team": "Abilene Christian",
      "Cl": "So.",
      "Height": "5-1",
      "Position": "L",
-     "S": "54",
-     "Digs": "279"
+     "S": "57",
+     "Digs": "292"
     },
     {
-     "Rank": "7",
+     "Rank": "8",
      "Name": "Carrina Barron",
      "Team": "Bryant",
      "Cl": "Sr.",
@@ -7175,17 +7893,17 @@
      "Digs": "278"
     },
     {
-     "Rank": "8",
-     "Name": "Jade Washington",
-     "Team": "East Texas A&M",
+     "Rank": "9",
+     "Name": "Elise Gurley",
+     "Team": "Western Caro.",
      "Cl": "So.",
-     "Height": "5-1",
-     "Position": "L/DS",
-     "S": "61",
-     "Digs": "274"
+     "Height": "5-5",
+     "Position": "L",
+     "S": "66",
+     "Digs": "276"
     },
     {
-     "Rank": "9",
+     "Rank": "10",
      "Name": "Jasmine Dulan",
      "Team": "Drake",
      "Cl": "Sr.",
@@ -7195,7 +7913,7 @@
      "Digs": "272"
     },
     {
-     "Rank": "10",
+     "Rank": "11",
      "Name": "Mia Jannazzo",
      "Team": "Radford",
      "Cl": "Fr.",
@@ -7205,7 +7923,17 @@
      "Digs": "271"
     },
     {
-     "Rank": "11",
+     "Rank": "12",
+     "Name": "Riley Steubing",
+     "Team": "Louisiana Tech",
+     "Cl": "Sr.",
+     "Height": "5-7",
+     "Position": "L/DS",
+     "S": "57",
+     "Digs": "268"
+    },
+    {
+     "Rank": "13",
      "Name": "Coco Figueroa",
      "Team": "Coppin St.",
      "Cl": "Sr.",
@@ -7215,17 +7943,17 @@
      "Digs": "266"
     },
     {
-     "Rank": "12",
-     "Name": "Elise Gurley",
-     "Team": "Western Caro.",
-     "Cl": "So.",
+     "Rank": "-",
+     "Name": "Leddy Rae Guinn",
+     "Team": "Tarleton St.",
+     "Cl": "Jr.",
      "Height": "5-5",
-     "Position": "L",
-     "S": "62",
-     "Digs": "261"
+     "Position": "DS",
+     "S": "57",
+     "Digs": "266"
     },
     {
-     "Rank": "13",
+     "Rank": "15",
      "Name": "Brooke Malek",
      "Team": "Siena",
      "Cl": "Sr.",
@@ -7235,7 +7963,7 @@
      "Digs": "260"
     },
     {
-     "Rank": "14",
+     "Rank": "16",
      "Name": "Madison Winkler",
      "Team": "Denver",
      "Cl": "So.",
@@ -7245,27 +7973,27 @@
      "Digs": "258"
     },
     {
-     "Rank": "15",
-     "Name": "Riley Steubing",
-     "Team": "Louisiana Tech",
+     "Rank": "17",
+     "Name": "Kati Goba",
+     "Team": "Milwaukee",
      "Cl": "Sr.",
-     "Height": "5-7",
+     "Height": "5-4",
      "Position": "L/DS",
-     "S": "54",
-     "Digs": "257"
+     "S": "64",
+     "Digs": "256"
     },
     {
-     "Rank": "16",
-     "Name": "Leddy Rae Guinn",
-     "Team": "Tarleton St.",
-     "Cl": "Jr.",
-     "Height": "5-5",
-     "Position": "DS",
-     "S": "54",
+     "Rank": "18",
+     "Name": "Natalia Navarro",
+     "Team": "Nicholls",
+     "Cl": "Fr.",
+     "Height": "5-2",
+     "Position": "L/DS",
+     "S": "63",
      "Digs": "255"
     },
     {
-     "Rank": "17",
+     "Rank": "19",
      "Name": "Dakota Henry",
      "Team": "Rhode Island",
      "Cl": "Jr.",
@@ -7275,7 +8003,27 @@
      "Digs": "254"
     },
     {
-     "Rank": "18",
+     "Rank": "-",
+     "Name": "Cassidy Trahan",
+     "Team": "Eastern Ky.",
+     "Cl": "So.",
+     "Height": "5-6",
+     "Position": "DS",
+     "S": "60",
+     "Digs": "254"
+    },
+    {
+     "Rank": "21",
+     "Name": "Caiti Barthel",
+     "Team": "Chattanooga",
+     "Cl": "Sr.",
+     "Height": "5-9",
+     "Position": "L/DS",
+     "S": "58",
+     "Digs": "253"
+    },
+    {
+     "Rank": "-",
      "Name": "Ava Martindale",
      "Team": "North Ala.",
      "Cl": "Sr.",
@@ -7285,7 +8033,7 @@
      "Digs": "253"
     },
     {
-     "Rank": "19",
+     "Rank": "23",
      "Name": "Giannelle Asomani",
      "Team": "Jackson St.",
      "Cl": "So.",
@@ -7295,7 +8043,47 @@
      "Digs": "252"
     },
     {
-     "Rank": "20",
+     "Rank": "-",
+     "Name": "Samantha Glenn",
+     "Team": "UT Arlington",
+     "Cl": "Sr.",
+     "Height": "5-8",
+     "Position": "OH",
+     "S": "60",
+     "Digs": "252"
+    },
+    {
+     "Rank": "25",
+     "Name": "Kennedy Gustafson",
+     "Team": "Louisiana",
+     "Cl": "Sr.",
+     "Height": "5-8",
+     "Position": "L",
+     "S": "64",
+     "Digs": "249"
+    },
+    {
+     "Rank": "-",
+     "Name": "Mia Lopez",
+     "Team": "LSU New Orleans",
+     "Cl": "Fr.",
+     "Height": "5-4",
+     "Position": "L/DS",
+     "S": "57",
+     "Digs": "249"
+    },
+    {
+     "Rank": "27",
+     "Name": "Sophia Tocmo",
+     "Team": "McNeese",
+     "Cl": "Fr.",
+     "Height": "5-3",
+     "Position": "L/DS",
+     "S": "46",
+     "Digs": "248"
+    },
+    {
+     "Rank": "28",
      "Name": "Najah Harris",
      "Team": "Southern U.",
      "Cl": "Sr.",
@@ -7305,7 +8093,17 @@
      "Digs": "247"
     },
     {
-     "Rank": "21",
+     "Rank": "-",
+     "Name": "Jadyn Petersen",
+     "Team": "UNI",
+     "Cl": "Jr.",
+     "Height": "5-8",
+     "Position": "DS",
+     "S": "50",
+     "Digs": "247"
+    },
+    {
+     "Rank": "30",
      "Name": "Miliani Villarreal",
      "Team": "Sacred Heart",
      "Cl": "Jr.",
@@ -7315,13 +8113,23 @@
      "Digs": "246"
     },
     {
-     "Rank": "22",
+     "Rank": "31",
      "Name": "Becky Barrett",
      "Team": "Purdue Fort Wayne",
      "Cl": "Sr.",
      "Height": "5-4",
      "Position": "DS",
      "S": "57",
+     "Digs": "244"
+    },
+    {
+     "Rank": "-",
+     "Name": "Bianca Byerly",
+     "Team": "Houston Christian",
+     "Cl": "Jr.",
+     "Height": "5-7",
+     "Position": "DS",
+     "S": "60",
      "Digs": "244"
     },
     {
@@ -7335,7 +8143,7 @@
      "Digs": "244"
     },
     {
-     "Rank": "24",
+     "Rank": "34",
      "Name": "Saige Damrow",
      "Team": "Creighton",
      "Cl": "Sr.",
@@ -7355,7 +8163,7 @@
      "Digs": "243"
     },
     {
-     "Rank": "26",
+     "Rank": "36",
      "Name": "Maddie Cugino",
      "Team": "Ga. Southern",
      "Cl": "Jr.",
@@ -7366,26 +8174,26 @@
     },
     {
      "Rank": "-",
-     "Name": "Kati Goba",
-     "Team": "Milwaukee",
+     "Name": "Lani Toutai",
+     "Team": "Utah Valley",
      "Cl": "Sr.",
-     "Height": "5-4",
+     "Height": "5-6",
      "Position": "L/DS",
-     "S": "59",
+     "S": "55",
      "Digs": "242"
+    },
+    {
+     "Rank": "38",
+     "Name": "Aspen Boice",
+     "Team": "Idaho St.",
+     "Cl": "Fr.",
+     "Height": "6-0",
+     "Position": "L",
+     "S": "51",
+     "Digs": "241"
     },
     {
      "Rank": "-",
-     "Name": "Natalia Navarro",
-     "Team": "Nicholls",
-     "Cl": "Fr.",
-     "Height": "5-2",
-     "Position": "L/DS",
-     "S": "60",
-     "Digs": "242"
-    },
-    {
-     "Rank": "29",
      "Name": "Jillian Shaneyfelt",
      "Team": "Southern Ill.",
      "Cl": "Sr.",
@@ -7395,27 +8203,7 @@
      "Digs": "241"
     },
     {
-     "Rank": "-",
-     "Name": "Cassidy Trahan",
-     "Team": "Eastern Ky.",
-     "Cl": "So.",
-     "Height": "5-6",
-     "Position": "DS",
-     "S": "57",
-     "Digs": "241"
-    },
-    {
-     "Rank": "31",
-     "Name": "Kennedy Gustafson",
-     "Team": "Louisiana",
-     "Cl": "Sr.",
-     "Height": "5-8",
-     "Position": "L",
-     "S": "60",
-     "Digs": "236"
-    },
-    {
-     "Rank": "-",
+     "Rank": "40",
      "Name": "Asialin Powell",
      "Team": "Grambling",
      "Cl": "Jr.",
@@ -7425,7 +8213,17 @@
      "Digs": "236"
     },
     {
-     "Rank": "33",
+     "Rank": "41",
+     "Name": "Laine Briggs",
+     "Team": "Pepperdine",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "L/DS",
+     "S": "55",
+     "Digs": "235"
+    },
+    {
+     "Rank": "-",
      "Name": "Marianne Garcia",
      "Team": "Middle Tenn.",
      "Cl": "Fr.",
@@ -7435,7 +8233,7 @@
      "Digs": "235"
     },
     {
-     "Rank": "34",
+     "Rank": "43",
      "Name": "Alyssa Chu",
      "Team": "Lafayette",
      "Cl": "Fr.",
@@ -7456,16 +8254,26 @@
     },
     {
      "Rank": "-",
-     "Name": "Mia Lopez",
-     "Team": "LSU New Orleans",
-     "Cl": "Fr.",
-     "Height": "5-4",
+     "Name": "Chloe Kaminski",
+     "Team": "Kansas City",
+     "Cl": "Sr.",
+     "Height": "5-8",
      "Position": "L/DS",
-     "S": "53",
+     "S": "51",
      "Digs": "234"
     },
     {
-     "Rank": "37",
+     "Rank": "-",
+     "Name": "Kennedy Seekford",
+     "Team": "Furman",
+     "Cl": "Sr.",
+     "Height": "5-6",
+     "Position": "L/DS",
+     "S": "58",
+     "Digs": "234"
+    },
+    {
+     "Rank": "47",
      "Name": "Daisy Cluxton",
      "Team": "Northern Ky.",
      "Cl": "So.",
@@ -7475,43 +8283,13 @@
      "Digs": "233"
     },
     {
-     "Rank": "38",
-     "Name": "Samantha Glenn",
-     "Team": "UT Arlington",
-     "Cl": "Sr.",
-     "Height": "5-8",
-     "Position": "OH",
-     "S": "57",
-     "Digs": "232"
-    },
-    {
-     "Rank": "-",
-     "Name": "Jadyn Petersen",
-     "Team": "UNI",
-     "Cl": "Jr.",
-     "Height": "5-8",
-     "Position": "DS",
-     "S": "47",
-     "Digs": "232"
-    },
-    {
-     "Rank": "40",
+     "Rank": "48",
      "Name": "Tayler Baron",
      "Team": "Western Ky.",
      "Cl": "Jr.",
      "Height": "5-7",
      "Position": "L/DS",
      "S": "54",
-     "Digs": "231"
-    },
-    {
-     "Rank": "-",
-     "Name": "Caiti Barthel",
-     "Team": "Chattanooga",
-     "Cl": "Sr.",
-     "Height": "5-9",
-     "Position": "L/DS",
-     "S": "53",
      "Digs": "231"
     },
     {
@@ -7525,84 +8303,14 @@
      "Digs": "231"
     },
     {
-     "Rank": "43",
-     "Name": "Laine Briggs",
-     "Team": "Pepperdine",
-     "Cl": "Sr.",
-     "Height": "5-11",
-     "Position": "L/DS",
-     "S": "52",
-     "Digs": "230"
-    },
-    {
-     "Rank": "-",
-     "Name": "Bianca Byerly",
-     "Team": "Houston Christian",
+     "Rank": "50",
+     "Name": "Ximena Cordero Barr",
+     "Team": "UC Davis",
      "Cl": "Jr.",
-     "Height": "5-7",
-     "Position": "DS",
-     "S": "57",
-     "Digs": "230"
-    },
-    {
-     "Rank": "-",
-     "Name": "Lani Toutai",
-     "Team": "Utah Valley",
-     "Cl": "Sr.",
-     "Height": "5-6",
-     "Position": "L/DS",
-     "S": "52",
-     "Digs": "230"
-    },
-    {
-     "Rank": "46",
-     "Name": "Hannah Langton",
-     "Team": "Colgate",
-     "Cl": "Jr.",
-     "Height": "5-9",
-     "Position": "L/DS",
-     "S": "49",
-     "Digs": "229"
-    },
-    {
-     "Rank": "47",
-     "Name": "Makayla Martinez",
-     "Team": "New Mexico St.",
-     "Cl": "Jr.",
-     "Height": "5-5",
-     "Position": "L/DS",
-     "S": "63",
-     "Digs": "228"
-    },
-    {
-     "Rank": "48",
-     "Name": "Sophia Tocmo",
-     "Team": "McNeese",
-     "Cl": "Fr.",
-     "Height": "5-3",
-     "Position": "L/DS",
-     "S": "42",
-     "Digs": "227"
-    },
-    {
-     "Rank": "49",
-     "Name": "Avery Gaume",
-     "Team": "Iona",
-     "Cl": "Jr.",
-     "Height": "5-4",
-     "Position": "L/DS",
-     "S": "54",
-     "Digs": "225"
-    },
-    {
-     "Rank": "-",
-     "Name": "Surabhi Srinivasan",
-     "Team": "Eastern Mich.",
-     "Cl": "Sr.",
      "Height": "5-10",
-     "Position": "DS",
-     "S": "51",
-     "Digs": "225"
+     "Position": "L",
+     "S": "57",
+     "Digs": "229"
     }
    ]
   },
@@ -7610,10 +8318,32 @@
    "id": "879",
    "name": "Total Kills",
    "title": "Total Kills",
-   "updated": "Thursday, October 01, 2026 8:10 am - Through games Wednesday, September 30, 2026",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
    "rows": [
     {
      "Rank": "1",
+     "Name": "Kalista Lukovich",
+     "Team": "Eastern Wash.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "MP": "15",
+     "S": "59",
+     "Kills": "258"
+    },
+    {
+     "Rank": "2",
+     "Name": "Morgan Hayes",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OPP",
+     "MP": "15",
+     "S": "60",
+     "Kills": "257"
+    },
+    {
+     "Rank": "3",
      "Name": "Mallory Reck",
      "Team": "Marist",
      "Cl": "So.",
@@ -7624,7 +8354,7 @@
      "Kills": "254"
     },
     {
-     "Rank": "2",
+     "Rank": "4",
      "Name": "Allie Sweet",
      "Team": "UNC Greensboro",
      "Cl": "Jr.",
@@ -7635,7 +8365,7 @@
      "Kills": "252"
     },
     {
-     "Rank": "3",
+     "Rank": "5",
      "Name": "Jurnee Robinson",
      "Team": "LSU",
      "Cl": "Sr.",
@@ -7646,29 +8376,18 @@
      "Kills": "250"
     },
     {
-     "Rank": "4",
-     "Name": "Morgan Hayes",
-     "Team": "Santa Clara",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "OPP",
-     "MP": "14",
-     "S": "57",
-     "Kills": "245"
-    },
-    {
-     "Rank": "5",
-     "Name": "Kalista Lukovich",
-     "Team": "Eastern Wash.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "MP": "14",
-     "S": "55",
-     "Kills": "236"
-    },
-    {
      "Rank": "6",
+     "Name": "Sylvie Zgonc",
+     "Team": "South Dakota St.",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "OH",
+     "MP": "13",
+     "S": "49",
+     "Kills": "230"
+    },
+    {
+     "Rank": "7",
      "Name": "Carola Tesoro",
      "Team": "St. John's (NY)",
      "Cl": "Fr.",
@@ -7679,7 +8398,18 @@
      "Kills": "229"
     },
     {
-     "Rank": "7",
+     "Rank": "8",
+     "Name": "Victoria Marthaler",
+     "Team": "Sacramento St.",
+     "Cl": "Jr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "MP": "14",
+     "S": "57",
+     "Kills": "226"
+    },
+    {
+     "Rank": "-",
      "Name": "Riley Rosneck",
      "Team": "Purdue Fort Wayne",
      "Cl": "Jr.",
@@ -7690,7 +8420,18 @@
      "Kills": "226"
     },
     {
-     "Rank": "8",
+     "Rank": "-",
+     "Name": "Claire Wagstaff",
+     "Team": "Gonzaga",
+     "Cl": "Jr.",
+     "Height": "6-4",
+     "Position": "RS",
+     "MP": "15",
+     "S": "58",
+     "Kills": "226"
+    },
+    {
+     "Rank": "11",
      "Name": "Chloe Monson",
      "Team": "Sam Houston",
      "Cl": "So.",
@@ -7712,7 +8453,7 @@
      "Kills": "221"
     },
     {
-     "Rank": "10",
+     "Rank": "13",
      "Name": "Ava Helming",
      "Team": "Valparaiso",
      "Cl": "Jr.",
@@ -7723,18 +8464,7 @@
      "Kills": "219"
     },
     {
-     "Rank": "-",
-     "Name": "Victoria Marthaler",
-     "Team": "Sacramento St.",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "MP": "13",
-     "S": "54",
-     "Kills": "219"
-    },
-    {
-     "Rank": "12",
+     "Rank": "14",
      "Name": "Carson Tyler",
      "Team": "Marquette",
      "Cl": "Jr.",
@@ -7745,7 +8475,7 @@
      "Kills": "218"
     },
     {
-     "Rank": "13",
+     "Rank": "15",
      "Name": "Suli Davis",
      "Team": "SMU",
      "Cl": "So.",
@@ -7778,7 +8508,7 @@
      "Kills": "217"
     },
     {
-     "Rank": "16",
+     "Rank": "18",
      "Name": "Sarah Wadsworth",
      "Team": "UNC Asheville",
      "Cl": "Jr.",
@@ -7789,7 +8519,51 @@
      "Kills": "216"
     },
     {
-     "Rank": "17",
+     "Rank": "19",
+     "Name": "Cassidy Hartman",
+     "Team": "UNI",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "MP": "14",
+     "S": "50",
+     "Kills": "215"
+    },
+    {
+     "Rank": "-",
+     "Name": "Jenna Legault",
+     "Team": "Fresno St.",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "MP": "14",
+     "S": "54",
+     "Kills": "215"
+    },
+    {
+     "Rank": "21",
+     "Name": "Akira Burt",
+     "Team": "Georgia St.",
+     "Cl": "Sr.",
+     "Height": "5-10",
+     "Position": "MB",
+     "MP": "15",
+     "S": "59",
+     "Kills": "213"
+    },
+    {
+     "Rank": "-",
+     "Name": "Petra Fritz",
+     "Team": "San Francisco",
+     "Cl": "So.",
+     "Height": "-",
+     "Position": "OH",
+     "MP": "16",
+     "S": "60",
+     "Kills": "213"
+    },
+    {
+     "Rank": "23",
      "Name": "Gracie Furlong",
      "Team": "Bradley",
      "Cl": "So.",
@@ -7800,51 +8574,51 @@
      "Kills": "212"
     },
     {
-     "Rank": "18",
-     "Name": "Claire Wagstaff",
-     "Team": "Gonzaga",
-     "Cl": "Jr.",
+     "Rank": "24",
+     "Name": "Maria Tabacuks",
+     "Team": "LMU (CA)",
+     "Cl": "Fr.",
      "Height": "6-4",
-     "Position": "RS",
+     "Position": "OH",
      "MP": "14",
-     "S": "53",
+     "S": "55",
      "Kills": "211"
     },
     {
-     "Rank": "19",
-     "Name": "Sylvie Zgonc",
-     "Team": "South Dakota St.",
-     "Cl": "Sr.",
-     "Height": "5-11",
+     "Rank": "25",
+     "Name": "Taylor Stanley",
+     "Team": "Kansas",
+     "Cl": "Fr.",
+     "Height": "6-3",
      "Position": "OH",
-     "MP": "12",
+     "MP": "13",
      "S": "44",
-     "Kills": "209"
+     "Kills": "208"
     },
     {
-     "Rank": "20",
-     "Name": "Akira Burt",
-     "Team": "Georgia St.",
+     "Rank": "26",
+     "Name": "Lily Dykstra",
+     "Team": "UNI",
      "Cl": "Sr.",
-     "Height": "5-10",
-     "Position": "MB",
-     "MP": "14",
-     "S": "56",
-     "Kills": "206"
-    },
-    {
-     "Rank": "-",
-     "Name": "Petra Fritz",
-     "Team": "San Francisco",
-     "Cl": "So.",
-     "Height": "-",
+     "Height": "6-0",
      "Position": "OH",
-     "MP": "15",
-     "S": "57",
-     "Kills": "206"
+     "MP": "14",
+     "S": "50",
+     "Kills": "207"
     },
     {
      "Rank": "-",
+     "Name": "Cate Shanahan",
+     "Team": "Santa Clara",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "OH",
+     "MP": "14",
+     "S": "57",
+     "Kills": "207"
+    },
+    {
+     "Rank": "28",
      "Name": "Bella Hutchens",
      "Team": "App State",
      "Cl": "Jr.",
@@ -7852,6 +8626,17 @@
      "Position": "OH",
      "MP": "16",
      "S": "64",
+     "Kills": "206"
+    },
+    {
+     "Rank": "-",
+     "Name": "Molly McCluskey",
+     "Team": "UC San Diego",
+     "Cl": "Jr.",
+     "Height": "6-3",
+     "Position": "OH",
+     "MP": "14",
+     "S": "57",
      "Kills": "206"
     },
     {
@@ -7877,7 +8662,7 @@
      "Kills": "206"
     },
     {
-     "Rank": "25",
+     "Rank": "32",
      "Name": "Chloe Chicoine",
      "Team": "Louisville",
      "Cl": "Sr.",
@@ -7888,29 +8673,18 @@
      "Kills": "205"
     },
     {
-     "Rank": "26",
-     "Name": "Cassidy Hartman",
-     "Team": "UNI",
+     "Rank": "-",
+     "Name": "Kennedy Louisell",
+     "Team": "James Madison",
      "Cl": "Sr.",
      "Height": "6-0",
      "Position": "OH",
      "MP": "13",
      "S": "47",
-     "Kills": "204"
+     "Kills": "205"
     },
     {
-     "Rank": "-",
-     "Name": "Jenna Legault",
-     "Team": "Fresno St.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "MP": "13",
-     "S": "50",
-     "Kills": "204"
-    },
-    {
-     "Rank": "-",
+     "Rank": "34",
      "Name": "Alayna Pierce",
      "Team": "Tennessee Tech",
      "Cl": "Jr.",
@@ -7921,7 +8695,18 @@
      "Kills": "204"
     },
     {
-     "Rank": "29",
+     "Rank": "-",
+     "Name": "Hanah Stoddard",
+     "Team": "Northern Ariz.",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "OH",
+     "MP": "15",
+     "S": "57",
+     "Kills": "204"
+    },
+    {
+     "Rank": "36",
      "Name": "Audrey Ross",
      "Team": "Boston College",
      "Cl": "Sr.",
@@ -7932,7 +8717,7 @@
      "Kills": "203"
     },
     {
-     "Rank": "30",
+     "Rank": "37",
      "Name": "Olivia Babcock",
      "Team": "Pittsburgh",
      "Cl": "Sr.",
@@ -7965,7 +8750,18 @@
      "Kills": "202"
     },
     {
-     "Rank": "33",
+     "Rank": "40",
+     "Name": "Ariana Brown",
+     "Team": "East Texas A&M",
+     "Cl": "Sr.",
+     "Height": "6-0",
+     "Position": "OH",
+     "MP": "16",
+     "S": "65",
+     "Kills": "201"
+    },
+    {
+     "Rank": "-",
      "Name": "Jordyn Gove",
      "Team": "Valparaiso",
      "Cl": "Jr.",
@@ -7987,7 +8783,7 @@
      "Kills": "201"
     },
     {
-     "Rank": "35",
+     "Rank": "43",
      "Name": "Kaili Doctor",
      "Team": "North Florida",
      "Cl": "Sr.",
@@ -7998,7 +8794,18 @@
      "Kills": "200"
     },
     {
-     "Rank": "36",
+     "Rank": "44",
+     "Name": "Izzy Castelloe",
+     "Team": "Furman",
+     "Cl": "Sr.",
+     "Height": "6-1",
+     "Position": "MB",
+     "MP": "14",
+     "S": "58",
+     "Kills": "199"
+    },
+    {
+     "Rank": "-",
      "Name": "Bianna Muoneke",
      "Team": "Georgia",
      "Cl": "Sr.",
@@ -8009,7 +8816,7 @@
      "Kills": "199"
     },
     {
-     "Rank": "37",
+     "Rank": "46",
      "Name": "Ella Demetrician",
      "Team": "Michigan",
      "Cl": "Jr.",
@@ -8020,147 +8827,196 @@
      "Kills": "198"
     },
     {
-     "Rank": "38",
-     "Name": "Reagan Nelson",
-     "Team": "Southeast Mo. St.",
-     "Cl": "So.",
-     "Height": "6-0",
-     "Position": "OH",
-     "MP": "15",
-     "S": "56",
-     "Kills": "197"
-    },
-    {
-     "Rank": "39",
-     "Name": "Sara Bowcutt",
-     "Team": "Texas Tech",
-     "Cl": "Fr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "MP": "13",
-     "S": "50",
-     "Kills": "196"
-    },
-    {
      "Rank": "-",
-     "Name": "Ksenia Rakhmanchik",
-     "Team": "Baylor",
-     "Cl": "So.",
-     "Height": "6-0",
-     "Position": "OH",
-     "MP": "12",
-     "S": "41",
-     "Kills": "196"
-    },
-    {
-     "Rank": "41",
-     "Name": "Gabrielle Gilbert",
-     "Team": "Norfolk St.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "MP": "15",
-     "S": "56",
-     "Kills": "195"
-    },
-    {
-     "Rank": "-",
-     "Name": "Haley Patterson",
-     "Team": "Kennesaw St.",
-     "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "MB",
-     "MP": "14",
-     "S": "53",
-     "Kills": "195"
-    },
-    {
-     "Rank": "-",
-     "Name": "Taylor Stanley",
-     "Team": "Kansas",
-     "Cl": "Fr.",
-     "Height": "6-3",
-     "Position": "OH",
-     "MP": "12",
-     "S": "41",
-     "Kills": "195"
-    },
-    {
-     "Rank": "44",
-     "Name": "Maria Tabacuks",
-     "Team": "LMU (CA)",
-     "Cl": "Fr.",
-     "Height": "6-4",
-     "Position": "OH",
-     "MP": "13",
-     "S": "52",
-     "Kills": "194"
-    },
-    {
-     "Rank": "45",
-     "Name": "Ana Burilovic",
-     "Team": "Colorado",
-     "Cl": "Sr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "MP": "12",
-     "S": "44",
-     "Kills": "193"
-    },
-    {
-     "Rank": "-",
-     "Name": "Leyna Nguyen",
-     "Team": "Loyola Chicago",
+     "Name": "Kiana Greer",
+     "Team": "Idaho",
      "Cl": "So.",
      "Height": "5-8",
-     "Position": "DS",
-     "MP": "13",
-     "S": "53",
-     "Kills": "193"
+     "Position": "OH",
+     "MP": "15",
+     "S": "60",
+     "Kills": "198"
     },
     {
      "Rank": "-",
-     "Name": "Emersen Schrom",
-     "Team": "Duquesne",
-     "Cl": "Jr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "MP": "13",
-     "S": "47",
-     "Kills": "193"
-    },
-    {
-     "Rank": "-",
-     "Name": "Cate Shanahan",
-     "Team": "Santa Clara",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "OH",
-     "MP": "13",
-     "S": "54",
-     "Kills": "193"
-    },
-    {
-     "Rank": "49",
-     "Name": "Lily Dykstra",
-     "Team": "UNI",
+     "Name": "Kyra McKelvey",
+     "Team": "Southeastern La.",
      "Cl": "Sr.",
-     "Height": "6-0",
-     "Position": "OH",
-     "MP": "13",
-     "S": "47",
-     "Kills": "192"
+     "Height": "5-11",
+     "Position": "OPP",
+     "MP": "16",
+     "S": "61",
+     "Kills": "198"
     },
     {
      "Rank": "-",
-     "Name": "Kiera Hamilton",
-     "Team": "George Mason",
+     "Name": "Elsie Sanchez",
+     "Team": "Northwestern St.",
      "Cl": "So.",
-     "Height": "6-2",
+     "Height": "5-10",
      "Position": "OH",
-     "MP": "11",
+     "MP": "17",
+     "S": "60",
+     "Kills": "198"
+    },
+    {
+     "Rank": "-",
+     "Name": "Nicole Schuetz",
+     "Team": "LMU (CA)",
+     "Cl": "So.",
+     "Height": "6-3",
+     "Position": "OH",
+     "MP": "14",
+     "S": "55",
+     "Kills": "198"
+    }
+   ]
+  },
+  {
+   "id": "928",
+   "name": "Triple Doubles",
+   "title": "Triple Doubles",
+   "updated": "Friday, October 02, 2026 8:10 am - Through games Thursday, October 01, 2026",
+   "rows": [
+    {
+     "Rank": "1",
+     "Name": "Emilee Hill",
+     "Team": "Eastern Ky.",
+     "Cl": "Sr.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "60",
+     "Trpl Dbl": "5"
+    },
+    {
+     "Rank": "2",
+     "Name": "Hannah Gardner",
+     "Team": "Missouri St.",
+     "Cl": "So.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "51",
+     "Trpl Dbl": "3"
+    },
+    {
+     "Rank": "3",
+     "Name": "Anisa Dorlouis",
+     "Team": "Presbyterian",
+     "Cl": "Sr.",
+     "Height": "5-8",
+     "Position": "S",
+     "S": "56",
+     "Trpl Dbl": "2"
+    },
+    {
+     "Rank": "-",
+     "Name": "Bella Nunez",
+     "Team": "Grand Canyon",
+     "Cl": "So.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "51",
+     "Trpl Dbl": "2"
+    },
+    {
+     "Rank": "-",
+     "Name": "Madi Maxwell",
+     "Team": "Long Beach St.",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "S",
+     "S": "46",
+     "Trpl Dbl": "2"
+    },
+    {
+     "Rank": "6",
+     "Name": "Raegan Richardson",
+     "Team": "App State",
+     "Cl": "Jr.",
+     "Height": "6-0",
+     "Position": "S",
+     "S": "64",
+     "Trpl Dbl": "1"
+    },
+    {
+     "Rank": "-",
+     "Name": "Antonie Kelnárová",
+     "Team": "Saint Mary's (CA)",
+     "Cl": "Jr.",
+     "Height": "5-10",
+     "Position": "OH",
+     "S": "59",
+     "Trpl Dbl": "1"
+    },
+    {
+     "Rank": "-",
+     "Name": "Rachel McCollum",
+     "Team": "UAB",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "S",
+     "S": "59",
+     "Trpl Dbl": "1"
+    },
+    {
+     "Rank": "-",
+     "Name": "Gwen Adler",
+     "Team": "Seton Hall",
+     "Cl": "Jr.",
+     "Height": "5-10",
+     "Position": "S",
+     "S": "52",
+     "Trpl Dbl": "1"
+    },
+    {
+     "Rank": "-",
+     "Name": "Hadley Hardersen",
+     "Team": "Indiana St.",
+     "Cl": "So.",
+     "Height": "6-0",
+     "Position": "S",
+     "S": "50",
+     "Trpl Dbl": "1"
+    },
+    {
+     "Rank": "-",
+     "Name": "Ava Hight",
+     "Team": "A&M-Corpus Christi",
+     "Cl": "So.",
+     "Height": "5-7",
+     "Position": "S",
+     "S": "48",
+     "Trpl Dbl": "1"
+    },
+    {
+     "Rank": "-",
+     "Name": "Brooke Larsen",
+     "Team": "South Dakota St.",
+     "Cl": "So.",
+     "Height": "5-11",
+     "Position": "S",
+     "S": "47",
+     "Trpl Dbl": "1"
+    },
+    {
+     "Rank": "-",
+     "Name": "Gaby Zovko",
+     "Team": "UNCW",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "S",
      "S": "45",
-     "Kills": "192"
+     "Trpl Dbl": "1"
+    },
+    {
+     "Rank": "-",
+     "Name": "Charlee Solomon",
+     "Team": "Tulane",
+     "Cl": "So.",
+     "Height": "5-10",
+     "Position": "S",
+     "S": "43",
+     "Trpl Dbl": "1"
     }
    ]
   }
