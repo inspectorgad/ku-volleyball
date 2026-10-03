@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-02T15:57:43Z",
+ "generatedAt": "2026-10-03T00:43:02Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -19485,7 +19485,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 32
+   "opponentRpi": 30
   },
   {
    "date": "2026-09-03",
@@ -20722,7 +20722,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 98
+   "opponentRpi": 77
   },
   {
    "date": "2026-09-08",
@@ -21210,7 +21210,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 182
+   "opponentRpi": 173
   },
   {
    "date": "2026-09-11",
@@ -21876,7 +21876,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 101
+   "opponentRpi": 99
   },
   {
    "date": "2026-09-13",
@@ -22338,7 +22338,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 84
+   "opponentRpi": 81
   },
   {
    "date": "2026-09-15",
@@ -22878,7 +22878,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 182
+   "opponentRpi": 173
   },
   {
    "date": "2026-09-18",
@@ -24082,7 +24082,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 148
+   "opponentRpi": 147
   },
   {
    "date": "2026-09-25",
@@ -25364,7 +25364,7 @@
    },
    "home": false,
    "forecast": 0.7102,
-   "opponentRpi": 171
+   "opponentRpi": 169
   },
   {
    "date": "2026-10-01",
@@ -26068,31 +26068,7 @@
    },
    "home": true,
    "forecast": 0.6552,
-   "opponentRpi": 27
-  },
-  {
-   "date": "2026-10-02",
-   "opponent": "BYU",
-   "season": "2026",
-   "home": true,
-   "venue": "Horejsi Family Volleyball Arena",
-   "city": "Lawrence, KS",
-   "time": "18:00",
-   "tv": "ESPN+",
-   "winProbability": 0.5857,
-   "ratingSource": "poll",
-   "commonOpponents": [
-    {
-     "team": "Florida St.",
-     "ku": "L 2-3",
-     "them": "W 3-2"
-    },
-    {
-     "team": "Pittsburgh",
-     "ku": "L 1-3",
-     "them": "L 1-3"
-    }
-   ]
+   "opponentRpi": 26
   },
   {
    "date": "2026-10-11",
@@ -26102,7 +26078,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.5756,
+   "winProbability": 0.5795,
    "ratingSource": "results"
   },
   {
@@ -26114,7 +26090,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.577,
+   "winProbability": 0.5783,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26183,7 +26159,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7402,
+   "winProbability": 0.7413,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26202,7 +26178,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5189,
+   "winProbability": 0.5166,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26240,7 +26216,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7584,
+   "winProbability": 0.7629,
    "ratingSource": "results"
   },
   {
@@ -26288,7 +26264,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7766,
+   "winProbability": 0.7731,
    "ratingSource": "results"
   },
   {
@@ -26299,7 +26275,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.6345,
+   "winProbability": 0.6335,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26513,7 +26489,7 @@
    "overallW": 10,
    "overallL": 3,
    "nationalRank": 19,
-   "rpiRank": 24,
+   "rpiRank": 21,
    "rpiSource": "provisional"
   },
   {
@@ -26525,7 +26501,7 @@
    "overallW": 10,
    "overallL": 1,
    "nationalRank": 18,
-   "rpiRank": 15,
+   "rpiRank": 13,
    "rpiSource": "provisional"
   },
   {
@@ -26549,7 +26525,7 @@
    "overallW": 8,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 65,
+   "rpiRank": 67,
    "rpiSource": "provisional"
   },
   {
@@ -26621,7 +26597,7 @@
    "overallW": 10,
    "overallL": 4,
    "nationalRank": 23,
-   "rpiRank": 27,
+   "rpiRank": 26,
    "rpiSource": "provisional"
   },
   {
@@ -26681,7 +26657,7 @@
    "overallW": 10,
    "overallL": 2,
    "nationalRank": 24,
-   "rpiRank": 50,
+   "rpiRank": 49,
    "rpiSource": "provisional"
   },
   {
@@ -26693,7 +26669,7 @@
    "overallW": 10,
    "overallL": 3,
    "nationalRank": 12,
-   "rpiRank": 25,
+   "rpiRank": 23,
    "rpiSource": "provisional"
   },
   {
@@ -26705,7 +26681,7 @@
    "overallW": 8,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 58,
+   "rpiRank": 51,
    "rpiSource": "provisional"
   },
   {
@@ -26765,7 +26741,7 @@
    "overallW": 9,
    "overallL": 2,
    "nationalRank": null,
-   "rpiRank": 38,
+   "rpiRank": 41,
    "rpiSource": "provisional"
   },
   {
@@ -26813,7 +26789,7 @@
    "overallW": 8,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 77,
+   "rpiRank": 82,
    "rpiSource": "provisional"
   },
   {
@@ -26837,7 +26813,7 @@
    "overallW": 7,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 45,
+   "rpiRank": 50,
    "rpiSource": "provisional"
   },
   {
@@ -26849,7 +26825,7 @@
    "overallW": 8,
    "overallL": 6,
    "nationalRank": null,
-   "rpiRank": 171,
+   "rpiRank": 169,
    "rpiSource": "provisional"
   },
   {
@@ -26861,7 +26837,7 @@
    "overallW": 5,
    "overallL": 7,
    "nationalRank": null,
-   "rpiRank": 149,
+   "rpiRank": 145,
    "rpiSource": "provisional"
   }
  ],
@@ -31112,373 +31088,6 @@
    ]
   },
   {
-   "team": "BYU",
-   "matches": 11,
-   "players": [
-    {
-     "player": "Claire Little Chambers",
-     "jerseyNumber": "12",
-     "position": "OH",
-     "mp": 11,
-     "sp": 42,
-     "k": 137,
-     "e": 34,
-     "ta": 333,
-     "a": 11,
-     "sa": 10,
-     "se": 6,
-     "d": 74,
-     "bs": 0,
-     "ba": 32,
-     "re": 11,
-     "bhe": 0,
-     "sat": 158
-    },
-    {
-     "player": "Elli Mortensen",
-     "jerseyNumber": "2",
-     "position": "OH",
-     "mp": 11,
-     "sp": 42,
-     "k": 117,
-     "e": 37,
-     "ta": 261,
-     "a": 13,
-     "sa": 15,
-     "se": 20,
-     "d": 75,
-     "bs": 0,
-     "ba": 17,
-     "re": 10,
-     "bhe": 0,
-     "sat": 145
-    },
-    {
-     "player": "Sophia Callahan",
-     "jerseyNumber": "22",
-     "position": "OH",
-     "mp": 9,
-     "sp": 36,
-     "k": 80,
-     "e": 31,
-     "ta": 196,
-     "a": 3,
-     "sa": 0,
-     "se": 0,
-     "d": 23,
-     "bs": 0,
-     "ba": 29,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Brooke Hardy",
-     "jerseyNumber": "4",
-     "position": "MB",
-     "mp": 10,
-     "sp": 39,
-     "k": 67,
-     "e": 14,
-     "ta": 125,
-     "a": 5,
-     "sa": 17,
-     "se": 10,
-     "d": 22,
-     "bs": 3,
-     "ba": 35,
-     "re": 0,
-     "bhe": 0,
-     "sat": 181
-    },
-    {
-     "player": "Kate Prior",
-     "jerseyNumber": "1",
-     "position": "OPP",
-     "mp": 10,
-     "sp": 37,
-     "k": 55,
-     "e": 25,
-     "ta": 125,
-     "a": 1,
-     "sa": 0,
-     "se": 0,
-     "d": 11,
-     "bs": 0,
-     "ba": 29,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Kelli Jo Burgess",
-     "jerseyNumber": "17",
-     "position": "MB",
-     "mp": 10,
-     "sp": 39,
-     "k": 54,
-     "e": 11,
-     "ta": 103,
-     "a": 0,
-     "sa": 0,
-     "se": 1,
-     "d": 1,
-     "bs": 2,
-     "ba": 71,
-     "re": 0,
-     "bhe": 0,
-     "sat": 5
-    },
-    {
-     "player": "Anna Blamires",
-     "jerseyNumber": "8",
-     "position": "OPP",
-     "mp": 8,
-     "sp": 25,
-     "k": 23,
-     "e": 6,
-     "ta": 46,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 1,
-     "bs": 0,
-     "ba": 3,
-     "re": 0,
-     "bhe": 0,
-     "sat": 1
-    },
-    {
-     "player": "Kylie Buttars",
-     "jerseyNumber": "21",
-     "position": "OH",
-     "mp": 8,
-     "sp": 26,
-     "k": 15,
-     "e": 8,
-     "ta": 38,
-     "a": 1,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 1,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Dimitra Nanou",
-     "jerseyNumber": "15",
-     "position": "OH",
-     "mp": 7,
-     "sp": 22,
-     "k": 11,
-     "e": 6,
-     "ta": 27,
-     "a": 0,
-     "sa": 1,
-     "se": 1,
-     "d": 10,
-     "bs": 0,
-     "ba": 1,
-     "re": 2,
-     "bhe": 0,
-     "sat": 15
-    },
-    {
-     "player": "Rachel Jepsen",
-     "jerseyNumber": "6",
-     "position": "MB",
-     "mp": 6,
-     "sp": 23,
-     "k": 9,
-     "e": 1,
-     "ta": 15,
-     "a": 1,
-     "sa": 0,
-     "se": 0,
-     "d": 1,
-     "bs": 0,
-     "ba": 3,
-     "re": 0,
-     "bhe": 0,
-     "sat": 1
-    },
-    {
-     "player": "Kaylie Kofe",
-     "jerseyNumber": "20",
-     "position": "S",
-     "mp": 11,
-     "sp": 42,
-     "k": 6,
-     "e": 0,
-     "ta": 11,
-     "a": 232,
-     "sa": 7,
-     "se": 17,
-     "d": 61,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 143
-    },
-    {
-     "player": "Lulu Po'uha",
-     "jerseyNumber": "5",
-     "position": "L",
-     "mp": 11,
-     "sp": 42,
-     "k": 3,
-     "e": 0,
-     "ta": 6,
-     "a": 45,
-     "sa": 3,
-     "se": 13,
-     "d": 119,
-     "bs": 0,
-     "ba": 0,
-     "re": 6,
-     "bhe": 0,
-     "sat": 140
-    },
-    {
-     "player": "Grace Fredrick",
-     "jerseyNumber": "9",
-     "position": "S",
-     "mp": 5,
-     "sp": 18,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 1,
-     "sa": 0,
-     "se": 1,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 2
-    },
-    {
-     "player": "Alex Bower",
-     "jerseyNumber": "7",
-     "position": "S",
-     "mp": 11,
-     "sp": 42,
-     "k": 0,
-     "e": 4,
-     "ta": 10,
-     "a": 228,
-     "sa": 5,
-     "se": 19,
-     "d": 54,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 163
-    },
-    {
-     "player": "Kaylee Tingey",
-     "jerseyNumber": "3",
-     "position": "L",
-     "mp": 8,
-     "sp": 29,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 3,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Addie Benson",
-     "jerseyNumber": "11",
-     "position": "OH",
-     "mp": 1,
-     "sp": 5,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Emma Barbero",
-     "jerseyNumber": "10",
-     "position": "L",
-     "mp": 1,
-     "sp": 5,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Brielle Kemavor",
-     "jerseyNumber": "24",
-     "position": "MB",
-     "mp": 1,
-     "sp": 5,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    },
-    {
-     "player": "Abby Hoybjerg",
-     "jerseyNumber": "18",
-     "position": "MB",
-     "mp": 1,
-     "sp": 5,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
-    }
-   ]
-  },
-  {
    "team": "Cincinnati",
    "matches": 12,
    "players": [
@@ -34090,11 +33699,11 @@
   {
    "team": "North Carolina",
    "season": "2026",
-   "matches": 10,
-   "sets": 39,
-   "serviceAces": 40,
-   "serviceErrors": 71,
-   "serveAttempts": 867,
+   "matches": 11,
+   "sets": 42,
+   "serviceAces": 43,
+   "serviceErrors": 80,
+   "serveAttempts": 940,
    "big12": false,
    "pollRank": 25
   },
@@ -34123,11 +33732,11 @@
   {
    "team": "Pittsburgh",
    "season": "2026",
-   "matches": 12,
-   "sets": 40,
-   "serviceAces": 53,
-   "serviceErrors": 75,
-   "serveAttempts": 961,
+   "matches": 13,
+   "sets": 43,
+   "serviceAces": 63,
+   "serviceErrors": 80,
+   "serveAttempts": 1035,
    "big12": false,
    "pollRank": 2
   },
@@ -34145,11 +33754,11 @@
   {
    "team": "SMU",
    "season": "2026",
-   "matches": 12,
-   "sets": 46,
-   "serviceAces": 53,
-   "serviceErrors": 143,
-   "serveAttempts": 1079,
+   "matches": 13,
+   "sets": 49,
+   "serviceAces": 58,
+   "serviceErrors": 155,
+   "serveAttempts": 1152,
    "big12": false,
    "pollRank": 5
   },
@@ -42797,6 +42406,6 @@
  "rpi": {
   "season": "2026",
   "source": "provisional",
-  "updated": "Provisional, through games 2026-10-01"
+  "updated": "Provisional, through games 2026-10-02"
  }
 }
