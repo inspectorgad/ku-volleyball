@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-03T17:34:12Z",
+ "generatedAt": "2026-10-03T20:10:36Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -19997,7 +19997,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 40
+   "opponentRpi": 39
   },
   {
    "date": "2026-09-04",
@@ -20722,7 +20722,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 73
+   "opponentRpi": 72
   },
   {
    "date": "2026-09-08",
@@ -21210,7 +21210,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 194
+   "opponentRpi": 195
   },
   {
    "date": "2026-09-11",
@@ -21876,7 +21876,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 101
+   "opponentRpi": 102
   },
   {
    "date": "2026-09-13",
@@ -22338,7 +22338,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 82
+   "opponentRpi": 83
   },
   {
    "date": "2026-09-15",
@@ -22878,7 +22878,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 194
+   "opponentRpi": 195
   },
   {
    "date": "2026-09-18",
@@ -23339,7 +23339,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 72
+   "opponentRpi": 70
   },
   {
    "date": "2026-09-20",
@@ -24082,7 +24082,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 164
+   "opponentRpi": 165
   },
   {
    "date": "2026-09-25",
@@ -25364,7 +25364,7 @@
    },
    "home": false,
    "forecast": 0.7102,
-   "opponentRpi": 177
+   "opponentRpi": 179
   },
   {
    "date": "2026-10-01",
@@ -26803,7 +26803,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.5937,
+   "winProbability": 0.5935,
    "ratingSource": "results"
   },
   {
@@ -26815,7 +26815,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5759,
+   "winProbability": 0.5812,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26894,7 +26894,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7394,
+   "winProbability": 0.7436,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26918,7 +26918,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5223,
+   "winProbability": 0.5239,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26961,7 +26961,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7707,
+   "winProbability": 0.7705,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27016,7 +27016,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7649,
+   "winProbability": 0.7651,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27034,7 +27034,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.6447,
+   "winProbability": 0.6445,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27260,7 +27260,7 @@
    "overallW": 12,
    "overallL": 2,
    "nationalRank": 9,
-   "rpiRank": 7,
+   "rpiRank": 6,
    "rpiSource": "provisional"
   },
   {
@@ -27272,7 +27272,7 @@
    "overallW": 9,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 65,
+   "rpiRank": 66,
    "rpiSource": "provisional"
   },
   {
@@ -27296,7 +27296,7 @@
    "overallW": 10,
    "overallL": 4,
    "nationalRank": 19,
-   "rpiRank": 25,
+   "rpiRank": 24,
    "rpiSource": "provisional"
   },
   {
@@ -27488,7 +27488,7 @@
    "overallW": 9,
    "overallL": 2,
    "nationalRank": null,
-   "rpiRank": 38,
+   "rpiRank": 40,
    "rpiSource": "provisional"
   },
   {
@@ -27560,7 +27560,7 @@
    "overallW": 8,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 90,
+   "rpiRank": 92,
    "rpiSource": "provisional"
   },
   {
@@ -27584,7 +27584,7 @@
    "overallW": 8,
    "overallL": 7,
    "nationalRank": null,
-   "rpiRank": 177,
+   "rpiRank": 179,
    "rpiSource": "provisional"
   },
   {
@@ -27596,7 +27596,7 @@
    "overallW": 5,
    "overallL": 8,
    "nationalRank": null,
-   "rpiRank": 160,
+   "rpiRank": 158,
    "rpiSource": "provisional"
   }
  ],
@@ -28227,7 +28227,7 @@
   },
   {
    "team": "Arizona St.",
-   "fetchedAt": "2026-09-26T20:07:31.478Z",
+   "fetchedAt": "2026-10-03T20:10:32.798Z",
    "players": [
     {
      "player": "Una Vajagi\u0107",
@@ -30105,7 +30105,7 @@
   },
   {
    "team": "Texas Tech",
-   "fetchedAt": "2026-09-26T20:07:34.923Z",
+   "fetchedAt": "2026-10-03T20:10:35.826Z",
    "players": [
     {
      "player": "Faith Jordan",
@@ -34463,11 +34463,11 @@
   {
    "team": "Louisville",
    "season": "2026",
-   "matches": 15,
-   "sets": 50,
-   "serviceAces": 80,
-   "serviceErrors": 118,
-   "serveAttempts": 1207,
+   "matches": 16,
+   "sets": 53,
+   "serviceAces": 87,
+   "serviceErrors": 125,
+   "serveAttempts": 1281,
    "big12": false,
    "pollRank": 4
   },
