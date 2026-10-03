@@ -529,10 +529,10 @@
   },
   "6625743": {
    "date": "2026-10-02",
-   "final": false,
+   "final": true,
    "home": "Kansas",
    "away": "BYU",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -8012,6 +8012,27 @@
    },
    "conferenceGame": true
   },
+  "6625743": {
+   "date": "2026-10-02",
+   "season": "2026",
+   "home": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 0,
+    "winner": false,
+    "rank": 19,
+    "inConference": true
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 18,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -11650,6 +11671,14 @@
    "season": "2026",
    "teams": [
     "Utah"
+   ],
+   "boxscored": true
+  },
+  "6625743": {
+   "date": "2026-10-02",
+   "season": "2026",
+   "teams": [
+    "BYU"
    ],
    "boxscored": true
   },
