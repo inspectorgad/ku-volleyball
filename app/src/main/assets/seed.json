@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-03T07:02:57Z",
+ "generatedAt": "2026-10-03T17:34:12Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -20722,7 +20722,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 71
+   "opponentRpi": 73
   },
   {
    "date": "2026-09-08",
@@ -21876,7 +21876,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 100
+   "opponentRpi": 101
   },
   {
    "date": "2026-09-13",
@@ -22338,7 +22338,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 81
+   "opponentRpi": 82
   },
   {
    "date": "2026-09-15",
@@ -26068,7 +26068,7 @@
    },
    "home": true,
    "forecast": 0.6552,
-   "opponentRpi": 30
+   "opponentRpi": 31
   },
   {
    "date": "2026-10-02",
@@ -27016,7 +27016,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7638,
+   "winProbability": 0.7649,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27272,7 +27272,7 @@
    "overallW": 9,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 64,
+   "rpiRank": 65,
    "rpiSource": "provisional"
   },
   {
@@ -27356,7 +27356,7 @@
    "overallW": 10,
    "overallL": 4,
    "nationalRank": 23,
-   "rpiRank": 30,
+   "rpiRank": 31,
    "rpiSource": "provisional"
   },
   {
@@ -27368,7 +27368,7 @@
    "overallW": 9,
    "overallL": 4,
    "nationalRank": null,
-   "rpiRank": 45,
+   "rpiRank": 46,
    "rpiSource": "provisional"
   },
   {
@@ -27596,7 +27596,7 @@
    "overallW": 5,
    "overallL": 8,
    "nationalRank": null,
-   "rpiRank": 161,
+   "rpiRank": 160,
    "rpiSource": "provisional"
   }
  ],
@@ -43203,6 +43203,6 @@
  "rpi": {
   "season": "2026",
   "source": "provisional",
-  "updated": "Provisional, through games 2026-10-02"
+  "updated": "Provisional, through games 2026-10-03"
  }
 }
