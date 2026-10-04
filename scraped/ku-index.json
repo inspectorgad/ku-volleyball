@@ -9798,6 +9798,27 @@
    },
    "conferenceGame": true
   },
+  "6627517": {
+   "date": "2026-10-03",
+   "season": "2026",
+   "home": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 3,
+    "winner": true,
+    "rank": 23,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -11261,6 +11282,14 @@
    ],
    "boxscored": true
   },
+  "6624633": {
+   "date": "2026-10-03",
+   "season": "2026",
+   "teams": [
+    "Nebraska"
+   ],
+   "boxscored": true
+  },
   "6624646": {
    "date": "2026-09-03",
    "season": "2026",
@@ -11627,6 +11656,14 @@
    "season": "2026",
    "teams": [
     "Baylor"
+   ],
+   "boxscored": true
+  },
+  "6625379": {
+   "date": "2026-10-03",
+   "season": "2026",
+   "teams": [
+    "Penn St."
    ],
    "boxscored": true
   },
@@ -13144,6 +13181,14 @@
    ],
    "boxscored": true
   },
+  "6627517": {
+   "date": "2026-10-03",
+   "season": "2026",
+   "teams": [
+    "Kansas St."
+   ],
+   "boxscored": true
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -13662,6 +13707,14 @@
    "teams": [
     "Arizona",
     "Iowa St."
+   ],
+   "boxscored": true
+  },
+  "6628248": {
+   "date": "2026-10-03",
+   "season": "2026",
+   "teams": [
+    "Stanford"
    ],
    "boxscored": true
   },
