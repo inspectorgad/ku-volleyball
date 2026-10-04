@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-04T00:01:26Z",
+ "generatedAt": "2026-10-04T07:23:12Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -19485,7 +19485,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 33
+   "opponentRpi": 34
   },
   {
    "date": "2026-09-03",
@@ -19997,7 +19997,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 38
+   "opponentRpi": 37
   },
   {
    "date": "2026-09-04",
@@ -21210,7 +21210,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 194
+   "opponentRpi": 189
   },
   {
    "date": "2026-09-11",
@@ -21876,7 +21876,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 101
+   "opponentRpi": 102
   },
   {
    "date": "2026-09-13",
@@ -22338,7 +22338,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 84
+   "opponentRpi": 81
   },
   {
    "date": "2026-09-15",
@@ -22878,7 +22878,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 194
+   "opponentRpi": 189
   },
   {
    "date": "2026-09-18",
@@ -23339,7 +23339,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 71
+   "opponentRpi": 70
   },
   {
    "date": "2026-09-20",
@@ -24082,7 +24082,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 158
+   "opponentRpi": 159
   },
   {
    "date": "2026-09-25",
@@ -24787,7 +24787,7 @@
    },
    "home": true,
    "forecast": 0.8189,
-   "opponentRpi": 106
+   "opponentRpi": 111
   },
   {
    "date": "2026-09-27",
@@ -25364,7 +25364,7 @@
    },
    "home": false,
    "forecast": 0.7102,
-   "opponentRpi": 177
+   "opponentRpi": 180
   },
   {
    "date": "2026-10-01",
@@ -26068,7 +26068,7 @@
    },
    "home": true,
    "forecast": 0.6552,
-   "opponentRpi": 32
+   "opponentRpi": 25
   },
   {
    "date": "2026-10-02",
@@ -26793,7 +26793,7 @@
    },
    "home": true,
    "forecast": 0.5857,
-   "opponentRpi": 12
+   "opponentRpi": 13
   },
   {
    "date": "2026-10-11",
@@ -26803,7 +26803,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.5951,
+   "winProbability": 0.598,
    "ratingSource": "results"
   },
   {
@@ -26815,7 +26815,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5875,
+   "winProbability": 0.5906,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26827,6 +26827,11 @@
      "team": "Houston",
      "ku": "W 3-0",
      "them": "L 1-3"
+    },
+    {
+     "team": "Utah",
+     "ku": "W 3-0",
+     "them": "L 0-3"
     }
    ]
   },
@@ -26894,7 +26899,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7485,
+   "winProbability": 0.7509,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26906,6 +26911,11 @@
      "team": "Houston",
      "ku": "W 3-0",
      "them": "L 1-3"
+    },
+    {
+     "team": "Utah",
+     "ku": "W 3-0",
+     "them": "L 0-3"
     }
    ]
   },
@@ -26918,7 +26928,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5251,
+   "winProbability": 0.5209,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26961,7 +26971,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7702,
+   "winProbability": 0.7716,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27016,7 +27026,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7654,
+   "winProbability": 0.7656,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27034,7 +27044,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.6432,
+   "winProbability": 0.6403,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27248,7 +27258,7 @@
    "overallW": 11,
    "overallL": 1,
    "nationalRank": 18,
-   "rpiRank": 12,
+   "rpiRank": 13,
    "rpiSource": "provisional"
   },
   {
@@ -27260,7 +27270,7 @@
    "overallW": 12,
    "overallL": 2,
    "nationalRank": 9,
-   "rpiRank": 6,
+   "rpiRank": 7,
    "rpiSource": "provisional"
   },
   {
@@ -27272,7 +27282,7 @@
    "overallW": 9,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 65,
+   "rpiRank": 62,
    "rpiSource": "provisional"
   },
   {
@@ -27289,6 +27299,18 @@
   },
   {
    "season": "2026",
+   "team": "Utah",
+   "seo": "utah",
+   "confW": 3,
+   "confL": 1,
+   "overallW": 11,
+   "overallL": 4,
+   "nationalRank": 23,
+   "rpiRank": 25,
+   "rpiSource": "provisional"
+  },
+  {
+   "season": "2026",
    "team": "Kansas",
    "seo": "kansas",
    "confW": 3,
@@ -27296,7 +27318,7 @@
    "overallW": 10,
    "overallL": 4,
    "nationalRank": 19,
-   "rpiRank": 25,
+   "rpiRank": 26,
    "rpiSource": "provisional"
   },
   {
@@ -27349,18 +27371,6 @@
   },
   {
    "season": "2026",
-   "team": "Utah",
-   "seo": "utah",
-   "confW": 2,
-   "confL": 1,
-   "overallW": 10,
-   "overallL": 4,
-   "nationalRank": 23,
-   "rpiRank": 32,
-   "rpiSource": "provisional"
-  },
-  {
-   "season": "2026",
    "team": "West Virginia",
    "seo": "west-virginia",
    "confW": 2,
@@ -27380,7 +27390,7 @@
    "overallW": 9,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 106,
+   "rpiRank": 111,
    "rpiSource": "provisional"
   },
   {
@@ -27481,18 +27491,6 @@
   },
   {
    "season": "2026",
-   "team": "Kansas St.",
-   "seo": "kansas-st",
-   "confW": 1,
-   "confL": 2,
-   "overallW": 9,
-   "overallL": 2,
-   "nationalRank": null,
-   "rpiRank": 42,
-   "rpiSource": "provisional"
-  },
-  {
-   "season": "2026",
    "team": "Colorado",
    "seo": "colorado",
    "confW": 1,
@@ -27500,7 +27498,7 @@
    "overallW": 10,
    "overallL": 3,
    "nationalRank": 24,
-   "rpiRank": 49,
+   "rpiRank": 47,
    "rpiSource": "provisional"
   },
   {
@@ -27513,6 +27511,18 @@
    "overallL": 5,
    "nationalRank": 21,
    "rpiRank": 14,
+   "rpiSource": "provisional"
+  },
+  {
+   "season": "2026",
+   "team": "Kansas St.",
+   "seo": "kansas-st",
+   "confW": 1,
+   "confL": 3,
+   "overallW": 9,
+   "overallL": 3,
+   "nationalRank": null,
+   "rpiRank": 49,
    "rpiSource": "provisional"
   },
   {
@@ -27560,7 +27570,7 @@
    "overallW": 8,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 92,
+   "rpiRank": 94,
    "rpiSource": "provisional"
   },
   {
@@ -27572,7 +27582,7 @@
    "overallW": 7,
    "overallL": 6,
    "nationalRank": null,
-   "rpiRank": 55,
+   "rpiRank": 59,
    "rpiSource": "provisional"
   },
   {
@@ -27584,7 +27594,7 @@
    "overallW": 8,
    "overallL": 7,
    "nationalRank": null,
-   "rpiRank": 177,
+   "rpiRank": 180,
    "rpiSource": "provisional"
   },
   {
@@ -27596,7 +27606,7 @@
    "overallW": 5,
    "overallL": 8,
    "nationalRank": null,
-   "rpiRank": 153,
+   "rpiRank": 151,
    "rpiSource": "provisional"
   }
  ],
@@ -32968,83 +32978,102 @@
   },
   {
    "team": "Kansas St.",
-   "matches": 11,
+   "matches": 12,
    "players": [
     {
      "player": "Addison Massey",
      "jerseyNumber": "15",
      "position": "OPP",
-     "mp": 11,
-     "sp": 42,
-     "k": 183,
-     "e": 73,
-     "ta": 427,
+     "mp": 12,
+     "sp": 45,
+     "k": 196,
+     "e": 75,
+     "ta": 450,
      "a": 7,
      "sa": 10,
-     "se": 10,
-     "d": 83,
+     "se": 11,
+     "d": 89,
      "bs": 10,
-     "ba": 12,
-     "re": 12,
+     "ba": 13,
+     "re": 16,
      "bhe": 0,
-     "sat": 164
+     "sat": 170
     },
     {
      "player": "Skylar Brady",
      "jerseyNumber": "11",
      "position": "OPP",
-     "mp": 11,
-     "sp": 35,
-     "k": 82,
-     "e": 41,
-     "ta": 228,
+     "mp": 12,
+     "sp": 38,
+     "k": 85,
+     "e": 47,
+     "ta": 248,
      "a": 1,
      "sa": 2,
      "se": 1,
      "d": 27,
-     "bs": 4,
-     "ba": 16,
+     "bs": 5,
+     "ba": 18,
      "re": 6,
      "bhe": 0,
-     "sat": 35
+     "sat": 40
     },
     {
      "player": "Reagan Fox",
      "jerseyNumber": "4",
      "position": "OH",
-     "mp": 11,
-     "sp": 41,
-     "k": 62,
-     "e": 31,
-     "ta": 170,
+     "mp": 12,
+     "sp": 44,
+     "k": 68,
+     "e": 32,
+     "ta": 181,
      "a": 7,
-     "sa": 1,
-     "se": 2,
-     "d": 23,
+     "sa": 2,
+     "se": 4,
+     "d": 26,
      "bs": 2,
      "ba": 20,
-     "re": 2,
+     "re": 3,
      "bhe": 0,
-     "sat": 12
+     "sat": 25
     },
     {
      "player": "Ellah Derrer",
      "jerseyNumber": "27",
      "position": "MB",
-     "mp": 11,
-     "sp": 37,
-     "k": 46,
-     "e": 8,
-     "ta": 98,
+     "mp": 12,
+     "sp": 40,
+     "k": 52,
+     "e": 10,
+     "ta": 111,
      "a": 3,
-     "sa": 10,
-     "se": 7,
+     "sa": 11,
+     "se": 8,
      "d": 21,
      "bs": 6,
-     "ba": 23,
+     "ba": 24,
      "re": 1,
      "bhe": 0,
-     "sat": 117
+     "sat": 124
+    },
+    {
+     "player": "Avery Stones",
+     "jerseyNumber": "5",
+     "position": "OH",
+     "mp": 11,
+     "sp": 33,
+     "k": 47,
+     "e": 23,
+     "ta": 147,
+     "a": 0,
+     "sa": 0,
+     "se": 0,
+     "d": 9,
+     "bs": 1,
+     "ba": 6,
+     "re": 3,
+     "bhe": 0,
+     "sat": 1
     },
     {
      "player": "Sydney Maue",
@@ -33066,33 +33095,14 @@
      "sat": 2
     },
     {
-     "player": "Avery Stones",
-     "jerseyNumber": "5",
-     "position": "OH",
-     "mp": 10,
-     "sp": 31,
-     "k": 43,
-     "e": 22,
-     "ta": 137,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 9,
-     "bs": 1,
-     "ba": 6,
-     "re": 3,
-     "bhe": 0,
-     "sat": 1
-    },
-    {
      "player": "Cadence Lundgren",
      "jerseyNumber": "16",
      "position": "MB",
-     "mp": 11,
-     "sp": 35,
-     "k": 41,
+     "mp": 12,
+     "sp": 37,
+     "k": 42,
      "e": 11,
-     "ta": 90,
+     "ta": 93,
      "a": 0,
      "sa": 0,
      "se": 0,
@@ -33107,17 +33117,17 @@
      "player": "Reese Resmer",
      "jerseyNumber": "21",
      "position": "MB",
-     "mp": 9,
-     "sp": 24,
+     "mp": 10,
+     "sp": 26,
      "k": 26,
      "e": 11,
-     "ta": 57,
+     "ta": 58,
      "a": 0,
      "sa": 0,
      "se": 1,
      "d": 2,
      "bs": 5,
-     "ba": 14,
+     "ba": 16,
      "re": 0,
      "bhe": 0,
      "sat": 11
@@ -33126,34 +33136,34 @@
      "player": "Emerson Van Lannen",
      "jerseyNumber": "13",
      "position": "S",
-     "mp": 11,
-     "sp": 42,
+     "mp": 12,
+     "sp": 45,
      "k": 11,
-     "e": 1,
-     "ta": 30,
-     "a": 237,
+     "e": 2,
+     "ta": 33,
+     "a": 257,
      "sa": 23,
      "se": 10,
-     "d": 77,
+     "d": 80,
      "bs": 0,
      "ba": 1,
      "re": 0,
      "bhe": 0,
-     "sat": 200
+     "sat": 206
     },
     {
      "player": "Lauren Latham",
      "jerseyNumber": "23",
      "position": "S",
-     "mp": 10,
-     "sp": 29,
+     "mp": 11,
+     "sp": 31,
      "k": 5,
      "e": 1,
-     "ta": 14,
-     "a": 83,
+     "ta": 15,
+     "a": 84,
      "sa": 3,
      "se": 9,
-     "d": 31,
+     "d": 32,
      "bs": 0,
      "ba": 0,
      "re": 0,
@@ -33164,15 +33174,15 @@
      "player": "Camdyn Stucky",
      "jerseyNumber": "8",
      "position": "S",
-     "mp": 9,
-     "sp": 25,
+     "mp": 10,
+     "sp": 28,
      "k": 1,
-     "e": 2,
-     "ta": 7,
-     "a": 93,
+     "e": 3,
+     "ta": 12,
+     "a": 96,
      "sa": 3,
      "se": 9,
-     "d": 35,
+     "d": 37,
      "bs": 0,
      "ba": 2,
      "re": 0,
@@ -33183,58 +33193,58 @@
      "player": "Caleigh Ponn",
      "jerseyNumber": "1",
      "position": "L",
-     "mp": 11,
-     "sp": 40,
+     "mp": 12,
+     "sp": 43,
      "k": 0,
      "e": 0,
      "ta": 0,
-     "a": 5,
-     "sa": 6,
+     "a": 6,
+     "sa": 7,
      "se": 14,
-     "d": 55,
+     "d": 57,
      "bs": 0,
      "ba": 0,
      "re": 4,
      "bhe": 0,
-     "sat": 117
+     "sat": 125
     },
     {
      "player": "Fuka Sekita",
      "jerseyNumber": "",
      "position": "L",
-     "mp": 11,
-     "sp": 42,
+     "mp": 12,
+     "sp": 45,
      "k": 0,
      "e": 0,
      "ta": 3,
-     "a": 57,
-     "sa": 9,
-     "se": 10,
-     "d": 148,
+     "a": 61,
+     "sa": 10,
+     "se": 12,
+     "d": 153,
      "bs": 0,
      "ba": 0,
-     "re": 6,
+     "re": 7,
      "bhe": 0,
-     "sat": 161
+     "sat": 170
     },
     {
      "player": "Chandler Carter",
      "jerseyNumber": "9",
      "position": "L",
-     "mp": 5,
-     "sp": 11,
+     "mp": 6,
+     "sp": 13,
      "k": 0,
      "e": 0,
      "ta": 0,
      "a": 0,
      "sa": 1,
-     "se": 1,
-     "d": 0,
+     "se": 2,
+     "d": 2,
      "bs": 0,
      "ba": 0,
-     "re": 0,
+     "re": 1,
      "bhe": 0,
-     "sat": 10
+     "sat": 16
     },
     {
      "player": "Alex Klukvin",
@@ -34442,11 +34452,11 @@
   {
    "team": "Kansas St.",
    "season": "2026",
-   "matches": 11,
-   "sets": 42,
-   "serviceAces": 68,
-   "serviceErrors": 75,
-   "serveAttempts": 970,
+   "matches": 12,
+   "sets": 45,
+   "serviceAces": 72,
+   "serviceErrors": 82,
+   "serveAttempts": 1030,
    "big12": true
   },
   {
@@ -34485,11 +34495,11 @@
   {
    "team": "Nebraska",
    "season": "2026",
-   "matches": 14,
-   "sets": 45,
-   "serviceAces": 88,
-   "serviceErrors": 102,
-   "serveAttempts": 1098,
+   "matches": 15,
+   "sets": 48,
+   "serviceAces": 99,
+   "serviceErrors": 110,
+   "serveAttempts": 1171,
    "big12": false,
    "pollRank": 1
   },
@@ -34518,11 +34528,11 @@
   {
    "team": "Penn St.",
    "season": "2026",
-   "matches": 13,
-   "sets": 46,
-   "serviceAces": 71,
-   "serviceErrors": 102,
-   "serveAttempts": 1060,
+   "matches": 14,
+   "sets": 50,
+   "serviceAces": 78,
+   "serviceErrors": 119,
+   "serveAttempts": 1156,
    "big12": false,
    "pollRank": 16
   },
@@ -34562,11 +34572,11 @@
   {
    "team": "Stanford",
    "season": "2026",
-   "matches": 13,
-   "sets": 46,
-   "serviceAces": 64,
-   "serviceErrors": 126,
-   "serveAttempts": 1052,
+   "matches": 14,
+   "sets": 49,
+   "serviceAces": 68,
+   "serviceErrors": 131,
+   "serveAttempts": 1126,
    "big12": false,
    "pollRank": 13
   },
@@ -34637,11 +34647,11 @@
   {
    "team": "Utah",
    "season": "2026",
-   "matches": 14,
-   "sets": 47,
-   "serviceAces": 75,
-   "serviceErrors": 149,
-   "serveAttempts": 1095,
+   "matches": 15,
+   "sets": 50,
+   "serviceAces": 83,
+   "serviceErrors": 160,
+   "serveAttempts": 1168,
    "big12": true,
    "pollRank": 23
   },
