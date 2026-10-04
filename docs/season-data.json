@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-04T17:48:29Z",
+ "generatedAt": "2026-10-04T20:24:20Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -19485,7 +19485,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 34
+   "opponentRpi": 31
   },
   {
    "date": "2026-09-03",
@@ -19997,7 +19997,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 37
+   "opponentRpi": 38
   },
   {
    "date": "2026-09-04",
@@ -20722,7 +20722,7 @@
    },
    "home": false,
    "neutral": true,
-   "opponentRpi": 72
+   "opponentRpi": 68
   },
   {
    "date": "2026-09-08",
@@ -21210,7 +21210,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 189
+   "opponentRpi": 181
   },
   {
    "date": "2026-09-11",
@@ -21876,7 +21876,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 102
+   "opponentRpi": 101
   },
   {
    "date": "2026-09-13",
@@ -22338,7 +22338,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 81
+   "opponentRpi": 77
   },
   {
    "date": "2026-09-15",
@@ -22878,7 +22878,7 @@
     }
    },
    "home": false,
-   "opponentRpi": 189
+   "opponentRpi": 181
   },
   {
    "date": "2026-09-18",
@@ -23339,7 +23339,7 @@
     }
    },
    "home": true,
-   "opponentRpi": 70
+   "opponentRpi": 79
   },
   {
    "date": "2026-09-20",
@@ -24787,7 +24787,7 @@
    },
    "home": true,
    "forecast": 0.8189,
-   "opponentRpi": 111
+   "opponentRpi": 100
   },
   {
    "date": "2026-09-27",
@@ -25364,7 +25364,7 @@
    },
    "home": false,
    "forecast": 0.7102,
-   "opponentRpi": 180
+   "opponentRpi": 183
   },
   {
    "date": "2026-10-01",
@@ -26068,7 +26068,7 @@
    },
    "home": true,
    "forecast": 0.6552,
-   "opponentRpi": 25
+   "opponentRpi": 27
   },
   {
    "date": "2026-10-02",
@@ -26803,7 +26803,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.598,
+   "winProbability": 0.6181,
    "ratingSource": "results"
   },
   {
@@ -26815,7 +26815,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5906,
+   "winProbability": 0.5977,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26899,7 +26899,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7509,
+   "winProbability": 0.7564,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26928,7 +26928,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5209,
+   "winProbability": 0.5297,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26971,7 +26971,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7716,
+   "winProbability": 0.7784,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27026,9 +27026,14 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7654,
+   "winProbability": 0.7826,
    "ratingSource": "results",
    "commonOpponents": [
+    {
+     "team": "Houston",
+     "ku": "W 3-0",
+     "them": "L 1-3"
+    },
     {
      "team": "Texas Tech",
      "ku": "W 3-0",
@@ -27044,7 +27049,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.6403,
+   "winProbability": 0.6556,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27270,7 +27275,7 @@
    "overallW": 12,
    "overallL": 2,
    "nationalRank": 9,
-   "rpiRank": 7,
+   "rpiRank": 6,
    "rpiSource": "provisional"
   },
   {
@@ -27282,7 +27287,7 @@
    "overallW": 9,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 62,
+   "rpiRank": 57,
    "rpiSource": "provisional"
   },
   {
@@ -27306,7 +27311,7 @@
    "overallW": 11,
    "overallL": 4,
    "nationalRank": 23,
-   "rpiRank": 25,
+   "rpiRank": 27,
    "rpiSource": "provisional"
   },
   {
@@ -27319,6 +27324,18 @@
    "overallL": 4,
    "nationalRank": 19,
    "rpiRank": 26,
+   "rpiSource": "provisional"
+  },
+  {
+   "season": "2026",
+   "team": "Houston",
+   "seo": "houston",
+   "confW": 3,
+   "confL": 1,
+   "overallW": 10,
+   "overallL": 5,
+   "nationalRank": null,
+   "rpiRank": 100,
    "rpiSource": "provisional"
   },
   {
@@ -27370,30 +27387,6 @@
    "rpiSource": "ncaa"
   },
   {
-   "season": "2026",
-   "team": "West Virginia",
-   "seo": "west-virginia",
-   "confW": 2,
-   "confL": 1,
-   "overallW": 9,
-   "overallL": 4,
-   "nationalRank": null,
-   "rpiRank": 44,
-   "rpiSource": "provisional"
-  },
-  {
-   "season": "2026",
-   "team": "Houston",
-   "seo": "houston",
-   "confW": 2,
-   "confL": 1,
-   "overallW": 9,
-   "overallL": 5,
-   "nationalRank": null,
-   "rpiRank": 111,
-   "rpiSource": "provisional"
-  },
-  {
    "season": "2025",
    "team": "BYU",
    "seo": "byu",
@@ -27440,6 +27433,18 @@
    "nationalRank": null,
    "rpiRank": 38,
    "rpiSource": "ncaa"
+  },
+  {
+   "season": "2026",
+   "team": "West Virginia",
+   "seo": "west-virginia",
+   "confW": 2,
+   "confL": 2,
+   "overallW": 9,
+   "overallL": 5,
+   "nationalRank": null,
+   "rpiRank": 60,
+   "rpiSource": "provisional"
   },
   {
    "season": "2026",
@@ -27498,7 +27503,7 @@
    "overallW": 10,
    "overallL": 3,
    "nationalRank": 24,
-   "rpiRank": 47,
+   "rpiRank": 45,
    "rpiSource": "provisional"
   },
   {
@@ -27510,7 +27515,7 @@
    "overallW": 8,
    "overallL": 5,
    "nationalRank": 21,
-   "rpiRank": 14,
+   "rpiRank": 15,
    "rpiSource": "provisional"
   },
   {
@@ -27522,7 +27527,7 @@
    "overallW": 9,
    "overallL": 3,
    "nationalRank": null,
-   "rpiRank": 49,
+   "rpiRank": 46,
    "rpiSource": "provisional"
   },
   {
@@ -27570,7 +27575,7 @@
    "overallW": 8,
    "overallL": 5,
    "nationalRank": null,
-   "rpiRank": 94,
+   "rpiRank": 98,
    "rpiSource": "provisional"
   },
   {
@@ -27582,7 +27587,7 @@
    "overallW": 7,
    "overallL": 6,
    "nationalRank": null,
-   "rpiRank": 59,
+   "rpiRank": 56,
    "rpiSource": "provisional"
   },
   {
@@ -27594,7 +27599,7 @@
    "overallW": 8,
    "overallL": 7,
    "nationalRank": null,
-   "rpiRank": 180,
+   "rpiRank": 183,
    "rpiSource": "provisional"
   },
   {
@@ -27606,7 +27611,7 @@
    "overallW": 5,
    "overallL": 8,
    "nationalRank": null,
-   "rpiRank": 151,
+   "rpiRank": 145,
    "rpiSource": "provisional"
   }
  ],
@@ -33965,42 +33970,42 @@
   },
   {
    "team": "West Virginia",
-   "matches": 13,
+   "matches": 14,
    "players": [
     {
      "player": "Nina Horning",
      "jerseyNumber": "13",
      "position": "OH",
-     "mp": 13,
-     "sp": 57,
-     "k": 195,
-     "e": 68,
-     "ta": 501,
-     "a": 4,
+     "mp": 14,
+     "sp": 61,
+     "k": 207,
+     "e": 72,
+     "ta": 537,
+     "a": 5,
      "sa": 16,
-     "se": 28,
-     "d": 85,
+     "se": 31,
+     "d": 91,
      "bs": 1,
-     "ba": 21,
-     "re": 21,
+     "ba": 22,
+     "re": 22,
      "bhe": 0,
-     "sat": 150
+     "sat": 160
     },
     {
      "player": "Anna Barr",
      "jerseyNumber": "2",
      "position": "OH",
-     "mp": 13,
-     "sp": 56,
-     "k": 135,
-     "e": 38,
-     "ta": 315,
+     "mp": 14,
+     "sp": 60,
+     "k": 148,
+     "e": 40,
+     "ta": 343,
      "a": 1,
      "sa": 0,
      "se": 0,
-     "d": 29,
+     "d": 30,
      "bs": 1,
-     "ba": 41,
+     "ba": 43,
      "re": 0,
      "bhe": 0,
      "sat": 1
@@ -34009,17 +34014,17 @@
      "player": "Trinity Sheridan",
      "jerseyNumber": "18",
      "position": "OPP",
-     "mp": 13,
-     "sp": 54,
-     "k": 116,
-     "e": 42,
-     "ta": 290,
-     "a": 2,
+     "mp": 14,
+     "sp": 57,
+     "k": 120,
+     "e": 46,
+     "ta": 304,
+     "a": 3,
      "sa": 0,
      "se": 0,
-     "d": 25,
+     "d": 28,
      "bs": 3,
-     "ba": 29,
+     "ba": 30,
      "re": 0,
      "bhe": 1,
      "sat": 0
@@ -34028,18 +34033,18 @@
      "player": "Macie Smith",
      "jerseyNumber": "20",
      "position": "OH",
-     "mp": 13,
-     "sp": 51,
-     "k": 97,
-     "e": 67,
-     "ta": 327,
+     "mp": 14,
+     "sp": 53,
+     "k": 101,
+     "e": 68,
+     "ta": 337,
      "a": 7,
      "sa": 3,
      "se": 16,
      "d": 43,
      "bs": 2,
      "ba": 11,
-     "re": 19,
+     "re": 20,
      "bhe": 0,
      "sat": 53
     },
@@ -34047,20 +34052,20 @@
      "player": "Maddy McGath",
      "jerseyNumber": "22",
      "position": "MB",
-     "mp": 13,
-     "sp": 57,
-     "k": 89,
-     "e": 22,
-     "ta": 199,
-     "a": 4,
-     "sa": 12,
+     "mp": 14,
+     "sp": 61,
+     "k": 93,
+     "e": 26,
+     "ta": 211,
+     "a": 5,
+     "sa": 16,
      "se": 18,
-     "d": 22,
-     "bs": 11,
-     "ba": 54,
+     "d": 25,
+     "bs": 12,
+     "ba": 55,
      "re": 0,
      "bhe": 0,
-     "sat": 160
+     "sat": 173
     },
     {
      "player": "Mirjam Karoliine Kask",
@@ -34085,18 +34090,18 @@
      "player": "Saar Bertels",
      "jerseyNumber": "6",
      "position": "OH",
-     "mp": 12,
-     "sp": 40,
-     "k": 18,
-     "e": 6,
-     "ta": 51,
+     "mp": 13,
+     "sp": 43,
+     "k": 22,
+     "e": 9,
+     "ta": 66,
      "a": 0,
      "sa": 1,
      "se": 2,
-     "d": 7,
+     "d": 8,
      "bs": 0,
      "ba": 3,
-     "re": 2,
+     "re": 3,
      "bhe": 0,
      "sat": 15
     },
@@ -34104,39 +34109,39 @@
      "player": "Lauren Duncan",
      "jerseyNumber": "",
      "position": "S",
-     "mp": 13,
-     "sp": 53,
-     "k": 12,
+     "mp": 14,
+     "sp": 56,
+     "k": 13,
      "e": 6,
-     "ta": 26,
-     "a": 196,
+     "ta": 27,
+     "a": 205,
      "sa": 17,
-     "se": 19,
-     "d": 54,
+     "se": 22,
+     "d": 60,
      "bs": 0,
      "ba": 0,
      "re": 0,
      "bhe": 0,
-     "sat": 186
+     "sat": 194
     },
     {
      "player": "Alexis Finnvold",
      "jerseyNumber": "5",
      "position": "S",
-     "mp": 13,
-     "sp": 57,
-     "k": 5,
-     "e": 1,
-     "ta": 16,
-     "a": 395,
+     "mp": 14,
+     "sp": 61,
+     "k": 6,
+     "e": 2,
+     "ta": 20,
+     "a": 422,
      "sa": 10,
-     "se": 26,
-     "d": 98,
+     "se": 29,
+     "d": 106,
      "bs": 1,
      "ba": 8,
      "re": 1,
      "bhe": 0,
-     "sat": 217
+     "sat": 232
     },
     {
      "player": "Camille Huff",
@@ -34153,6 +34158,25 @@
      "d": 0,
      "bs": 2,
      "ba": 3,
+     "re": 0,
+     "bhe": 0,
+     "sat": 0
+    },
+    {
+     "player": "Cami Huff",
+     "jerseyNumber": "8",
+     "position": "MB",
+     "mp": 2,
+     "sp": 5,
+     "k": 3,
+     "e": 1,
+     "ta": 8,
+     "a": 0,
+     "sa": 0,
+     "se": 0,
+     "d": 0,
+     "bs": 2,
+     "ba": 2,
      "re": 0,
      "bhe": 0,
      "sat": 0
@@ -34177,20 +34201,20 @@
      "sat": 143
     },
     {
-     "player": "Cami Huff",
-     "jerseyNumber": "8",
+     "player": "Sophia Fallah",
+     "jerseyNumber": "15",
      "position": "MB",
-     "mp": 1,
-     "sp": 3,
+     "mp": 8,
+     "sp": 31,
      "k": 1,
      "e": 0,
-     "ta": 5,
+     "ta": 3,
      "a": 0,
      "sa": 0,
      "se": 0,
      "d": 0,
-     "bs": 2,
-     "ba": 1,
+     "bs": 0,
+     "ba": 2,
      "re": 0,
      "bhe": 0,
      "sat": 0
@@ -34199,20 +34223,20 @@
      "player": "Eily Painter",
      "jerseyNumber": "4",
      "position": "L",
-     "mp": 13,
-     "sp": 44,
+     "mp": 14,
+     "sp": 46,
      "k": 0,
      "e": 0,
      "ta": 0,
      "a": 2,
-     "sa": 1,
+     "sa": 3,
      "se": 0,
-     "d": 27,
+     "d": 31,
      "bs": 0,
      "ba": 0,
      "re": 6,
      "bhe": 0,
-     "sat": 54
+     "sat": 64
     },
     {
      "player": "Lucie Smardova",
@@ -34256,39 +34280,20 @@
      "player": "Reagan Turk",
      "jerseyNumber": "19",
      "position": "L/DS",
-     "mp": 13,
-     "sp": 56,
+     "mp": 14,
+     "sp": 60,
      "k": 0,
      "e": 0,
      "ta": 1,
-     "a": 32,
+     "a": 33,
      "sa": 9,
      "se": 8,
-     "d": 197,
+     "d": 209,
      "bs": 0,
      "ba": 0,
-     "re": 10,
+     "re": 11,
      "bhe": 0,
-     "sat": 227
-    },
-    {
-     "player": "Sophia Fallah",
-     "jerseyNumber": "15",
-     "position": "MB",
-     "mp": 7,
-     "sp": 29,
-     "k": 0,
-     "e": 0,
-     "ta": 0,
-     "a": 0,
-     "sa": 0,
-     "se": 0,
-     "d": 0,
-     "bs": 0,
-     "ba": 0,
-     "re": 0,
-     "bhe": 0,
-     "sat": 0
+     "sat": 243
     },
     {
      "player": "Nula Anderson",
@@ -34313,20 +34318,20 @@
      "player": "Cassie Bruns",
      "jerseyNumber": "23",
      "position": "L/DS",
-     "mp": 1,
-     "sp": 5,
+     "mp": 2,
+     "sp": 9,
      "k": 0,
      "e": 0,
      "ta": 0,
-     "a": 1,
-     "sa": 1,
+     "a": 5,
+     "sa": 2,
      "se": 0,
-     "d": 7,
+     "d": 14,
      "bs": 0,
      "ba": 0,
-     "re": 0,
+     "re": 1,
      "bhe": 0,
-     "sat": 21
+     "sat": 36
     }
    ]
   }
@@ -34410,21 +34415,21 @@
   {
    "team": "Houston",
    "season": "2026",
-   "matches": 14,
-   "sets": 51,
-   "serviceAces": 82,
-   "serviceErrors": 118,
-   "serveAttempts": 1154,
+   "matches": 15,
+   "sets": 55,
+   "serviceAces": 87,
+   "serviceErrors": 133,
+   "serveAttempts": 1249,
    "big12": true
   },
   {
    "team": "Indiana",
    "season": "2026",
-   "matches": 12,
-   "sets": 40,
-   "serviceAces": 69,
-   "serviceErrors": 97,
-   "serveAttempts": 895,
+   "matches": 13,
+   "sets": 44,
+   "serviceAces": 74,
+   "serviceErrors": 107,
+   "serveAttempts": 987,
    "big12": false,
    "pollRank": 15
   },
@@ -34539,11 +34544,11 @@
   {
    "team": "Pittsburgh",
    "season": "2026",
-   "matches": 13,
-   "sets": 43,
-   "serviceAces": 63,
-   "serviceErrors": 80,
-   "serveAttempts": 1035,
+   "matches": 14,
+   "sets": 46,
+   "serviceAces": 67,
+   "serviceErrors": 89,
+   "serveAttempts": 1108,
    "big12": false,
    "pollRank": 2
   },
@@ -34561,11 +34566,11 @@
   {
    "team": "SMU",
    "season": "2026",
-   "matches": 13,
-   "sets": 49,
-   "serviceAces": 58,
-   "serviceErrors": 155,
-   "serveAttempts": 1152,
+   "matches": 14,
+   "sets": 52,
+   "serviceAces": 64,
+   "serviceErrors": 166,
+   "serveAttempts": 1225,
    "big12": false,
    "pollRank": 5
   },
@@ -34605,22 +34610,22 @@
   {
    "team": "Texas",
    "season": "2026",
-   "matches": 11,
-   "sets": 41,
-   "serviceAces": 45,
-   "serviceErrors": 138,
-   "serveAttempts": 899,
+   "matches": 12,
+   "sets": 45,
+   "serviceAces": 52,
+   "serviceErrors": 154,
+   "serveAttempts": 996,
    "big12": false,
    "pollRank": 8
   },
   {
    "team": "Texas A&M",
    "season": "2026",
-   "matches": 14,
-   "sets": 50,
-   "serviceAces": 64,
-   "serviceErrors": 130,
-   "serveAttempts": 1161,
+   "matches": 15,
+   "sets": 53,
+   "serviceAces": 72,
+   "serviceErrors": 140,
+   "serveAttempts": 1237,
    "big12": false,
    "pollRank": 14
   },
@@ -34669,11 +34674,11 @@
   {
    "team": "West Virginia",
    "season": "2026",
-   "matches": 13,
-   "sets": 53,
-   "serviceAces": 70,
-   "serviceErrors": 123,
-   "serveAttempts": 1160,
+   "matches": 14,
+   "sets": 57,
+   "serviceAces": 77,
+   "serviceErrors": 132,
+   "serveAttempts": 1247,
    "big12": true
   },
   {
