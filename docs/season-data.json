@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-05T00:08:53Z",
+ "generatedAt": "2026-10-05T07:38:37Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -24082,7 +24082,7 @@
    },
    "home": true,
    "forecast": 0.7795,
-   "opponentRpi": 166
+   "opponentRpi": 165
   },
   {
    "date": "2026-09-25",
@@ -25364,7 +25364,7 @@
    },
    "home": false,
    "forecast": 0.7102,
-   "opponentRpi": 207
+   "opponentRpi": 206
   },
   {
    "date": "2026-10-01",
@@ -26068,7 +26068,7 @@
    },
    "home": true,
    "forecast": 0.6552,
-   "opponentRpi": 25
+   "opponentRpi": 26
   },
   {
    "date": "2026-10-02",
@@ -26928,7 +26928,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5418,
+   "winProbability": 0.542,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27049,7 +27049,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.6525,
+   "winProbability": 0.6531,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27268,7 +27268,7 @@
    "overallW": 13,
    "overallL": 2,
    "nationalRank": 9,
-   "rpiRank": 6,
+   "rpiRank": 7,
    "rpiSource": "provisional"
   },
   {
@@ -27304,7 +27304,7 @@
    "overallW": 11,
    "overallL": 4,
    "nationalRank": 23,
-   "rpiRank": 25,
+   "rpiRank": 26,
    "rpiSource": "provisional"
   },
   {
@@ -27340,7 +27340,7 @@
    "overallW": 9,
    "overallL": 6,
    "nationalRank": null,
-   "rpiRank": 66,
+   "rpiRank": 65,
    "rpiSource": "provisional"
   },
   {
@@ -27460,7 +27460,7 @@
    "overallW": 11,
    "overallL": 3,
    "nationalRank": 24,
-   "rpiRank": 38,
+   "rpiRank": 37,
    "rpiSource": "provisional"
   },
   {
@@ -27616,7 +27616,7 @@
    "overallW": 8,
    "overallL": 8,
    "nationalRank": null,
-   "rpiRank": 207,
+   "rpiRank": 206,
    "rpiSource": "provisional"
   }
  ],
@@ -34409,11 +34409,11 @@
   {
    "team": "Florida",
    "season": "2026",
-   "matches": 12,
-   "sets": 40,
-   "serviceAces": 66,
-   "serviceErrors": 119,
-   "serveAttempts": 965,
+   "matches": 13,
+   "sets": 45,
+   "serviceAces": 73,
+   "serviceErrors": 134,
+   "serveAttempts": 1077,
    "big12": false,
    "pollRank": 7
   },
@@ -34472,11 +34472,11 @@
   {
    "team": "Kentucky",
    "season": "2026",
-   "matches": 13,
-   "sets": 45,
-   "serviceAces": 60,
-   "serviceErrors": 101,
-   "serveAttempts": 1071,
+   "matches": 14,
+   "sets": 50,
+   "serviceAces": 70,
+   "serviceErrors": 113,
+   "serveAttempts": 1177,
    "big12": false,
    "pollRank": 3
   },
@@ -34494,11 +34494,11 @@
   {
    "team": "Minnesota",
    "season": "2026",
-   "matches": 11,
-   "sets": 39,
-   "serviceAces": 83,
-   "serviceErrors": 118,
-   "serveAttempts": 922,
+   "matches": 12,
+   "sets": 43,
+   "serviceAces": 88,
+   "serviceErrors": 134,
+   "serveAttempts": 1007,
    "big12": false,
    "pollRank": 20
   },
@@ -34689,11 +34689,11 @@
   {
    "team": "Wisconsin",
    "season": "2026",
-   "matches": 13,
-   "sets": 50,
-   "serviceAces": 67,
-   "serviceErrors": 110,
-   "serveAttempts": 1114,
+   "matches": 14,
+   "sets": 54,
+   "serviceAces": 74,
+   "serviceErrors": 124,
+   "serveAttempts": 1210,
    "big12": false,
    "pollRank": 6
   }
