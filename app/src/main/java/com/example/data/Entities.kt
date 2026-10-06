@@ -131,7 +131,14 @@ data class Player(
     val height: String = "",
     // On the current roster. Maintained by the nightly roster scrape; former
     // players keep their stats but are shown in a separate roster section.
-    val active: Boolean = true
+    val active: Boolean = true,
+    // Background from kuathletics.com's roster page, refreshed by every sync:
+    // academic year ("Jr."), hometown, last high school, and for a transfer the
+    // college she came from. Empty when the roster page has not said.
+    val classYear: String = "",
+    val hometown: String = "",
+    val highSchool: String = "",
+    val previousSchool: String = ""
 )
 
 // Dates are stored as ISO yyyy-MM-dd strings so lexicographic order matches

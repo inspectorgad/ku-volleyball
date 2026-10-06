@@ -87,6 +87,12 @@ def add_player(name, jersey, position, height="", prefer=False):
             existing["height"] = height
 
 
+# Background lines from kuathletics.com's roster: class year, hometown, high
+# school and, for a transfer, the college she came from. Only the roster page
+# has them, so like height they are carried forward for a player who leaves it.
+BACKGROUND_FIELDS = ("classYear", "hometown", "highSchool", "previousSchool")
+
+
 def strip_rank(name):
     """Drops the national rank kuathletics prefixes onto a ranked opponent.
 
@@ -575,6 +581,10 @@ for entry in load_json("scraped/roster.json", []):
         (entry.get("height") or "").strip(),
         prefer=True,
     )
+    for field in BACKGROUND_FIELDS:
+        value = (entry.get(field) or "").strip()
+        if value:
+            players[name.lower()][field] = value
 
 # active = on the current scraped roster. A failed/empty roster scrape must
 # not mass-retire the team, so with an implausibly small roster the previous
@@ -595,6 +605,9 @@ for key, player in players.items():
     # a player who leaves the roster keeps the height we already knew.
     if not player.get("height"):
         player["height"] = previous.get("height", "")
+    for field in BACKGROUND_FIELDS:
+        if not player.get(field) and previous.get(field):
+            player[field] = previous[field]
 
 # Stat lines were recorded with whatever casing the box score used; align
 # them with the canonical player names so the app can match them up.

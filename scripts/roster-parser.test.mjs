@@ -94,6 +94,51 @@ test('labelled blocks', () => {
   assert.equal(r[1].position, 'Outside Hitter');
 });
 
+// kuathletics.com's list view, copied from the 2026 page: class, hometown and
+// high school for everyone, and the college a transfer came from.
+const LABELLED_BACKGROUND = `
+Jersey Number
+3
+Reese Messer
+Position
+S
+Academic Year
+ So.
+Height
+ 5' 11''
+Hometown
+Olathe, Kan.
+Last School
+Saint James Academy
+Previous School
+Previous School: USC
+Full Bio
+Jersey Number
+10
+Reese Ptacek
+Position
+MB
+Academic Year
+ Jr.
+Height
+ 6' 3''
+Hometown
+Prescott, Wisconsin
+Last School
+Prescott High School
+Full Bio
+`;
+
+test('labelled blocks carry class, hometown, high school and a previous college', () => {
+  const r = parseRoster(LABELLED_BACKGROUND);
+  assert.deepEqual(r[0], {
+    name: 'Reese Messer', jerseyNumber: '3', position: 'S', height: '5-11',
+    classYear: 'So.', hometown: 'Olathe, Kan.', highSchool: 'Saint James Academy', previousSchool: 'USC',
+  });
+  assert.equal(r[1].highSchool, 'Prescott High School');
+  assert.equal(r[1].previousSchool, undefined);
+});
+
 test('unlabelled cards, name below the number', () => {
   const r = parseRoster(CARD);
   assert.equal(r.length, 2);

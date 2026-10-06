@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -157,10 +158,18 @@ private fun PlayerCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
-                val details = listOf(player.position, player.height).filter { it.isNotBlank() }
+                val details = listOf(
+                    player.position, player.height,
+                    // A departed player's class is the one she last had here, so
+                    // it is shown only for the current roster.
+                    if (player.active) player.classYear else ""
+                ).filter { it.isNotBlank() }
                 if (details.isNotEmpty()) {
+                    Text(details.joinToString(" · "), style = MaterialTheme.typography.bodyMedium)
+                }
+                backgroundLine(player)?.let {
                     Text(
-                        details.joinToString(" · "),
+                        it,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -259,9 +268,10 @@ fun PlayerDialog(
             Button(
                 enabled = name.isNotBlank(),
                 onClick = {
+                    // copy() so an edit keeps the roster background the
+                    // dialog does not show.
                     onSave(
-                        Player(
-                            id = player?.id ?: 0,
+                        (player ?: Player(name = "")).copy(
                             name = name.trim(),
                             jerseyNumber = number.trim(),
                             position = position.trim(),
@@ -340,16 +350,32 @@ fun PlayerDetailScreen(
                     Column(modifier = Modifier.padding(12.dp)) {
                         val details = listOf(
                             player.position,
-                            player.height.takeIf { it.isNotBlank() }?.let { "$it tall" } ?: ""
+                            player.height.takeIf { it.isNotBlank() }?.let { "$it tall" } ?: "",
+                            if (player.active) classYearName(player.classYear) else ""
                         ).filter { it.isNotBlank() }
                         if (details.isNotEmpty()) {
-                            Text(
-                                details.joinToString(" · "),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(details.joinToString(" · "), style = MaterialTheme.typography.bodyMedium)
                         }
+                        backgroundRows(player).forEach { (label, value) ->
+                            Row(modifier = Modifier.padding(top = 2.dp)) {
+                                Text(
+                                    label,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.width(112.dp)
+                                )
+                                Text(value, style = MaterialTheme.typography.bodyMedium)
+                            }
+                        }
+                        if (backgroundRows(player).isNotEmpty()) {
+                            Text(
+                                EXPLAIN_BACKGROUND,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             "Stats by Season",
                             style = MaterialTheme.typography.titleSmall,
@@ -522,4 +548,40 @@ fun PlayerDetailScreen(
             }
         )
     }
+}
+
+/** Where the background lines come from, under them on the player page. */
+const val EXPLAIN_BACKGROUND =
+    "Class, hometown, high school and previous college are from kuathletics.com's roster and " +
+        "refresh nightly. Players no longer on the roster keep what it last said, without a class year."
+
+/**
+ * "Olathe, Kan. · Saint James Academy · from USC" for a roster card: where she
+ * is from, her high school, and the college a transfer came from.
+ */
+fun backgroundLine(player: Player): String? = listOfNotNull(
+    player.hometown.takeIf { it.isNotBlank() },
+    player.highSchool.takeIf { it.isNotBlank() },
+    player.previousSchool.takeIf { it.isNotBlank() }?.let { "from $it" }
+).takeIf { it.isNotEmpty() }?.joinToString(" · ")
+
+/** The same facts spelled out for the player page, one per row. */
+fun backgroundRows(player: Player): List<Pair<String, String>> = listOf(
+    "Hometown" to player.hometown,
+    "High school" to player.highSchool,
+    "Transferred from" to player.previousSchool
+).filter { it.second.isNotBlank() }
+
+/** "Jr." as "Junior", for the player page where there is room for the word. */
+fun classYearName(short: String): String = when (short.trim().lowercase().trimEnd('.')) {
+    "fr" -> "Freshman"
+    "so" -> "Sophomore"
+    "jr" -> "Junior"
+    "sr" -> "Senior"
+    "gr", "grad" -> "Graduate student"
+    "r-fr" -> "Redshirt freshman"
+    "r-so" -> "Redshirt sophomore"
+    "r-jr" -> "Redshirt junior"
+    "r-sr" -> "Redshirt senior"
+    else -> short.trim()
 }

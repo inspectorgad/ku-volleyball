@@ -123,6 +123,9 @@
   #detail-form .up { color: var(--win); } #detail-form .down { color: var(--loss); }
   #detail-form .full { grid-column: 1 / -1; }
   #detail .sub { color: var(--ink-3); font-size: 13px; margin: 2px 0 10px; }
+  #detail-bg { margin: 6px 0 10px; }
+  .bg-row { display: flex; gap: 12px; font-size: 14px; line-height: 1.6; }
+  .bg-label { color: var(--ink-3); min-width: 120px; }
   #players tbody tr { cursor: pointer; }
   #players tbody tr:hover td, #players tbody tr:focus-visible td { background: var(--chip-bg); }
   #players th { cursor: pointer; user-select: none; }
@@ -254,6 +257,7 @@
     <button class="close" id="detail-close">✕ close</button>
     <h2 id="detail-name"></h2>
     <div class="sub" id="detail-sub"></div>
+    <div id="detail-bg"></div>
     <div id="detail-form"></div>
     <table id="detail-log"></table>
   </section>
@@ -418,6 +422,10 @@ const EXPLAIN = {
   playerSplits: "This player's numbers by where the match was played, this season. Only matches with a known location count, and a line built on two or three matches is a rough guide.",
   common: "Teams both KU and this opponent have played this season, and how each side did. A rough guide only: venue, injuries and the point in the season all change what a result means.",
 };
+
+// Word-for-word EXPLAIN_BACKGROUND in the app's RosterScreen.kt.
+const EXPLAIN_BACKGROUND = "Class, hometown, high school and previous college are from kuathletics.com's roster and " +
+  "refresh nightly. Players no longer on the roster keep what it last said, without a class year.";
 
 let SEED = null;
 let season = null;
@@ -872,12 +880,26 @@ function renderDetail(lines) {
   const bits = [];
   if (info?.position) bits.push(info.position);
   if (info?.height) bits.push(info.height);
+  if (info?.classYear && info.active !== false) bits.push(info.classYear);
   if (info && info.active === false) bits.push("former player");
   bits.push(season === "All" ? "career" : season + " season");
   bits.push(mine.length
     ? `${mine.length} matches · ${t.k} K · ${fmtPct(t.pct)} · ${t.d} D · ${t.blk} BLK`
     : "no matches in this view");
   document.getElementById("detail-sub").textContent = bits.join(" · ");
+  // Background from kuathletics.com's roster: hometown, high school and the
+  // college a transfer came from. Same facts and wording as the app.
+  const bg = document.getElementById("detail-bg");
+  bg.replaceChildren();
+  const facts = [["Hometown", info?.hometown], ["High school", info?.highSchool], ["Transferred from", info?.previousSchool]]
+    .filter(([, v]) => v);
+  for (const [label, value] of facts) {
+    const row = el("div", "bg-row");
+    row.appendChild(el("span", "bg-label", label));
+    row.appendChild(el("span", null, value));
+    bg.appendChild(row);
+  }
+  if (facts.length) bg.appendChild(el("p", "fineprint", EXPLAIN_BACKGROUND));
 
   renderForm(openPlayer);
 

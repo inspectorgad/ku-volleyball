@@ -13,7 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         OpponentStatLine::class, MatchTeamStats::class,
         OpponentRosterEntry::class, OpponentSeasonStat::class,
         TeamServing::class, NationalLeader::class, MatchGoal::class],
-    version = 15,
+    version = 16,
     exportSchema = false
 )
 abstract class JayhawksDatabase : RoomDatabase() {
@@ -256,6 +256,15 @@ abstract class JayhawksDatabase : RoomDatabase() {
             }
         }
 
+        private val MIGRATION_15_16 = object : Migration(15, 16) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Roster background; the next sync fills it in.
+                for (column in listOf("classYear", "hometown", "highSchool", "previousSchool")) {
+                    db.execSQL("ALTER TABLE players ADD COLUMN $column TEXT NOT NULL DEFAULT ''")
+                }
+            }
+        }
+
         fun get(context: Context): JayhawksDatabase =
             instance ?: synchronized(this) {
                 instance ?: Room.databaseBuilder(
@@ -266,7 +275,7 @@ abstract class JayhawksDatabase : RoomDatabase() {
                     MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6,
                     MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10,
                     MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
-                    MIGRATION_13_14, MIGRATION_14_15
+                    MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16
                 ).build().also { instance = it }
             }
     }

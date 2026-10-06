@@ -71,6 +71,10 @@ object Seeder {
                 val position = p.optString("position", "")
                 val height = p.optString("height", "")
                 val active = p.optBoolean("active", true)
+                val classYear = p.optString("classYear", "")
+                val hometown = p.optString("hometown", "")
+                val highSchool = p.optString("highSchool", "")
+                val previousSchool = p.optString("previousSchool", "")
                 val existing = existingByKey[name.lowercase()]
                 if (existing == null) {
                     playerIdsByKey[name.lowercase()] = dao.insertPlayer(
@@ -79,7 +83,11 @@ object Seeder {
                             jerseyNumber = jersey,
                             position = position,
                             height = height,
-                            active = active
+                            active = active,
+                            classYear = classYear,
+                            hometown = hometown,
+                            highSchool = highSchool,
+                            previousSchool = previousSchool
                         )
                     )
                 } else {
@@ -91,7 +99,11 @@ object Seeder {
                         jerseyNumber = jersey.ifBlank { existing.jerseyNumber },
                         position = position.ifBlank { existing.position },
                         height = height.ifBlank { existing.height },
-                        active = active
+                        active = active,
+                        classYear = classYear.ifBlank { existing.classYear },
+                        hometown = hometown.ifBlank { existing.hometown },
+                        highSchool = highSchool.ifBlank { existing.highSchool },
+                        previousSchool = previousSchool.ifBlank { existing.previousSchool }
                     )
                     if (updated != existing) dao.updatePlayer(updated)
                 }

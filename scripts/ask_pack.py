@@ -27,6 +27,10 @@ DEFINITIONS = {
     "points": "k + sa + bs + 0.5 * ba (NCAA individual points)",
     "team_blocks": "bs + 0.5 * ba (NCAA team block total)",
     "per_set": "a rate per set uses the player's own sp; a team rate uses the match's total sets",
+    "classYear / hometown / highSchool / previousSchool": "from kuathletics.com's roster: academic year "
+                                                          "(Fr., So., Jr., Sr., Gr.), home town, last high school, and "
+                                                          "for a transfer the college she came from; class is "
+                                                          "only current for active players",
     "site": "H home, A away, N neutral site (a tournament or event venue that is neither team's home)",
     "conference": "true when the opponent is in that season's Big 12 standings",
     "ku_rank / opp_rank": "AVCA poll rank each team held on the day of the match (null = unranked); for NCAA "
@@ -91,7 +95,8 @@ def system_prompt(p):
                                                  "nationalRank", "rpiRank", "rpiSource"]),
         (f"AVCA poll ({p['poll']['updated']}):\n" + _csv(p["poll"]["rows"], ["rank", "team", "record", "points", "previous"]))
         if p.get("poll") else "",
-        "Roster:\n" + _csv(p["roster"], ["name", "jerseyNumber", "position", "height", "active"]),
+        "Roster:\n" + _csv(p["roster"], ["name", "jerseyNumber", "position", "height", "active",
+                                         "classYear", "hometown", "highSchool", "previousSchool"]),
     ]
     return SYSTEM_RULES + "\n\n" + "\n\n".join(x for x in parts if x)
 
@@ -182,7 +187,8 @@ def build_pack(seed):
             "season": current_poll["season"], "updated": current_poll.get("updated"),
             "rows": [{k: r.get(k) for k in ("rank", "team", "record", "points", "previous", "firstPlaceVotes")}
                      for r in current_poll.get("rows", [])]},
-        "roster": [{k: p.get(k) for k in ("name", "jerseyNumber", "position", "height", "active")}
+        "roster": [{k: p.get(k) for k in ("name", "jerseyNumber", "position", "height", "active",
+                                          "classYear", "hometown", "highSchool", "previousSchool")}
                    for p in seed.get("players", [])],
     }
     pack["system_prompt"] = system_prompt(pack)

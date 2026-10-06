@@ -54,6 +54,20 @@ function tidyName(s) {
 }
 
 /** Sidearm's labelled blocks: scan each player's block for the labels we want. */
+// The labels Sidearm prints in its list view, and the field each fills.
+// "Last School" is the high school for a first-year and for most transfers too:
+// the college a transfer came from has its own "Previous School" line.
+const LABELLED_FIELDS = {
+  position: 'position',
+  height: 'height',
+  'academic year': 'classYear',
+  class: 'classYear',
+  hometown: 'hometown',
+  'last school': 'highSchool',
+  'high school': 'highSchool',
+  'previous school': 'previousSchool',
+};
+
 function parseLabelled(lines) {
   const roster = [];
   for (let i = 0; i < lines.length; i++) {
@@ -64,16 +78,23 @@ function parseLabelled(lines) {
     const fields = {};
     for (let j = i + 3; j < lines.length && lines[j].toLowerCase() !== 'jersey number'; j++) {
       const label = lines[j].toLowerCase();
-      if (label === 'position' || label === 'height') {
-        fields[label] = (lines[j + 1] || '').trim();
+      if (label in LABELLED_FIELDS) {
+        fields[LABELLED_FIELDS[label]] = (lines[j + 1] || '').trim();
       }
     }
-    roster.push({
+    const player = {
       name: name.trim(),
       jerseyNumber: numberOf(number),
       position: (fields.position || '').trim(),
       height: normalizeHeight(fields.height),
-    });
+    };
+    // The background lines, only where the page has them. Sidearm writes the
+    // transfer line as "Previous School: USC" under a "Previous School" label.
+    for (const key of ['classYear', 'hometown', 'highSchool', 'previousSchool']) {
+      const value = (fields[key] || '').replace(/^previous school:\s*/i, '').trim();
+      if (value) player[key] = value;
+    }
+    roster.push(player);
   }
   return roster;
 }

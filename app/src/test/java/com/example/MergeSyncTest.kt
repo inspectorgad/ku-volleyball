@@ -316,6 +316,38 @@ class MergeSyncTest {
     }
 
     @Test
+    fun `roster background fills in, and a blank feed does not erase it`() = runTest {
+        val dao = db.dao()
+        fun seed(extra: String) = org.json.JSONObject(
+            """{"players": [{"name": "Reese Messer", "jerseyNumber": "3", "position": "S" $extra}], "matches": []}"""
+        )
+        Seeder.merge(
+            seed(""", "classYear": "So.", "hometown": "Olathe, Kan.", "highSchool": "Saint James Academy", "previousSchool": "USC" """),
+            dao
+        )
+        var p = dao.playersOnce().single()
+        assertEquals("So.", p.classYear)
+        assertEquals("Saint James Academy", p.highSchool)
+        assertEquals("USC", p.previousSchool)
+        // A later feed without the background (a roster scrape that failed)
+        // leaves what is stored.
+        Seeder.merge(seed(""), dao)
+        p = dao.playersOnce().single()
+        assertEquals("Olathe, Kan.", p.hometown)
+        assertEquals("USC", p.previousSchool)
+    }
+
+    @Test
+    fun `the card line reads hometown, high school, then a transfer's college`() {
+        val p = com.example.data.Player(
+            name = "Reese Messer", hometown = "Olathe, Kan.", highSchool = "Saint James Academy", previousSchool = "USC"
+        )
+        assertEquals("Olathe, Kan. · Saint James Academy · from USC", com.example.ui.backgroundLine(p))
+        assertEquals(null, com.example.ui.backgroundLine(com.example.data.Player(name = "Former Player")))
+        assertEquals("Sophomore", com.example.ui.classYearName("So."))
+    }
+
+    @Test
     fun `a hand-edited result that is not a mirror still stands`() = runTest {
         val dao = db.dao()
         dao.insertMatch(
