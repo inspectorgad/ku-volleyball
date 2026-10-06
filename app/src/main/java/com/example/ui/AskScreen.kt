@@ -163,7 +163,7 @@ object AskSession {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AskScreen(onBack: () -> Unit) {
+fun AskScreen(onBack: () -> Unit, prefill: String? = null) {
     val context = LocalContext.current.applicationContext
     var savedKey by remember { mutableStateOf(AskSession.sessionKey ?: AskKeyStore.load(context)) }
     var model by remember { mutableStateOf(AskKeyStore.model(context)) }
@@ -174,6 +174,15 @@ fun AskScreen(onBack: () -> Unit) {
 
     LaunchedEffect(turns.size) {
         if (turns.isNotEmpty()) listState.animateScrollToItem(turns.size + 1)
+    }
+    // A question handed over by a Preview or Recap button: asked at once when a
+    // key is saved, otherwise waiting in the box. Asked once, not again on a
+    // return to this screen.
+    LaunchedEffect(prefill) {
+        val q = prefill ?: return@LaunchedEffect
+        if (turns.any { it.question == q }) return@LaunchedEffect
+        val key = savedKey
+        if (key != null && AskSession.running == null) AskSession.ask(q, key, model) else question = q
     }
 
     Scaffold(
@@ -413,3 +422,14 @@ private fun AskInput(
     }
 }
 
+/** The Preview button's question; the dashboard's ask.js asks the same. */
+fun previewQuestion(date: String, versus: String, opponent: String) =
+    "Give me a short scouting report for the $date match $versus $opponent: their season so far and " +
+        "what they do well, our last meeting and any common opponents, the players to watch on each " +
+        "side, how we match up, and the win model's estimate."
+
+/** The Recap button's question. */
+fun recapQuestion(date: String, versus: String, opponent: String) =
+    "Recap the $date match $versus $opponent: the result and how each set went, our standout " +
+        "players and theirs, how the night compared with our season averages, and which performance " +
+        "goals we met or missed."

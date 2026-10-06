@@ -46,6 +46,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     var openOpponent by rememberSaveable { mutableStateOf<String?>(null) }
     var askOpen by rememberSaveable { mutableStateOf(false) }
     var simOpen by rememberSaveable { mutableStateOf(false) }
+    var askPrefill by rememberSaveable { mutableStateOf<String?>(null) }
 
     val players by viewModel.players.collectAsStateWithLifecycle()
     val matches by viewModel.matches.collectAsStateWithLifecycle()
@@ -71,12 +72,18 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     }
 
     val showingDetail = openPlayerId != null || openMatchId != null || openOpponent != null || askOpen || simOpen
+    // Back closes the top screen only: Ask opened from a match's Recap button
+    // returns to that match.
     BackHandler(enabled = showingDetail) {
-        openPlayerId = null
-        openMatchId = null
-        openOpponent = null
-        askOpen = false
-        simOpen = false
+        when {
+            askOpen -> { askOpen = false; askPrefill = null }
+            simOpen -> simOpen = false
+            else -> {
+                openPlayerId = null
+                openMatchId = null
+                openOpponent = null
+            }
+        }
     }
     // On any tab but the first, back returns to the first tab rather than
     // leaving the app - the usual Android pattern for bottom navigation. Only
@@ -89,7 +96,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     val openMatch = openMatchId?.let { id -> matches.firstOrNull { it.id == id } }
 
     when {
-        askOpen -> AskScreen(onBack = { askOpen = false })
+        askOpen -> AskScreen(onBack = { askOpen = false; askPrefill = null }, prefill = askPrefill)
 
         simOpen && simulation != null -> SimulatorScreen(simulation!!, onBack = { simOpen = false })
 
@@ -122,7 +129,8 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
             },
             onSaveStatLine = viewModel::saveStatLine,
             onDeleteStatLine = viewModel::deleteStatLine,
-            onBack = { openMatchId = null }
+            onBack = { openMatchId = null },
+            onAskClaude = { q -> askPrefill = q; askOpen = true }
         )
 
         openOpponent != null -> OpponentDetailScreen(

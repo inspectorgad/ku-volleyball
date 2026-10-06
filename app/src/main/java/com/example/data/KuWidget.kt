@@ -1,5 +1,6 @@
 package com.example.data
 
+import com.example.ui.played
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider

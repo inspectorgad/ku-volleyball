@@ -124,6 +124,7 @@
   #detail-form .full { grid-column: 1 / -1; }
   #detail .sub { color: var(--ink-3); font-size: 13px; margin: 2px 0 10px; }
   #detail-bg { margin: 6px 0 10px; }
+  .ask-mini { padding: 2px 10px; font-size: 12px; margin-left: 8px; }
   #sim-wrap { margin-bottom: 16px; }
   .sim-head { font-size: 14px; margin: 10px 0 4px; }
   .sim-lines p { margin: 2px 0; font-size: 15px; }
@@ -437,6 +438,71 @@ const EXPLAIN = {
 const EXPLAIN_BACKGROUND = "Class, hometown, high school and previous college are from kuathletics.com's roster and " +
   "refresh nightly. Players no longer on the roster keep what it last said, without a class year.";
 
+// --- Shareable result image: the same card the app draws (ResultImage.kt) ---
+function resultCard(m) {
+  const us = m.teamSets, them = m.opponentSets;
+  const lines = m.lines ?? [];
+  const top = (f) => lines.reduce((b, l) => (f(l) > (b ? f(b) : -1) ? l : b), null);
+  const perf = [];
+  const k = top(l => l.k ?? 0);
+  if (k && k.k > 0) perf.push(`${k.player}: ${k.k} kills` + (k.ta ? ` on ${fmtPct((k.k - (k.e ?? 0)) / k.ta)}` : ""));
+  const d = top(l => l.d ?? 0);
+  if (d && d.d > 0) perf.push(`${d.player}: ${d.d} digs`);
+  const a = top(l => l.a ?? 0);
+  if (a && a.a >= 10) perf.push(`${a.player}: ${a.a} assists`);
+  const b = top(l => 2 * (l.bs ?? 0) + (l.ba ?? 0));
+  if (b && (b.bs ?? 0) + (b.ba ?? 0) >= 3) perf.push(`${b.player}: ${(b.bs ?? 0) + (b.ba ?? 0) / 2} blocks`);
+  const upTo = SEED.matches.filter(x => x.season === m.season && x.teamSets != null && x.date <= m.date && !/\(exh/i.test(x.opponent));
+  const w = upTo.filter(x => x.teamSets > x.opponentSets).length;
+  const day = new Date(m.date + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+  return {
+    headline: (us > them ? "KANSAS WINS " : "KANSAS FALLS ") + `${us}-${them}`,
+    opponent: `${siteWord(m)} ${rankedOpp(m)}`,
+    sets: m.setScores ?? "",
+    dateLine: [day, m.venue].filter(Boolean).join(" · "),
+    performers: perf,
+    record: `Record ${w}-${upTo.length - w}`,
+  };
+}
+
+function drawResultCard(card) {
+  const cv = document.createElement("canvas");
+  cv.width = 1080; cv.height = 1350;
+  const c = cv.getContext("2d");
+  c.fillStyle = "#0051BA"; c.fillRect(0, 0, 1080, 1350);
+  c.fillStyle = "#E8000D"; c.fillRect(0, 0, 1080, 18);
+  const fit = (text, x, y, size, bold, alpha = 1) => {
+    let s = size;
+    do { c.font = `${bold ? "700" : "400"} ${s}px system-ui, -apple-system, Roboto, sans-serif`; s -= 2; }
+    while (c.measureText(text).width > 920 && s > 20);
+    c.fillStyle = `rgba(255,255,255,${alpha})`;
+    c.fillText(text, x, y);
+  };
+  let y = 130;
+  fit("KANSAS VOLLEYBALL", 80, y, 40, true, 0.82);
+  y += 150; fit(card.headline, 80, y, 104, true);
+  y += 90; fit(card.opponent, 80, y, 64, false);
+  y += 90; fit(card.sets, 80, y, 50, false, 0.9);
+  y += 120; c.fillStyle = "#E8000D"; c.fillRect(80, y - 40, 200, 6);
+  for (const line of card.performers) { y += 80; fit(line, 80, y, 48, false); }
+  fit(card.record, 80, 1350 - 170, 46, true);
+  fit(card.dateLine, 80, 1350 - 110, 38, false, 0.78);
+  return cv;
+}
+
+async function shareResultImage(m) {
+  const card = resultCard(m);
+  const blob = await new Promise(r => drawResultCard(card).toBlob(r, "image/png"));
+  const file = new File([blob], "ku-result.png", { type: "image/png" });
+  // The phone's share sheet where the browser offers one; a download otherwise.
+  if (navigator.canShare?.({ files: [file] })) {
+    try { await navigator.share({ files: [file], text: `${card.headline} ${card.opponent} (${card.sets})` }); return; }
+    catch (e) { if (e.name === "AbortError") return; }
+  }
+  const a = el("a"); a.href = URL.createObjectURL(blob); a.download = "ku-result.png"; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
 let SEED = null;
 let season = null;
 // "All matches", "Big 12" or "Non-conference". Mirrors MatchScope in the app.
@@ -741,6 +807,11 @@ function renderUpcoming(upcoming) {
           : m.ratingSource === "preseason" ? "; this opponent from a preseason estimate." : ".");
       li.appendChild(s);
     }
+    // A scouting report from Claude, through the Ask box below.
+    const pv = el("button", "chip ask-mini", "Preview");
+    pv.title = "Ask Claude for a scouting report on this match";
+    pv.onclick = () => window.kuAskAbout?.(window.kuPreviewQuestion(m.date, siteWord(m), m.opponent));
+    li.appendChild(pv);
     ul.appendChild(li);
   }
   if (upcoming.some(m => m.winProbability != null)) {
@@ -1252,6 +1323,21 @@ function renderGoals(results) {
   }
   sel.onchange = () => { goalMatchKey = sel.value; renderGoals(results); renderMatchTable(results); };
   const m = withGoals.find(x => keyOf(x) === goalMatchKey);
+  // Recap of the picked match from Claude, through the Ask box.
+  let rc = document.getElementById("goal-recap");
+  if (!rc) {
+    rc = el("button", "chip ask-mini", "Recap this match with Claude");
+    rc.id = "goal-recap";
+    sel.insertAdjacentElement("afterend", rc);
+  }
+  rc.onclick = () => window.kuAskAbout?.(window.kuRecapQuestion(m.date, siteWord(m), m.opponent));
+  let sh = document.getElementById("goal-share");
+  if (!sh) {
+    sh = el("button", "chip ask-mini", "Share result image");
+    sh.id = "goal-share";
+    rc.insertAdjacentElement("afterend", sh);
+  }
+  sh.onclick = () => shareResultImage(m);
   const dt = document.getElementById("goal-detail");
   dt.replaceChildren();
   const dh = dt.createTHead().insertRow();

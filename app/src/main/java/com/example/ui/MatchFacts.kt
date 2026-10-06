@@ -30,7 +30,7 @@ fun rankedOpponent(match: Match): String = when {
 
 // SimpleDateFormat rather than java.time, which needs API 26 (minSdk is 24).
 // Pinned to UTC on both sides so a date never shifts with the phone's zone.
-private fun reformat(value: String, from: String, to: String): String? = runCatching {
+internal fun reformat(value: String, from: String, to: String): String? = runCatching {
     val inFmt = SimpleDateFormat(from, Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC"); isLenient = false }
     val outFmt = SimpleDateFormat(to, Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC") }
     outFmt.format(inFmt.parse(value)!!)

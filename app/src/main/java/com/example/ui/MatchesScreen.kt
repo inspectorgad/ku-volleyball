@@ -1,5 +1,7 @@
 package com.example.ui
 
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -568,7 +570,9 @@ fun MatchDetailScreen(
     onDeleteMatch: (Match) -> Unit,
     onSaveStatLine: (StatLine) -> Unit,
     onDeleteStatLine: (StatLine) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    // Opens "Ask about the team" with a preview or recap question.
+    onAskClaude: ((String) -> Unit)? = null
 ) {
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
@@ -685,6 +689,33 @@ fun MatchDetailScreen(
                             )
                         }
                         ResultText(match)
+                    }
+                }
+            }
+
+            // One tap to Claude for a scouting report before the match or a
+            // recap after it, through "Ask about the team".
+            onAskClaude?.let { ask ->
+                item {
+                    OutlinedButton(
+                        onClick = {
+                            ask(
+                                if (match.played) recapQuestion(match.date, match.versus, match.opponent)
+                                else previewQuestion(match.date, match.versus, match.opponent)
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(if (match.played) "Recap this match with Claude" else "Preview this match with Claude")
+                    }
+                }
+            }
+            // The result as a picture for a text or a post.
+            resultCard(match, players, statLines, matches)?.let { card ->
+                item {
+                    val context = LocalContext.current
+                    OutlinedButton(onClick = { shareResultCard(context, card) }, modifier = Modifier.fillMaxWidth()) {
+                        Text("Share result image")
                     }
                 }
             }

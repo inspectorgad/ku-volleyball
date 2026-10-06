@@ -387,6 +387,31 @@ function init() {
     ex.appendChild(b);
   }
   refreshKeyState();
+
+  // The Preview and Recap buttons elsewhere on the page hand a question over
+  // here: asked at once when a key is saved, otherwise left in the box with a
+  // note that a key is needed.
+  window.kuAskAbout = (q) => {
+    $("ask-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (running) return;
+    if (apiKey()) {
+      ask(q);
+    } else {
+      $("ask-q").value = q;
+      showError("Add your Anthropic API key above, then press Ask.");
+    }
+  };
 }
+
+// The Preview and Recap buttons' questions, word for word the app's
+// previewQuestion() and recapQuestion() in AskScreen.kt.
+window.kuPreviewQuestion = (date, versus, opponent) =>
+  `Give me a short scouting report for the ${date} match ${versus} ${opponent}: their season so far and ` +
+  "what they do well, our last meeting and any common opponents, the players to watch on each " +
+  "side, how we match up, and the win model's estimate.";
+window.kuRecapQuestion = (date, versus, opponent) =>
+  `Recap the ${date} match ${versus} ${opponent}: the result and how each set went, our standout ` +
+  "players and theirs, how the night compared with our season averages, and which performance " +
+  "goals we met or missed.";
 
 init();
