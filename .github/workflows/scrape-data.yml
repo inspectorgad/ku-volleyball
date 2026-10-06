@@ -45,6 +45,7 @@ on:
       - 'scripts/schedule-parser.mjs'
       - 'scripts/ics_feed.py'
       - 'scripts/ask_pack.py'
+      - 'scripts/sim_inputs.py'
       # The win model's power ratings are meant to be edited by hand when the
       # AVCA poll lands. Every remaining match's number changes with them, so
       # the feed should be rebuilt on the spot rather than up to four hours
@@ -100,7 +101,7 @@ jobs:
       # parser fails here, before it can write a bad seed.
       - name: Test scripts
         run: |
-          node --test scripts/schedule-parser.test.mjs scripts/roster-parser.test.mjs scripts/match-night-watch.test.mjs
+          node --test scripts/schedule-parser.test.mjs scripts/roster-parser.test.mjs scripts/match-night-watch.test.mjs docs/sim.test.mjs
           python3 -m unittest discover -s scripts -p 'test_*.py'
 
       - name: Scrape NCAA + kuathletics data

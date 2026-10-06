@@ -1,5 +1,10 @@
 package com.example.ui
 
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+import com.example.data.SeasonSimulator
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -77,8 +82,15 @@ fun LeadersScreen(
     pollEntries: List<PollEntry> = emptyList(),
     standings: List<ConferenceStanding> = emptyList(),
     // Opens "Ask about the team".
-    onOpenAsk: (() -> Unit)? = null
+    onOpenAsk: (() -> Unit)? = null,
+    // The season simulator's inputs and the way into it.
+    simulation: SeasonSimulator.Inputs? = null,
+    onOpenSimulator: (() -> Unit)? = null
 ) {
+    var simResult by remember(simulation) { mutableStateOf<SeasonSimulator.Result?>(null) }
+    LaunchedEffect(simulation) {
+        simResult = simulation?.let { withContext(Dispatchers.Default) { SeasonSimulator.simulate(it) } }
+    }
     // Seasons ordered most recent first; default selection is the current (latest) season.
     val seasons = matches.sortedByDescending { it.date }.map { it.season }.distinct()
     var selectedSeason by rememberSaveable { mutableStateOf<String?>(null) }
@@ -194,6 +206,27 @@ fun LeadersScreen(
                         Text(
                             "Type a question - \"how do we do when we lose the first set?\" - and get an answer worked out from the data.",
                             style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
+            val sim = simResult
+            if (sim != null && onOpenSimulator != null && simulation?.remaining?.isNotEmpty() == true) {
+                item {
+                    ExplainedCard(EXPLAIN_SIMULATOR, onClick = onOpenSimulator) {
+                        Text(
+                            "Season simulator ›",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        simulatorLines(sim).forEach {
+                            Text(it, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 2.dp))
+                        }
+                        Text(
+                            "Tap to set results and see what changes.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 2.dp)
                         )
                     }
                 }

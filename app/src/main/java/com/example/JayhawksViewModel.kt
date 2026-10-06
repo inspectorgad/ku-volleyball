@@ -14,7 +14,9 @@ import com.example.data.OpponentSeasonStat
 import com.example.data.OpponentStatLine
 import com.example.data.Player
 import com.example.data.PollEntry
+import com.example.data.SeasonSimulator
 import com.example.data.SeasonSync
+import com.example.data.SimulationStore
 import com.example.data.Seeder
 import com.example.data.StatLine
 import com.example.data.TeamServing
@@ -47,6 +49,10 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
     private val _syncFailure = MutableStateFlow(SeasonSync.lastFailure(app))
     val syncFailure: StateFlow<String?> = _syncFailure.asStateFlow()
 
+    // The season simulator's inputs, refreshed with the data.
+    private val _simulation = MutableStateFlow(SimulationStore.inputs(app))
+    val simulation: StateFlow<SeasonSimulator.Inputs?> = _simulation.asStateFlow()
+
     // Snackbar messages, emitted only for user-initiated refreshes.
     private val _syncMessages = MutableSharedFlow<String>()
     val syncMessages: SharedFlow<String> = _syncMessages.asSharedFlow()
@@ -56,6 +62,7 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
             // Bundled data first (also covers first launch offline), then a
             // throttled network sync for anything newer.
             Seeder.sync(app, dao)
+            _simulation.value = SimulationStore.inputs(app)
             if (SeasonSync.shouldAutoSync(app)) refreshInternal(manual = false)
         }
     }
@@ -71,6 +78,7 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
             _isSyncing.value = false
         }
         _dataUpdatedAt.value = SeasonSync.lastGeneratedAt(getApplication())
+        _simulation.value = SimulationStore.inputs(getApplication())
         _lastCheckedMs.value = SeasonSync.lastSuccessMs(getApplication())
         _syncFailure.value = SeasonSync.lastFailure(getApplication())
         if (manual) {

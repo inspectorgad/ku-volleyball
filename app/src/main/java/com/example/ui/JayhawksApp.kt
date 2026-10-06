@@ -45,6 +45,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     var openMatchId by rememberSaveable { mutableStateOf<Long?>(null) }
     var openOpponent by rememberSaveable { mutableStateOf<String?>(null) }
     var askOpen by rememberSaveable { mutableStateOf(false) }
+    var simOpen by rememberSaveable { mutableStateOf(false) }
 
     val players by viewModel.players.collectAsStateWithLifecycle()
     val matches by viewModel.matches.collectAsStateWithLifecycle()
@@ -62,18 +63,20 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
     val dataUpdatedAt by viewModel.dataUpdatedAt.collectAsStateWithLifecycle()
     val lastCheckedMs by viewModel.lastCheckedMs.collectAsStateWithLifecycle()
     val syncFailure by viewModel.syncFailure.collectAsStateWithLifecycle()
+    val simulation by viewModel.simulation.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(Unit) {
         viewModel.syncMessages.collect { snackbarHostState.showSnackbar(it) }
     }
 
-    val showingDetail = openPlayerId != null || openMatchId != null || openOpponent != null || askOpen
+    val showingDetail = openPlayerId != null || openMatchId != null || openOpponent != null || askOpen || simOpen
     BackHandler(enabled = showingDetail) {
         openPlayerId = null
         openMatchId = null
         openOpponent = null
         askOpen = false
+        simOpen = false
     }
     // On any tab but the first, back returns to the first tab rather than
     // leaving the app - the usual Android pattern for bottom navigation. Only
@@ -87,6 +90,8 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
 
     when {
         askOpen -> AskScreen(onBack = { askOpen = false })
+
+        simOpen && simulation != null -> SimulatorScreen(simulation!!, onBack = { simOpen = false })
 
         openPlayer != null -> PlayerDetailScreen(
             player = openPlayer,
@@ -189,7 +194,9 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                         syncFailure = syncFailure,
                         pollEntries = pollEntries,
                         standings = standings,
-                        onOpenAsk = { askOpen = true }
+                        onOpenAsk = { askOpen = true },
+                        simulation = simulation,
+                        onOpenSimulator = { simOpen = true }
                     )
 
                     Tab.Serving -> ServingScreen(

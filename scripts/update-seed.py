@@ -23,6 +23,7 @@ SEED_PATH = "app/src/main/assets/seed.json"
 # The NCAA API sends a few names double-encoded ("InÃ©s" for "Inés"), so every
 # box score read below goes through fix_tree (scripts/text_fix.py).
 from text_fix import fix_tree  # noqa: E402
+import sim_inputs  # noqa: E402
 
 
 def load_json(path, default):
@@ -874,7 +875,7 @@ for g in sorted((d1_raw.get("games") or {}).items()):
 current_season = max((m["season"] for m in matches.values()), default=None)
 # Computed whether or not the NCAA has published: the win model below rates
 # unranked teams from these values, and the NCAA's table carries ranks only.
-computed_rpi, d1_games_played = {}, {}
+computed_rpi, d1_games_played, by_team_games = {}, {}, {}
 if d1_games and d1_raw.get("season") == current_season:
     is_d1 = (lambda t: t in d1_names) if d1_names else (lambda t: True)
     by_team_games = team_games(d1_games, is_d1)
@@ -1419,6 +1420,38 @@ if teams_rated or poll_rating:
           f"Kansas {ku_rating} from the {ku_source}"
           + (f"; {unrated} with no rating for the opponent" if unrated else ""))
 
+# --- Season simulator inputs ---------------------------------------------------
+# The simulation runs on the reader's device (see scripts/sim_inputs.py for why
+# and for its two simplifications); this ships what it needs.
+simulation = None
+if current_season and (teams_rated or poll_rating):
+    season_rows = [r for r in standings if r["season"] == current_season]
+    # Conference matches per team: what every team played last season, 18 in
+    # the 15-team Big 12. Read rather than written down, so a change of format
+    # follows on its own once a season is complete.
+    earlier = [r["confW"] + r["confL"] for r in standings if r["season"] < current_season]
+    conf_total = max(earlier) if earlier else 18
+    big12_now = {norm_team(r["team"]) for r in season_rows}
+    left = []
+    for m in sorted(matches.values(), key=lambda x: x["date"]):
+        if m["season"] != current_season or m.get("teamSets") is not None:
+            continue
+        if "(exh" in m["opponent"].lower():
+            continue
+        venue = "N" if m.get("neutral") else "H" if m.get("home") else "A"
+        left.append({"date": m["date"], "opponent": m["opponent"], "venue": venue,
+                     "conference": norm_team(m["opponent"]) in big12_now,
+                     "p": m.get("winProbability")})
+    simulation = sim_inputs.build(
+        ku_key=norm_team("Kansas"), ku_rating=ku_rating, remaining=left,
+        standings=season_rows, rating_of=lambda t: rating_for(t)[0],
+        scale=ratings.get("scale") or 25, conf_total=conf_total,
+        by_team=by_team_games, computed_rpi=computed_rpi, norm=norm_team,
+    )
+    if simulation:
+        print(f"simulator: {len(simulation['remaining'])} KU matches to play, "
+              f"{len(simulation['others'])} other Big 12 teams, {conf_total} conference matches each")
+
 # --- Forecast log --------------------------------------------------------------
 # The forecast is dropped from a match once it is played, which is right for the
 # schedule but leaves nothing to grade the model by. So the last forecast made
@@ -1595,6 +1628,8 @@ if national_leaders:
     seed["nationalLeaders"] = national_leaders
 if rpi_note:
     seed["rpi"] = rpi_note
+if simulation:
+    seed["simulation"] = simulation
 
 os.makedirs(os.path.dirname(SEED_PATH), exist_ok=True)
 

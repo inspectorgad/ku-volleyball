@@ -127,6 +127,7 @@ object SeasonSync {
         } catch (e: Exception) {
             return SyncResult.Failed("merge failed: ${e.message}")
         }
+        SimulationStore.save(context, root)
 
         val generatedAt = root.optString("generatedAt").takeIf { it.isNotBlank() }
         p.edit()

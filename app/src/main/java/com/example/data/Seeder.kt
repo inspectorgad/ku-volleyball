@@ -32,7 +32,11 @@ object Seeder {
             context.assets.open("seed.json").bufferedReader().use { it.readText() }
         }.getOrNull() ?: return
 
-        runCatching { merge(JSONObject(json), dao) }
+        runCatching {
+            val root = JSONObject(json)
+            merge(root, dao)
+            SimulationStore.save(context, root)
+        }
     }
 
     private fun matchKey(date: String, opponent: String) = "$date|${normTeam(opponent)}"
