@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-06T16:13:22Z",
+ "generatedAt": "2026-10-06T23:17:01Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -8,6 +8,9 @@
    "jerseyNumber": "24",
    "position": "MB",
    "height": "6-3",
+   "classYear": "Sr.",
+   "hometown": "Liberty, Mo.",
+   "highSchool": "Liberty HS",
    "active": true
   },
   {
@@ -29,6 +32,9 @@
    "jerseyNumber": "21",
    "position": "Pin",
    "height": "6-2",
+   "classYear": "Fr.",
+   "hometown": "Bountiful, Utah",
+   "highSchool": "Woods Cross HS",
    "active": true
   },
   {
@@ -43,6 +49,10 @@
    "jerseyNumber": "11",
    "position": "S",
    "height": "5-11",
+   "classYear": "Sr.",
+   "hometown": "Stanfield, N.C.",
+   "highSchool": "Hickory Grove Christian School",
+   "previousSchool": "Oregon",
    "active": true
   },
   {
@@ -50,6 +60,9 @@
    "jerseyNumber": "4",
    "position": "MB",
    "height": "6-4",
+   "classYear": "Fr.",
+   "hometown": "Riverside, Calif.",
+   "highSchool": "Centennial HS",
    "active": true
   },
   {
@@ -71,6 +84,9 @@
    "jerseyNumber": "1",
    "position": "Pin",
    "height": "6-1",
+   "classYear": "Jr.",
+   "hometown": "River Forest, Ill.",
+   "highSchool": "River Forest HS",
    "active": true
   },
   {
@@ -78,6 +94,9 @@
    "jerseyNumber": "12",
    "position": "L/DS",
    "height": "5-4",
+   "classYear": "Jr.",
+   "hometown": "Olathe, Kan.",
+   "highSchool": "Saint James Academy",
    "active": true
   },
   {
@@ -85,6 +104,9 @@
    "jerseyNumber": "7",
    "position": "MB",
    "height": "6-1",
+   "classYear": "Fr.",
+   "hometown": "Webb City, Mo.",
+   "highSchool": "Edmond North HS",
    "active": true
   },
   {
@@ -106,6 +128,9 @@
    "jerseyNumber": "2",
    "position": "Pin",
    "height": "6-3",
+   "classYear": "Jr.",
+   "hometown": "Johnston, Iowa",
+   "highSchool": "Dowling Catholic HS",
    "active": true
   },
   {
@@ -113,6 +138,9 @@
    "jerseyNumber": "25",
    "position": "Pin",
    "height": "5-11",
+   "classYear": "So.",
+   "hometown": "Beech Grove, Ind.",
+   "highSchool": "Roncalli HS",
    "active": true
   },
   {
@@ -127,6 +155,10 @@
    "jerseyNumber": "6",
    "position": "L/DS",
    "height": "5-7",
+   "classYear": "Jr.",
+   "hometown": "Eureka, Mo.",
+   "highSchool": "Eureka HS",
+   "previousSchool": "Ohio State",
    "active": true
   },
   {
@@ -141,6 +173,10 @@
    "jerseyNumber": "3",
    "position": "S",
    "height": "5-11",
+   "classYear": "So.",
+   "hometown": "Olathe, Kan.",
+   "highSchool": "Saint James Academy",
+   "previousSchool": "USC",
    "active": true
   },
   {
@@ -148,6 +184,9 @@
    "jerseyNumber": "10",
    "position": "MB",
    "height": "6-3",
+   "classYear": "Jr.",
+   "hometown": "Prescott, Wisconsin",
+   "highSchool": "Prescott High School",
    "active": true
   },
   {
@@ -162,6 +201,9 @@
    "jerseyNumber": "5",
    "position": "Pin",
    "height": "5-10",
+   "classYear": "Fr.",
+   "hometown": "Atlanta, Ga.",
+   "highSchool": "Marietta HS",
    "active": true
   },
   {
@@ -183,6 +225,9 @@
    "jerseyNumber": "23",
    "position": "Pin",
    "height": "6-3",
+   "classYear": "Fr.",
+   "hometown": "Overland Park, Kan.",
+   "highSchool": "Blue Valley Southwest HS",
    "active": true
   },
   {
@@ -190,6 +235,9 @@
    "jerseyNumber": "15",
    "position": "Pin",
    "height": "6-4",
+   "classYear": "Fr.",
+   "hometown": "Laramie, Wyo.",
+   "highSchool": "Laramie HS",
    "active": true
   }
  ],
@@ -26893,7 +26941,7 @@
    "city": "Ames, IA",
    "time": "14:00",
    "tv": "ESPN+",
-   "winProbability": 0.5265,
+   "winProbability": 0.5267,
    "ratingSource": "results",
    "commonOpponents": [
     {
