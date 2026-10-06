@@ -14,6 +14,8 @@ import com.example.data.OpponentSeasonStat
 import com.example.data.OpponentStatLine
 import com.example.data.Player
 import com.example.data.PollEntry
+import com.example.data.KuWidget
+import com.example.data.MatchAlertWorker
 import com.example.data.SeasonSimulator
 import com.example.data.SeasonSync
 import com.example.data.SimulationStore
@@ -63,6 +65,8 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
             // throttled network sync for anything newer.
             Seeder.sync(app, dao)
             _simulation.value = SimulationStore.inputs(app)
+            runCatching { KuWidget.updateAll(app) }
+            MatchAlertWorker.reschedule(app)
             if (SeasonSync.shouldAutoSync(app)) refreshInternal(manual = false)
         }
     }
@@ -79,6 +83,7 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
         }
         _dataUpdatedAt.value = SeasonSync.lastGeneratedAt(getApplication())
         _simulation.value = SimulationStore.inputs(getApplication())
+        runCatching { KuWidget.updateAll(getApplication()) }
         _lastCheckedMs.value = SeasonSync.lastSuccessMs(getApplication())
         _syncFailure.value = SeasonSync.lastFailure(getApplication())
         if (manual) {

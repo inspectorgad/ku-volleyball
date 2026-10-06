@@ -82,6 +82,7 @@ fun MatchesScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 val (upcoming, results) = splitSchedule(matches, todayIso())
+                item(key = "alerts") { AlertsCard() }
                 if (upcoming.isNotEmpty()) {
                     item(key = "h-upcoming") { SectionHeader("Upcoming") }
                     items(upcoming, key = { it.id }) { match ->
