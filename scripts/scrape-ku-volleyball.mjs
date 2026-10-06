@@ -639,6 +639,7 @@ try {
     }
   }
   const weekAgo = new Date(Date.now() - 7 * 86_400_000).toISOString();
+  const ROSTER_PARSER_VERSION = 2;
 
   const rosters = { ...previous };
   const unmapped = [];
@@ -647,7 +648,10 @@ try {
   for (const [key, displayName] of [...wanted].sort()) {
     const url = siteMap[key];
     if (!url) { unmapped.push(displayName); continue; }
-    if (previous[key]?.fetchedAt > weekAgo && previous[key]?.players?.length) continue;
+    // A roster stored by an older parser is read again at once rather than
+    // waiting out its week: version 2 added class, hometown and high school.
+    const current = previous[key]?.parser === ROSTER_PARSER_VERSION;
+    if (current && previous[key]?.fetchedAt > weekAgo && previous[key]?.players?.length) continue;
     try {
       // Some roster tables render well after domcontentloaded, so keep
       // scrolling and re-reading until the parser finds players. Using the
@@ -675,13 +679,21 @@ try {
         team: displayName,
         url,
         fetchedAt: new Date().toISOString(),
+        parser: ROSTER_PARSER_VERSION,
         players,
       };
       fetched++;
       fs.rmSync(`${miss}.txt`, { force: true });
       fs.rmSync(`${miss}.html`, { force: true });
+      const withBackground = players.filter((p) => p.hometown || p.highSchool || p.classYear).length;
+      // A roster read in full but with no background is a layout the parser
+      // does not know yet, or a school that publishes none. The page text is
+      // kept so the next look can tell which.
+      const bgMiss = `scraped/roster-nobg-${key.replace(/\s+/g, '-')}.txt`;
+      if (withBackground) fs.rmSync(bgMiss, { force: true });
+      else fs.writeFileSync(bgMiss, text.slice(0, 200_000));
       console.log(`  roster ${displayName}: ${players.length} players ` +
-        `(${players.filter((p) => p.height).length} with height)`);
+        `(${players.filter((p) => p.height).length} with height, ${withBackground} with background)`);
     } catch (e) {
       failed.push(`${displayName} (${e.message.split('\n')[0]})`);
     }

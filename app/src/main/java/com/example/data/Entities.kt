@@ -313,7 +313,13 @@ data class OpponentRosterEntry(
     val playerName: String,
     val jerseyNumber: String = "",
     val position: String = "",
-    val height: String = ""
+    val height: String = "",
+    // As on a Kansas player: whatever the school's roster page publishes, so
+    // any of these can be empty for one school and filled for the next.
+    val classYear: String = "",
+    val hometown: String = "",
+    val highSchool: String = "",
+    val previousSchool: String = ""
 )
 
 /**

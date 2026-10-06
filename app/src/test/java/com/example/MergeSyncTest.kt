@@ -338,6 +338,19 @@ class MergeSyncTest {
     }
 
     @Test
+    fun `an opponent's card line reads the same way, and is absent when the school publishes none`() {
+        val p = com.example.data.OpponentRosterEntry(
+            team = "UCF", playerName = "Sarah Mendoza",
+            hometown = "Austin, Texas", highSchool = "Westlake HS", previousSchool = "Oregon"
+        )
+        assertEquals("Austin, Texas · Westlake HS · from Oregon", com.example.ui.opponentBackgroundLine(p))
+        assertEquals(
+            null,
+            com.example.ui.opponentBackgroundLine(com.example.data.OpponentRosterEntry(team = "UCF", playerName = "X"))
+        )
+    }
+
+    @Test
     fun `the card line reads hometown, high school, then a transfer's college`() {
         val p = com.example.data.Player(
             name = "Reese Messer", hometown = "Olathe, Kan.", highSchool = "Saint James Academy", previousSchool = "USC"

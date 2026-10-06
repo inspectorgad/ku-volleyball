@@ -54,6 +54,68 @@ function tidyName(s) {
 }
 
 /** Sidearm's labelled blocks: scan each player's block for the labels we want. */
+// --- Background: class year, hometown, high school, previous college --------
+// Every layout below can carry some of these. They are read by what they look
+// like, the same way positions and heights are, and only ever added to a
+// player: a layout that has none of them yields the four basic fields alone.
+
+const CLASS_WORDS = {
+  fr: 'Fr.', freshman: 'Fr.', so: 'So.', sophomore: 'So.', jr: 'Jr.', junior: 'Jr.',
+  sr: 'Sr.', senior: 'Sr.', gr: 'Gr.', grad: 'Gr.', graduate: 'Gr.', 'graduate student': 'Gr.',
+  '5th': 'Gr.', fifth: 'Gr.',
+};
+// "Jr.", "Junior", "R-Fr.", "Redshirt Sophomore", "Graduate Student"; then the
+// rest of the cell, which on some sites is the hometown.
+const CLASS = /^(r-|rs-?|redshirt\s+)?(graduate student|freshman|sophomore|junior|senior|graduate|grad|5th|fifth|fr|so|jr|sr|gr)\.?(?=\s|$)\s*(.*)$/i;
+
+/** {classYear, rest} if the text starts with a class year. */
+function classOf(text) {
+  const m = CLASS.exec((text || '').trim());
+  if (!m) return null;
+  const short = CLASS_WORDS[m[2].toLowerCase()];
+  return { classYear: (m[1] ? 'R-' : '') + short, rest: m[3].trim() };
+}
+
+// "Olathe, Kan." or "Novi Sad, Serbia": a place, then a comma, then a state or
+// country. No digits, and short, so a sentence or a score never reads as one.
+const PLACE = /^[\p{Lu}][\p{L} .'’-]{1,40},\s*[\p{L} .'’-]{2,30}$/u;
+
+/**
+ * "Joliet, Illinois / West Joliet HS (Oregon)" and its shorter forms: the
+ * hometown, then the high school, then a previous college in brackets or as a
+ * third part. Null unless the first part is a place.
+ */
+function placeOf(text) {
+  const parts = (text || '').split(/\s+\/\s+/).map((t) => t.trim()).filter(Boolean);
+  if (!parts.length || !PLACE.test(parts[0])) return null;
+  const out = { hometown: parts[0] };
+  let school = parts[1] || '';
+  let previous = parts[2] || '';
+  const bracket = /^(.*?)\s*\(([^)]+)\)$/.exec(school);
+  if (bracket) { school = bracket[1]; previous = previous || bracket[2]; }
+  if (school) out.highSchool = school;
+  if (previous) out.previousSchool = previous;
+  return out;
+}
+
+/** Background found in a run of cells or lines, first match of each kind. */
+function backgroundFrom(texts) {
+  const out = {};
+  for (const t of texts) {
+    if (!t) continue;
+    const c = classOf(t);
+    if (c && !out.classYear) {
+      out.classYear = c.classYear;
+      const p = placeOf(c.rest);
+      if (p) Object.assign(out, { ...p, ...out });
+      continue;
+    }
+    const p = !out.hometown && placeOf(t);
+    if (p) Object.assign(out, p);
+  }
+  return out;
+}
+
 // The labels Sidearm prints in its list view, and the field each fills.
 // "Last School" is the high school for a first-year and for most transfers too:
 // the college a transfer came from has its own "Previous School" line.
@@ -125,11 +187,18 @@ function parseCards(lines) {
     const height = window.filter((l) => l !== name && l !== position)
       .map(normalizeHeight).find(Boolean);
     if (!name || !position || !height) continue;
+    // The class rides on the height line ("6′5″Senior") and the hometown is the
+    // line after the card's three, before the next number starts a card.
+    const heightLine = window.find((l) => l !== name && l !== position && normalizeHeight(l)) || '';
+    const after = [];
+    for (let j = i + 4; j < Math.min(lines.length, i + 7) && !isNumber(lines[j]); j++) after.push(lines[j]);
+    const tail = heightLine.replace(HEIGHT, '').trim();
     roster.push({
       name: tidyName(name),
       jerseyNumber: numberOf(lines[i]),
       position: position.trim(),
       height,
+      ...backgroundFrom([tail, ...window.filter((l) => l !== name && l !== position && l !== heightLine), ...after]),
     });
   }
   return roster;
@@ -153,11 +222,14 @@ function parseHeader(lines) {
     // A blank line or two can sit between the number and the name.
     const name = [lines[i + 2], lines[i + 3], lines[i + 4]].find(isName);
     if (!name) continue;
+    // "Sophomore Columbia, Mo." on the line under the name.
+    const at = lines.indexOf(name, i + 2);
     roster.push({
       name: name.trim(),
       jerseyNumber: numberOf(lines[i + 1]),
       position,
       height,
+      ...backgroundFrom([lines[at + 1]]),
     });
   }
   return roster;
@@ -187,6 +259,7 @@ function parseTable(lines) {
       jerseyNumber: numberOf(lines[i].replace(/\t+$/, '')),
       position,
       height: heightCell,
+      ...backgroundFrom(cells.slice(cells.indexOf(heightCell) + 1)),
     });
   }
   return roster;
@@ -220,6 +293,7 @@ function parseRows(lines) {
       jerseyNumber: numberOf(cells[0]),
       position,
       height,
+      ...backgroundFrom(cells.slice(cells.indexOf(position) + 1).filter((c) => !normalizeHeight(c))),
     });
   }
   return roster;
@@ -242,6 +316,10 @@ const FIELDS = {
   number: ['jerseynumber', 'jersey', 'uniformnumber', 'uniform', 'number'],
   position: ['positionshort', 'position', 'pos'],
   height: ['height', 'heightformatted'],
+  classYear: ['academicyear', 'classyear', 'class', 'year', 'eligibility', 'academicyearshort'],
+  hometown: ['hometown', 'homecity'],
+  highSchool: ['highschool', 'lastschool'],
+  previousSchool: ['previousschool', 'formerschool', 'transferfrom'],
 };
 
 function pick(obj, aliases) {
@@ -266,12 +344,19 @@ function playerFromObject(o) {
   const name = pick(o, FIELDS.name)
     || `${pick(o, FIELDS.first)} ${pick(o, FIELDS.last)}`.trim();
   if (!isName(name)) return null;
-  return {
+  const player = {
     name: tidyName(name.trim()),
     jerseyNumber: numberOf(pick(o, FIELDS.number)),
     position: pick(o, FIELDS.position).trim(),
     height,
   };
+  const cls = classOf(pick(o, FIELDS.classYear));
+  if (cls) player.classYear = cls.classYear;
+  for (const key of ['hometown', 'highSchool', 'previousSchool']) {
+    const v = pick(o, FIELDS[key]).trim();
+    if (v && v.length < 80) player[key] = v;
+  }
+  return player;
 }
 
 /**

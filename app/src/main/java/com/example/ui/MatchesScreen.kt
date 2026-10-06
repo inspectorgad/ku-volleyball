@@ -788,13 +788,20 @@ fun MatchDetailScreen(
                                         listOfNotNull(
                                             p.position.takeIf { it.isNotBlank() },
                                             p.height.takeIf { it.isNotBlank() },
+                                            p.classYear.takeIf { it.isNotBlank() },
                                             form[p.playerName.lowercase()]?.let { summarize(it) },
                                             killsVsKu[p.playerName.lowercase()]
                                                 ?.takeIf { it > 0 }?.let { "$it K vs KU" }
                                         ).joinToString(" · ").ifBlank { "No details published" },
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        style = MaterialTheme.typography.bodyMedium
                                     )
+                                    opponentBackgroundLine(p)?.let {
+                                        Text(
+                                            it,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -1103,3 +1110,10 @@ private fun StatFieldRow(
         }
     }
 }
+
+/** The roster card's second line for an opponent, as for a Kansas player. */
+fun opponentBackgroundLine(p: OpponentRosterEntry): String? = listOfNotNull(
+    p.hometown.takeIf { it.isNotBlank() },
+    p.highSchool.takeIf { it.isNotBlank() },
+    p.previousSchool.takeIf { it.isNotBlank() }?.let { "from $it" }
+).takeIf { it.isNotEmpty() }?.joinToString(" · ")

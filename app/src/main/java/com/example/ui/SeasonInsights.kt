@@ -226,9 +226,10 @@ const val EXPLAIN_LAST_MEETING =
         "so an old meeting is a rough guide only."
 
 const val EXPLAIN_ROSTER =
-    "From the school's own roster page. Each player shows position, height, this season's " +
-        "stats where the NCAA has them, and \"K vs KU\": kills against Kansas across every " +
-        "meeting this app holds."
+    "From the school's own roster page. Each player shows position, height and class, this " +
+        "season's stats where the NCAA has them, and \"K vs KU\": kills against Kansas across " +
+        "every meeting this app holds. The second line is hometown, high school and, for a " +
+        "transfer, her previous college - whatever that school publishes, so some show less."
 
 const val EXPLAIN_MATCH_GOALS =
     "The coaching staff's game-by-game targets, scored from this match's box score. Each row " +

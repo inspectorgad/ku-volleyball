@@ -360,7 +360,11 @@ object Seeder {
                             playerName = it,
                             jerseyNumber = p.optString("jerseyNumber"),
                             position = p.optString("position"),
-                            height = p.optString("height")
+                            height = p.optString("height"),
+                            classYear = p.optString("classYear"),
+                            hometown = p.optString("hometown"),
+                            highSchool = p.optString("highSchool"),
+                            previousSchool = p.optString("previousSchool")
                         )
                     }
                 }

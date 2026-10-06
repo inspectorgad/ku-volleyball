@@ -1037,6 +1037,7 @@ for key, entry in sorted(load_json("scraped/opponent-rosters.json", {}).items())
             "jerseyNumber": str(p.get("jerseyNumber") or ""),
             "position": (p.get("position") or "").strip(),
             "height": (p.get("height") or "").strip(),
+            **{f: (p.get(f) or "").strip() for f in BACKGROUND_FIELDS if (p.get(f) or "").strip()},
         }
         for p in entry.get("players", [])
         if p.get("name")
@@ -1064,7 +1065,9 @@ for m in matches.values():
             backfilled += 1
 
 roster_players = sum(len(r["players"]) for r in opponent_rosters)
-print(f"opponent rosters: {len(opponent_rosters)} teams, {roster_players} players")
+with_bg = sum(1 for r in opponent_rosters for p in r["players"]
+              if any(p.get(f) for f in BACKGROUND_FIELDS))
+print(f"opponent rosters: {len(opponent_rosters)} teams, {roster_players} players, {with_bg} with background")
 print(f"  heights applied to {backfilled} opposing box-score lines")
 
 # --- Scheduled opponents' season form ---------------------------------------

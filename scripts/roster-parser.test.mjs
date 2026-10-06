@@ -143,25 +143,29 @@ test('unlabelled cards, name below the number', () => {
   const r = parseRoster(CARD);
   assert.equal(r.length, 2);
   // Caps are folded back to title case.
-  assert.deepEqual(r[0], { name: 'Sarah Hickman', jerseyNumber: '1', position: 'OPP', height: '6-5' });
+  assert.deepEqual(r[0], { name: 'Sarah Hickman', jerseyNumber: '1', position: 'OPP', height: '6-5',
+    classYear: 'Sr.', hometown: 'Houston, Texas' });
 });
 
 test('position and height above the number', () => {
   const r = parseRoster(HEADER);
   assert.equal(r.length, 2);
-  assert.deepEqual(r[0], { name: 'Jane Doe', jerseyNumber: '1', position: 'Middle Blocker', height: '6-0' });
+  assert.deepEqual(r[0], { name: 'Jane Doe', jerseyNumber: '1', position: 'Middle Blocker', height: '6-0',
+    classYear: 'So.', hometown: 'Columbia, Mo.' });
 });
 
 test('table with the number and name on their own lines', () => {
   const r = parseRoster(TABLE);
   assert.equal(r.length, 2);
-  assert.deepEqual(r[0], { name: 'Jane Doe', jerseyNumber: '5', position: 'MB', height: '6-3' });
+  assert.deepEqual(r[0], { name: 'Jane Doe', jerseyNumber: '5', position: 'MB', height: '6-3',
+    classYear: 'Jr.', hometown: 'Austin, Texas' });
 });
 
 test('one player per tab-separated line', () => {
   const r = parseRoster(ROW);
   assert.equal(r.length, 3);
-  assert.deepEqual(r[0], { name: 'Faith Jordan', jerseyNumber: '0', position: 'MB', height: '5-11' });
+  assert.deepEqual(r[0], { name: 'Faith Jordan', jerseyNumber: '0', position: 'MB', height: '5-11',
+    classYear: 'Fr.', hometown: 'Joliet, Illinois', highSchool: 'West Joliet HS' });
   assert.equal(r[1].position, 'OH/RS');
   assert.equal(r[2].height, '5-5');
 });
@@ -192,4 +196,24 @@ test('heights in every notation a school writes', () => {
 test('a page with no roster yields nothing rather than guesses', () => {
   assert.deepEqual(parseRoster('Home\nTickets\nShop\nNews\n'), []);
   assert.deepEqual(parseRoster(''), []);
+});
+
+test('a hometown inside the card, and none where the card has no comma place', () => {
+  const r = parseRoster(CARD_NAME_ABOVE);
+  assert.equal(r[0].classYear, 'Jr.');
+  assert.equal(r[0].hometown, 'Novi Sad, Serbia');
+  // "San Diego" alone could be anything, so it is not taken for a hometown.
+  assert.equal(r[1].hometown, undefined);
+});
+
+test('class words and transfer brackets in every spelling a school uses', () => {
+  const r = parseRoster('7\tAnn Lee\tOH\t6-1\tRedshirt Junior\tAustin, Texas / Westlake HS (Oregon)\n'
+    + '8\tBea Kay\tS\t5-9\tGraduate Student\tLyon, France\n'
+    + '9\tCam Fox\tL\t5-6\tFr.\tTulsa, Okla.\n'
+    + '10\tDee Roe\tMB\t6-4\tSo.\tBoise, Idaho\n');
+  assert.deepEqual(
+    [r[0].classYear, r[0].hometown, r[0].highSchool, r[0].previousSchool],
+    ['R-Jr.', 'Austin, Texas', 'Westlake HS', 'Oregon'],
+  );
+  assert.equal(r[1].classYear, 'Gr.');
 });

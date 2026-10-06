@@ -124,6 +124,7 @@
   #detail-form .full { grid-column: 1 / -1; }
   #detail .sub { color: var(--ink-3); font-size: 13px; margin: 2px 0 10px; }
   #detail-bg { margin: 6px 0 10px; }
+  .roster-bg { font-size: 12px; color: var(--ink-3); white-space: normal; }
   .bg-row { display: flex; gap: 12px; font-size: 14px; line-height: 1.6; }
   .bg-label { color: var(--ink-3); min-width: 120px; }
   #players tbody tr { cursor: pointer; }
@@ -413,7 +414,7 @@ const EXPLAIN = {
   scorecard: "Grades the win % shown on the schedule, using the last forecast made before first serve. Called: how often the team the model favoured won. Expected wins: the forecasts added up; if it runs well ahead of the wins KU actually has, the ratings are too kind to KU. Brier score: the average squared gap between forecast and result (1 for a win, 0 for a loss). 0 is perfect, 0.25 is what saying 50% every time would score, and lower is better. Matches before Sep 19, when the model started, are not graded.",
   forecast: "Est. win is the win model's chance that KU wins this match. Every team gets a power rating: ranked teams from the AVCA coaches' poll, and unranked teams from their results this season (their RPI), blended with a preseason estimate that counts for less the more they play. The gap between KU's rating and the opponent's, plus a home or road adjustment, becomes the percentage. It is an estimate from ratings, not a betting line; the Win model scorecard near the top of this page shows how it has done.",
   lastMeeting: "The most recent match between these two teams, from KU's side: the result, the set scores, and the opponent's top attackers that day. Rosters change between seasons, so an old meeting is a rough guide only.",
-  roster: "From the school's own roster page. Each player shows position, height, this season's stats where the NCAA has them, and \"K vs KU\": kills against Kansas across every meeting this dashboard holds.",
+  roster: "From the school's own roster page. Each player shows position, height and class, this season's stats where the NCAA has them, and \"K vs KU\": kills against Kansas across every meeting this dashboard holds. The second line is hometown, high school and, for a transfer, her previous college - whatever that school publishes, so some show less.",
   matchGoals: "The coaching staff's game-by-game targets, scored from this match's box score. Each row shows the target, then what KU did: black is met, red is missed, and ≤ marks a goal where lower is better. Team goals come first. Role goals (Setter, middles M1 and M2, OPP for the opposite, L1 and L2 for the left sides) belong to whoever played that role in this match, named in the Who column.",
   seasonGoals: "How often each target has been met this season, least often first. A goal that is almost never met may be set out of reach rather than badly played. Click a goal for its match-by-match chart; the dashed line is the target and red dots are misses.",
   poll: "The AVCA coaches' top 25. ▲ or ▼ is the move since the previous poll and NEW is a team that was unranked last time. The number in brackets after a team is its first-place votes. Big 12 teams carry a Big 12 tag and Kansas is highlighted.",
@@ -1372,10 +1373,11 @@ function renderScouting() {
       }
     }
     const hasVs = [...vsKu.values()].some(v => v > 0);
+    const hasYr = roster.players.some(p => p.classYear);
 
     const t = el("table");
     const head = t.createTHead().insertRow();
-    for (const c of ["#", "Player", "Pos", "Ht", f ? "K" : "", f ? "PCT" : "", f ? "D" : "", hasVs ? "K vs KU" : ""].filter(Boolean)) {
+    for (const c of ["#", "Player", "Pos", "Ht", hasYr ? "Yr" : "", f ? "K" : "", f ? "PCT" : "", f ? "D" : "", hasVs ? "K vs KU" : ""].filter(Boolean)) {
       const th = head.appendChild(el("th", null, c));
       // The name column is left-aligned, so its header has to be too.
       if (c === "Player") th.style.textAlign = "left";
@@ -1390,8 +1392,12 @@ function renderScouting() {
       const nameCell = r.insertCell();
       nameCell.textContent = p.player;
       nameCell.style.textAlign = "left";
+      // Hometown, high school, previous college: the app's second card line.
+      const bgLine = [p.hometown, p.highSchool, p.previousSchool && "from " + p.previousSchool].filter(Boolean).join(" · ");
+      if (bgLine) nameCell.appendChild(el("div", "roster-bg", bgLine));
       r.insertCell().textContent = p.position || "—";
       r.insertCell().textContent = p.height || "—";
+      if (hasYr) r.insertCell().textContent = p.classYear || "—";
       if (f) {
         const s = byName.get(p.player.toLowerCase());
         const pct = s && s.ta ? (s.k - s.e) / s.ta : null;
