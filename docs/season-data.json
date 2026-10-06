@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-06T23:17:01Z",
+ "generatedAt": "2026-10-06T23:22:09Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -26816,7 +26816,7 @@
    "city": "Orlando, FL",
    "time": "12:00",
    "tv": "ESPN+",
-   "winProbability": 0.6096,
+   "winProbability": 0.6118,
    "ratingSource": "results"
   },
   {
@@ -26828,7 +26828,7 @@
    "city": "Manhattan, KS",
    "time": "18:30",
    "tv": "ESPN+",
-   "winProbability": 0.5911,
+   "winProbability": 0.5913,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26912,7 +26912,7 @@
    "city": "Lawrence, KS",
    "time": "19:00",
    "tv": "FS1",
-   "winProbability": 0.7512,
+   "winProbability": 0.7514,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -26984,7 +26984,7 @@
    "city": "Lawrence, KS",
    "time": "13:00",
    "tv": "ESPN+",
-   "winProbability": 0.7699,
+   "winProbability": 0.77,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27039,7 +27039,7 @@
    "city": "Lawrence, KS",
    "time": "18:00",
    "tv": "ESPN+",
-   "winProbability": 0.7715,
+   "winProbability": 0.7697,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -27062,7 +27062,7 @@
    "venue": "McKale Center",
    "city": "Tucson, AZ",
    "tv": "ESPN+",
-   "winProbability": 0.6392,
+   "winProbability": 0.6396,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -28122,685 +28122,939 @@
  "opponentRosters": [
   {
    "team": "Arizona",
-   "fetchedAt": "2026-10-05T12:35:32.147Z",
+   "fetchedAt": "2026-10-06T23:21:31.136Z",
    "players": [
     {
      "player": "Maria Olga Siapani",
      "jerseyNumber": "1",
      "position": "S",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "Jr.",
+     "hometown": "Limassol, Cyprus",
+     "highSchool": "Grammar School of Limassol",
+     "previousSchool": "UAlbany"
     },
     {
      "player": "Renee Jones",
      "jerseyNumber": "2",
      "position": "OPP",
-     "height": "6-5"
+     "height": "6-5",
+     "classYear": "So.",
+     "hometown": "Fort Washington, Md.",
+     "highSchool": "IMG Academy"
     },
     {
      "player": "Brenna Ginder",
      "jerseyNumber": "3",
      "position": "L/DS",
-     "height": "5-5"
+     "height": "5-5",
+     "classYear": "Jr.",
+     "hometown": "Fort Wayne, Ind.",
+     "highSchool": "Carroll H.S."
     },
     {
      "player": "Maya Flemister",
      "jerseyNumber": "4",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "So.",
+     "hometown": "Centennial, Colo.",
+     "highSchool": "Arapahoe H.S."
     },
     {
      "player": "Gigi Whann",
      "jerseyNumber": "5",
      "position": "L/DS",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "Fr.",
+     "hometown": "Dallas, Texas",
+     "highSchool": "Highland Park H.S."
     },
     {
      "player": "Harmony Sample",
      "jerseyNumber": "7",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "5th",
+     "hometown": "Lewisville, Texas",
+     "highSchool": "Hebron H.S.",
+     "previousSchool": "Notre Dame"
     },
     {
      "player": "Kristen Dear",
      "jerseyNumber": "8",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "So.",
+     "hometown": "Carson, Calif.",
+     "highSchool": "Long Beach Polytechnic H.S.",
+     "previousSchool": "Howard"
     },
     {
      "player": "Britt Carlson",
      "jerseyNumber": "10",
      "position": "OPP",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "5th",
+     "hometown": "Woodbury, Minn.",
+     "highSchool": "East Ridge H.S.",
+     "previousSchool": "UCF"
     },
     {
      "player": "Carlie Cisneros",
      "jerseyNumber": "12",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Jr.",
+     "hometown": "Kansas City, Mo.",
+     "highSchool": "Liberty North H.S."
     },
     {
      "player": "Kennedy Osunsanmi",
      "jerseyNumber": "14",
      "position": "OPP",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Jr.",
+     "hometown": "Stevenson Ranch, Calif.",
+     "highSchool": "West Ranch H.S.",
+     "previousSchool": "San Diego"
     },
     {
      "player": "Shea Davis",
      "jerseyNumber": "16",
      "position": "L/DS",
-     "height": "5-5"
+     "height": "5-5",
+     "classYear": "So.",
+     "hometown": "Elkhart, Ind.",
+     "highSchool": "Concord H.S."
     },
     {
      "player": "Destiny Ndam-Simpson",
      "jerseyNumber": "18",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Sr.",
+     "hometown": "Omaha, Neb.",
+     "highSchool": "Westside H.S.",
+     "previousSchool": "Creighton"
     },
     {
      "player": "Brookelyn Hatton",
      "jerseyNumber": "19",
      "position": "L/DS",
-     "height": "5-4"
+     "height": "5-4",
+     "classYear": "So.",
+     "hometown": "Overland Park, Kan.",
+     "highSchool": "Blue Valley West H.S."
     },
     {
      "player": "Hayden Reeder",
      "jerseyNumber": "21",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Ramsey, Minn.",
+     "highSchool": "Anoka H.S."
     },
     {
      "player": "Journey Tucker",
      "jerseyNumber": "22",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Buckeye, Ariz.",
+     "highSchool": "Verrado H.S."
     },
     {
      "player": "Marina Vosloo",
      "jerseyNumber": "23",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "San Diego, Calif.",
+     "highSchool": "Torrey Pines H.S."
     },
     {
      "player": "Payton Woods",
      "jerseyNumber": "31",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Sr.",
+     "hometown": "Montgomery, Texas",
+     "highSchool": "Lake Creek H.S.",
+     "previousSchool": "Virginia Tech"
     }
    ]
   },
   {
    "team": "Arizona St.",
-   "fetchedAt": "2026-10-03T20:10:32.798Z",
+   "fetchedAt": "2026-10-06T23:21:26.584Z",
    "players": [
     {
      "player": "Una Vajagi\u0107",
      "jerseyNumber": "1",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Jr.",
+     "hometown": "Novi Sad, Serbia"
     },
     {
      "player": "Ella Hope",
      "jerseyNumber": "2",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Fr.",
+     "hometown": "Waterloo, Ontario"
     },
     {
      "player": "\u017diva Labinjan",
      "jerseyNumber": "3",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Fr.",
+     "hometown": "Koper, Slovenia"
     },
     {
      "player": "Ella Lewis",
      "jerseyNumber": "4",
      "position": "L",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "So.",
+     "hometown": "The Woodlands, Texas"
     },
     {
      "player": "Aniya Clinton",
      "jerseyNumber": "5",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Gr.",
+     "hometown": "Midland, Texas"
     },
     {
      "player": "Jadyn Wilgus",
      "jerseyNumber": "6",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "Austin, Texas"
     },
     {
      "player": "Zoey Burgess",
      "jerseyNumber": "7",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Jr.",
+     "hometown": "Lehi, Utah"
     },
     {
      "player": "Elle Mottola",
      "jerseyNumber": "8",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Fr.",
+     "hometown": "Orlando, Fla."
     },
     {
      "player": "Noemie Glover",
      "jerseyNumber": "10",
      "position": "OPP",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Rancho Santa Fe, Calif."
     },
     {
      "player": "Isabella Costantini",
      "jerseyNumber": "11",
      "position": "S",
-     "height": "5-10"
+     "height": "5-10",
+     "classYear": "Sr.",
+     "hometown": "Curitiba, Brazil"
     },
     {
      "player": "Piper Rama",
      "jerseyNumber": "13",
      "position": "L",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "Jr."
     },
     {
      "player": "Jillian Neal",
      "jerseyNumber": "14",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr."
     },
     {
      "player": "Faith Frame",
      "jerseyNumber": "15",
      "position": "L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Jr.",
+     "hometown": "Gretna, Neb."
     },
     {
      "player": "Aurora Papac",
      "jerseyNumber": "17",
      "position": "MB",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "So.",
+     "hometown": "Po\u017eega, Croatia"
     },
     {
      "player": "Antonina Serafinowska",
      "jerseyNumber": "19",
      "position": "MB",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Jr.",
+     "hometown": "Kiekrz, Poland"
     },
     {
      "player": "Grace Martin",
      "jerseyNumber": "20",
      "position": "OH",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Fr.",
+     "hometown": "Overland Park, Kansas"
     },
     {
      "player": "Paige Lehman",
      "jerseyNumber": "21",
      "position": "L",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Fr.",
+     "hometown": "Orlando, Fla."
     },
     {
      "player": "Ma\u00e9va Schalk",
      "jerseyNumber": "23",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "So.",
+     "hometown": "Cannes, France"
     },
     {
      "player": "Ella Lomigora",
      "jerseyNumber": "25",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr."
     },
     {
      "player": "Kiylah Presley",
      "jerseyNumber": "43",
      "position": "OPP",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Jr.",
+     "hometown": "Laurel, Md."
     }
    ]
   },
   {
    "team": "Baylor",
-   "fetchedAt": "2026-10-05T12:35:35.015Z",
+   "fetchedAt": "2026-10-06T23:21:33.901Z",
    "players": [
     {
      "player": "Harley Greek",
      "jerseyNumber": "1",
      "position": "S",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Sr.",
+     "hometown": "Emory, Texas",
+     "highSchool": "Rains HS"
     },
     {
      "player": "Bailey Warren",
      "jerseyNumber": "2",
      "position": "OH",
-     "height": "5-10"
+     "height": "5-10",
+     "classYear": "So.",
+     "hometown": "Houston, Texas",
+     "highSchool": "Fulshear HS"
     },
     {
      "player": "Taylor Crain",
      "jerseyNumber": "3",
      "position": "DS/L",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "Jr.",
+     "hometown": "Pearland, Texas",
+     "highSchool": "Lutheran South Academy"
     },
     {
      "player": "Lacy Tinnell",
      "jerseyNumber": "5",
      "position": "MB",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Fr.",
+     "hometown": "The Woodlands, Texas",
+     "highSchool": "College Park HS"
     },
     {
      "player": "Ksenia Rakhmanchik",
      "jerseyNumber": "6",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "So.",
+     "hometown": "Minsk, Belarus"
     },
     {
      "player": "Victoria Davis",
      "jerseyNumber": "7",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Santa Clarita, Calif.",
+     "highSchool": "West Ranch HS"
     },
     {
      "player": "Abby Schoene",
      "jerseyNumber": "8",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Fr.",
+     "hometown": "Wentzville, Missouri",
+     "highSchool": "Timberland High School"
     },
     {
      "player": "Mya Hemmer",
      "jerseyNumber": "9",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Ishpeming, Mich.",
+     "highSchool": "Ishpeming"
     },
     {
      "player": "Nadiya Johnson",
      "jerseyNumber": "10",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Ashburn, Virginia",
+     "highSchool": "Riverside High School"
     },
     {
      "player": "Isabela Haggard",
      "jerseyNumber": "12",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "So.",
+     "hometown": "Lexington, KY",
+     "highSchool": "Paul Laurnece Dunbar High School",
+     "previousSchool": "Marquette"
     },
     {
      "player": "Grace Carroll",
      "jerseyNumber": "16",
      "position": "OPP",
-     "height": "6-5"
+     "height": "6-5",
+     "classYear": "Jr.",
+     "hometown": "San Antonio, Texas",
+     "highSchool": "Cornerstone Christian School"
     },
     {
      "player": "MJ McCurdy",
      "jerseyNumber": "17",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "Frisco, Texas",
+     "highSchool": "Frisco Liberty HS",
+     "previousSchool": "Texas State"
     },
     {
      "player": "Morgan Madison",
      "jerseyNumber": "22",
      "position": "L/DS",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "So.",
+     "hometown": "Magnolia, Texas",
+     "highSchool": "College Park HS"
     },
     {
      "player": "Tehani Ulufatu",
      "jerseyNumber": "26",
      "position": "L/DS",
-     "height": "5-5"
+     "height": "5-5",
+     "classYear": "Sr.",
+     "hometown": "San Francisco, Calif.",
+     "highSchool": "Marin Catholic HS"
     },
     {
      "player": "Jules Hernandez",
      "jerseyNumber": "33",
      "position": "L",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "Fr.",
+     "hometown": "Frisco, Texas",
+     "highSchool": "Memorial HS"
     },
     {
      "player": "Halle Bills",
      "jerseyNumber": "37",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Draper, Utah",
+     "highSchool": "Corner Canyon"
     }
    ]
   },
   {
    "team": "BYU",
-   "fetchedAt": "2026-10-05T12:35:37.871Z",
+   "fetchedAt": "2026-10-06T23:21:36.726Z",
    "players": [
     {
      "player": "Kate Prior",
      "jerseyNumber": "1",
      "position": "Middle Blocker/Opposite Hitter",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Sr.",
+     "hometown": "Henderson, Nevada"
     },
     {
      "player": "Elli Mortensen",
      "jerseyNumber": "2",
      "position": "Outside Hitter",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "Draper, Utah"
     },
     {
      "player": "Kaylee Tingey",
      "jerseyNumber": "3",
      "position": "Libero",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "So.",
+     "hometown": "Overland Park, Kansas"
     },
     {
      "player": "Brooke Hardy",
      "jerseyNumber": "4",
      "position": "Middle Blocker",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Fr.",
+     "hometown": "Fruitland, Idaho"
     },
     {
      "player": "Lulu Po'uha",
      "jerseyNumber": "5",
      "position": "Libero",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "Jr.",
+     "hometown": "L\u0101'ie, Hawai'i"
     },
     {
      "player": "Rachel Jepsen",
      "jerseyNumber": "6",
      "position": "Middle Blocker",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "So.",
+     "hometown": "Holladay, Utah"
     },
     {
      "player": "Alex Bower",
      "jerseyNumber": "7",
      "position": "Setter",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Jr.",
+     "hometown": "Nampa, Idaho"
     },
     {
      "player": "Anna Blamires",
      "jerseyNumber": "8",
      "position": "Opposite Hitter",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "So.",
+     "hometown": "Colorado Springs, Colorado"
     },
     {
      "player": "Grace Fredrick",
      "jerseyNumber": "9",
      "position": "Setter",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "So.",
+     "hometown": "Salt Lake City, Utah"
     },
     {
      "player": "Emma Barbero",
      "jerseyNumber": "10",
      "position": "Libero",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Sr.",
+     "hometown": "Asti, Italy"
     },
     {
      "player": "Addie Benson",
      "jerseyNumber": "11",
      "position": "Outside Hitter",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Newbury Park, California"
     },
     {
      "player": "Claire Little Chambers",
      "jerseyNumber": "12",
      "position": "Outside Hitter",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Sr.",
+     "hometown": "Temecula, California"
     },
     {
      "player": "Dimitra Nanou",
      "jerseyNumber": "15",
      "position": "Outside Hitter",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "So.",
+     "hometown": "Kozani, Greece"
     },
     {
      "player": "Kelli Jo Burgess",
      "jerseyNumber": "17",
      "position": "Middle Blocker",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Lehi, Utah"
     },
     {
      "player": "Abby Hoybjerg",
      "jerseyNumber": "18",
      "position": "Middle Blocker",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "El Dorado Hills, California"
     },
     {
      "player": "Kaylie Kofe",
      "jerseyNumber": "20",
      "position": "Setter",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "Jr.",
+     "hometown": "Idaho Falls, Idaho"
     },
     {
      "player": "Kylie Buttars",
      "jerseyNumber": "21",
      "position": "Outside Hitter",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Lehi, Utah"
     },
     {
      "player": "Sophia Callahan",
      "jerseyNumber": "22",
      "position": "Outside Hitter",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Encinitas, California"
     },
     {
      "player": "Brielle Kemavor",
      "jerseyNumber": "24",
      "position": "Middle Blocker",
-     "height": "6-5"
+     "height": "6-5",
+     "classYear": "Sr.",
+     "hometown": "Bristow, Virginia"
     }
    ]
   },
   {
    "team": "Cincinnati",
-   "fetchedAt": "2026-10-05T12:35:41.030Z",
+   "fetchedAt": "2026-10-06T23:21:40.157Z",
    "players": [
     {
      "player": "Andi Spies",
      "jerseyNumber": "0",
      "position": "S",
-     "height": "5-10"
+     "height": "5-10",
+     "classYear": "Jr."
     },
     {
      "player": "Ava Ledebuhr",
      "jerseyNumber": "1",
      "position": "L/DS",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "So."
     },
     {
      "player": "Sydney Nolan",
      "jerseyNumber": "2",
      "position": "OH",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Sr."
     },
     {
      "player": "Lily Rolfes",
      "jerseyNumber": "3",
      "position": "S",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Fr."
     },
     {
      "player": "Audrey Rome",
      "jerseyNumber": "4",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Gr."
     },
     {
      "player": "Lilian Entenmann",
      "jerseyNumber": "5",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Sr."
     },
     {
      "player": "Kate Lijic",
      "jerseyNumber": "6",
      "position": "S",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Jr."
     },
     {
      "player": "Andrea Simovski",
      "jerseyNumber": "7",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Jr."
     },
     {
      "player": "Ligia Williams",
      "jerseyNumber": "8",
      "position": "MB",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Gr."
     },
     {
      "player": "Kayla Hostetler",
      "jerseyNumber": "9",
      "position": "L/DS",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "Sr."
     },
     {
      "player": "Nina Scrucca",
      "jerseyNumber": "11",
      "position": "OPP",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Fr."
     },
     {
      "player": "Malayna Boyles",
      "jerseyNumber": "12",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr."
     },
     {
      "player": "Kayla Edginton",
      "jerseyNumber": "13",
      "position": "RS/OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr."
     },
     {
      "player": "Julia Horan",
      "jerseyNumber": "14",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr."
     },
     {
      "player": "Elliott Mickelberry",
      "jerseyNumber": "15",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "So."
     },
     {
      "player": "Izzy Busignani",
      "jerseyNumber": "16",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "So."
     },
     {
      "player": "Tatjana Simeunovi\u0107",
      "jerseyNumber": "18",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "So."
     },
     {
      "player": "Viktoria Ninova",
      "jerseyNumber": "21",
      "position": "L",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "Fr."
     }
    ]
   },
   {
    "team": "Colorado",
-   "fetchedAt": "2026-10-05T12:35:44.420Z",
+   "fetchedAt": "2026-10-06T23:21:43.826Z",
    "players": [
     {
      "player": "Jenna Ylivainio",
      "jerseyNumber": "2",
      "position": "S",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Sr.",
+     "hometown": "H\u00e4meenlinna, Finland",
+     "highSchool": "H\u00e4meenlinna Lyseo"
     },
     {
      "player": "Audrey Asleson",
      "jerseyNumber": "4",
      "position": "S",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "So.",
+     "hometown": "La Grange, Ill.",
+     "highSchool": "Benet Academy"
     },
     {
      "player": "Elle Richardson",
      "jerseyNumber": "5",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Fr.",
+     "hometown": "Orem, Utah",
+     "highSchool": "Mountain View High School"
     },
     {
      "player": "Dumebi Okoye",
      "jerseyNumber": "6",
      "position": "PIN",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Surrey, British Columbia",
+     "highSchool": "Guildford Park Secondary School"
     },
     {
      "player": "Barbora Rakauskaite",
      "jerseyNumber": "7",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Fr.",
+     "hometown": "Vilnius, Lithuania",
+     "highSchool": "Vytautas Magnus Gymnasium"
     },
     {
      "player": "Ines Losada",
      "jerseyNumber": "8",
      "position": "PIN",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "So.",
+     "hometown": "Coruna, Spain",
+     "highSchool": "IES Eusebio da Guarda"
     },
     {
      "player": "Avery Bolles",
      "jerseyNumber": "9",
      "position": "DS/L",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Sr.",
+     "hometown": "Andover, Minn.",
+     "highSchool": "Andover High School"
     },
     {
      "player": "Sydney Jordan",
      "jerseyNumber": "10",
      "position": "PIN",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Sr.",
+     "hometown": "Missouri City, Texas",
+     "highSchool": "Ridge Point High School"
     },
     {
      "player": "Ana Burilovic",
      "jerseyNumber": "11",
      "position": "PIN",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Sr.",
+     "hometown": "Split, Croatia",
+     "highSchool": "V. Gimnasium \u201cVladimir Nazor\u201d"
     },
     {
      "player": "Kensley Hennessy",
      "jerseyNumber": "12",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "San Diego, Calif.",
+     "highSchool": "Cathedral Catholic High School"
     },
     {
      "player": "Katie Salonga",
      "jerseyNumber": "13",
      "position": "DS/L/S",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "Jr.",
+     "hometown": "Pleasanton, Calif.",
+     "highSchool": "Foothill High School"
     },
     {
      "player": "Nikki Ott",
      "jerseyNumber": "14",
      "position": "DS/L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "So.",
+     "hometown": "Valley, Neb.",
+     "highSchool": "Skutt Catholic High School"
     },
     {
      "player": "Gwen Schiff",
      "jerseyNumber": "15",
      "position": "PIN",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Jr.",
+     "hometown": "Urbana, Ill.",
+     "highSchool": "Urbana High School"
     },
     {
      "player": "Maria Splawska",
      "jerseyNumber": "16",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Jr.",
+     "hometown": "Sroda Wielkopolska, Poland",
+     "highSchool": "GKS Wiezyca 2011 Stezyca (Club Team)"
     },
     {
      "player": "Peyton Neal",
      "jerseyNumber": "20",
      "position": "DS/L",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Sr.",
+     "hometown": "Nolensville, Tenn.",
+     "highSchool": "Nolensville High School"
     },
     {
      "player": "Lily Dwinell",
      "jerseyNumber": "21",
      "position": "PIN",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Sr.",
+     "hometown": "San Clemente, Calif.",
+     "highSchool": "San Clemente High School"
     },
     {
      "player": "Tinons Munar Galmes",
      "jerseyNumber": "22",
      "position": "DS/L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Jr.",
+     "hometown": "Majorca, Spain",
+     "highSchool": "IES Antonio Machado"
     },
     {
      "player": "Cayla Payne",
      "jerseyNumber": "33",
      "position": "MB",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Sr.",
+     "hometown": "Carlsbad, Calif.",
+     "highSchool": "Carlsbad High School"
     }
    ]
   },
@@ -29154,337 +29408,509 @@
   },
   {
    "team": "Houston",
-   "fetchedAt": "2026-10-05T12:35:47.756Z",
+   "fetchedAt": "2026-10-06T23:21:46.909Z",
    "players": [
     {
      "player": "Alyssa Gonzales",
      "jerseyNumber": "1",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Sr.",
+     "hometown": "Aledo, Texas",
+     "highSchool": "Aledo HS",
+     "previousSchool": "Wichita State"
     },
     {
      "player": "Olivia Stringer",
      "jerseyNumber": "2",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Jr.",
+     "hometown": "Lake Jackson, Texas",
+     "highSchool": "Brazoswood HS",
+     "previousSchool": "Blinn JC / Texas A&M CC"
     },
     {
      "player": "Alexis Roberson",
      "jerseyNumber": "3",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Sr.",
+     "hometown": "Missouri City, Texas",
+     "highSchool": "Ridge Point HS",
+     "previousSchool": "TCU"
     },
     {
      "player": "Kamille Gibson",
      "jerseyNumber": "4",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Jr.",
+     "hometown": "Crossroads, Texas",
+     "highSchool": "Braswell HS",
+     "previousSchool": "Tennessee / Oklahoma"
     },
     {
      "player": "Lily Barron",
      "jerseyNumber": "5",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "Lewis Center, Ohio",
+     "highSchool": "Olentangy Orange HS"
     },
     {
      "player": "Kalei Edson",
      "jerseyNumber": "6",
      "position": "S",
-     "height": "5-10"
+     "height": "5-10",
+     "classYear": "Jr.",
+     "hometown": "Centralia, Ill.",
+     "highSchool": "Centralia HS",
+     "previousSchool": "Auburn"
     },
     {
      "player": "Kaitlyn Evans",
      "jerseyNumber": "8",
      "position": "MB",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Sr.",
+     "hometown": "Dallas, Texas",
+     "highSchool": "David Butler HS",
+     "previousSchool": "American / LMU"
     },
     {
      "player": "Shannon Dworaczyk",
      "jerseyNumber": "9",
      "position": "S",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Fr.",
+     "hometown": "Magnolia, Texas",
+     "highSchool": "Magnolia West HS"
     },
     {
      "player": "Aidan Conner",
      "jerseyNumber": "10",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "7th",
+     "hometown": "Cypress, Texas",
+     "highSchool": "Bridgeland HS",
+     "previousSchool": "Columbia"
     },
     {
      "player": "Sydney Jones",
      "jerseyNumber": "11",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "Havertown, Pa.",
+     "highSchool": "Haverford HS",
+     "previousSchool": "Temple / Tennessee"
     },
     {
      "player": "Leah Robinson",
      "jerseyNumber": "13",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Kansas City, Mo.",
+     "highSchool": "St. James Academy"
     },
     {
      "player": "Cali Reece",
      "jerseyNumber": "15",
      "position": "L",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "Fr.",
+     "hometown": "Spring, Texas",
+     "highSchool": "Grand Oaks HS"
     },
     {
      "player": "Mattie Casale",
      "jerseyNumber": "19",
      "position": "L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "So.",
+     "hometown": "Wesley Chapel, Fla.",
+     "highSchool": "Carrollwood Day School",
+     "previousSchool": "Purdue"
     },
     {
      "player": "Noemi Despaigne",
      "jerseyNumber": "21",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "So.",
+     "hometown": "Ivrea, Italy",
+     "highSchool": "I.I.S. Bruno Munari",
+     "previousSchool": "Georgia Tech"
     },
     {
      "player": "Harmoni Dobbins",
      "jerseyNumber": "22",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Fr.",
+     "hometown": "Ellenwood, Ga.",
+     "highSchool": "Deerfield Academy"
     },
     {
      "player": "Gillian Pitts",
      "jerseyNumber": "24",
      "position": "L",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "So.",
+     "hometown": "Little Elm, Texas",
+     "highSchool": "Prestonwood Christian Academy"
     },
     {
      "player": "Ava Wilkerson",
      "jerseyNumber": "25",
      "position": "MB",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Fr.",
+     "hometown": "Hillsborough, N.C.",
+     "highSchool": "Orange HS"
     },
     {
      "player": "Tara Greenberry",
      "jerseyNumber": "34",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "So.",
+     "hometown": "Florissant, Mo.",
+     "highSchool": "Incarnate Word Academy"
     }
    ]
   },
   {
    "team": "Iowa St.",
-   "fetchedAt": "2026-10-05T12:35:50.669Z",
+   "fetchedAt": "2026-10-06T23:21:49.609Z",
    "players": [
     {
      "player": "Pam McCune",
      "jerseyNumber": "1",
      "position": "MB",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Sr.",
+     "hometown": "Upper Marlboro, Md.",
+     "highSchool": "St. John's"
     },
     {
      "player": "Reese Naeve",
      "jerseyNumber": "2",
      "position": "OH",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Fr.",
+     "hometown": "Iowa City, Iowa",
+     "highSchool": "Iowa City Regina"
     },
     {
      "player": "Layna Waselewsky",
      "jerseyNumber": "3",
      "position": "DS/L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "So.",
+     "hometown": "Ada, Mich.",
+     "highSchool": "Forest Hills Eastern"
     },
     {
      "player": "Reagan Hanfelt",
      "jerseyNumber": "4",
      "position": "MB/RS",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "So.",
+     "hometown": "Ankeny, Iowa",
+     "highSchool": "Ankeny"
     },
     {
      "player": "D'Aaliyah Kemp",
      "jerseyNumber": "5",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Indianapolis, Ind.",
+     "highSchool": "Mt. Vernon"
     },
     {
      "player": "Baileigh Carlsen",
      "jerseyNumber": "6",
      "position": "L/DS",
-     "height": "5-8"
+     "height": "5-8",
+     "classYear": "So.",
+     "hometown": "Ankeny, Iowa",
+     "highSchool": "Ankeny"
     },
     {
      "player": "Annalise Grant",
      "jerseyNumber": "7",
      "position": "L/DS",
-     "height": "5-4"
+     "height": "5-4",
+     "classYear": "So.",
+     "hometown": "West Des Moines, Iowa",
+     "highSchool": "Dowling Catholic"
     },
     {
      "player": "Macie Lupkes",
      "jerseyNumber": "8",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Cedar Rapids, Iowa",
+     "highSchool": "Xavier"
     },
     {
      "player": "Mesaiya Bettis",
      "jerseyNumber": "9",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "So.",
+     "hometown": "Apple Valley, Minn.",
+     "highSchool": "Burnsville"
     },
     {
      "player": "Rachel Van Gorp",
      "jerseyNumber": "10",
      "position": "L",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Jr.",
+     "hometown": "Olathe, Kan.",
+     "highSchool": "Heritage Christian Academy"
     },
     {
      "player": "Ella Florez",
      "jerseyNumber": "11",
      "position": "S",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Fr.",
+     "hometown": "Shawnee, Kansas",
+     "highSchool": "Mill Valley"
     },
     {
      "player": "Abbi Brenizer",
      "jerseyNumber": "12",
      "position": "MB/RS",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Sr.",
+     "hometown": "Norwalk, Iowa",
+     "highSchool": "Norwalk"
     },
     {
      "player": "Lilly Wachholz",
      "jerseyNumber": "13",
      "position": "RS",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Waconia, Minn.",
+     "highSchool": "Mayer Lutheran"
     },
     {
      "player": "Nayeli Gonzalez",
      "jerseyNumber": "14",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "San Antonio, Texas",
+     "highSchool": "Cornerstone Christian"
     },
     {
      "player": "Katie Byergo",
      "jerseyNumber": "16",
      "position": "MB/RS",
-     "height": "6-5"
+     "height": "6-5",
+     "classYear": "Fr.",
+     "hometown": "Chesterfield, Mo.",
+     "highSchool": "Parkway West"
     },
     {
      "player": "Ava Martin",
      "jerseyNumber": "17",
      "position": "S",
-     "height": "5-10"
+     "height": "5-10",
+     "classYear": "Jr.",
+     "hometown": "Leawood, Kan.",
+     "highSchool": "Bishop Miege"
     },
     {
      "player": "Taylor Johnson",
      "jerseyNumber": "18",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Houston, Texas",
+     "highSchool": "Ridge Point"
     },
     {
      "player": "Nayeli Ti'a",
      "jerseyNumber": "20",
      "position": "OH",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Sr.",
+     "hometown": "Livermore, Calif.",
+     "highSchool": "Granada"
     },
     {
      "player": "Alea Goolsby",
      "jerseyNumber": "30",
      "position": "OH",
-     "height": "5-10"
+     "height": "5-10",
+     "classYear": "So.",
+     "hometown": "Olathe, Kan.",
+     "highSchool": "Saint Thomas Aquinas"
     }
    ]
   },
   {
    "team": "Kansas St.",
-   "fetchedAt": "2026-10-05T12:35:53.896Z",
+   "fetchedAt": "2026-10-06T23:21:52.826Z",
    "players": [
     {
      "player": "Fuka Sekita",
      "jerseyNumber": "0",
      "position": "L",
-     "height": "5-1"
+     "height": "5-1",
+     "classYear": "Sr.",
+     "hometown": "Hyogo, Japan",
+     "highSchool": "Mukogawa Women's University Senior",
+     "previousSchool": "UTEP"
     },
     {
      "player": "Caleigh Ponn",
      "jerseyNumber": "1",
      "position": "L",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "So.",
+     "hometown": "Roanoke, Va.",
+     "highSchool": "Hidden Valley"
     },
     {
      "player": "Sydney Maue",
      "jerseyNumber": "2",
      "position": "PIN",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "So.",
+     "hometown": "Walker, Iowa",
+     "highSchool": "Mount Vernon",
+     "previousSchool": "Arkansas"
     },
     {
      "player": "Alex Klukvin",
      "jerseyNumber": "3",
      "position": "L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "So.",
+     "hometown": "Olathe, Kan.",
+     "highSchool": "Olathe Northwest"
     },
     {
      "player": "Reagan Fox",
      "jerseyNumber": "4",
      "position": "PIN",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Kansas City, Mo.",
+     "highSchool": "St. Teresa\u2019s Academy"
     },
     {
      "player": "Avery Stones",
      "jerseyNumber": "5",
      "position": "PIN",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "So.",
+     "hometown": "Queen Creek, Ariz.",
+     "highSchool": "Perry"
     },
     {
      "player": "Camdyn Stucky",
      "jerseyNumber": "8",
      "position": "S",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "So.",
+     "hometown": "Wichita, Kan.",
+     "highSchool": "Maize South",
+     "previousSchool": "Tennessee"
     },
     {
      "player": "Chandler Carter",
      "jerseyNumber": "9",
      "position": "L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Fr.",
+     "hometown": "Spring, Texas",
+     "highSchool": "Klein Collins"
     },
     {
      "player": "Skylar Brady",
      "jerseyNumber": "11",
      "position": "PIN",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Bethany, Okla.",
+     "highSchool": "Bethany"
     },
     {
      "player": "Emerson Van Lannen",
      "jerseyNumber": "13",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Jr.",
+     "hometown": "Kimberly, Wis.",
+     "highSchool": "Appleton North"
     },
     {
      "player": "Addison Massey",
      "jerseyNumber": "15",
      "position": "PIN",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Las Cruces, N.M.",
+     "highSchool": "Las Cruces"
     },
     {
      "player": "Cadence Lundgren",
      "jerseyNumber": "16",
      "position": "MB",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "So.",
+     "hometown": "Bozeman, Mont.",
+     "highSchool": "Gallatin"
     },
     {
      "player": "Reese Resmer",
      "jerseyNumber": "21",
      "position": "MB",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Fr.",
+     "hometown": "Noblesville, Ind.",
+     "highSchool": "Noblesville"
     },
     {
      "player": "Lauren Latham",
      "jerseyNumber": "23",
      "position": "S",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "So.",
+     "hometown": "Hot Springs, Ark.",
+     "highSchool": "Lakeside"
     },
     {
      "player": "Ellah Derrer",
      "jerseyNumber": "27",
      "position": "MB",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Fr.",
+     "hometown": "Davenport, Iowa",
+     "highSchool": "Davenport Assumption"
     },
     {
      "player": "Tatum Tindall",
      "jerseyNumber": "30",
      "position": "PIN/MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Jr.",
+     "hometown": "Manhattan, Kan.",
+     "highSchool": "Manhattan"
     }
    ]
   },
@@ -29994,235 +30420,355 @@
   },
   {
    "team": "TCU",
-   "fetchedAt": "2026-10-05T12:35:57.383Z",
+   "fetchedAt": "2026-10-06T23:21:56.109Z",
    "players": [
     {
      "player": "Alice Volpe",
      "jerseyNumber": "0",
      "position": "DS/L",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "Jr.",
+     "hometown": "Cypress, Texas",
+     "highSchool": "Bridgeland HS"
     },
     {
      "player": "Evan Hendrix",
      "jerseyNumber": "2",
      "position": "OH",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Jr.",
+     "hometown": "Scottsdale, Ariz.",
+     "highSchool": "Notre Dame Prep"
     },
     {
      "player": "Addy Horner",
      "jerseyNumber": "3",
      "position": "S",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "So.",
+     "hometown": "Wheaton, Ill.",
+     "highSchool": "St. Francis HS",
+     "previousSchool": "Wisconsin"
     },
     {
      "player": "De\u2019Andrea McMillian",
      "jerseyNumber": "4",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "So.",
+     "hometown": "Mansfield, Texas",
+     "highSchool": "Lake Ridge HS",
+     "previousSchool": "Florida"
     },
     {
      "player": "Jalyn Gibson",
      "jerseyNumber": "5",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "5th",
+     "hometown": "San Antonio, Texas",
+     "highSchool": "Brandeis HS"
     },
     {
      "player": "Reese Wilburn",
      "jerseyNumber": "6",
      "position": "S",
-     "height": "5-5"
+     "height": "5-5",
+     "classYear": "So.",
+     "hometown": "Bryant, Ark.",
+     "highSchool": "Bryant HS"
     },
     {
      "player": "Reese Robins",
      "jerseyNumber": "7",
      "position": "OPP/MB",
-     "height": "6-5"
+     "height": "6-5",
+     "classYear": "Sr.",
+     "hometown": "Mansfield, Texas",
+     "highSchool": "Timberview HS",
+     "previousSchool": "Louisville"
     },
     {
      "player": "Mia Lee",
      "jerseyNumber": "8",
      "position": "MB",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Sr.",
+     "hometown": "Vineyard, Utah",
+     "highSchool": "Mountain View HS",
+     "previousSchool": "BYU"
     },
     {
      "player": "Lauren Murphy",
      "jerseyNumber": "9",
      "position": "OH",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Sr.",
+     "hometown": "Round Rock, Texas",
+     "highSchool": "Round Rock HS",
+     "previousSchool": "Ohio State"
     },
     {
      "player": "Kinsley Young",
      "jerseyNumber": "10",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Fr.",
+     "hometown": "Southlake, Texas",
+     "highSchool": "Southlake Carroll HS"
     },
     {
      "player": "Becca Kelley",
      "jerseyNumber": "11",
      "position": "OH",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Sr.",
+     "hometown": "Rockwall, Texas",
+     "highSchool": "Rockwall HS",
+     "previousSchool": "Oregon"
     },
     {
      "player": "Molly McCarthy",
      "jerseyNumber": "13",
      "position": "DS/L",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "5th",
+     "hometown": "Rancho Mirage, Calif.",
+     "highSchool": "Palm Desert HS",
+     "previousSchool": "Kansas"
     },
     {
      "player": "Josie Valgus",
      "jerseyNumber": "14",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Fr.",
+     "hometown": "Chapel Hill, N.C.",
+     "highSchool": "Seaforth HS"
     },
     {
      "player": "Jaylen Clark",
      "jerseyNumber": "16",
      "position": "DS/L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Sr.",
+     "hometown": "Manhattan Beach, Calif.",
+     "highSchool": "Mira Costa HS"
     },
     {
      "player": "Rosemary Archer",
      "jerseyNumber": "17",
      "position": "S",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "5th",
+     "hometown": "Fairview, Texas",
+     "highSchool": "Lovejoy HS",
+     "previousSchool": "Pepperdine"
     },
     {
      "player": "McKenzie Berg",
      "jerseyNumber": "19",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "So.",
+     "hometown": "Midlothian, Texas",
+     "highSchool": "Midlothian HS"
     },
     {
      "player": "Blaykli Bobik",
      "jerseyNumber": "20",
      "position": "OH/OPP",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Jr.",
+     "hometown": "Queen Creek, Ariz.",
+     "highSchool": "Queen Creek HS",
+     "previousSchool": "BYU"
     },
     {
      "player": "Morgan Holloman",
      "jerseyNumber": "21",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Colorado Springs, Colo.",
+     "highSchool": "Pine Creek HS"
     }
    ]
   },
   {
    "team": "Texas Tech",
-   "fetchedAt": "2026-10-03T20:10:35.826Z",
+   "fetchedAt": "2026-10-06T23:21:59.368Z",
    "players": [
     {
      "player": "Faith Jordan",
      "jerseyNumber": "0",
      "position": "MB",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Fr.",
+     "hometown": "Joliet, Illinois",
+     "highSchool": "West Joliet HS"
     },
     {
      "player": "Taylor Bahnub",
      "jerseyNumber": "1",
      "position": "OH/RS",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "Dublin, Ohio",
+     "highSchool": "Dublin Jerome HS"
     },
     {
      "player": "Gretchen Sigman",
      "jerseyNumber": "2",
      "position": "RS",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Jr.",
+     "hometown": "Holland, Ohio",
+     "highSchool": "Holland HS"
     },
     {
      "player": "Aviya Russo",
      "jerseyNumber": "3",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Los Altos, California",
+     "highSchool": "Los Altos HS"
     },
     {
      "player": "Ally Fausett",
      "jerseyNumber": "4",
      "position": "S/RS",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Laguna Niguel, California",
+     "highSchool": "Dana Hills HS"
     },
     {
      "player": "Elia Dinsmore",
      "jerseyNumber": "5",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Thompson's Station, Tennessee",
+     "highSchool": "Independence HS"
     },
     {
      "player": "Kenna McKenzie",
      "jerseyNumber": "6",
      "position": "OH/RS",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "So.",
+     "hometown": "Waco, Texas",
+     "highSchool": "Waco Midway HS"
     },
     {
      "player": "Kayla Robertson",
      "jerseyNumber": "7",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Jr.",
+     "hometown": "St. Louis, Missouri",
+     "highSchool": "Timberland HS"
     },
     {
      "player": "Sara Bowcutt",
      "jerseyNumber": "8",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Fr.",
+     "hometown": "Queen Creek, Arizona",
+     "highSchool": "American Leadership Academy"
     },
     {
      "player": "Maddie Smotherman",
      "jerseyNumber": "9",
      "position": "DS/L",
-     "height": "5-6"
+     "height": "5-6",
+     "classYear": "So.",
+     "hometown": "Dallas, Texas",
+     "highSchool": "Bishop Lynch HS"
     },
     {
      "player": "Katelyn Cochran",
      "jerseyNumber": "10",
      "position": "S",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Sr.",
+     "hometown": "Roseville, Calif.",
+     "highSchool": "Whitney HS"
     },
     {
      "player": "Tatum Johnson",
      "jerseyNumber": "11",
      "position": "MB",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Jr.",
+     "hometown": "Laguna Beach, California",
+     "highSchool": "JSerra Catholic HS"
     },
     {
      "player": "Taylor Cook",
      "jerseyNumber": "12",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "So.",
+     "hometown": "Melissa, Texas",
+     "highSchool": "Prestonwood Christian Academy"
     },
     {
      "player": "Shelby Ignash",
      "jerseyNumber": "13",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "So.",
+     "hometown": "Cass City, Michigan",
+     "highSchool": "Cass City HS"
     },
     {
      "player": "Reagan Engler",
      "jerseyNumber": "17",
      "position": "MB/RS",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Sr.",
+     "hometown": "Grapevine, Texas",
+     "highSchool": "Colleyville Heritage HS"
     },
     {
      "player": "Maggie Boyd",
      "jerseyNumber": "20",
      "position": "OH",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Gr.",
+     "hometown": "Flower Mound, Texas",
+     "highSchool": "Marcus HS"
     },
     {
      "player": "Emily Contreras",
      "jerseyNumber": "21",
      "position": "L",
-     "height": "5-5"
+     "height": "5-5",
+     "classYear": "Sr.",
+     "hometown": "Austin, Texas",
+     "highSchool": "Lake Travis HS"
     },
     {
      "player": "Ashlyn Bellamy",
      "jerseyNumber": "23",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Sr.",
+     "hometown": "Lee's Summit, Missouri",
+     "highSchool": "Lee's Summit HS"
     },
     {
      "player": "Ava Johnson",
      "jerseyNumber": "24",
      "position": "L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Fr.",
+     "hometown": "Parker, Colorado",
+     "highSchool": "Chaparrel HS"
     }
    ]
   },
@@ -30336,331 +30882,479 @@
   },
   {
    "team": "UCF",
-   "fetchedAt": "2026-10-06T16:13:21.518Z",
+   "fetchedAt": "2026-10-06T23:22:02.340Z",
    "players": [
     {
      "player": "Abby Schomers",
      "jerseyNumber": "1",
      "position": "SETTER",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "R-Sr.",
+     "hometown": "Omaha, Neb."
     },
     {
      "player": "Sarah Mendoza",
      "jerseyNumber": "2",
      "position": "L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "So.",
+     "hometown": "Bedford, Texas"
     },
     {
      "player": "Sasha Cohen",
      "jerseyNumber": "3",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "R-Jr.",
+     "hometown": "Lakewood, Colo."
     },
     {
      "player": "Fallon Stewart",
      "jerseyNumber": "5",
      "position": "OH",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "Jr.",
+     "hometown": "Winter Park, Fla."
     },
     {
      "player": "London Adkins",
      "jerseyNumber": "7",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Ocoee, Fla."
     },
     {
      "player": "Ella Chapman",
      "jerseyNumber": "8",
      "position": "MB",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Sr.",
+     "hometown": "Greensburg, Ind."
     },
     {
      "player": "Alexa Haley",
      "jerseyNumber": "9",
      "position": "L",
-     "height": "5-4"
+     "height": "5-4",
+     "classYear": "So.",
+     "hometown": "Naples, Fla."
     },
     {
      "player": "Avah Armour",
      "jerseyNumber": "10",
      "position": "OH",
-     "height": "6-6"
+     "height": "6-6",
+     "classYear": "Sr.",
+     "hometown": "Manitou Springs, Colo."
     },
     {
      "player": "Reese Moore",
      "jerseyNumber": "11",
      "position": "DS/L",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "So.",
+     "hometown": "Franklin, Tenn."
     },
     {
      "player": "Nygeria Hart",
      "jerseyNumber": "12",
      "position": "OH",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "So.",
+     "hometown": "Port Charlotte, Fla."
     },
     {
      "player": "Kiki Horne",
      "jerseyNumber": "14",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "Pittsburgh, Penn."
     },
     {
      "player": "Emma Cook",
      "jerseyNumber": "15",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Jr.",
+     "hometown": "Fernandina Beach, Fla."
     },
     {
      "player": "Natasha Casey",
      "jerseyNumber": "16",
      "position": "OPP",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Orlando, Fla."
     },
     {
      "player": "Deana Petrov",
      "jerseyNumber": "18",
      "position": "MB",
-     "height": "6-5"
+     "height": "6-5",
+     "classYear": "Fr.",
+     "hometown": "Clearwater, Fla."
     },
     {
      "player": "Chloe Albiez",
      "jerseyNumber": "19",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Jr.",
+     "hometown": "Weaverville, Calif."
     },
     {
      "player": "Mikayla Porter",
      "jerseyNumber": "20",
      "position": "SETTER",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "So.",
+     "hometown": "Deerfield Beach, Fla."
     },
     {
      "player": "Elena Dibbs-Frantz",
      "jerseyNumber": "25",
      "position": "OH",
-     "height": "6-6"
+     "height": "6-6",
+     "classYear": "Fr.",
+     "hometown": "Tampa, Fla."
     }
    ]
   },
   {
    "team": "Utah",
-   "fetchedAt": "2026-10-05T12:36:00.201Z",
+   "fetchedAt": "2026-10-06T23:22:05.537Z",
    "players": [
     {
      "player": "Princess Atamah",
      "jerseyNumber": "13",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Prato, Italy",
+     "highSchool": "Istituto pacinotti archimede Roma/Istituto leonardi Perugia"
     },
     {
      "player": "Levani Falatea",
      "jerseyNumber": "10",
      "position": "OH",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Jr.",
+     "hometown": "South Jordan, Utah",
+     "highSchool": "Bingham"
     },
     {
      "player": "Katelynn Field",
      "jerseyNumber": "12",
      "position": "MB",
-     "height": "6-5"
+     "height": "6-5",
+     "classYear": "So.",
+     "hometown": "Harrisville, Utah",
+     "highSchool": "Weber High School"
     },
     {
      "player": "Kamryn Gibadlo",
      "jerseyNumber": "18",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Sr.",
+     "hometown": "Cave Creek, Ariz.",
+     "highSchool": "Cactus Shadows HS"
     },
     {
      "player": "Langley Griffin",
      "jerseyNumber": "15",
      "position": "OH",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "Sr.",
+     "hometown": "Gig Harbor, Wash.",
+     "highSchool": "Peninsula HS"
     },
     {
      "player": "Sierra Grizzle",
      "jerseyNumber": "8",
      "position": "L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Sr.",
+     "hometown": "Meridian, Idaho",
+     "highSchool": "Mountain View High School",
+     "previousSchool": "Texas Tech/Wyoming"
     },
     {
      "player": "Allie Grossenbach",
      "jerseyNumber": "17",
      "position": "OPP",
-     "height": "6-0"
+     "height": "6-0",
+     "classYear": "So.",
+     "hometown": "Herriman",
+     "highSchool": "Mountain Ridge High"
     },
     {
      "player": "Suttyn Harris",
      "jerseyNumber": "5",
      "position": "OH",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Fr.",
+     "hometown": "Inman, Kansas",
+     "highSchool": "Inman High School"
     },
     {
      "player": "Loryn Helgesen",
      "jerseyNumber": "4",
      "position": "OPP",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Jr.",
+     "hometown": "Kaysville, Utah",
+     "highSchool": "Davis High School",
+     "previousSchool": "Utah State"
     },
     {
      "player": "DyBorrah Johnson",
      "jerseyNumber": "7",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "So.",
+     "hometown": "Gilbert, Ariz.",
+     "highSchool": "Camille Casteel High School"
     },
     {
      "player": "Isabelle Marco",
      "jerseyNumber": "3",
      "position": "S",
-     "height": "5-10"
+     "height": "5-10",
+     "classYear": "Jr.",
+     "hometown": "Atherton, Calif.",
+     "highSchool": "Sacred Heart Preparatory"
     },
     {
      "player": "Lana Mijacic",
      "jerseyNumber": "1",
      "position": "MB",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "So.",
+     "hometown": "Belgrade, Serbia",
+     "highSchool": "Gimnazija \"Crnjasnki\""
     },
     {
      "player": "Isabella Mogridge",
      "jerseyNumber": "2",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "So.",
+     "hometown": "Lutz, Florida",
+     "highSchool": "Berkeley Preparatory School",
+     "previousSchool": "Tennessee"
     },
     {
      "player": "Grace Moss",
      "jerseyNumber": "9",
      "position": "L/DS",
-     "height": "5-5"
+     "height": "5-5",
+     "classYear": "R-Jr.",
+     "hometown": "Dana Point, Calif.",
+     "highSchool": "Santa Margarita HS",
+     "previousSchool": "Cal State Bakersfield"
     },
     {
      "player": "Olga Musial",
      "jerseyNumber": "14",
      "position": "OH/OPP",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Boguchwala, Poland",
+     "highSchool": "Szkoly Mistrzostwa Sportowego Mielec"
     },
     {
      "player": "McKenna Payne",
      "jerseyNumber": "11",
      "position": "UU",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Sr.",
+     "hometown": "Farmington, Utah",
+     "highSchool": "St. Mary Catholic Central HS"
     },
     {
      "player": "Ashley West",
      "jerseyNumber": "6",
      "position": "OH/OPP",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "R-Sr.",
+     "hometown": "Arvada, Colo.",
+     "highSchool": "Ralston Valley HS"
     },
     {
      "player": "Devyn Wiest",
      "jerseyNumber": "16",
      "position": "OH",
-     "height": "6-3"
+     "height": "6-3",
+     "classYear": "R-Fr.",
+     "hometown": "Peoria, Ariz.",
+     "highSchool": "Sandra Day O'Connor HS"
     }
    ]
   },
   {
    "team": "West Virginia",
-   "fetchedAt": "2026-10-05T12:36:03.207Z",
+   "fetchedAt": "2026-10-06T23:22:08.919Z",
    "players": [
     {
      "player": "Lauren Duncan",
      "jerseyNumber": "0",
      "position": "S",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Fr.",
+     "hometown": "Brentwood,Tenn.",
+     "highSchool": "Brentwood High School",
+     "previousSchool": "BYU"
     },
     {
      "player": "Tally Grissom",
      "jerseyNumber": "1",
      "position": "DS/L",
-     "height": "5-10"
+     "height": "5-10",
+     "classYear": "Jr.",
+     "hometown": "Flower Mound, Texas",
+     "highSchool": "Liberty Christian High School",
+     "previousSchool": "Tulsa"
     },
     {
      "player": "Anna Barr",
      "jerseyNumber": "2",
      "position": "RS",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "So.",
+     "hometown": "Allen, Texas",
+     "highSchool": "Lovejoy High School"
     },
     {
      "player": "Eily Painter",
      "jerseyNumber": "4",
      "position": "DS/L",
-     "height": "5-4"
+     "height": "5-4",
+     "classYear": "Jr.",
+     "hometown": "Pottsville, Pa.",
+     "highSchool": "Pottsville Area High School"
     },
     {
      "player": "Alexis Finnvold",
      "jerseyNumber": "5",
      "position": "S",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "R-Sr.",
+     "hometown": "Boca Raton, Fla.",
+     "highSchool": "Boca Raton Community High School",
+     "previousSchool": "Louisville"
     },
     {
      "player": "Saar Bertels",
      "jerseyNumber": "6",
      "position": "OH",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Eppegem, Belgium",
+     "highSchool": "College Vilvoorde"
     },
     {
      "player": "Mirjam Karoliine Kask",
      "jerseyNumber": "7",
      "position": "MB",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Kiili, Estonia",
+     "highSchool": "Tallinn School No.21"
     },
     {
      "player": "Cami Huff",
      "jerseyNumber": "8",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Mobile, Ala.",
+     "highSchool": "McGill-Toolen Catholic High School"
     },
     {
      "player": "Nina Horning",
      "jerseyNumber": "13",
      "position": "OH",
-     "height": "6-4"
+     "height": "6-4",
+     "classYear": "Sr.",
+     "hometown": "Lake Orion, Mich.",
+     "highSchool": "Lake Orion",
+     "previousSchool": "Cincinnati"
     },
     {
      "player": "Sophia Fallah",
      "jerseyNumber": "15",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Gr.",
+     "hometown": "Aachen, Germany",
+     "highSchool": "Pascal-Gymnasium M\u00fcnster"
     },
     {
      "player": "Lucie \u0160mardov\u00e1",
      "jerseyNumber": "16",
      "position": "DS/L",
-     "height": "5-9"
+     "height": "5-9",
+     "classYear": "Gr.",
+     "hometown": "Brno, Czech Republic",
+     "highSchool": "Sportovn\u00ed gymn\u00e1zium Ludn\u00edka Danka"
     },
     {
      "player": "Trinity Sheridan",
      "jerseyNumber": "18",
      "position": "OPP",
-     "height": "5-11"
+     "height": "5-11",
+     "classYear": "Sr.",
+     "hometown": "Crystal Lake, Ill.",
+     "highSchool": "Prairie High School",
+     "previousSchool": "UNLV / Cal State San Bernardino / UC Riverside"
     },
     {
      "player": "Reagan Turk",
      "jerseyNumber": "19",
      "position": "DS/L",
-     "height": "5-7"
+     "height": "5-7",
+     "classYear": "Fr.",
+     "hometown": "Indianapolis, Ind.",
+     "highSchool": "Roncalli High School"
     },
     {
      "player": "Macie Smith",
      "jerseyNumber": "20",
      "position": "OH/RS",
-     "height": "6-1"
+     "height": "6-1",
+     "classYear": "Fr.",
+     "hometown": "Cicero, Ind.",
+     "highSchool": "Hamilton Heights High School"
     },
     {
      "player": "Nula Anderson",
      "jerseyNumber": "21",
      "position": "OH",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Fr.",
+     "hometown": "Bozeman, Mont.",
+     "highSchool": "Bozeman High School"
     },
     {
      "player": "Maddy McGath",
      "jerseyNumber": "22",
      "position": "MB",
-     "height": "6-2"
+     "height": "6-2",
+     "classYear": "Sr.",
+     "hometown": "Brookfield, Wis.",
+     "highSchool": "Brookfield East High School"
     },
     {
      "player": "Cassie Bruns",
      "jerseyNumber": "23",
      "position": "DS/L",
-     "height": "5-5"
+     "height": "5-5",
+     "classYear": "Fr.",
+     "hometown": "Menomonee Falls, Wis.",
+     "highSchool": "Menomonee Falls High School"
     }
    ]
   },
