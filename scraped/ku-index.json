@@ -8816,6 +8816,27 @@
    },
    "conferenceGame": true
   },
+  "6626569": {
+   "date": "2026-10-08",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626681": {
    "date": "2026-09-05",
    "season": "2026",
@@ -9316,6 +9337,27 @@
     "score": 3,
     "winner": true,
     "rank": 18,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6626885": {
+   "date": "2026-10-08",
+   "season": "2026",
+   "home": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 17,
     "inConference": true
    },
    "conferenceGame": true
@@ -11406,6 +11448,15 @@
    ],
    "boxscored": true
   },
+  "6624392": {
+   "date": "2026-10-08",
+   "season": "2026",
+   "teams": [
+    "Illinois",
+    "Wisconsin"
+   ],
+   "boxscored": true
+  },
   "6624495": {
    "date": "2026-09-26",
    "season": "2026",
@@ -12700,6 +12751,14 @@
    ],
    "boxscored": true
   },
+  "6626569": {
+   "date": "2026-10-08",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
   "6626582": {
    "date": "2026-08-29",
    "season": "2026",
@@ -13000,6 +13059,15 @@
    "season": "2026",
    "teams": [
     "Kansas St.",
+    "BYU"
+   ],
+   "boxscored": true
+  },
+  "6626885": {
+   "date": "2026-10-08",
+   "season": "2026",
+   "teams": [
+    "Houston",
     "BYU"
    ],
    "boxscored": true
