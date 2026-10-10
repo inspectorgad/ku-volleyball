@@ -10119,6 +10119,27 @@
    },
    "conferenceGame": true
   },
+  "6627531": {
+   "date": "2026-10-09",
+   "season": "2026",
+   "home": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 11,
+    "inConference": true
+   },
+   "away": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 1,
+    "winner": false,
+    "rank": 23,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627597": {
    "date": "2026-09-04",
    "season": "2026",
@@ -11472,6 +11493,15 @@
    ],
    "boxscored": true
   },
+  "6624367": {
+   "date": "2026-10-09",
+   "season": "2026",
+   "teams": [
+    "Michigan St.",
+    "Oregon"
+   ],
+   "boxscored": true
+  },
   "6624379": {
    "date": "2026-09-01",
    "season": "2026",
@@ -11690,6 +11720,14 @@
    "teams": [
     "Minnesota",
     "Wisconsin"
+   ],
+   "boxscored": true
+  },
+  "6624837": {
+   "date": "2026-10-09",
+   "season": "2026",
+   "teams": [
+    "Minnesota"
    ],
    "boxscored": true
   },
@@ -12421,6 +12459,14 @@
    "season": "2026",
    "teams": [
     "Wichita St."
+   ],
+   "boxscored": true
+  },
+  "6626234": {
+   "date": "2026-10-09",
+   "season": "2026",
+   "teams": [
+    "Florida"
    ],
    "boxscored": true
   },
@@ -13500,6 +13546,15 @@
    ],
    "boxscored": true
   },
+  "6627193": {
+   "date": "2026-10-09",
+   "season": "2026",
+   "teams": [
+    "Purdue",
+    "Southern California"
+   ],
+   "boxscored": true
+  },
   "6627223": {
    "date": "2026-09-18",
    "season": "2026",
@@ -13708,6 +13763,15 @@
    "teams": [
     "Arizona St.",
     "Iowa St."
+   ],
+   "boxscored": true
+  },
+  "6627531": {
+   "date": "2026-10-09",
+   "season": "2026",
+   "teams": [
+    "Arizona St.",
+    "Colorado"
    ],
    "boxscored": true
   },
@@ -14528,6 +14592,14 @@
    "season": "2026",
    "teams": [
     "Nebraska",
+    "Texas"
+   ],
+   "boxscored": true
+  },
+  "6628596": {
+   "date": "2026-10-09",
+   "season": "2026",
+   "teams": [
     "Texas"
    ],
    "boxscored": true
