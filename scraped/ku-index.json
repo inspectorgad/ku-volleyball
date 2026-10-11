@@ -8846,6 +8846,27 @@
    },
    "conferenceGame": true
   },
+  "6626571": {
+   "date": "2026-10-10",
+   "season": "2026",
+   "home": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 17,
+    "inConference": true
+   },
+   "away": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626681": {
    "date": "2026-09-05",
    "season": "2026",
@@ -11453,6 +11474,14 @@
    ],
    "boxscored": true
   },
+  "6624339": {
+   "date": "2026-10-10",
+   "season": "2026",
+   "teams": [
+    "Oregon"
+   ],
+   "boxscored": true
+  },
   "6624351": {
    "date": "2026-08-28",
    "season": "2026",
@@ -12903,6 +12932,14 @@
   },
   "6626569": {
    "date": "2026-10-08",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
+  "6626571": {
+   "date": "2026-10-10",
    "season": "2026",
    "teams": [
     "West Virginia"
@@ -14683,6 +14720,15 @@
    "teams": [
     "Wisconsin",
     "Florida"
+   ],
+   "boxscored": true
+  },
+  "6637935": {
+   "date": "2026-10-10",
+   "season": "2026",
+   "teams": [
+    "Nebraska",
+    "Wisconsin"
    ],
    "boxscored": true
   },
