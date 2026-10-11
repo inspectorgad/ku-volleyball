@@ -1,13 +1,5 @@
 [
  {
-  "date": "2026-10-11",
-  "opponent": "UCF",
-  "home": false,
-  "time": "12:00",
-  "city": "Orlando, FL",
-  "tv": "ESPN+"
- },
- {
   "date": "2026-10-15",
   "opponent": "Kansas State",
   "home": false,
@@ -47,9 +39,9 @@
   "date": "2026-10-30",
   "opponent": "Kansas State",
   "home": true,
+  "time": "19:00",
   "city": "Lawrence, KS",
   "venue": "Allen Fieldhouse",
-  "time": "19:00",
   "tv": "FS1"
  },
  {
