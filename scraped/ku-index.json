@@ -196,7 +196,8 @@
   "2026-10-08": true,
   "2026-10-09": true,
   "2026-10-10": true,
-  "2026-10-11": true
+  "2026-10-11": true,
+  "2026-10-12": true
  },
  "games": {
   "6479442": {
@@ -10064,6 +10065,27 @@
    },
    "conferenceGame": true
   },
+  "6627519": {
+   "date": "2026-10-11",
+   "season": "2026",
+   "home": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 3,
+    "winner": true,
+    "rank": 23,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -10207,6 +10229,27 @@
     "score": 1,
     "winner": false,
     "rank": 23,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6627533": {
+   "date": "2026-10-11",
+   "season": "2026",
+   "home": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 11,
+    "inConference": true
+   },
+   "away": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 0,
+    "winner": false,
+    "rank": 8,
     "inConference": true
    },
    "conferenceGame": true
@@ -11842,6 +11885,14 @@
   },
   "6624837": {
    "date": "2026-10-09",
+   "season": "2026",
+   "teams": [
+    "Minnesota"
+   ],
+   "boxscored": true
+  },
+  "6624838": {
+   "date": "2026-10-11",
    "season": "2026",
    "teams": [
     "Minnesota"
@@ -13900,6 +13951,15 @@
    ],
    "boxscored": true
   },
+  "6627519": {
+   "date": "2026-10-11",
+   "season": "2026",
+   "teams": [
+    "Colorado",
+    "Kansas St."
+   ],
+   "boxscored": true
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -13956,6 +14016,15 @@
    "teams": [
     "Arizona St.",
     "Colorado"
+   ],
+   "boxscored": true
+  },
+  "6627533": {
+   "date": "2026-10-11",
+   "season": "2026",
+   "teams": [
+    "Arizona St.",
+    "TCU"
    ],
    "boxscored": true
   },
@@ -14799,6 +14868,14 @@
   },
   "6628596": {
    "date": "2026-10-09",
+   "season": "2026",
+   "teams": [
+    "Texas"
+   ],
+   "boxscored": true
+  },
+  "6628597": {
+   "date": "2026-10-11",
    "season": "2026",
    "teams": [
     "Texas"
