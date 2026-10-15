@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-10-15T06:21:32Z",
+ "generatedAt": "2026-10-15T17:52:43Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -35798,7 +35798,7 @@
  ],
  "nationalLeaders": {
   "season": "2026",
-  "updated": "Wednesday, October 14, 2026 8:10 am - Through games Tuesday, October 13, 2026",
+  "updated": "Thursday, October 15, 2026 9:10 am - Through games Wednesday, October 14, 2026",
   "categories": [
    {
     "id": "42",
@@ -36270,6 +36270,17 @@
      {
       "idx": 42,
       "rank": 43,
+      "player": "Cayley Hanson",
+      "team": "Mississippi St.",
+      "cls": "Jr.",
+      "height": "6-2",
+      "position": "S",
+      "sets": 49,
+      "value": ".49"
+     },
+     {
+      "idx": 43,
+      "rank": 44,
       "player": "Ariana Rodriguez",
       "team": "Miami (FL)",
       "cls": "Sr.",
@@ -36279,8 +36290,8 @@
       "value": ".49"
      },
      {
-      "idx": 43,
-      "rank": 44,
+      "idx": 44,
+      "rank": 45,
       "player": "Reagan Anderson",
       "team": "Austin Peay",
       "cls": "Sr.",
@@ -36290,8 +36301,8 @@
       "value": ".49"
      },
      {
-      "idx": 44,
-      "rank": 45,
+      "idx": 45,
+      "rank": 46,
       "player": "Marianne Garcia",
       "team": "Middle Tenn.",
       "cls": "Fr.",
@@ -36301,8 +36312,8 @@
       "value": ".49"
      },
      {
-      "idx": 45,
-      "rank": 46,
+      "idx": 46,
+      "rank": 47,
       "player": "Valentina Vaulet",
       "team": "Oregon",
       "cls": "Sr.",
@@ -36312,8 +36323,8 @@
       "value": ".48"
      },
      {
-      "idx": 46,
-      "rank": 47,
+      "idx": 47,
+      "rank": 48,
       "player": "Clara Yu",
       "team": "Columbia",
       "cls": "Jr.",
@@ -36323,19 +36334,8 @@
       "value": ".48"
      },
      {
-      "idx": 47,
-      "rank": 48,
-      "player": "Cayley Hanson",
-      "team": "Mississippi St.",
-      "cls": "Jr.",
-      "height": "6-2",
-      "position": "S",
-      "sets": 46,
-      "value": ".48"
-     },
-     {
       "idx": 48,
-      "rank": 48,
+      "rank": 49,
       "player": "Brynn Minter",
       "team": "Charleston So.",
       "cls": "Fr.",
@@ -36805,17 +36805,6 @@
      {
       "idx": 40,
       "rank": 41,
-      "player": "Jackie Matias",
-      "team": "Oregon St.",
-      "cls": "Sr.",
-      "height": "5-9",
-      "position": "S",
-      "sets": 57,
-      "value": "10.14"
-     },
-     {
-      "idx": 41,
-      "rank": 42,
       "player": "Alexis Haury",
       "team": "Cal Poly",
       "cls": "Jr.",
@@ -36825,8 +36814,8 @@
       "value": "10.09"
      },
      {
-      "idx": 42,
-      "rank": 43,
+      "idx": 41,
+      "rank": 42,
       "player": "Anna Flores",
       "team": "California",
       "cls": "Fr.",
@@ -36836,14 +36825,25 @@
       "value": "10.09"
      },
      {
-      "idx": 43,
-      "rank": 44,
+      "idx": 42,
+      "rank": 43,
       "player": "Heloise Soares",
       "team": "Georgia Tech",
       "cls": "Sr.",
       "height": "5-11",
       "position": "S",
       "sets": 59,
+      "value": "10.08"
+     },
+     {
+      "idx": 43,
+      "rank": 44,
+      "player": "Jackie Matias",
+      "team": "Oregon St.",
+      "cls": "Sr.",
+      "height": "5-9",
+      "position": "S",
+      "sets": 60,
       "value": "10.08"
      },
      {
@@ -36893,17 +36893,6 @@
      {
       "idx": 48,
       "rank": 49,
-      "player": "Cayley Hanson",
-      "team": "Mississippi St.",
-      "cls": "Jr.",
-      "height": "6-2",
-      "position": "S",
-      "sets": 46,
-      "value": "9.96"
-     },
-     {
-      "idx": 49,
-      "rank": 50,
       "player": "Sofia Dawson",
       "team": "North Florida",
       "cls": "So.",
@@ -36911,6 +36900,17 @@
       "position": "S",
       "sets": 63,
       "value": "9.95"
+     },
+     {
+      "idx": 49,
+      "rank": 50,
+      "player": "Erin Debiec",
+      "team": "Colorado St.",
+      "cls": "Jr.",
+      "height": "6-1",
+      "position": "S",
+      "sets": 60,
+      "value": "9.93"
      }
     ]
    },
@@ -37202,8 +37202,8 @@
       "cls": "So.",
       "height": "6-2",
       "position": "OH",
-      "sets": 54,
-      "value": "11.26"
+      "sets": 57,
+      "value": "11.28"
      },
      {
       "idx": 26,
@@ -37450,6 +37450,17 @@
      {
       "idx": 48,
       "rank": 49,
+      "player": "Taylor Cripe",
+      "team": "Central Mich.",
+      "cls": "So.",
+      "height": "5-8",
+      "position": "OH",
+      "sets": 64,
+      "value": "10.72"
+     },
+     {
+      "idx": 49,
+      "rank": 50,
       "player": "Brooklyn DeLeye",
       "team": "Kentucky",
       "cls": "Sr.",
@@ -37457,17 +37468,6 @@
       "position": "OH",
       "sets": 57,
       "value": "10.67"
-     },
-     {
-      "idx": 49,
-      "rank": 50,
-      "player": "Sara Bowcutt",
-      "team": "Texas Tech",
-      "cls": "Fr.",
-      "height": "6-0",
-      "position": "OH",
-      "sets": 54,
-      "value": "10.63"
      }
     ]
    },
@@ -37732,17 +37732,6 @@
      {
       "idx": 23,
       "rank": 24,
-      "player": "Emily Fowler",
-      "team": "Virginia",
-      "cls": "Sr.",
-      "height": "6-3",
-      "position": "MB",
-      "sets": 57,
-      "value": "1.40"
-     },
-     {
-      "idx": 24,
-      "rank": 25,
       "player": "Julia Amorim",
       "team": "Hofstra",
       "cls": "So.",
@@ -37752,8 +37741,8 @@
       "value": "1.40"
      },
      {
-      "idx": 25,
-      "rank": 26,
+      "idx": 24,
+      "rank": 25,
       "player": "Helen Wilford",
       "team": "Bowling Green",
       "cls": "Jr.",
@@ -37763,8 +37752,8 @@
       "value": "1.39"
      },
      {
-      "idx": 26,
-      "rank": 27,
+      "idx": 25,
+      "rank": 26,
       "player": "Cayla Payne",
       "team": "Colorado",
       "cls": "Sr.",
@@ -37774,8 +37763,8 @@
       "value": "1.39"
      },
      {
-      "idx": 27,
-      "rank": 28,
+      "idx": 26,
+      "rank": 27,
       "player": "Kayla Jansen",
       "team": "Saint Louis",
       "cls": "Jr.",
@@ -37785,8 +37774,8 @@
       "value": "1.39"
      },
      {
-      "idx": 28,
-      "rank": 29,
+      "idx": 27,
+      "rank": 28,
       "player": "Chelsea Sutton",
       "team": "Tennessee",
       "cls": "Jr.",
@@ -37796,8 +37785,8 @@
       "value": "1.38"
      },
      {
-      "idx": 29,
-      "rank": 30,
+      "idx": 28,
+      "rank": 29,
       "player": "Eve Wilson",
       "team": "Colorado St.",
       "cls": "Sr.",
@@ -37807,8 +37796,8 @@
       "value": "1.38"
      },
      {
-      "idx": 30,
-      "rank": 31,
+      "idx": 29,
+      "rank": 30,
       "player": "Hannah Olmstead",
       "team": "Binghamton",
       "cls": "So.",
@@ -37818,14 +37807,25 @@
       "value": "1.38"
      },
      {
-      "idx": 31,
-      "rank": 32,
+      "idx": 30,
+      "rank": 31,
       "player": "Zoe Humphrey",
       "team": "Georgia Tech",
       "cls": "So.",
       "height": "6-2",
       "position": "MB",
       "sets": 58,
+      "value": "1.38"
+     },
+     {
+      "idx": 31,
+      "rank": 32,
+      "player": "Emily Fowler",
+      "team": "Virginia",
+      "cls": "Sr.",
+      "height": "6-3",
+      "position": "MB",
+      "sets": 61,
       "value": "1.38"
      },
      {
@@ -37930,17 +37930,6 @@
      {
       "idx": 41,
       "rank": 42,
-      "player": "Hatteras Welker",
-      "team": "Coastal Carolina",
-      "cls": "Jr.",
-      "height": "6-3",
-      "position": "MB",
-      "sets": 61,
-      "value": "1.33"
-     },
-     {
-      "idx": 42,
-      "rank": 43,
       "player": "Kendal Kemp",
       "team": "Georgia",
       "cls": "Sr.",
@@ -37948,6 +37937,17 @@
       "position": "MB",
       "sets": 55,
       "value": "1.33"
+     },
+     {
+      "idx": 42,
+      "rank": 43,
+      "player": "Hatteras Welker",
+      "team": "Coastal Carolina",
+      "cls": "Jr.",
+      "height": "6-3",
+      "position": "MB",
+      "sets": 65,
+      "value": "1.32"
      },
      {
       "idx": 43,
@@ -38223,6 +38223,17 @@
      {
       "idx": 17,
       "rank": 18,
+      "player": "Ashton Rogers",
+      "team": "UIW",
+      "cls": "So.",
+      "height": "5-6",
+      "position": "L",
+      "sets": 63,
+      "value": "4.68"
+     },
+     {
+      "idx": 18,
+      "rank": 19,
       "player": "Reagan Anderson",
       "team": "Austin Peay",
       "cls": "Sr.",
@@ -38232,8 +38243,8 @@
       "value": "4.68"
      },
      {
-      "idx": 18,
-      "rank": 19,
+      "idx": 19,
+      "rank": 20,
       "player": "Mia Jannazzo",
       "team": "Radford",
       "cls": "Fr.",
@@ -38243,8 +38254,8 @@
       "value": "4.67"
      },
      {
-      "idx": 19,
-      "rank": 19,
+      "idx": 20,
+      "rank": 20,
       "player": "Madeline Sanderson",
       "team": "Montana",
       "cls": "So.",
@@ -38252,17 +38263,6 @@
       "position": "DS",
       "sets": 60,
       "value": "4.67"
-     },
-     {
-      "idx": 20,
-      "rank": 21,
-      "player": "Ashton Rogers",
-      "team": "UIW",
-      "cls": "So.",
-      "height": "5-6",
-      "position": "L",
-      "sets": 58,
-      "value": "4.66"
      },
      {
       "idx": 21,
@@ -38355,6 +38355,17 @@
      {
       "idx": 29,
       "rank": 30,
+      "player": "Ainoah Cruz",
+      "team": "Missouri",
+      "cls": "Sr.",
+      "height": "5-3",
+      "position": "DS",
+      "sets": 69,
+      "value": "4.57"
+     },
+     {
+      "idx": 30,
+      "rank": 31,
       "player": "Jumana Martin",
       "team": "Col. of Charleston",
       "cls": "So.",
@@ -38364,8 +38375,8 @@
       "value": "4.56"
      },
      {
-      "idx": 30,
-      "rank": 31,
+      "idx": 31,
+      "rank": 32,
       "player": "Leddy Rae Guinn",
       "team": "Tarleton St.",
       "cls": "Jr.",
@@ -38375,8 +38386,8 @@
       "value": "4.56"
      },
      {
-      "idx": 31,
-      "rank": 32,
+      "idx": 32,
+      "rank": 33,
       "player": "Hannah Howard",
       "team": "UMBC",
       "cls": "Sr.",
@@ -38386,29 +38397,7 @@
       "value": "4.55"
      },
      {
-      "idx": 32,
-      "rank": 33,
-      "player": "Ainoah Cruz",
-      "team": "Missouri",
-      "cls": "Sr.",
-      "height": "5-3",
-      "position": "DS",
-      "sets": 66,
-      "value": "4.53"
-     },
-     {
       "idx": 33,
-      "rank": 34,
-      "player": "Ivy Cooper",
-      "team": "Virginia Tech",
-      "cls": "So.",
-      "height": "5-4",
-      "position": "L/DS",
-      "sets": 55,
-      "value": "4.53"
-     },
-     {
-      "idx": 34,
       "rank": 34,
       "player": "Taygan Corstange",
       "team": "Wright St.",
@@ -38419,8 +38408,8 @@
       "value": "4.53"
      },
      {
-      "idx": 35,
-      "rank": 36,
+      "idx": 34,
+      "rank": 35,
       "player": "Surabhi Srinivasan",
       "team": "Eastern Mich.",
       "cls": "Sr.",
@@ -38430,8 +38419,8 @@
       "value": "4.50"
      },
      {
-      "idx": 36,
-      "rank": 37,
+      "idx": 35,
+      "rank": 36,
       "player": "Mia Maloney",
       "team": "Arkansas St.",
       "cls": "Sr.",
@@ -38441,8 +38430,8 @@
       "value": "4.48"
      },
      {
-      "idx": 37,
-      "rank": 38,
+      "idx": 36,
+      "rank": 37,
       "player": "Bella Marrero",
       "team": "American",
       "cls": "Jr.",
@@ -38452,19 +38441,8 @@
       "value": "4.44"
      },
      {
-      "idx": 38,
-      "rank": 39,
-      "player": "Jonna Spohn",
-      "team": "Coastal Carolina",
-      "cls": "Jr.",
-      "height": "5-5",
-      "position": "L",
-      "sets": 61,
-      "value": "4.44"
-     },
-     {
-      "idx": 39,
-      "rank": 40,
+      "idx": 37,
+      "rank": 38,
       "player": "Chloe Kaminski",
       "team": "Kansas City",
       "cls": "Sr.",
@@ -38474,8 +38452,8 @@
       "value": "4.44"
      },
      {
-      "idx": 40,
-      "rank": 41,
+      "idx": 38,
+      "rank": 39,
       "player": "Shaelin White",
       "team": "Sam Houston",
       "cls": "Jr.",
@@ -38485,8 +38463,8 @@
       "value": "4.44"
      },
      {
-      "idx": 41,
-      "rank": 42,
+      "idx": 39,
+      "rank": 40,
       "player": "Saige Damrow",
       "team": "Creighton",
       "cls": "Sr.",
@@ -38494,6 +38472,28 @@
       "position": "L/DS",
       "sets": 72,
       "value": "4.43"
+     },
+     {
+      "idx": 40,
+      "rank": 41,
+      "player": "Ivy Cooper",
+      "team": "Virginia Tech",
+      "cls": "So.",
+      "height": "5-4",
+      "position": "L/DS",
+      "sets": 59,
+      "value": "4.42"
+     },
+     {
+      "idx": 41,
+      "rank": 42,
+      "player": "McKenna Yates",
+      "team": "Mississippi St.",
+      "cls": "Jr.",
+      "height": "5-6",
+      "position": "DS",
+      "sets": 57,
+      "value": "4.42"
      },
      {
       "idx": 42,
@@ -38670,17 +38670,6 @@
      {
       "idx": 7,
       "rank": 8,
-      "player": "Kamryn Lee-Caracci",
-      "team": "Georgetown",
-      "cls": "Sr.",
-      "height": "6-1",
-      "position": "MB",
-      "sets": 60,
-      "value": ".442"
-     },
-     {
-      "idx": 8,
-      "rank": 9,
       "player": "Caroline Noonan",
       "team": "Col. of Charleston",
       "cls": "So.",
@@ -38690,8 +38679,8 @@
       "value": ".440"
      },
      {
-      "idx": 9,
-      "rank": 10,
+      "idx": 8,
+      "rank": 9,
       "player": "Maya Bukovcan",
       "team": "High Point",
       "cls": "So.",
@@ -38701,19 +38690,19 @@
       "value": ".440"
      },
      {
-      "idx": 10,
-      "rank": 11,
-      "player": "Berkeley Ploder",
+      "idx": 9,
+      "rank": 10,
+      "player": "Kamryn Lee-Caracci",
       "team": "Georgetown",
-      "cls": "Jr.",
+      "cls": "Sr.",
       "height": "6-1",
       "position": "MB",
-      "sets": 59,
-      "value": ".437"
+      "sets": 64,
+      "value": ".435"
      },
      {
-      "idx": 11,
-      "rank": 12,
+      "idx": 10,
+      "rank": 11,
       "player": "Kristina Starostenko",
       "team": "Illinois",
       "cls": "Jr.",
@@ -38723,8 +38712,8 @@
       "value": ".435"
      },
      {
-      "idx": 12,
-      "rank": 13,
+      "idx": 11,
+      "rank": 12,
       "player": "Charlotte Kelly",
       "team": "Cal Poly",
       "cls": "So.",
@@ -38732,6 +38721,17 @@
       "position": "MB",
       "sets": 53,
       "value": ".431"
+     },
+     {
+      "idx": 12,
+      "rank": 13,
+      "player": "Berkeley Ploder",
+      "team": "Georgetown",
+      "cls": "Jr.",
+      "height": "6-1",
+      "position": "MB",
+      "sets": 63,
+      "value": ".426"
      },
      {
       "idx": 13,
@@ -38758,6 +38758,17 @@
      {
       "idx": 15,
       "rank": 16,
+      "player": "Gha'Naye Whitfield-Moss",
+      "team": "Mississippi St.",
+      "cls": "Sr.",
+      "height": "6-0",
+      "position": "MB",
+      "sets": 44,
+      "value": ".416"
+     },
+     {
+      "idx": 16,
+      "rank": 17,
       "player": "Sawyer Thomsen",
       "team": "California",
       "cls": "Sr.",
@@ -38767,8 +38778,8 @@
       "value": ".413"
      },
      {
-      "idx": 16,
-      "rank": 17,
+      "idx": 17,
+      "rank": 18,
       "player": "Eliza McKnight",
       "team": "Western Ky.",
       "cls": "Fr.",
@@ -38778,8 +38789,8 @@
       "value": ".413"
      },
      {
-      "idx": 17,
-      "rank": 18,
+      "idx": 18,
+      "rank": 19,
       "player": "Olivia Lasee",
       "team": "Lehigh",
       "cls": "Sr.",
@@ -38789,8 +38800,8 @@
       "value": ".409"
      },
      {
-      "idx": 18,
-      "rank": 19,
+      "idx": 19,
+      "rank": 20,
       "player": "Karolina T. Rodriguez Mendez",
       "team": "Saint Peter's",
       "cls": "Sr.",
@@ -38800,8 +38811,8 @@
       "value": ".408"
      },
      {
-      "idx": 19,
-      "rank": 20,
+      "idx": 20,
+      "rank": 21,
       "player": "Nya Bunton",
       "team": "Texas",
       "cls": "Sr.",
@@ -38811,8 +38822,8 @@
       "value": ".408"
      },
      {
-      "idx": 20,
-      "rank": 21,
+      "idx": 21,
+      "rank": 22,
       "player": "Hannah Sanders",
       "team": "Delaware St.",
       "cls": "Sr.",
@@ -38822,8 +38833,8 @@
       "value": ".407"
      },
      {
-      "idx": 21,
-      "rank": 22,
+      "idx": 22,
+      "rank": 23,
       "player": "Brooke Hardy",
       "team": "BYU",
       "cls": "Fr.",
@@ -38833,8 +38844,8 @@
       "value": ".406"
      },
      {
-      "idx": 22,
-      "rank": 23,
+      "idx": 23,
+      "rank": 24,
       "player": "Taelyn Bentley",
       "team": "San Diego St.",
       "cls": "So.",
@@ -38844,8 +38855,8 @@
       "value": ".405"
      },
      {
-      "idx": 23,
-      "rank": 24,
+      "idx": 24,
+      "rank": 25,
       "player": "Camryn Wise",
       "team": "Ball St.",
       "cls": "Sr.",
@@ -38855,8 +38866,8 @@
       "value": ".405"
      },
      {
-      "idx": 24,
-      "rank": 25,
+      "idx": 25,
+      "rank": 26,
       "player": "Nikola Gamlin",
       "team": "Sacramento St.",
       "cls": "Fr.",
@@ -38866,8 +38877,8 @@
       "value": ".404"
      },
      {
-      "idx": 25,
-      "rank": 26,
+      "idx": 26,
+      "rank": 27,
       "player": "Ally Chandler",
       "team": "UC Davis",
       "cls": "Sr.",
@@ -38877,8 +38888,8 @@
       "value": ".403"
      },
      {
-      "idx": 26,
-      "rank": 27,
+      "idx": 27,
+      "rank": 28,
       "player": "Alex Myers",
       "team": "Ga. Southern",
       "cls": "So.",
@@ -38888,8 +38899,8 @@
       "value": ".403"
      },
      {
-      "idx": 27,
-      "rank": 28,
+      "idx": 28,
+      "rank": 29,
       "player": "Lizzy Andrew",
       "team": "Stanford",
       "cls": "Jr.",
@@ -38899,8 +38910,8 @@
       "value": ".403"
      },
      {
-      "idx": 28,
-      "rank": 29,
+      "idx": 29,
+      "rank": 30,
       "player": "Chidera Ozoh",
       "team": "Akron",
       "cls": "Sr.",
@@ -38910,8 +38921,8 @@
       "value": ".400"
      },
      {
-      "idx": 29,
-      "rank": 30,
+      "idx": 30,
+      "rank": 31,
       "player": "Brooke Bultema",
       "team": "Louisville",
       "cls": "Jr.",
@@ -38921,8 +38932,8 @@
       "value": ".394"
      },
      {
-      "idx": 30,
-      "rank": 31,
+      "idx": 31,
+      "rank": 32,
       "player": "Leah Ford",
       "team": "Southern California",
       "cls": "Jr.",
@@ -38932,8 +38943,8 @@
       "value": ".393"
      },
      {
-      "idx": 31,
-      "rank": 31,
+      "idx": 32,
+      "rank": 32,
       "player": "Gabrielle Nichols",
       "team": "Penn St.",
       "cls": "So.",
@@ -38943,8 +38954,8 @@
       "value": ".393"
      },
      {
-      "idx": 32,
-      "rank": 33,
+      "idx": 33,
+      "rank": 34,
       "player": "Erin McMullen",
       "team": "Belmont",
       "cls": "So.",
@@ -38954,8 +38965,8 @@
       "value": ".392"
      },
      {
-      "idx": 33,
-      "rank": 34,
+      "idx": 34,
+      "rank": 35,
       "player": "Ava Bogan",
       "team": "Cornell",
       "cls": "Sr.",
@@ -38965,8 +38976,8 @@
       "value": ".391"
      },
      {
-      "idx": 34,
-      "rank": 35,
+      "idx": 35,
+      "rank": 36,
       "player": "Zora Hardison",
       "team": "Michigan St.",
       "cls": "Sr.",
@@ -38976,8 +38987,8 @@
       "value": ".390"
      },
      {
-      "idx": 35,
-      "rank": 35,
+      "idx": 36,
+      "rank": 36,
       "player": "Julia Hunt",
       "team": "Washington",
       "cls": "Jr.",
@@ -38987,8 +38998,8 @@
       "value": ".390"
      },
      {
-      "idx": 36,
-      "rank": 37,
+      "idx": 37,
+      "rank": 38,
       "player": "Riley Tucker",
       "team": "Tulane",
       "cls": "Sr.",
@@ -38998,8 +39009,8 @@
       "value": ".390"
      },
      {
-      "idx": 37,
-      "rank": 38,
+      "idx": 38,
+      "rank": 39,
       "player": "Laney Daniell",
       "team": "Liberty",
       "cls": "So.",
@@ -39009,8 +39020,8 @@
       "value": ".390"
      },
      {
-      "idx": 38,
-      "rank": 39,
+      "idx": 39,
+      "rank": 40,
       "player": "Sasha Cohen",
       "team": "UCF",
       "cls": "Jr.",
@@ -39020,8 +39031,8 @@
       "value": ".389"
      },
      {
-      "idx": 39,
-      "rank": 40,
+      "idx": 40,
+      "rank": 41,
       "player": "Brooke Harwood",
       "team": "UCLA",
       "cls": "Fr.",
@@ -39031,8 +39042,8 @@
       "value": ".389"
      },
      {
-      "idx": 40,
-      "rank": 41,
+      "idx": 41,
+      "rank": 42,
       "player": "Diane Pichelman",
       "team": "Green Bay",
       "cls": "Jr.",
@@ -39042,8 +39053,8 @@
       "value": ".389"
      },
      {
-      "idx": 41,
-      "rank": 42,
+      "idx": 42,
+      "rank": 43,
       "player": "Olivia Burrage",
       "team": "Kennesaw St.",
       "cls": "Sr.",
@@ -39053,8 +39064,8 @@
       "value": ".388"
      },
      {
-      "idx": 42,
-      "rank": 43,
+      "idx": 43,
+      "rank": 44,
       "player": "Breklyn Pulling",
       "team": "Cal Poly",
       "cls": "Sr.",
@@ -39064,8 +39075,8 @@
       "value": ".388"
      },
      {
-      "idx": 43,
-      "rank": 44,
+      "idx": 44,
+      "rank": 45,
       "player": "Gabby Weihe",
       "team": "Western Mich.",
       "cls": "Sr.",
@@ -39075,8 +39086,8 @@
       "value": ".387"
      },
      {
-      "idx": 44,
-      "rank": 45,
+      "idx": 45,
+      "rank": 46,
       "player": "Joelie Spelts",
       "team": "Montana St.",
       "cls": "Sr.",
@@ -39086,25 +39097,14 @@
       "value": ".387"
      },
      {
-      "idx": 45,
-      "rank": 46,
+      "idx": 46,
+      "rank": 47,
       "player": "Yasmeen Muhammad",
       "team": "LIU",
       "cls": "Sr.",
       "height": "6-2",
       "position": "MB",
       "sets": 50,
-      "value": ".383"
-     },
-     {
-      "idx": 46,
-      "rank": 47,
-      "player": "Noella Obi",
-      "team": "Mississippi St.",
-      "cls": "Jr.",
-      "height": "6-0",
-      "position": "OPP",
-      "sets": 51,
       "value": ".383"
      },
      {
@@ -39689,12 +39689,12 @@
      {
       "idx": 49,
       "rank": 50,
-      "player": "Alayna Pierce",
-      "team": "Tennessee Tech",
-      "cls": "Jr.",
-      "height": "5-11",
+      "player": "AC Froehlich",
+      "team": "Oregon St.",
+      "cls": "Sr.",
+      "height": "6-1",
       "position": "OH",
-      "sets": 72,
+      "sets": 60,
       "value": "3.92"
      }
     ]
@@ -40759,17 +40759,6 @@
      {
       "idx": 45,
       "rank": 46,
-      "player": "Lindsey Mangelson",
-      "team": "Mississippi St.",
-      "cls": "So.",
-      "height": "6-2",
-      "position": "OH",
-      "sets": 54,
-      "value": "4.55"
-     },
-     {
-      "idx": 46,
-      "rank": 47,
       "player": "Victoria Marthaler",
       "team": "Sacramento St.",
       "cls": "Jr.",
@@ -40779,8 +40768,8 @@
       "value": "4.54"
      },
      {
-      "idx": 47,
-      "rank": 48,
+      "idx": 46,
+      "rank": 47,
       "player": "Hailey Brockway",
       "team": "CSUN",
       "cls": "Sr.",
@@ -40790,8 +40779,8 @@
       "value": "4.54"
      },
      {
-      "idx": 48,
-      "rank": 49,
+      "idx": 47,
+      "rank": 48,
       "player": "Ashby Willis",
       "team": "Southern Ind.",
       "cls": "Sr.",
@@ -40801,8 +40790,8 @@
       "value": "4.52"
      },
      {
-      "idx": 49,
-      "rank": 50,
+      "idx": 48,
+      "rank": 49,
       "player": "Maria Tabacuks",
       "team": "LMU (CA)",
       "cls": "Fr.",
@@ -40810,6 +40799,17 @@
       "position": "OH",
       "sets": 68,
       "value": "4.51"
+     },
+     {
+      "idx": 49,
+      "rank": 50,
+      "player": "Gabrielle Gilbert",
+      "team": "Norfolk St.",
+      "cls": "Sr.",
+      "height": "6-0",
+      "position": "OH",
+      "sets": 71,
+      "value": "4.50"
      }
     ]
    },
@@ -41244,7 +41244,7 @@
       "cls": "Jr.",
       "height": "6-1",
       "position": "S",
-      "sets": 79,
+      "sets": 82,
       "value": "31"
      },
      {
@@ -41400,6 +41400,17 @@
      {
       "idx": 2,
       "rank": 3,
+      "player": "Eva Rovello",
+      "team": "Coppin St.",
+      "cls": "Jr.",
+      "height": "6-1",
+      "position": "S",
+      "sets": 82,
+      "value": "775"
+     },
+     {
+      "idx": 3,
+      "rank": 4,
       "player": "Katie Boney",
       "team": "Western Caro.",
       "cls": "Sr.",
@@ -41407,17 +41418,6 @@
       "position": "S",
       "sets": 81,
       "value": "764"
-     },
-     {
-      "idx": 3,
-      "rank": 4,
-      "player": "Eva Rovello",
-      "team": "Coppin St.",
-      "cls": "Jr.",
-      "height": "6-1",
-      "position": "S",
-      "sets": 79,
-      "value": "751"
      },
      {
       "idx": 4,
@@ -42407,7 +42407,18 @@
      },
      {
       "idx": 43,
-      "rank": 44,
+      "rank": 43,
+      "player": "Taylor Cripe",
+      "team": "Central Mich.",
+      "cls": "So.",
+      "height": "5-8",
+      "position": "OH",
+      "sets": 64,
+      "value": "686"
+     },
+     {
+      "idx": 44,
+      "rank": 45,
       "player": "Kennedy Louisell",
       "team": "James Madison",
       "cls": "Sr.",
@@ -42417,8 +42428,8 @@
       "value": "685"
      },
      {
-      "idx": 44,
-      "rank": 45,
+      "idx": 45,
+      "rank": 46,
       "player": "Ana Burilovic",
       "team": "Colorado",
       "cls": "Sr.",
@@ -42428,8 +42439,19 @@
       "value": "684"
      },
      {
-      "idx": 45,
+      "idx": 46,
       "rank": 46,
+      "player": "Jahniya Jackson",
+      "team": "North Texas",
+      "cls": "Sr.",
+      "height": "5-8",
+      "position": "OH",
+      "sets": 71,
+      "value": "684"
+     },
+     {
+      "idx": 47,
+      "rank": 48,
       "player": "Lauren Hubert",
       "team": "Sacred Heart",
       "cls": "Sr.",
@@ -42439,8 +42461,8 @@
       "value": "683"
      },
      {
-      "idx": 46,
-      "rank": 47,
+      "idx": 48,
+      "rank": 49,
       "player": "Ariana Brown",
       "team": "East Texas A&M",
       "cls": "Sr.",
@@ -42450,8 +42472,8 @@
       "value": "681"
      },
      {
-      "idx": 47,
-      "rank": 48,
+      "idx": 49,
+      "rank": 50,
       "player": "Sophia Henry",
       "team": "Middle Tenn.",
       "cls": "Jr.",
@@ -42459,28 +42481,6 @@
       "position": "OH",
       "sets": 68,
       "value": "679"
-     },
-     {
-      "idx": 48,
-      "rank": 48,
-      "player": "Lara Matta",
-      "team": "Mercer",
-      "cls": "So.",
-      "height": "5-11",
-      "position": "OH",
-      "sets": 65,
-      "value": "679"
-     },
-     {
-      "idx": 49,
-      "rank": 50,
-      "player": "Summer Kohler",
-      "team": "USC Upstate",
-      "cls": "So.",
-      "height": "5-11",
-      "position": "OH",
-      "sets": 62,
-      "value": "677"
      }
     ]
    },
@@ -42756,6 +42756,17 @@
      {
       "idx": 24,
       "rank": 23,
+      "player": "Hatteras Welker",
+      "team": "Coastal Carolina",
+      "cls": "Jr.",
+      "height": "6-3",
+      "position": "MB",
+      "sets": 65,
+      "value": "86.0"
+     },
+     {
+      "idx": 25,
+      "rank": 23,
       "player": "Naomi White",
       "team": "Washington St.",
       "cls": "Sr.",
@@ -42765,8 +42776,8 @@
       "value": "86.0"
      },
      {
-      "idx": 25,
-      "rank": 26,
+      "idx": 26,
+      "rank": 27,
       "player": "Cari Bohm",
       "team": "California",
       "cls": "Sr.",
@@ -42776,8 +42787,8 @@
       "value": "85.0"
      },
      {
-      "idx": 26,
-      "rank": 26,
+      "idx": 27,
+      "rank": 27,
       "player": "Ryleigh Patterson",
       "team": "Harvard",
       "cls": "Sr.",
@@ -42787,8 +42798,8 @@
       "value": "85.0"
      },
      {
-      "idx": 27,
-      "rank": 26,
+      "idx": 28,
+      "rank": 27,
       "player": "Cayla Payne",
       "team": "Colorado",
       "cls": "Sr.",
@@ -42798,8 +42809,8 @@
       "value": "85.0"
      },
      {
-      "idx": 28,
-      "rank": 29,
+      "idx": 29,
+      "rank": 30,
       "player": "Julia Amorim",
       "team": "Hofstra",
       "cls": "So.",
@@ -42809,8 +42820,19 @@
       "value": "84.0"
      },
      {
-      "idx": 29,
-      "rank": 29,
+      "idx": 30,
+      "rank": 30,
+      "player": "Emily Fowler",
+      "team": "Virginia",
+      "cls": "Sr.",
+      "height": "6-3",
+      "position": "MB",
+      "sets": 61,
+      "value": "84.0"
+     },
+     {
+      "idx": 31,
+      "rank": 30,
       "player": "Courtney Grayson",
       "team": "UConn",
       "cls": "Fr.",
@@ -42820,8 +42842,8 @@
       "value": "84.0"
      },
      {
-      "idx": 30,
-      "rank": 31,
+      "idx": 32,
+      "rank": 33,
       "player": "Maya Bukovcan",
       "team": "High Point",
       "cls": "So.",
@@ -42831,8 +42853,8 @@
       "value": "83.0"
      },
      {
-      "idx": 31,
-      "rank": 31,
+      "idx": 33,
+      "rank": 33,
       "player": "Lacey Murphy",
       "team": "Holy Cross",
       "cls": "Jr.",
@@ -42842,8 +42864,8 @@
       "value": "83.0"
      },
      {
-      "idx": 32,
-      "rank": 31,
+      "idx": 34,
+      "rank": 33,
       "player": "Chidera Ozoh",
       "team": "Akron",
       "cls": "Sr.",
@@ -42853,8 +42875,8 @@
       "value": "83.0"
      },
      {
-      "idx": 33,
-      "rank": 31,
+      "idx": 35,
+      "rank": 33,
       "player": "Buse Tinaz",
       "team": "Iona",
       "cls": "Sr.",
@@ -42864,8 +42886,8 @@
       "value": "83.0"
      },
      {
-      "idx": 34,
-      "rank": 31,
+      "idx": 36,
+      "rank": 33,
       "player": "Eve Wilson",
       "team": "Colorado St.",
       "cls": "Sr.",
@@ -42875,8 +42897,8 @@
       "value": "83.0"
      },
      {
-      "idx": 35,
-      "rank": 36,
+      "idx": 37,
+      "rank": 38,
       "player": "Tamia Coleman",
       "team": "Florida A&M",
       "cls": "Jr.",
@@ -42886,8 +42908,8 @@
       "value": "82.0"
      },
      {
-      "idx": 36,
-      "rank": 36,
+      "idx": 38,
+      "rank": 38,
       "player": "Skyler Gartin",
       "team": "Sacramento St.",
       "cls": "Jr.",
@@ -42897,8 +42919,8 @@
       "value": "82.0"
      },
      {
-      "idx": 37,
-      "rank": 36,
+      "idx": 39,
+      "rank": 38,
       "player": "Meredith Reisman",
       "team": "Presbyterian",
       "cls": "Sr.",
@@ -42908,8 +42930,8 @@
       "value": "82.0"
      },
      {
-      "idx": 38,
-      "rank": 36,
+      "idx": 40,
+      "rank": 38,
       "player": "Teodora Stamenkovic",
       "team": "St. John's (NY)",
       "cls": "Fr.",
@@ -42919,8 +42941,8 @@
       "value": "82.0"
      },
      {
-      "idx": 39,
-      "rank": 36,
+      "idx": 41,
+      "rank": 38,
       "player": "Emily Williams",
       "team": "Louisiana",
       "cls": "So.",
@@ -42930,8 +42952,8 @@
       "value": "82.0"
      },
      {
-      "idx": 40,
-      "rank": 41,
+      "idx": 42,
+      "rank": 43,
       "player": "Kekua Richards",
       "team": "Colorado St.",
       "cls": "Jr.",
@@ -42941,8 +42963,8 @@
       "value": "81.0"
      },
      {
-      "idx": 41,
-      "rank": 41,
+      "idx": 43,
+      "rank": 43,
       "player": "Amelia Wass de Czege",
       "team": "South Fla.",
       "cls": "Jr.",
@@ -42952,19 +42974,8 @@
       "value": "81.0"
      },
      {
-      "idx": 42,
-      "rank": 41,
-      "player": "Hatteras Welker",
-      "team": "Coastal Carolina",
-      "cls": "Jr.",
-      "height": "6-3",
-      "position": "MB",
-      "sets": 61,
-      "value": "81.0"
-     },
-     {
-      "idx": 43,
-      "rank": 44,
+      "idx": 44,
+      "rank": 45,
       "player": "Azra Eri\u00e7",
       "team": "Eastern Mich.",
       "cls": "Sr.",
@@ -42974,19 +42985,8 @@
       "value": "80.0"
      },
      {
-      "idx": 44,
-      "rank": 44,
-      "player": "Emily Fowler",
-      "team": "Virginia",
-      "cls": "Sr.",
-      "height": "6-3",
-      "position": "MB",
-      "sets": 57,
-      "value": "80.0"
-     },
-     {
       "idx": 45,
-      "rank": 44,
+      "rank": 45,
       "player": "Sidney Gray",
       "team": "Eastern Wash.",
       "cls": "So.",
@@ -42997,7 +42997,7 @@
      },
      {
       "idx": 46,
-      "rank": 44,
+      "rank": 45,
       "player": "Zoe Humphrey",
       "team": "Georgia Tech",
       "cls": "So.",
@@ -43008,7 +43008,7 @@
      },
      {
       "idx": 47,
-      "rank": 44,
+      "rank": 45,
       "player": "Chloe Judd",
       "team": "Missouri St.",
       "cls": "So.",
@@ -43019,7 +43019,7 @@
      },
      {
       "idx": 48,
-      "rank": 44,
+      "rank": 45,
       "player": "Noa Kamphuis",
       "team": "Lafayette",
       "cls": "Fr.",
@@ -43030,7 +43030,7 @@
      },
      {
       "idx": 49,
-      "rank": 44,
+      "rank": 45,
       "player": "Kinsley Young",
       "team": "TCU",
       "cls": "Fr.",
@@ -43181,6 +43181,17 @@
      {
       "idx": 12,
       "rank": 13,
+      "player": "Coco Figueroa",
+      "team": "Coppin St.",
+      "cls": "Sr.",
+      "height": "5-5",
+      "position": "L/DS",
+      "sets": 82,
+      "value": "341"
+     },
+     {
+      "idx": 13,
+      "rank": 14,
       "player": "Carrina Barron",
       "team": "Bryant",
       "cls": "Sr.",
@@ -43188,17 +43199,6 @@
       "position": "L",
       "sets": 70,
       "value": "334"
-     },
-     {
-      "idx": 13,
-      "rank": 14,
-      "player": "Coco Figueroa",
-      "team": "Coppin St.",
-      "cls": "Sr.",
-      "height": "5-5",
-      "position": "L/DS",
-      "sets": 79,
-      "value": "330"
      },
      {
       "idx": 14,
@@ -43258,6 +43258,17 @@
      {
       "idx": 19,
       "rank": 20,
+      "player": "Ainoah Cruz",
+      "team": "Missouri",
+      "cls": "Sr.",
+      "height": "5-3",
+      "position": "DS",
+      "sets": 69,
+      "value": "315"
+     },
+     {
+      "idx": 20,
+      "rank": 20,
       "player": "Shaelin White",
       "team": "Sam Houston",
       "cls": "Jr.",
@@ -43267,19 +43278,8 @@
       "value": "315"
      },
      {
-      "idx": 20,
-      "rank": 21,
-      "player": "Kati Goba",
-      "team": "Milwaukee",
-      "cls": "Sr.",
-      "height": "5-4",
-      "position": "L/DS",
-      "sets": 75,
-      "value": "314"
-     },
-     {
       "idx": 21,
-      "rank": 21,
+      "rank": 22,
       "player": "Dakota Henry",
       "team": "Rhode Island",
       "cls": "Jr.",
@@ -43301,7 +43301,18 @@
      },
      {
       "idx": 23,
-      "rank": 24,
+      "rank": 23,
+      "player": "Kati Goba",
+      "team": "Milwaukee",
+      "cls": "Sr.",
+      "height": "5-4",
+      "position": "L/DS",
+      "sets": 75,
+      "value": "313"
+     },
+     {
+      "idx": 24,
+      "rank": 25,
       "player": "Caiti Barthel",
       "team": "Chattanooga",
       "cls": "Sr.",
@@ -43311,8 +43322,8 @@
       "value": "312"
      },
      {
-      "idx": 24,
-      "rank": 24,
+      "idx": 25,
+      "rank": 25,
       "player": "Aspen Boice",
       "team": "Idaho St.",
       "cls": "Fr.",
@@ -43322,8 +43333,8 @@
       "value": "312"
      },
      {
-      "idx": 25,
-      "rank": 24,
+      "idx": 26,
+      "rank": 25,
       "player": "Riley Steubing",
       "team": "Louisiana Tech",
       "cls": "Sr.",
@@ -43333,8 +43344,8 @@
       "value": "312"
      },
      {
-      "idx": 26,
-      "rank": 27,
+      "idx": 27,
+      "rank": 28,
       "player": "Madison Winkler",
       "team": "Denver",
       "cls": "So.",
@@ -43344,8 +43355,8 @@
       "value": "309"
      },
      {
-      "idx": 27,
-      "rank": 28,
+      "idx": 28,
+      "rank": 29,
       "player": "Samantha Glenn",
       "team": "UT Arlington",
       "cls": "Sr.",
@@ -43355,8 +43366,8 @@
       "value": "307"
      },
      {
-      "idx": 28,
-      "rank": 29,
+      "idx": 29,
+      "rank": 30,
       "player": "Addison Pollock",
       "team": "Penn",
       "cls": "So.",
@@ -43366,8 +43377,8 @@
       "value": "304"
      },
      {
-      "idx": 29,
-      "rank": 30,
+      "idx": 30,
+      "rank": 31,
       "player": "Celimar Hoyos",
       "team": "Presbyterian",
       "cls": "Sr.",
@@ -43377,8 +43388,8 @@
       "value": "303"
      },
      {
-      "idx": 30,
-      "rank": 30,
+      "idx": 31,
+      "rank": 31,
       "player": "Cassidy Trahan",
       "team": "Eastern Ky.",
       "cls": "So.",
@@ -43388,8 +43399,8 @@
       "value": "303"
      },
      {
-      "idx": 31,
-      "rank": 32,
+      "idx": 32,
+      "rank": 33,
       "player": "Jadyn Petersen",
       "team": "UNI",
       "cls": "Jr.",
@@ -43399,8 +43410,8 @@
       "value": "302"
      },
      {
-      "idx": 32,
-      "rank": 33,
+      "idx": 33,
+      "rank": 34,
       "player": "Jumana Martin",
       "team": "Col. of Charleston",
       "cls": "So.",
@@ -43410,8 +43421,8 @@
       "value": "301"
      },
      {
-      "idx": 33,
-      "rank": 33,
+      "idx": 34,
+      "rank": 34,
       "player": "Natalia Navarro",
       "team": "Nicholls",
       "cls": "Fr.",
@@ -43421,19 +43432,8 @@
       "value": "301"
      },
      {
-      "idx": 34,
-      "rank": 35,
-      "player": "Ainoah Cruz",
-      "team": "Missouri",
-      "cls": "Sr.",
-      "height": "5-3",
-      "position": "DS",
-      "sets": 66,
-      "value": "299"
-     },
-     {
       "idx": 35,
-      "rank": 35,
+      "rank": 36,
       "player": "Sophie Ledbetter",
       "team": "Ball St.",
       "cls": "Jr.",
@@ -43510,7 +43510,18 @@
      },
      {
       "idx": 42,
-      "rank": 43,
+      "rank": 42,
+      "player": "Ashton Rogers",
+      "team": "UIW",
+      "cls": "So.",
+      "height": "5-6",
+      "position": "L",
+      "sets": 63,
+      "value": "295"
+     },
+     {
+      "idx": 43,
+      "rank": 44,
       "player": "Bianca Byerly",
       "team": "Houston Christian",
       "cls": "Jr.",
@@ -43520,8 +43531,8 @@
       "value": "294"
      },
      {
-      "idx": 43,
-      "rank": 43,
+      "idx": 44,
+      "rank": 44,
       "player": "Kennedy Seekford",
       "team": "Furman",
       "cls": "Sr.",
@@ -43531,8 +43542,8 @@
       "value": "294"
      },
      {
-      "idx": 44,
-      "rank": 45,
+      "idx": 45,
+      "rank": 46,
       "player": "Vanessa Del Real",
       "team": "Akron",
       "cls": "Sr.",
@@ -43542,8 +43553,8 @@
       "value": "292"
      },
      {
-      "idx": 45,
-      "rank": 46,
+      "idx": 46,
+      "rank": 47,
       "player": "Emma Sayre",
       "team": "Marshall",
       "cls": "Jr.",
@@ -43553,8 +43564,8 @@
       "value": "290"
      },
      {
-      "idx": 46,
-      "rank": 46,
+      "idx": 47,
+      "rank": 47,
       "player": "Rachel Van Gorp",
       "team": "Iowa St.",
       "cls": "Jr.",
@@ -43564,8 +43575,8 @@
       "value": "290"
      },
      {
-      "idx": 47,
-      "rank": 48,
+      "idx": 48,
+      "rank": 49,
       "player": "Makayla Martinez",
       "team": "New Mexico St.",
       "cls": "Jr.",
@@ -43575,8 +43586,8 @@
       "value": "289"
      },
      {
-      "idx": 48,
-      "rank": 49,
+      "idx": 49,
+      "rank": 50,
       "player": "Hannah Langton",
       "team": "Colgate",
       "cls": "Jr.",
@@ -43584,17 +43595,6 @@
       "position": "L/DS",
       "sets": 63,
       "value": "288"
-     },
-     {
-      "idx": 49,
-      "rank": 50,
-      "player": "Brooke Eslinger",
-      "team": "Missouri St.",
-      "cls": "Sr.",
-      "height": "5-3",
-      "position": "DS",
-      "sets": 66,
-      "value": "287"
      }
     ]
    },
@@ -44046,6 +44046,17 @@
      {
       "idx": 40,
       "rank": 40,
+      "player": "Kyra McKelvey",
+      "team": "Southeastern La.",
+      "cls": "Sr.",
+      "height": "5-11",
+      "position": "OPP",
+      "sets": 76,
+      "value": "257"
+     },
+     {
+      "idx": 41,
+      "rank": 40,
       "player": "Trinity Rye",
       "team": "Purdue Fort Wayne",
       "cls": "So.",
@@ -44055,8 +44066,8 @@
       "value": "257"
      },
      {
-      "idx": 41,
-      "rank": 42,
+      "idx": 42,
+      "rank": 43,
       "player": "Sadie McAda",
       "team": "Southern Miss.",
       "cls": "Sr.",
@@ -44066,8 +44077,8 @@
       "value": "256"
      },
      {
-      "idx": 42,
-      "rank": 42,
+      "idx": 43,
+      "rank": 43,
       "player": "Claire Wagstaff",
       "team": "Gonzaga",
       "cls": "Jr.",
@@ -44077,8 +44088,8 @@
       "value": "256"
      },
      {
-      "idx": 43,
-      "rank": 44,
+      "idx": 44,
+      "rank": 45,
       "player": "LaDonna Trantham",
       "team": "Florida A&M",
       "cls": "So.",
@@ -44088,8 +44099,8 @@
       "value": "254"
      },
      {
-      "idx": 44,
-      "rank": 45,
+      "idx": 45,
+      "rank": 46,
       "player": "Hanah Stoddard",
       "team": "Northern Ariz.",
       "cls": "Sr.",
@@ -44099,8 +44110,8 @@
       "value": "252"
      },
      {
-      "idx": 45,
-      "rank": 45,
+      "idx": 46,
+      "rank": 46,
       "player": "Ashby Willis",
       "team": "Southern Ind.",
       "cls": "Sr.",
@@ -44110,8 +44121,8 @@
       "value": "252"
      },
      {
-      "idx": 46,
-      "rank": 47,
+      "idx": 47,
+      "rank": 48,
       "player": "Brooklyn DeLeye",
       "team": "Kentucky",
       "cls": "Sr.",
@@ -44121,8 +44132,8 @@
       "value": "250"
      },
      {
-      "idx": 47,
-      "rank": 47,
+      "idx": 48,
+      "rank": 48,
       "player": "Sophia Henry",
       "team": "Middle Tenn.",
       "cls": "Jr.",
@@ -44132,25 +44143,14 @@
       "value": "250"
      },
      {
-      "idx": 48,
-      "rank": 47,
+      "idx": 49,
+      "rank": 48,
       "player": "Sydney Jones",
       "team": "Houston",
       "cls": "Jr.",
       "height": "6-2",
       "position": "OH",
       "sets": 56,
-      "value": "250"
-     },
-     {
-      "idx": 49,
-      "rank": 47,
-      "player": "Cate Shanahan",
-      "team": "Santa Clara",
-      "cls": "Jr.",
-      "height": "6-2",
-      "position": "OH",
-      "sets": 64,
       "value": "250"
      }
     ]
@@ -44207,6 +44207,17 @@
      {
       "idx": 4,
       "rank": 4,
+      "player": "Calissa Allison",
+      "team": "UIW",
+      "cls": "Jr.",
+      "height": "5-9",
+      "position": "S",
+      "sets": 62,
+      "value": "2"
+     },
+     {
+      "idx": 5,
+      "rank": 4,
       "player": "Madi Maxwell",
       "team": "Long Beach St.",
       "cls": "Jr.",
@@ -44216,8 +44227,8 @@
       "value": "2"
      },
      {
-      "idx": 5,
-      "rank": 6,
+      "idx": 6,
+      "rank": 7,
       "player": "Raegan Richardson",
       "team": "App State",
       "cls": "Jr.",
@@ -44227,8 +44238,8 @@
       "value": "1"
      },
      {
-      "idx": 6,
-      "rank": 6,
+      "idx": 7,
+      "rank": 7,
       "player": "Antonie Keln\u00e1rov\u00e1",
       "team": "Saint Mary's (CA)",
       "cls": "Jr.",
@@ -44238,8 +44249,8 @@
       "value": "1"
      },
      {
-      "idx": 7,
-      "rank": 6,
+      "idx": 8,
+      "rank": 7,
       "player": "Rachel McCollum",
       "team": "UAB",
       "cls": "Sr.",
@@ -44249,8 +44260,8 @@
       "value": "1"
      },
      {
-      "idx": 8,
-      "rank": 6,
+      "idx": 9,
+      "rank": 7,
       "player": "Gwen Adler",
       "team": "Seton Hall",
       "cls": "Jr.",
@@ -44260,19 +44271,19 @@
       "value": "1"
      },
      {
-      "idx": 9,
-      "rank": 6,
+      "idx": 10,
+      "rank": 7,
       "player": "Gaby Zovko",
       "team": "UNCW",
       "cls": "Sr.",
       "height": "6-2",
       "position": "S",
-      "sets": 62,
+      "sets": 66,
       "value": "1"
      },
      {
-      "idx": 10,
-      "rank": 6,
+      "idx": 11,
+      "rank": 7,
       "player": "Juliette Myrick",
       "team": "Army West Point",
       "cls": "Sr.",
@@ -44282,8 +44293,8 @@
       "value": "1"
      },
      {
-      "idx": 11,
-      "rank": 6,
+      "idx": 12,
+      "rank": 7,
       "player": "Alexys James",
       "team": "Howard",
       "cls": "So.",
@@ -44293,8 +44304,8 @@
       "value": "1"
      },
      {
-      "idx": 12,
-      "rank": 6,
+      "idx": 13,
+      "rank": 7,
       "player": "Ava Hight",
       "team": "A&M-Corpus Christi",
       "cls": "So.",
@@ -44304,8 +44315,8 @@
       "value": "1"
      },
      {
-      "idx": 13,
-      "rank": 6,
+      "idx": 14,
+      "rank": 7,
       "player": "Brooke Larsen",
       "team": "South Dakota St.",
       "cls": "So.",
@@ -44315,8 +44326,8 @@
       "value": "1"
      },
      {
-      "idx": 14,
-      "rank": 6,
+      "idx": 15,
+      "rank": 7,
       "player": "Charlee Solomon",
       "team": "Tulane",
       "cls": "So.",
@@ -44326,19 +44337,8 @@
       "value": "1"
      },
      {
-      "idx": 15,
-      "rank": 6,
-      "player": "Calissa Allison",
-      "team": "UIW",
-      "cls": "Jr.",
-      "height": "5-9",
-      "position": "S",
-      "sets": 57,
-      "value": "1"
-     },
-     {
       "idx": 16,
-      "rank": 6,
+      "rank": 7,
       "player": "Hadley Hardersen",
       "team": "Indiana St.",
       "cls": "So.",
