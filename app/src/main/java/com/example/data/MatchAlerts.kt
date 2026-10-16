@@ -1,8 +1,9 @@
 package com.example.data
 
-import com.example.ui.played
 import com.example.json.JSONArray
 import com.example.json.JSONObject
+import com.example.text.fixed
+import com.example.ui.played
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -149,7 +150,7 @@ object MatchAlerts {
     }
 
     private fun formatHit(v: Double): String {
-        val s = String.format(Locale.US, "%.3f", v)
+        val s = fixed(v, 3)
         return if (s.startsWith("0")) s.substring(1) else if (s.startsWith("-0")) "-" + s.substring(2) else s
     }
 

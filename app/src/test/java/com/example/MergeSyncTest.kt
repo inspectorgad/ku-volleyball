@@ -6,8 +6,8 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.data.JayhawksDatabase
 import com.example.data.Seeder
 import com.example.data.StatLine
-import kotlinx.coroutines.test.runTest
 import com.example.json.JSONObject
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -262,7 +262,7 @@ class MergeSyncTest {
             assertEquals("24-26, 25-21, 25-19, 26-28, 13-15", match.setScores)
         }
 
-    private fun utahJson() = com.example.json.JSONObject(
+    private fun utahJson() = JSONObject(
         """
         {"players": [], "matches": [
           {"date": "2026-10-01", "opponent": "Utah", "season": "2026", "home": true,
@@ -318,7 +318,7 @@ class MergeSyncTest {
     @Test
     fun `roster background fills in, and a blank feed does not erase it`() = runTest {
         val dao = db.dao()
-        fun seed(extra: String) = com.example.json.JSONObject(
+        fun seed(extra: String) = JSONObject(
             """{"players": [{"name": "Reese Messer", "jerseyNumber": "3", "position": "S" $extra}], "matches": []}"""
         )
         Seeder.merge(

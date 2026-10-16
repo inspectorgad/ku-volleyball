@@ -61,6 +61,7 @@ import com.example.stats.VolleyballTotals
 import com.example.stats.aggregate
 import com.example.stats.formatAverage
 import com.example.stats.formatPerSet
+import com.example.text.fixed
 
 private const val ALL_SEASONS = "All"
 
@@ -416,7 +417,7 @@ fun LeadersScreen(
                             playersById[playerId]?.let {
                                 val pts = totals.points
                                 it.name to if (pts % 1.0 == 0.0) pts.toInt().toString()
-                                else String.format(java.util.Locale.US, "%.1f", pts)
+                                else fixed(pts, 1)
                             }
                         }
                 )

@@ -62,7 +62,14 @@ android {
     compose = true
     buildConfig = true
   }
-  testOptions { unitTests { isIncludeAndroidResources = true } }
+  testOptions {
+    unitTests {
+      isIncludeAndroidResources = true
+      // CI is the only place these run, so a failure has to explain itself in
+      // the log: print the expected and actual values, not just the line.
+      all { it.testLogging { exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL } }
+    }
+  }
 }
 
 // Configure the Secrets Gradle Plugin to use .env and .env.example files

@@ -2,11 +2,12 @@ package com.example.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.json.JSONObject
+import com.example.text.hex2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import com.example.json.JSONObject
 import java.security.MessageDigest
 import java.util.concurrent.TimeUnit
 
@@ -115,7 +116,7 @@ object SeasonSync {
             ?: return SyncResult.Failed(failures.joinToString("; "))
 
         val hash = MessageDigest.getInstance("SHA-256").digest(body)
-            .joinToString("") { "%02x".format(it) }
+            .joinToString("") { hex2(it) }
         val p = prefs(context)
         if (hash == p.getString(KEY_HASH, null)) {
             p.edit().putLong(KEY_SUCCESS_MS, System.currentTimeMillis()).apply()

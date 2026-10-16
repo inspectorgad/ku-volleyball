@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.SeasonSimulator
 import com.example.data.SeasonSimulator.chance
+import com.example.text.fixed
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -53,7 +54,7 @@ fun simulatorLines(r: SeasonSimulator.Result): List<String> = listOf(
     "Projected record ${r.winsMid}-${r.games - r.winsMid} " +
         "(likely range ${r.winsLow}-${r.games - r.winsLow} to ${r.winsHigh}-${r.games - r.winsHigh})",
     "Big 12: top-four finish ${chance(r.top4)} · title ${chance(r.title)} " +
-        "(a share ${chance(r.shareOfTitle)}) · average place ${"%.1f".format(java.util.Locale.US, r.averagePlace)}",
+        "(a share ${chance(r.shareOfTitle)}) · average place ${fixed(r.averagePlace, 1)}",
     "NCAA tournament ${chance(r.tournament)} · final RPI around #${r.rpiRankMid} " +
         "(#${r.rpiRankLow}-#${r.rpiRankHigh})"
 )

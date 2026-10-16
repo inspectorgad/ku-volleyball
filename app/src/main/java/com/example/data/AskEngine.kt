@@ -1,5 +1,8 @@
 package com.example.data
 
+import com.example.json.JSONArray
+import com.example.json.JSONObject
+import com.example.text.fixed
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -11,8 +14,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import com.example.json.JSONArray
-import com.example.json.JSONObject
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
@@ -318,7 +319,7 @@ class AskEngine(
             val cents = dollars * 100
             val price = when {
                 cents < 1 -> "under 1¢"
-                cents < 10 -> "about ${"%.1f".format(java.util.Locale.US, cents)}¢"
+                cents < 10 -> "about ${fixed(cents, 1)}¢"
                 else -> "about ${Math.round(cents)}¢"
             }
             return "${model.shortName} · $price" +

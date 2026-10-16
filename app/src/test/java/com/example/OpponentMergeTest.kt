@@ -5,9 +5,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.data.JayhawksDatabase
 import com.example.data.Seeder
+import com.example.json.JSONObject
 import com.example.stats.aggregate
 import kotlinx.coroutines.test.runTest
-import com.example.json.JSONObject
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

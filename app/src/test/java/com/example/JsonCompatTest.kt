@@ -1,13 +1,13 @@
 package com.example
 
+import com.example.json.JSONArray as KtArray
+import com.example.json.JSONObject as KtObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.File
-import com.example.json.JSONArray as KtArray
-import com.example.json.JSONObject as KtObject
 import org.json.JSONArray as AndroidArray
 import org.json.JSONObject as AndroidObject
 
@@ -33,7 +33,7 @@ class JsonCompatTest {
          "huge": 123456789012345678901234567890, "d": 2.5, "whole": 2.0, "exp": 1e5,
          "small": 1.5e-7, "t": true, "f": false, "n": null,
          "o": {"a": 1, "b": [1, "x", null]}, "a": [1, 2.5, "3", null, true, {"k": "v"}, [], -0.0],
-         "esc": "a/b \"q\" back\\slash tab\t nl\n cr\r ff\f bs\b \u0001     é ☃ 🏐"}
+         "esc": "a/b \"q\" back\\slash tab\t nl\n cr\r ff\f bs\b \u0001 \u2028 \u2029 é ☃ 🏐"}
     """.trimIndent()
 
     private val keys = listOf(
@@ -91,7 +91,7 @@ class JsonCompatTest {
             .put("on", true)
             .put("gone", "x")
             .put("gone", null as Any?)
-            .put("text", "Today is 10/16. \"Who\" led?\n ")
+            .put("text", "Today is 10/16. \"Who\" led?\n\u2028")
             .put("messages", KtArray(listOf(KtObject().put("role", "user"), "plain", 3, null)))
             .put("tags", KtArray(listOf("a", "b")))
             .put("nested", KtArray().put(KtObject().put("type", "ephemeral")).put(1.5).put(false))
@@ -104,7 +104,7 @@ class JsonCompatTest {
             .put("on", true)
             .put("gone", "x")
             .put("gone", null as Any?)
-            .put("text", "Today is 10/16. \"Who\" led?\n ")
+            .put("text", "Today is 10/16. \"Who\" led?\n\u2028")
             .put("messages", AndroidArray(listOf(AndroidObject().put("role", "user"), "plain", 3, null)))
             .put("tags", AndroidArray(listOf("a", "b")))
             .put("nested", AndroidArray().put(AndroidObject().put("type", "ephemeral")).put(1.5).put(false))

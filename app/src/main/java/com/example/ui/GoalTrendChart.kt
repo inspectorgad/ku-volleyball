@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.example.text.fixed
 
 /**
  * A goal's number written the way the staff's own sheet writes it: a per-set
@@ -25,8 +26,8 @@ import androidx.compose.ui.unit.dp
  */
 fun formatGoal(value: Double?, decimals: Int): String = when {
     value == null -> "—"
-    decimals == 3 -> String.format(java.util.Locale.US, "%.3f", value).removePrefix("0")
-    else -> String.format(java.util.Locale.US, "%.2f", value)
+    decimals == 3 -> fixed(value, 3).removePrefix("0")
+    else -> fixed(value, 2)
 }
 
 /** One match's number for a goal, in the order the matches were played. */

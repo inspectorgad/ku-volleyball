@@ -1,7 +1,7 @@
 package com.example.stats
 
 import com.example.data.VolleyballLine
-import java.util.Locale
+import com.example.text.fixed
 
 /**
  * Aggregated volleyball totals for any collection of stat lines
@@ -144,14 +144,14 @@ fun aggregate(lines: Collection<VolleyballLine>): VolleyballTotals = VolleyballT
 
 /** Formats hitting percentage volleyball-style: .314, -.050, 1.000 */
 fun formatAverage(value: Double): String {
-    val formatted = String.format(Locale.US, "%.3f", value)
+    val formatted = fixed(value, 3)
     return formatted
         .replace("0.", ".")
         .let { if (it == "-.000") ".000" else it }
 }
 
 /** Formats a per-set rate: 3.71, 0.35 */
-fun formatPerSet(value: Double): String = String.format(Locale.US, "%.2f", value)
+fun formatPerSet(value: Double): String = fixed(value, 2)
 
 /** Short human summary of a single match line, e.g. "15 K (.250), 10 D, 2 SA, 5 BLK". */
 fun summarize(line: VolleyballLine): String {

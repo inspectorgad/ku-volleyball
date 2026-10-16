@@ -379,8 +379,7 @@ internal object Writer {
         }
     }
 
-    // Android's JSONStringer.string: RFC 4627's required escapes, plus '/' and
-    // the two characters JavaScript treats as line breaks.
+    // Android's JSONStringer.string: RFC 4627's required escapes, plus '/'.
     fun string(out: StringBuilder, value: String) {
         out.append('"')
         for (c in value) {
@@ -391,7 +390,6 @@ internal object Writer {
                 '\n' -> out.append("\\n")
                 '\r' -> out.append("\\r")
                 '\u000C' -> out.append("\\f")
-                ' ', ' ' -> unicodeEscape(out, c)
                 else -> if (c.code <= 0x1F) unicodeEscape(out, c) else out.append(c)
             }
         }

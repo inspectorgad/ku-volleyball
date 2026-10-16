@@ -3,6 +3,7 @@ package com.example.ui
 import com.example.data.Match
 import com.example.data.normTeam
 import com.example.json.JSONArray
+import com.example.text.fixed
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -42,8 +43,8 @@ fun forecastScorecard(matches: List<Match>, season: String): Scorecard? {
 
 fun scorecardLine(s: Scorecard): String =
     "Called ${s.called} of ${s.graded} · expected " +
-        "${"%.1f".format(java.util.Locale.US, s.expectedWins)} wins, won ${s.actualWins} · " +
-        "Brier ${"%.2f".format(java.util.Locale.US, s.brier)} (0.25 = coin flip)"
+        "${fixed(s.expectedWins, 1)} wins, won ${s.actualWins} · " +
+        "Brier ${fixed(s.brier, 2)} (0.25 = coin flip)"
 
 data class RpiTier(val label: String, val wins: Int, val losses: Int)
 
