@@ -200,7 +200,8 @@
   "2026-10-12": true,
   "2026-10-13": true,
   "2026-10-14": true,
-  "2026-10-15": true
+  "2026-10-15": true,
+  "2026-10-16": true
  },
  "games": {
   "6479442": {
@@ -555,10 +556,10 @@
   },
   "6625745": {
    "date": "2026-10-15",
-   "final": false,
+   "final": true,
    "home": "Kansas St.",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -8080,6 +8081,27 @@
    },
    "conferenceGame": true
   },
+  "6625745": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "home": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 17,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -12425,6 +12447,14 @@
    "season": "2026",
    "teams": [
     "UCF"
+   ],
+   "boxscored": true
+  },
+  "6625745": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "teams": [
+    "Kansas St."
    ],
    "boxscored": true
   },
