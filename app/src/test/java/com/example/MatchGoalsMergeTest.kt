@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.data.JayhawksDatabase
 import com.example.data.Seeder
 import kotlinx.coroutines.test.runTest
-import org.json.JSONObject
+import com.example.json.JSONObject
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

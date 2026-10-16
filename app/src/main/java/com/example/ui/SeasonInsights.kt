@@ -2,7 +2,7 @@ package com.example.ui
 
 import com.example.data.Match
 import com.example.data.normTeam
-import org.json.JSONArray
+import com.example.json.JSONArray
 import kotlin.math.abs
 import kotlin.math.roundToInt
 

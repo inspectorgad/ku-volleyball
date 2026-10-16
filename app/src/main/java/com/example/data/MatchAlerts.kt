@@ -1,8 +1,8 @@
 package com.example.data
 
 import com.example.ui.played
-import org.json.JSONArray
-import org.json.JSONObject
+import com.example.json.JSONArray
+import com.example.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone

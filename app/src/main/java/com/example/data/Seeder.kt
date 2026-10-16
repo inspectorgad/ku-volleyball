@@ -1,7 +1,7 @@
 package com.example.data
 
 import android.content.Context
-import org.json.JSONObject
+import com.example.json.JSONObject
 
 /**
  * Syncs the bundled assets/seed.json into the database on every launch,
@@ -436,7 +436,7 @@ object Seeder {
      * and [MatchGoal.met] works it out on demand.
      */
     private suspend fun mergeMatchGoals(
-        defs: org.json.JSONArray?,
+        defs: com.example.json.JSONArray?,
         goals: JSONObject?,
         matchId: Long,
         dao: JayhawksDao

@@ -1,8 +1,8 @@
 package com.example
 
 import com.example.data.SeasonDataValidator
-import org.json.JSONArray
-import org.json.JSONObject
+import com.example.json.JSONArray
+import com.example.json.JSONObject
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test

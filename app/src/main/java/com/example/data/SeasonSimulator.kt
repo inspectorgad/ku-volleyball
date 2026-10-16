@@ -1,7 +1,7 @@
 package com.example.data
 
 import android.content.Context
-import org.json.JSONObject
+import com.example.json.JSONObject
 import java.io.File
 
 /**
