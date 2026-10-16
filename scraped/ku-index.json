@@ -9467,6 +9467,27 @@
    },
    "conferenceGame": true
   },
+  "6626887": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 14,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626979": {
    "date": "2026-09-04",
    "season": "2026",
@@ -10286,6 +10307,27 @@
    },
    "conferenceGame": true
   },
+  "6627534": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "home": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 8,
+    "inConference": true
+   },
+   "away": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627597": {
    "date": "2026-09-04",
    "season": "2026",
@@ -10807,6 +10849,27 @@
     "score": 1,
     "winner": false,
     "rank": 24,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6628230": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "home": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 3,
+    "winner": true,
+    "rank": 25,
     "inConference": true
    },
    "conferenceGame": true
@@ -11694,6 +11757,14 @@
    ],
    "boxscored": true
   },
+  "6624369": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "teams": [
+    "Michigan St."
+   ],
+   "boxscored": true
+  },
   "6624379": {
    "date": "2026-09-01",
    "season": "2026",
@@ -12226,11 +12297,27 @@
    ],
    "boxscored": true
   },
+  "6625287": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "teams": [
+    "Nebraska"
+   ],
+   "boxscored": true
+  },
   "6625330": {
    "date": "2026-08-30",
    "season": "2026",
    "teams": [
     "Baylor"
+   ],
+   "boxscored": true
+  },
+  "6625373": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "teams": [
+    "Purdue"
    ],
    "boxscored": true
   },
@@ -13481,6 +13568,15 @@
    ],
    "boxscored": true
   },
+  "6626887": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "teams": [
+    "Utah",
+    "BYU"
+   ],
+   "boxscored": true
+  },
   "6626911": {
    "date": "2026-08-30",
    "season": "2026",
@@ -14077,6 +14173,15 @@
    ],
    "boxscored": true
   },
+  "6627534": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "teams": [
+    "Arizona St.",
+    "Arizona"
+   ],
+   "boxscored": true
+  },
   "6627569": {
    "date": "2026-08-28",
    "season": "2026",
@@ -14469,6 +14574,15 @@
    "season": "2026",
    "teams": [
     "TCU",
+    "Colorado"
+   ],
+   "boxscored": true
+  },
+  "6628230": {
+   "date": "2026-10-15",
+   "season": "2026",
+   "teams": [
+    "Iowa St.",
     "Colorado"
    ],
    "boxscored": true
