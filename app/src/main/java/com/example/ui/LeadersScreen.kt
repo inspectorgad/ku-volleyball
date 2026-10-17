@@ -61,7 +61,9 @@ import com.example.stats.VolleyballTotals
 import com.example.stats.aggregate
 import com.example.stats.formatAverage
 import com.example.stats.formatPerSet
+import com.example.text.currentTimeMs
 import com.example.text.fixed
+import com.example.text.utcToLocal
 
 private const val ALL_SEASONS = "All"
 
@@ -582,14 +584,8 @@ fun SeasonGoalsCard(
 }
 
 /** "Data from Sep 23, 9:21 AM · checked 2 h ago · pull down to refresh", in local time. */
-fun dataStatusLine(generatedAt: String?, lastCheckedMs: Long, nowMs: Long = System.currentTimeMillis()): String {
-    val data = generatedAt?.let { iso ->
-        runCatching {
-            val utc = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", java.util.Locale.US)
-                .apply { timeZone = java.util.TimeZone.getTimeZone("UTC") }
-            java.text.SimpleDateFormat("MMM d, h:mm a", java.util.Locale.US).format(utc.parse(iso)!!)
-        }.getOrNull()
-    }
+fun dataStatusLine(generatedAt: String?, lastCheckedMs: Long, nowMs: Long = currentTimeMs()): String {
+    val data = generatedAt?.let { utcToLocal(it, "MMM d, h:mm a") }
     val checked = if (lastCheckedMs <= 0) "never checked online" else {
         val mins = ((nowMs - lastCheckedMs) / 60_000).coerceAtLeast(0)
         "checked " + when {

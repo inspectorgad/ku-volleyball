@@ -2,11 +2,9 @@ package com.example.data
 
 import com.example.json.JSONArray
 import com.example.json.JSONObject
+import com.example.text.centralToUtcMs
 import com.example.text.fixed
 import com.example.ui.played
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
 
 /**
  * What a match-night alert says, worked out from the NCAA's feeds - the same
@@ -24,13 +22,7 @@ object MatchAlerts {
     const val WINDOW_AFTER_MIN = 4 * 60L
 
     /** First serve in UTC millis: the schedule's "18:00" is Central time; 6 p.m. when none is published. */
-    fun firstServeUtc(date: String, time: String): Long? = runCatching {
-        val fmt = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US).apply {
-            timeZone = TimeZone.getTimeZone("America/Chicago")
-            isLenient = false
-        }
-        fmt.parse("$date ${time.ifBlank { "18:00" }}")!!.time
-    }.getOrNull()
+    fun firstServeUtc(date: String, time: String): Long? = centralToUtcMs(date, time.ifBlank { "18:00" })
 
     /** The KU match whose window [nowMs] falls in, if any. */
     fun activeMatch(matches: List<Match>, nowMs: Long): Match? = matches.firstOrNull { m ->

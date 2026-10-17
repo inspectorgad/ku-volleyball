@@ -59,6 +59,7 @@ import com.example.data.StatLine
 import com.example.data.sameTeam
 import com.example.stats.aggregate
 import com.example.stats.summarize
+import com.example.text.todayIso
 import kotlin.math.roundToInt
 
 @Composable
@@ -204,10 +205,6 @@ private fun MatchCard(
         }
     }
 }
-
-/** Today's date on this phone, as the ISO string match dates are stored in. */
-private fun todayIso(): String =
-    java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US).format(java.util.Date())
 
 /**
  * H / A / N chip. The letter carries the meaning, so the tint is reinforcement

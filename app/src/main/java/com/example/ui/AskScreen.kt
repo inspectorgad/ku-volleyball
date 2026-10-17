@@ -57,6 +57,7 @@ import com.example.data.ASK_MODELS
 import com.example.data.AskEngine
 import com.example.data.AskKeyStore
 import com.example.data.AskModel
+import com.example.text.todayIso
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -65,9 +66,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 const val EXPLAIN_ASK =
     "Type a question about the team and Claude, Anthropic's AI, answers it from this season's data: " +
@@ -116,7 +114,7 @@ object AskSession {
     fun ask(question: String, key: String, model: AskModel) {
         if (running != null) return
         val turn = AskTurn(question).also { turns += it }
-        val today = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+        val today = todayIso()
         // Off the main thread: the requests carry the season's tables, and
         // building them is too slow for the UI thread. Snapshot state may be
         // written from here; the screen redraws with each change.

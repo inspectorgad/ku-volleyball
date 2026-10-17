@@ -57,6 +57,9 @@ android {
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+    // kotlinx-datetime is built on java.time, which Android only ships from
+    // API 26; desugaring supplies it on the API 24-25 phones minSdk allows.
+    isCoreLibraryDesugaringEnabled = true
   }
   buildFeatures {
     compose = true
@@ -110,6 +113,7 @@ dependencies {
   // implementation(libs.firebase.ai)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.kotlinx.datetime)
   implementation(libs.kotlinx.serialization.json)
   implementation(libs.logging.interceptor)
   implementation(libs.moshi.kotlin)
@@ -133,6 +137,7 @@ dependencies {
   androidTestImplementation(libs.androidx.runner)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
   debugImplementation(libs.androidx.compose.ui.tooling)
+  coreLibraryDesugaring(libs.desugar.jdk.libs)
   "ksp"(libs.androidx.room.compiler)
   "ksp"(libs.moshi.kotlin.codegen)
 }

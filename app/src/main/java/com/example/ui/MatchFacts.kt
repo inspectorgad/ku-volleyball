@@ -3,9 +3,7 @@ package com.example.ui
 import com.example.data.Match
 import com.example.data.normTeam
 import com.example.data.sameTeam
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
+import com.example.text.reformat
 import kotlin.math.roundToInt
 
 /*
@@ -27,14 +25,6 @@ fun rankedOpponent(match: Match): String = when {
     match.opponentRank != null -> "#${match.opponentRank} ${match.opponent}"
     else -> match.opponent
 }
-
-// SimpleDateFormat rather than java.time, which needs API 26 (minSdk is 24).
-// Pinned to UTC on both sides so a date never shifts with the phone's zone.
-internal fun reformat(value: String, from: String, to: String): String? = runCatching {
-    val inFmt = SimpleDateFormat(from, Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC"); isLenient = false }
-    val outFmt = SimpleDateFormat(to, Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC") }
-    outFmt.format(inFmt.parse(value)!!)
-}.getOrNull()
 
 /**
  * "Fri Sep 25 · 6:00 PM CT · ESPN+". The schedule lists every time in Central,
