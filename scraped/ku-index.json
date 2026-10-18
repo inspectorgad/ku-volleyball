@@ -8447,6 +8447,27 @@
    },
    "conferenceGame": true
   },
+  "6625838": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "home": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 0,
+    "winner": false,
+    "rank": 10,
+    "inConference": true
+   },
+   "away": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625955": {
    "date": "2026-09-11",
    "season": "2026",
@@ -11798,6 +11819,15 @@
    ],
    "boxscored": true
   },
+  "6624252": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "Washington",
+    "Indiana"
+   ],
+   "boxscored": true
+  },
   "6624279": {
    "date": "2026-09-25",
    "season": "2026",
@@ -12401,6 +12431,14 @@
    ],
    "boxscored": true
   },
+  "6625238": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "Tennessee"
+   ],
+   "boxscored": true
+  },
   "6625239": {
    "date": "2026-09-03",
    "season": "2026",
@@ -12515,6 +12553,14 @@
    ],
    "boxscored": true
   },
+  "6625285": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "Oregon"
+   ],
+   "boxscored": true
+  },
   "6625286": {
    "date": "2026-10-09",
    "season": "2026",
@@ -12544,6 +12590,14 @@
    "season": "2026",
    "teams": [
     "Purdue"
+   ],
+   "boxscored": true
+  },
+  "6625374": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "Wisconsin"
    ],
    "boxscored": true
   },
@@ -12909,6 +12963,15 @@
    "teams": [
     "Baylor",
     "Arizona"
+   ],
+   "boxscored": true
+  },
+  "6625838": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "TCU",
+    "Baylor"
    ],
    "boxscored": true
   },
@@ -13703,6 +13766,14 @@
    ],
    "boxscored": true
   },
+  "6626827": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "Kentucky"
+   ],
+   "boxscored": true
+  },
   "6626846": {
    "date": "2026-08-28",
    "season": "2026",
@@ -14346,6 +14417,14 @@
    "season": "2026",
    "teams": [
     "North Carolina"
+   ],
+   "boxscored": true
+  },
+  "6627394": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "Stanford"
    ],
    "boxscored": true
   },
@@ -15278,6 +15357,14 @@
    "season": "2026",
    "teams": [
     "Texas A&M"
+   ],
+   "boxscored": true
+  },
+  "6628447": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "Vanderbilt"
    ],
    "boxscored": true
   },
