@@ -203,7 +203,8 @@
   "2026-10-15": true,
   "2026-10-16": true,
   "2026-10-17": true,
-  "2026-10-18": true
+  "2026-10-18": true,
+  "2026-10-19": true
  },
  "games": {
   "6479442": {
@@ -15511,6 +15512,15 @@
    "season": "2026",
    "teams": [
     "Texas"
+   ],
+   "boxscored": true
+  },
+  "6628582": {
+   "date": "2026-10-18",
+   "season": "2026",
+   "teams": [
+    "Texas",
+    "Florida"
    ],
    "boxscored": true
   },
