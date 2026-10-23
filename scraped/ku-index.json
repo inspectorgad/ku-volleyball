@@ -207,7 +207,8 @@
   "2026-10-19": true,
   "2026-10-20": true,
   "2026-10-21": true,
-  "2026-10-22": true
+  "2026-10-22": true,
+  "2026-10-23": true
  },
  "games": {
   "6479442": {
@@ -573,6 +574,13 @@
    "home": "Kansas",
    "away": "Arizona St.",
    "boxscored": true
+  },
+  "6625747": {
+   "date": "2026-10-23",
+   "final": false,
+   "home": "TCU",
+   "away": "Kansas",
+   "boxscored": false
   }
  },
  "big12Games": {
@@ -10278,6 +10286,27 @@
    },
    "conferenceGame": true
   },
+  "6627520": {
+   "date": "2026-10-22",
+   "season": "2026",
+   "home": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -14551,6 +14580,15 @@
    "season": "2026",
    "teams": [
     "Colorado",
+    "Kansas St."
+   ],
+   "boxscored": true
+  },
+  "6627520": {
+   "date": "2026-10-22",
+   "season": "2026",
+   "teams": [
+    "Cincinnati",
     "Kansas St."
    ],
    "boxscored": true
