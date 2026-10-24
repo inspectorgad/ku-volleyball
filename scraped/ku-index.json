@@ -8502,6 +8502,27 @@
    },
    "conferenceGame": true
   },
+  "6625839": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "home": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": 24,
+    "inConference": true
+   },
+   "away": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625955": {
    "date": "2026-09-11",
    "season": "2026",
@@ -13173,6 +13194,14 @@
    ],
    "boxscored": true
   },
+  "6625839": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Baylor"
+   ],
+   "boxscored": true
+  },
   "6625870": {
    "date": "2026-08-29",
    "season": "2026",
@@ -15982,6 +16011,15 @@
    "teams": [
     "Nebraska",
     "Wisconsin"
+   ],
+   "boxscored": true
+  },
+  "6637936": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Wisconsin",
+    "Washington"
    ],
    "boxscored": true
   },
