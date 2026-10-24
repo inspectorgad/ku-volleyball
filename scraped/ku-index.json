@@ -208,7 +208,8 @@
   "2026-10-20": true,
   "2026-10-21": true,
   "2026-10-22": true,
-  "2026-10-23": true
+  "2026-10-23": true,
+  "2026-10-24": true
  },
  "games": {
   "6479442": {
@@ -577,10 +578,10 @@
   },
   "6625747": {
    "date": "2026-10-23",
-   "final": false,
+   "final": true,
    "home": "TCU",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -8144,6 +8145,27 @@
    },
    "conferenceGame": true
   },
+  "6625747": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "home": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 0,
+    "winner": false,
+    "rank": 13,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 17,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -9047,6 +9069,27 @@
    },
    "conferenceGame": true
   },
+  "6626575": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "home": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626681": {
    "date": "2026-09-05",
    "season": "2026",
@@ -9802,6 +9845,27 @@
     "inConference": false
    },
    "conferenceGame": false
+  },
+  "6627011": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "home": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
   },
   "6627016": {
    "date": "2026-09-04",
@@ -11903,6 +11967,14 @@
    ],
    "boxscored": true
   },
+  "6624253": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Indiana"
+   ],
+   "boxscored": true
+  },
   "6624279": {
    "date": "2026-09-25",
    "season": "2026",
@@ -12334,6 +12406,15 @@
    ],
    "boxscored": true
   },
+  "6624839": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Purdue",
+    "Minnesota"
+   ],
+   "boxscored": true
+  },
   "6624939": {
    "date": "2026-09-06",
    "season": "2026",
@@ -12661,6 +12742,15 @@
    ],
    "boxscored": true
   },
+  "6625289": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Penn St.",
+    "Oregon"
+   ],
+   "boxscored": true
+  },
   "6625330": {
    "date": "2026-08-30",
    "season": "2026",
@@ -12770,6 +12860,14 @@
    "season": "2026",
    "teams": [
     "Kentucky"
+   ],
+   "boxscored": true
+  },
+  "6625623": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Florida"
    ],
    "boxscored": true
   },
@@ -12922,6 +13020,14 @@
    "season": "2026",
    "teams": [
     "Arizona St."
+   ],
+   "boxscored": true
+  },
+  "6625747": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "TCU"
    ],
    "boxscored": true
   },
@@ -13212,6 +13318,14 @@
    ],
    "boxscored": true
   },
+  "6626151": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Stanford"
+   ],
+   "boxscored": true
+  },
   "6626231": {
    "date": "2026-09-12",
    "season": "2026",
@@ -13225,6 +13339,14 @@
    "season": "2026",
    "teams": [
     "Florida"
+   ],
+   "boxscored": true
+  },
+  "6626251": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Creighton"
    ],
    "boxscored": true
   },
@@ -13722,6 +13844,15 @@
    "season": "2026",
    "teams": [
     "West Virginia"
+   ],
+   "boxscored": true
+  },
+  "6626575": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "West Virginia",
+    "Arizona"
    ],
    "boxscored": true
   },
@@ -14264,6 +14395,15 @@
    ],
    "boxscored": true
   },
+  "6627011": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Texas Tech",
+    "UCF"
+   ],
+   "boxscored": true
+  },
   "6627015": {
    "date": "2026-09-09",
    "season": "2026",
@@ -14425,6 +14565,14 @@
    "season": "2026",
    "teams": [
     "TCU"
+   ],
+   "boxscored": true
+  },
+  "6627178": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Texas A&M"
    ],
    "boxscored": true
   },
@@ -15428,6 +15576,14 @@
    ],
    "boxscored": true
   },
+  "6628330": {
+   "date": "2026-10-23",
+   "season": "2026",
+   "teams": [
+    "Pittsburgh"
+   ],
+   "boxscored": true
+  },
   "6628335": {
    "date": "2026-09-18",
    "season": "2026",
@@ -15880,6 +16036,14 @@
   },
   "6638330": {
    "date": "2026-10-04",
+   "season": "2026",
+   "teams": [
+    "North Carolina"
+   ],
+   "boxscored": true
+  },
+  "6638331": {
+   "date": "2026-10-23",
    "season": "2026",
    "teams": [
     "North Carolina"
