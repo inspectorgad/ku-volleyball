@@ -10442,6 +10442,27 @@
    },
    "conferenceGame": true
   },
+  "6627521": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "home": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -11345,6 +11366,27 @@
    },
    "conferenceGame": true
   },
+  "6628252": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "home": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6628262": {
    "date": "2026-09-06",
    "season": "2026",
@@ -11570,6 +11612,27 @@
     "name": "Utah",
     "seo": "utah",
     "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6628341": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "home": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 1,
     "winner": false,
     "rank": null,
     "inConference": true
@@ -12113,6 +12176,14 @@
    ],
    "boxscored": true
   },
+  "6624343": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Wisconsin"
+   ],
+   "boxscored": true
+  },
   "6624351": {
    "date": "2026-08-28",
    "season": "2026",
@@ -12465,6 +12536,15 @@
    ],
    "boxscored": true
   },
+  "6624848": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Minnesota",
+    "Washington"
+   ],
+   "boxscored": true
+  },
   "6624939": {
    "date": "2026-09-06",
    "season": "2026",
@@ -12659,6 +12739,15 @@
    "teams": [
     "Tennessee",
     "Kentucky"
+   ],
+   "boxscored": true
+  },
+  "6625242": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Tennessee",
+    "Vanderbilt"
    ],
    "boxscored": true
   },
@@ -12934,6 +13023,14 @@
    "season": "2026",
    "teams": [
     "Texas A&M"
+   ],
+   "boxscored": true
+  },
+  "6625645": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Texas"
    ],
    "boxscored": true
   },
@@ -13558,6 +13655,14 @@
    ],
    "boxscored": true
   },
+  "6626281": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "SMU"
+   ],
+   "boxscored": true
+  },
   "6626287": {
    "date": "2026-09-06",
    "season": "2026",
@@ -14084,6 +14189,15 @@
    "season": "2026",
    "teams": [
     "Kentucky"
+   ],
+   "boxscored": true
+  },
+  "6626828": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Kentucky",
+    "Texas A&M"
    ],
    "boxscored": true
   },
@@ -14905,6 +15019,14 @@
    ],
    "boxscored": true
   },
+  "6627521": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Kansas St."
+   ],
+   "boxscored": true
+  },
   "6627523": {
    "date": "2026-08-29",
    "season": "2026",
@@ -15553,6 +15675,15 @@
    ],
    "boxscored": true
   },
+  "6628252": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Cincinnati",
+    "Arizona"
+   ],
+   "boxscored": true
+  },
   "6628262": {
    "date": "2026-09-06",
    "season": "2026",
@@ -15658,6 +15789,14 @@
    ],
    "boxscored": true
   },
+  "6628331": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Pittsburgh"
+   ],
+   "boxscored": true
+  },
   "6628335": {
    "date": "2026-09-18",
    "season": "2026",
@@ -15685,6 +15824,14 @@
   },
   "6628340": {
    "date": "2026-10-17",
+   "season": "2026",
+   "teams": [
+    "Iowa St."
+   ],
+   "boxscored": true
+  },
+  "6628341": {
+   "date": "2026-10-25",
    "season": "2026",
    "teams": [
     "Iowa St."
@@ -16105,6 +16252,14 @@
    "season": "2026",
    "teams": [
     "Ole Miss"
+   ],
+   "boxscored": true
+  },
+  "6638237": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Florida"
    ],
    "boxscored": true
   },
