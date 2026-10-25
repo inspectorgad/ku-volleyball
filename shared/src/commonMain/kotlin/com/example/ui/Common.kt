@@ -243,7 +243,8 @@ fun StatTooltip(term: String, content: @Composable () -> Unit) {
         tooltip = { PlainTooltip { Text(explanation) } },
         state = rememberTooltipState(),
         // While the bubble shows, a tap or Back only closes it, as it always
-        // has; Material 3 1.4 made tooltips let them through by default.
+        // has on Android; Material 3 1.4 made tooltips let them through by
+        // default. (On iPhone the bubble never takes focus either way.)
         focusable = true
     ) {
         content()

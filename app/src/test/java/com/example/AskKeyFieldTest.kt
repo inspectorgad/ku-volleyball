@@ -19,9 +19,9 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 /**
- * The Anthropic API key stays in this app: its box on the Ask screen is kept
- * out of autofill, so the phone's password manager neither offers passwords
- * for it nor offers to save the key.
+ * The Anthropic API key stays in this app: its box on the Ask screen is marked
+ * as holding no autofill data, so it can neither start an autofill session nor
+ * feed one (and saving the key closes any session another box opened, unsaved).
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
@@ -30,7 +30,7 @@ class AskKeyFieldTest {
     @get:Rule val rule = createComposeRule()
 
     @Test
-    fun `the API key box is not offered to the password manager`() {
+    fun `the API key box can neither start nor feed an autofill session`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         rule.setContent {
             CompositionLocalProvider(LocalPhone provides AndroidPhone(context)) {

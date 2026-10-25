@@ -71,8 +71,16 @@ object SeasonSync {
         else null
     }
 
-    fun shouldAutoSync(device: Device): Boolean =
-        currentTimeMs() - prefs(device).long(KEY_SUCCESS_MS) > AUTO_SYNC_INTERVAL_MS
+    /**
+     * Has the next sync merge the feed even if it is unchanged, and start at
+     * once: [Seeder] asks for this once, to put back season data that older
+     * builds rolled back.
+     */
+    fun mergeAgain(device: Device) = prefs(device).edit { remove(KEY_HASH) }
+
+    fun shouldAutoSync(device: Device): Boolean = prefs(device).let { p ->
+        p.string(KEY_HASH) == null || currentTimeMs() - p.long(KEY_SUCCESS_MS) > AUTO_SYNC_INTERVAL_MS
+    }
 
     suspend fun sync(device: Device, dao: JayhawksDao, http: Http = defaultHttp): SyncResult =
         withContext(Dispatchers.IO) {

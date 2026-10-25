@@ -303,9 +303,10 @@ private fun KeyCard(
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     // The key stays in this app. The password keyboard (which keeps the
-                    // keyboard from learning it) also marks the field as a password for the
-                    // phone's password manager, which would offer to save the key - and sync
-                    // it to its cloud - once the field closes. So it is kept out of autofill.
+                    // keyboard from learning it) also marks the field as a password for an
+                    // Android phone's password manager, which would offer to save the key -
+                    // and sync it to its cloud - once the field closes. Marked as holding no
+                    // autofill data, it can neither start an autofill session nor feed one.
                     modifier = Modifier.fillMaxWidth().semantics { contentDataType = ContentDataType.None }
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {

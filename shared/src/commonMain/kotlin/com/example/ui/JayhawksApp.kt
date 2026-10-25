@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.JayhawksViewModel
 
@@ -153,7 +154,11 @@ fun JayhawksApp(viewModel: JayhawksViewModel) {
                                         Tab.Opponents -> AppIcons.Shield
                                         Tab.Big12 -> AppIcons.Leaderboard
                                     },
-                                    contentDescription = tab.label
+                                    contentDescription = tab.label,
+                                    // The selected tab's pill is sized from the icon:
+                                    // 4dp a side brings Material 3 1.4's 56dp pill
+                                    // back to the 64dp it always was.
+                                    modifier = Modifier.padding(horizontal = 4.dp)
                                 )
                             },
                             label = { Text(tab.label) },

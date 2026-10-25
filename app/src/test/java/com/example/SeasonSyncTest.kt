@@ -158,6 +158,24 @@ class SeasonSyncTest {
     }
 
     @Test
+    fun `data an older build rolled back is put back by merging the feed once more, at once`() = runBlocking {
+        val http = FakeHttp(mapOf(pages to ok(season("2099-01-01T00:00:00Z"))))
+        assertEquals(SyncResult.Updated("2099-01-01T00:00:00Z"), SeasonSync.sync(device, db.dao(), http))
+        assertFalse(SeasonSync.shouldAutoSync(device))
+
+        // First launch with the check: the bundled copy is held back, and the
+        // unchanged feed is merged again straight away.
+        Seeder.sync(device, db.dao())
+        assertTrue(SeasonSync.shouldAutoSync(device))
+        assertEquals(SyncResult.Updated("2099-01-01T00:00:00Z"), SeasonSync.sync(device, db.dao(), http))
+
+        // Only that once.
+        Seeder.sync(device, db.dao())
+        assertFalse(SeasonSync.shouldAutoSync(device))
+        assertEquals(SyncResult.NoChange, SeasonSync.sync(device, db.dao(), http))
+    }
+
+    @Test
     fun `a failure after a success is shown until the next success`() = runBlocking {
         val good = FakeHttp(mapOf(pages to ok(season("2026-10-24T07:00:00Z"))))
         SeasonSync.sync(device, db.dao(), good)

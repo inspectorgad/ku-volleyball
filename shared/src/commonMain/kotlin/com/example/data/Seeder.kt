@@ -38,11 +38,24 @@ object Seeder {
 
         runCatching {
             val root = JSONObject(json)
-            if (olderThan(root.optString("generatedAt"), SeasonSync.lastGeneratedAt(device))) return
+            val older = olderThan(root.optString("generatedAt"), SeasonSync.lastGeneratedAt(device))
+            // Builds before this check merged an older copy anyway, and the sync
+            // never merged the unchanged feed again to undo it. So on the first
+            // launch with the check, a held-back copy has the sync merge the feed
+            // once more; a copy that is merged repairs it by itself.
+            val settings = device.settings(PREFS)
+            if (!settings.boolean(KEY_CHECKED)) {
+                if (older) SeasonSync.mergeAgain(device)
+                settings.edit { putBoolean(KEY_CHECKED, true) }
+            }
+            if (older) return
             merge(root, dao)
             SimulationStore.save(device, root)
         }
     }
+
+    private const val PREFS = "season_seed"
+    private const val KEY_CHECKED = "rollback_checked"
 
     private val STAMP = Regex("""\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ""")
 
