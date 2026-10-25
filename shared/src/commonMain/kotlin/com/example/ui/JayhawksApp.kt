@@ -1,6 +1,5 @@
 package com.example.ui
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -66,7 +65,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel) {
     val showingDetail = openPlayerId != null || openMatchId != null || openOpponent != null || askOpen || simOpen
     // Back closes the top screen only: Ask opened from a match's Recap button
     // returns to that match.
-    BackHandler(enabled = showingDetail) {
+    SystemBackHandler(enabled = showingDetail) {
         when {
             askOpen -> { askOpen = false; askPrefill = null }
             simOpen -> simOpen = false
@@ -80,7 +79,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel) {
     // On any tab but the first, back returns to the first tab rather than
     // leaving the app - the usual Android pattern for bottom navigation. Only
     // from the first tab does back exit.
-    BackHandler(enabled = !showingDetail && currentTab != Tab.Roster) {
+    SystemBackHandler(enabled = !showingDetail && currentTab != Tab.Roster) {
         currentTab = Tab.Roster
     }
 

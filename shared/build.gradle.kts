@@ -14,6 +14,10 @@ plugins {
   alias(libs.plugins.android.kotlin.multiplatform.library)
   // Room's compiler, run once per platform (see dependencies below).
   alias(libs.plugins.google.devtools.ksp)
+  // The screens: Compose Multiplatform, and the Compose compiler (same
+  // version as Kotlin).
+  alias(libs.plugins.compose.multiplatform)
+  alias(libs.plugins.kotlin.compose)
 }
 
 kotlin {
@@ -36,14 +40,23 @@ kotlin {
 
   sourceSets {
     commonMain.dependencies {
-      // api: the app uses the database and its DAO directly.
+      // api: the app uses the database and its DAO directly, and draws its
+      // Android-only cards (match alerts) with the same Compose.
       api(libs.androidx.room.runtime)
+      api(libs.compose.runtime)
+      api(libs.compose.foundation)
+      api(libs.compose.ui)
+      api(libs.compose.material3)
+      api(libs.jetbrains.lifecycle.viewmodel)
+      implementation(libs.jetbrains.lifecycle.runtime.compose)
       implementation(libs.kotlinx.coroutines.core)
       implementation(libs.kotlinx.datetime)
       implementation(libs.kotlinx.serialization.json)
     }
     androidMain.dependencies {
       implementation(libs.okhttp)
+      // Android's back button (SystemBackHandler).
+      implementation(libs.androidx.activity.compose)
     }
     iosMain.dependencies {
       implementation(libs.androidx.sqlite.bundled)
