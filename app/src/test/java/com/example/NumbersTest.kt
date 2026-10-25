@@ -2,6 +2,7 @@ package com.example
 
 import com.example.text.fixed
 import com.example.text.hex2
+import com.example.text.roundHalfUp
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.Locale
@@ -58,6 +59,22 @@ class NumbersTest {
             // Values a few decimal places long, where ties actually happen.
             check(random.nextInt(-100_000, 100_000) / 10_000.0)
         }
+    }
+
+    @Test
+    fun `whole-number rounding matches Math round`() {
+        val values = mutableListOf(
+            0.0, -0.0, 0.5, -0.5, 1.5, -1.5, 2.5, -2.5, 0.49999999999999994, 99.5, 100.49, 1e19, -1e19,
+            Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.MAX_VALUE, Double.MIN_VALUE,
+        )
+        val random = Random(20262)
+        repeat(100_000) {
+            values += random.nextDouble(-1000.0, 1000.0)
+            // Percentages and cents, where halves are common.
+            values += random.nextInt(-20_000, 20_000) / 2.0
+            values += random.nextInt(0, 1000) / 1000.0 * 100
+        }
+        for (v in values) assertEquals("value $v", Math.round(v), roundHalfUp(v))
     }
 
     @Test

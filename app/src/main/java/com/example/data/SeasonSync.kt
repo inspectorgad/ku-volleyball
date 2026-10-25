@@ -1,15 +1,15 @@
 package com.example.data
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.example.json.JSONObject
+import com.example.platform.Device
+import com.example.platform.Http
+import com.example.platform.newHttp
+import com.example.text.currentTimeMs
 import com.example.text.hex2
+import com.example.text.sha256
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.security.MessageDigest
-import java.util.concurrent.TimeUnit
 
 sealed interface SyncResult {
     data class Updated(val generatedAt: String?) : SyncResult
@@ -52,46 +52,39 @@ object SeasonSync {
     private const val KEY_GENERATED_AT = "last_generated_at"
     private const val AUTO_SYNC_INTERVAL_MS = 6L * 60 * 60 * 1000
 
-    private val client by lazy {
-        OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .build()
-    }
+    private val defaultHttp by lazy { newHttp(connectSeconds = 10, readSeconds = 20) }
 
-    fun lastGeneratedAt(context: Context): String? =
-        prefs(context).getString(KEY_GENERATED_AT, null)
+    fun lastGeneratedAt(device: Device): String? = prefs(device).string(KEY_GENERATED_AT)
 
     /** When a feed last answered - with news or without - or 0 if never. */
-    fun lastSuccessMs(context: Context): Long = prefs(context).getLong(KEY_SUCCESS_MS, 0)
+    fun lastSuccessMs(device: Device): Long = prefs(device).long(KEY_SUCCESS_MS)
 
     /**
      * Why the most recent attempt failed, or null if it succeeded. Kept so a
      * refresh that fails on launch - which shows no message, because nobody
      * asked for it - still leaves a trace on screen instead of vanishing.
      */
-    fun lastFailure(context: Context): String? = prefs(context).let { p ->
-        if (p.getLong(KEY_FAILURE_MS, 0) > p.getLong(KEY_SUCCESS_MS, 0)) p.getString(KEY_FAILURE, null)
+    fun lastFailure(device: Device): String? = prefs(device).let { p ->
+        if (p.long(KEY_FAILURE_MS) > p.long(KEY_SUCCESS_MS)) p.string(KEY_FAILURE)
         else null
     }
 
-    fun shouldAutoSync(context: Context): Boolean =
-        System.currentTimeMillis() - prefs(context).getLong(KEY_SUCCESS_MS, 0) >
-            AUTO_SYNC_INTERVAL_MS
+    fun shouldAutoSync(device: Device): Boolean =
+        currentTimeMs() - prefs(device).long(KEY_SUCCESS_MS) > AUTO_SYNC_INTERVAL_MS
 
-    suspend fun sync(context: Context, dao: JayhawksDao): SyncResult =
+    suspend fun sync(device: Device, dao: JayhawksDao, http: Http = defaultHttp): SyncResult =
         withContext(Dispatchers.IO) {
-            val result = syncOnce(context, dao)
+            val result = syncOnce(device, dao, http)
             if (result is SyncResult.Failed) {
-                prefs(context).edit()
-                    .putString(KEY_FAILURE, result.reason)
-                    .putLong(KEY_FAILURE_MS, System.currentTimeMillis())
-                    .apply()
+                prefs(device).edit {
+                    putString(KEY_FAILURE, result.reason)
+                    putLong(KEY_FAILURE_MS, currentTimeMs())
+                }
             }
             result
         }
 
-    private suspend fun syncOnce(context: Context, dao: JayhawksDao): SyncResult {
+    private suspend fun syncOnce(device: Device, dao: JayhawksDao, http: Http): SyncResult {
         // First source that returns valid data wins. Every failure is kept so
         // that if all of them fail, the message says what each one did.
         val failures = mutableListOf<String>()
@@ -99,11 +92,12 @@ object SeasonSync {
         for (url in DATA_URLS) {
             val host = url.substringAfter("://").substringBefore('/')
             val body = try {
-                client.newCall(Request.Builder().url(url).build()).execute().use { resp ->
-                    if (resp.isSuccessful) resp.body?.bytes() else {
-                        failures += "$host ${resp.code}"; null
-                    }
+                val resp = http.get(url)
+                if (resp.isSuccessful) resp.body else {
+                    failures += "$host ${resp.code}"; null
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 failures += "$host unreachable"; null
             } ?: continue
@@ -115,11 +109,10 @@ object SeasonSync {
         val (body, root) = fetched
             ?: return SyncResult.Failed(failures.joinToString("; "))
 
-        val hash = MessageDigest.getInstance("SHA-256").digest(body)
-            .joinToString("") { hex2(it) }
-        val p = prefs(context)
-        if (hash == p.getString(KEY_HASH, null)) {
-            p.edit().putLong(KEY_SUCCESS_MS, System.currentTimeMillis()).apply()
+        val hash = sha256(body).joinToString("") { hex2(it) }
+        val p = prefs(device)
+        if (hash == p.string(KEY_HASH)) {
+            p.edit { putLong(KEY_SUCCESS_MS, currentTimeMs()) }
             return SyncResult.NoChange
         }
 
@@ -128,19 +121,18 @@ object SeasonSync {
         } catch (e: Exception) {
             return SyncResult.Failed("merge failed: ${e.message}")
         }
-        SimulationStore.save(context, root)
+        SimulationStore.save(device, root)
 
         val generatedAt = root.optString("generatedAt").takeIf { it.isNotBlank() }
-        p.edit()
-            .putString(KEY_HASH, hash)
-            .putLong(KEY_SUCCESS_MS, System.currentTimeMillis())
-            .putString(KEY_GENERATED_AT, generatedAt)
-            .apply()
+        p.edit {
+            putString(KEY_HASH, hash)
+            putLong(KEY_SUCCESS_MS, currentTimeMs())
+            putString(KEY_GENERATED_AT, generatedAt)
+        }
         return SyncResult.Updated(generatedAt)
     }
 
-    private fun prefs(context: Context): SharedPreferences =
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+    private fun prefs(device: Device) = device.settings(PREFS)
 }
 
 /**
@@ -153,7 +145,7 @@ object SeasonDataValidator {
     const val MIN_MATCHES = 15
 
     fun parse(bytes: ByteArray): JSONObject? = try {
-        val root = JSONObject(String(bytes, Charsets.UTF_8))
+        val root = JSONObject(bytes.decodeToString())
         val valid = root.optInt("formatVersion", 1) <= SUPPORTED_FORMAT &&
             (root.optJSONArray("players")?.length() ?: 0) >= MIN_PLAYERS &&
             (root.optJSONArray("matches")?.length() ?: 0) >= MIN_MATCHES

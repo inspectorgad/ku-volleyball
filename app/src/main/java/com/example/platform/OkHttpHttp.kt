@@ -1,0 +1,69 @@
+package com.example.platform
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Headers.Companion.toHeaders
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import java.io.IOException
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+
+/** A new [Http] that gives up connecting after [connectSeconds] and on a silent server after [readSeconds]. */
+fun newHttp(connectSeconds: Long, readSeconds: Long): Http = OkHttpHttp(connectSeconds, readSeconds)
+
+/** [Http] on Android, through OkHttp. */
+class OkHttpHttp(connectSeconds: Long, readSeconds: Long) : Http {
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(connectSeconds, TimeUnit.SECONDS)
+        .readTimeout(readSeconds, TimeUnit.SECONDS)
+        .build()
+
+    override suspend fun get(url: String, headers: Map<String, String>): HttpResponse =
+        send(Request.Builder().url(url).headers(headers.toHeaders()).build())
+
+    override suspend fun post(url: String, headers: Map<String, String>, json: String): HttpResponse =
+        send(
+            Request.Builder().url(url).headers(headers.toHeaders())
+                .post(json.toRequestBody("application/json".toMediaType()))
+                .build()
+        )
+
+    private suspend fun send(request: Request): HttpResponse {
+        val response = try {
+            client.newCall(request).await()
+        } catch (e: IOException) {
+            throw HttpException("${request.url.host} unreachable", e)
+        }
+        return withContext(Dispatchers.IO) {
+            response.use {
+                try {
+                    HttpResponse(it.code, it.body?.bytes() ?: ByteArray(0))
+                } catch (e: IOException) {
+                    throw HttpException("${request.url.host} stopped answering", e)
+                }
+            }
+        }
+    }
+}
+
+/** Runs the call off the main thread; cancelling the coroutine cancels the call. */
+private suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
+    cont.invokeOnCancellation { cancel() }
+    enqueue(object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            if (!cont.isCancelled) cont.resumeWithException(e)
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            if (cont.isCancelled) response.close() else cont.resume(response)
+        }
+    })
+}

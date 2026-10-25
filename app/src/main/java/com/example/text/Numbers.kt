@@ -1,5 +1,7 @@
 package com.example.text
 
+import kotlin.math.roundToLong
+
 // Fixed-point number formatting without java.util.Formatter, which iOS does
 // not have.
 //
@@ -38,6 +40,13 @@ fun fixed(value: Double, decimals: Int): String {
     val body = if (decimals == 0) intPart else "$intPart.$fracPart"
     return if (negative) "-$body" else body
 }
+
+/**
+ * [value] to the nearest whole number, halves rounded up, as Java's
+ * Math.round(Double) gives it: 2.5 is 3, -2.5 is -2, and NaN is 0 (where
+ * Kotlin's roundToLong() would throw).
+ */
+fun roundHalfUp(value: Double): Long = if (value.isNaN()) 0 else value.roundToLong()
 
 /** Lower-case two-digit hex for a byte, as "%02x".format(byte) writes it. */
 fun hex2(b: Byte): String = (b.toInt() and 0xFF).toString(16).padStart(2, '0')

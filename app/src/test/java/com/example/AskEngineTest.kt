@@ -4,6 +4,7 @@ import com.example.data.ASK_MODELS
 import com.example.data.AskEngine
 import com.example.json.JSONArray
 import com.example.json.JSONObject
+import com.example.platform.OkHttpHttp
 import com.example.ui.MdBlock
 import com.example.ui.inlineMarkdown
 import com.example.ui.parseMarkdown
@@ -11,7 +12,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -54,7 +54,8 @@ class AskEngineTest {
     }
 
     private fun engine() = AskEngine(
-        client = OkHttpClient(),
+        // OkHttp's own defaults, which these tests were written against.
+        http = OkHttpHttp(connectSeconds = 10, readSeconds = 10),
         baseUrl = server.url("/").toString().trimEnd('/'),
         loadPack = { pack }
     )

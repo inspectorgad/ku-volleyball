@@ -23,6 +23,7 @@ import com.example.data.Seeder
 import com.example.data.StatLine
 import com.example.data.TeamServing
 import com.example.data.SyncResult
+import com.example.platform.AndroidDevice
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -36,23 +37,24 @@ import kotlinx.coroutines.launch
 class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
 
     private val dao = JayhawksDatabase.get(app).dao()
+    private val device = AndroidDevice(app)
 
     private val _isSyncing = MutableStateFlow(false)
     val isSyncing: StateFlow<Boolean> = _isSyncing.asStateFlow()
 
-    private val _dataUpdatedAt = MutableStateFlow(SeasonSync.lastGeneratedAt(app))
+    private val _dataUpdatedAt = MutableStateFlow(SeasonSync.lastGeneratedAt(device))
     val dataUpdatedAt: StateFlow<String?> = _dataUpdatedAt.asStateFlow()
 
     // When a feed last answered, and why the latest attempt failed if it did.
     // Shown on screen because the launch sync is silent: without these a
     // refresh that never reaches the feed looks exactly like a quiet news day.
-    private val _lastCheckedMs = MutableStateFlow(SeasonSync.lastSuccessMs(app))
+    private val _lastCheckedMs = MutableStateFlow(SeasonSync.lastSuccessMs(device))
     val lastCheckedMs: StateFlow<Long> = _lastCheckedMs.asStateFlow()
-    private val _syncFailure = MutableStateFlow(SeasonSync.lastFailure(app))
+    private val _syncFailure = MutableStateFlow(SeasonSync.lastFailure(device))
     val syncFailure: StateFlow<String?> = _syncFailure.asStateFlow()
 
     // The season simulator's inputs, refreshed with the data.
-    private val _simulation = MutableStateFlow(SimulationStore.inputs(app))
+    private val _simulation = MutableStateFlow(SimulationStore.inputs(device))
     val simulation: StateFlow<SeasonSimulator.Inputs?> = _simulation.asStateFlow()
 
     // Snackbar messages, emitted only for user-initiated refreshes.
@@ -63,11 +65,11 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             // Bundled data first (also covers first launch offline), then a
             // throttled network sync for anything newer.
-            Seeder.sync(app, dao)
-            _simulation.value = SimulationStore.inputs(app)
+            Seeder.sync(device, dao)
+            _simulation.value = SimulationStore.inputs(device)
             runCatching { KuWidget.updateAll(app) }
             MatchAlertWorker.reschedule(app)
-            if (SeasonSync.shouldAutoSync(app)) refreshInternal(manual = false)
+            if (SeasonSync.shouldAutoSync(device)) refreshInternal(manual = false)
         }
     }
 
@@ -77,15 +79,15 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
         if (_isSyncing.value) return
         _isSyncing.value = true
         val result = try {
-            SeasonSync.sync(getApplication(), dao)
+            SeasonSync.sync(device, dao)
         } finally {
             _isSyncing.value = false
         }
-        _dataUpdatedAt.value = SeasonSync.lastGeneratedAt(getApplication())
-        _simulation.value = SimulationStore.inputs(getApplication())
+        _dataUpdatedAt.value = SeasonSync.lastGeneratedAt(device)
+        _simulation.value = SimulationStore.inputs(device)
         runCatching { KuWidget.updateAll(getApplication()) }
-        _lastCheckedMs.value = SeasonSync.lastSuccessMs(getApplication())
-        _syncFailure.value = SeasonSync.lastFailure(getApplication())
+        _lastCheckedMs.value = SeasonSync.lastSuccessMs(device)
+        _syncFailure.value = SeasonSync.lastFailure(device)
         if (manual) {
             _syncMessages.emit(
                 when (result) {

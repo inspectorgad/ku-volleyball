@@ -57,6 +57,7 @@ import com.example.data.ASK_MODELS
 import com.example.data.AskEngine
 import com.example.data.AskKeyStore
 import com.example.data.AskModel
+import com.example.platform.AndroidDevice
 import com.example.text.todayIso
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -163,8 +164,9 @@ object AskSession {
 @Composable
 fun AskScreen(onBack: () -> Unit, prefill: String? = null) {
     val context = LocalContext.current.applicationContext
-    var savedKey by remember { mutableStateOf(AskSession.sessionKey ?: AskKeyStore.load(context)) }
-    var model by remember { mutableStateOf(AskKeyStore.model(context)) }
+    val device = remember(context) { AndroidDevice(context) }
+    var savedKey by remember { mutableStateOf(AskSession.sessionKey ?: AskKeyStore.load(device)) }
+    var model by remember { mutableStateOf(AskKeyStore.model(device)) }
     var question by rememberSaveable { mutableStateOf("") }
     val busy = AskSession.running != null
     val listState = rememberLazyListState()
@@ -219,7 +221,7 @@ fun AskScreen(onBack: () -> Unit, prefill: String? = null) {
                         savedKey = savedKey,
                         model = model,
                         onKey = { key, keep ->
-                            if (keep && AskKeyStore.save(context, key)) {
+                            if (keep && AskKeyStore.save(device, key)) {
                                 AskSession.sessionKey = null
                             } else {
                                 AskSession.sessionKey = key
@@ -227,13 +229,13 @@ fun AskScreen(onBack: () -> Unit, prefill: String? = null) {
                             savedKey = key
                         },
                         onForget = {
-                            AskKeyStore.forget(context)
+                            AskKeyStore.forget(device)
                             AskSession.sessionKey = null
                             savedKey = null
                         },
                         onModel = {
                             model = it
-                            AskKeyStore.saveModel(context, it)
+                            AskKeyStore.saveModel(device, it)
                         }
                     )
                 }

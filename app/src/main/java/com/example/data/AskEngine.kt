@@ -2,22 +2,12 @@ package com.example.data
 
 import com.example.json.JSONArray
 import com.example.json.JSONObject
+import com.example.platform.Http
+import com.example.platform.HttpException
+import com.example.platform.newHttp
 import com.example.text.fixed
+import com.example.text.roundHalfUp
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
-import java.io.IOException
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 /**
  * A model the reader can pick. Prices are dollars per million tokens;
@@ -76,12 +66,13 @@ class AskException(message: String) : Exception(message)
  * Anthropic sent it and sent back verbatim, which is what the conversation
  * needs to continue, and no block type has to be rebuilt by hand. The Anthropic
  * Java SDK was not used because it would add about 30 MB of libraries to an
- * app that already has OkHttp and a JSON parser.
+ * app that already has an HTTP client and a JSON parser, and it could not run
+ * on iPhone.
  */
 class AskEngine(
-    private val client: OkHttpClient = defaultClient,
+    private val http: Http = defaultHttp,
     private val baseUrl: String = "https://api.anthropic.com",
-    private val loadPack: suspend () -> JSONObject = { fetchPack(defaultClient) }
+    private val loadPack: suspend () -> JSONObject = { fetchPack(defaultHttp) }
 ) {
     private var pack: JSONObject? = null
     private val tableCache = mutableMapOf<String, String>()
@@ -197,26 +188,22 @@ class AskEngine(
     }
 
     private suspend fun send(apiKey: String, body: JSONObject): JSONObject {
-        val builder = Request.Builder()
-            .url("$baseUrl/v1/messages?beta=true")
-            .header("x-api-key", apiKey)
-            .header("anthropic-version", "2023-06-01")
-            .post(body.toString().toRequestBody("application/json".toMediaType()))
-        if (body.has("fallbacks")) builder.header("anthropic-beta", FALLBACK_BETA)
-        val call = client.newCall(builder.build())
+        val headers = buildMap {
+            put("x-api-key", apiKey)
+            put("anthropic-version", "2023-06-01")
+            if (body.has("fallbacks")) put("anthropic-beta", FALLBACK_BETA)
+        }
         val response = try {
-            call.await()
-        } catch (e: IOException) {
+            http.post("$baseUrl/v1/messages?beta=true", headers, body.toString())
+        } catch (e: HttpException) {
             throw AskException("Couldn't reach api.anthropic.com. Check your connection - some networks block it.")
         }
-        return response.use { r ->
-            val text = withContext(Dispatchers.IO) { r.body?.string().orEmpty() }
-            if (!r.isSuccessful) throw AskException(explainError(r.code, text))
-            try {
-                JSONObject(text)
-            } catch (e: Exception) {
-                throw AskException("Anthropic sent back something the app couldn't read.")
-            }
+        val text = response.text()
+        if (!response.isSuccessful) throw AskException(explainError(response.code, text))
+        return try {
+            JSONObject(text)
+        } catch (e: Exception) {
+            throw AskException("Anthropic sent back something the app couldn't read.")
         }
     }
 
@@ -271,20 +258,15 @@ class AskEngine(
             "https://raw.githubusercontent.com/inspectorgad/ku-volleyball/main/docs/ask-data.json",
         )
 
-        val defaultClient: OkHttpClient by lazy {
-            OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                // One round trip can include several runs of Claude's code.
-                .readTimeout(5, TimeUnit.MINUTES)
-                .build()
-        }
+        // One round trip can include several runs of Claude's code, hence the
+        // five minutes allowed for an answer.
+        val defaultHttp: Http by lazy { newHttp(connectSeconds = 15, readSeconds = 5 * 60) }
 
-        suspend fun fetchPack(client: OkHttpClient, urls: List<String> = PACK_URLS): JSONObject {
+        suspend fun fetchPack(http: Http, urls: List<String> = PACK_URLS): JSONObject {
             for (url in urls) {
                 val pack = try {
-                    val r = client.newCall(Request.Builder().url(url).header("Cache-Control", "no-cache").build()).await()
-                    r.use { if (it.isSuccessful) withContext(Dispatchers.IO) { it.body?.string() } else null }
-                        ?.let { JSONObject(it) }
+                    val r = http.get(url, mapOf("Cache-Control" to "no-cache"))
+                    if (r.isSuccessful) JSONObject(r.text()) else null
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
@@ -320,7 +302,7 @@ class AskEngine(
             val price = when {
                 cents < 1 -> "under 1¢"
                 cents < 10 -> "about ${fixed(cents, 1)}¢"
-                else -> "about ${Math.round(cents)}¢"
+                else -> "about ${roundHalfUp(cents)}¢"
             }
             return "${model.shortName} · $price" +
                 (if (usage[2] > 0) " (season data read from cache)" else "") +
@@ -360,18 +342,4 @@ class AskEngine(
                     .put("allowed_callers", JSONArray().put("code_execution_20260120"))
             )
     }
-}
-
-/** Runs the call off the main thread; cancelling the coroutine cancels the call. */
-private suspend fun Call.await(): Response = suspendCancellableCoroutine { cont ->
-    cont.invokeOnCancellation { cancel() }
-    enqueue(object : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-            if (!cont.isCancelled) cont.resumeWithException(e)
-        }
-
-        override fun onResponse(call: Call, response: Response) {
-            if (cont.isCancelled) response.close() else cont.resume(response)
-        }
-    })
 }

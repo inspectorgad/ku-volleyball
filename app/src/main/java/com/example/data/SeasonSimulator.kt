@@ -1,8 +1,8 @@
 package com.example.data
 
-import android.content.Context
 import com.example.json.JSONObject
-import java.io.File
+import com.example.platform.Device
+import com.example.text.roundHalfUp
 
 /**
  * The season simulator: plays the rest of the season out many times from the
@@ -181,7 +181,7 @@ object SeasonSimulator {
     fun chance(p: Double): String = when {
         p < 0.005 -> "under 1%"
         p > 0.995 -> "over 99%"
-        else -> "${Math.round(p * 100)}%"
+        else -> "${roundHalfUp(p * 100)}%"
     }
 }
 
@@ -192,21 +192,16 @@ object SeasonSimulator {
 object SimulationStore {
     private const val FILE = "simulation.json"
 
-    fun save(context: Context, root: JSONObject) {
+    fun save(device: Device, root: JSONObject) {
         val sim = root.optJSONObject("simulation") ?: return
         val generatedAt = root.optString("generatedAt")
-        val file = File(context.filesDir, FILE)
-        val stored = load(context)
+        val stored = load(device)
         if (stored != null && stored.optString("generatedAt") > generatedAt) return
-        runCatching {
-            file.writeText(JSONObject().put("generatedAt", generatedAt).put("simulation", sim).toString())
-        }
+        device.writeFile(FILE, JSONObject().put("generatedAt", generatedAt).put("simulation", sim).toString())
     }
 
-    fun load(context: Context): JSONObject? = runCatching {
-        JSONObject(File(context.filesDir, FILE).readText())
-    }.getOrNull()
+    fun load(device: Device): JSONObject? = device.readFile(FILE)?.let { runCatching { JSONObject(it) }.getOrNull() }
 
-    fun inputs(context: Context): SeasonSimulator.Inputs? =
-        load(context)?.optJSONObject("simulation")?.let { SeasonSimulator.parse(it) }
+    fun inputs(device: Device): SeasonSimulator.Inputs? =
+        load(device)?.optJSONObject("simulation")?.let { SeasonSimulator.parse(it) }
 }
