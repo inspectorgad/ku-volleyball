@@ -16,8 +16,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-/** A new [Http] that gives up connecting after [connectSeconds] and on a silent server after [readSeconds]. */
-fun newHttp(connectSeconds: Long, readSeconds: Long): Http = OkHttpHttp(connectSeconds, readSeconds)
+actual fun newHttp(connectSeconds: Long, readSeconds: Long): Http = OkHttpHttp(connectSeconds, readSeconds)
 
 /** [Http] on Android, through OkHttp. */
 class OkHttpHttp(connectSeconds: Long, readSeconds: Long) : Http {

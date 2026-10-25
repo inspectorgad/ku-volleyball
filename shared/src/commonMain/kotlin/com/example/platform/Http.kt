@@ -1,6 +1,12 @@
 package com.example.platform
 
 /**
+ * A new [Http] that gives up connecting after [connectSeconds] and on a silent
+ * server after [readSeconds]: OkHttp on Android, NSURLSession on iPhone.
+ */
+expect fun newHttp(connectSeconds: Long, readSeconds: Long): Http
+
+/**
  * Plain HTTP for the shared code: one request, the whole answer back. An
  * answer with an error status (404, 500) is still an answer; [HttpException]
  * means no answer arrived. Cancelling the calling coroutine cancels the request.

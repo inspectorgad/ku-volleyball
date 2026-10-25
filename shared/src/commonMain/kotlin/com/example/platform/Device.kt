@@ -1,8 +1,8 @@
 package com.example.platform
 
 // What the shared code needs from the phone it runs on, as interfaces, so the
-// same code can run on Android and on iPhone. AndroidDevice and OkHttpHttp are
-// Android's versions; the iPhone app supplies its own.
+// same code can run on Android and on iPhone. AndroidDevice is Android's
+// version (androidMain); the iPhone's comes with the iPhone app.
 
 /** Storage the app keeps on this phone. */
 interface Device {
