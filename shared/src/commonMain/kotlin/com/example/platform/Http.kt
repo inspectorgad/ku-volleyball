@@ -31,6 +31,12 @@ class HttpResponse(val code: Int, val body: ByteArray) {
 /**
  * The server couldn't be reached, or the connection broke before the whole
  * answer arrived. [code] is the status of an answer that broke off partway,
- * or null if no answer arrived at all.
+ * or null if no answer arrived at all. [reason] says why in plain words
+ * ("the request timed out"), for messages a reader sees.
  */
-class HttpException(message: String, cause: Throwable? = null, val code: Int? = null) : Exception(message, cause)
+class HttpException(
+    message: String,
+    cause: Throwable? = null,
+    val code: Int? = null,
+    val reason: String? = null,
+) : Exception(message, cause)

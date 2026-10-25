@@ -17,7 +17,7 @@ actual fun newHttp(connectSeconds: Long, readSeconds: Long): Http = DarwinHttp(c
  * [Http] on iPhone, through NSURLSession. Like OkHttp on Android it keeps no
  * cache and no cookies. NSURLSession has a single timeout for "nothing
  * received for this long", which covers connecting and reading, so it gets
- * the longer of the two.
+ * the longer of the two, on the session and on each request alike.
  */
 class DarwinHttp(connectSeconds: Long, readSeconds: Long) : Http {
     private val timeout = maxOf(connectSeconds, readSeconds).toDouble()
@@ -25,6 +25,10 @@ class DarwinHttp(connectSeconds: Long, readSeconds: Long) : Http {
         NSURLSessionConfiguration.ephemeralSessionConfiguration().apply {
             setHTTPCookieStorage(null)
             setURLCache(null)
+            // Set here as well as on each request: the session's own default
+            // is 60 seconds, too short for an Ask answer, which can take
+            // minutes while Claude runs its code.
+            setTimeoutIntervalForRequest(timeout)
         }
     )
 
@@ -59,8 +63,10 @@ class DarwinHttp(connectSeconds: Long, readSeconds: Long) : Http {
                     error == null && code != null -> cont.resume(HttpResponse(code, data?.toByteArray() ?: ByteArray(0)))
                     // An error after the status line arrived is an answer that broke off.
                     error != null && code != null ->
-                        cont.resumeWithException(HttpException("$host stopped answering: ${error.localizedDescription}", code = code))
-                    else -> cont.resumeWithException(HttpException("$host unreachable: ${error?.localizedDescription}"))
+                        cont.resumeWithException(
+                            HttpException("$host stopped answering: ${error.localizedDescription}", code = code, reason = error.reason())
+                        )
+                    else -> cont.resumeWithException(HttpException("$host unreachable: ${error?.localizedDescription}", reason = error?.reason()))
                 }
             }
             cont.invokeOnCancellation { task.cancel() }
@@ -68,3 +74,6 @@ class DarwinHttp(connectSeconds: Long, readSeconds: Long) : Http {
         }
     }
 }
+
+/** iOS's own description ("The request timed out."), as words to follow "Couldn't reach ...:". */
+private fun NSError.reason(): String = localizedDescription.trimEnd('.').replaceFirstChar { it.lowercase() }

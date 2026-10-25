@@ -199,7 +199,8 @@ class AskEngine(
             // An answer that broke off partway is not a network that blocks
             // Anthropic: let it through to the "Something went wrong" message.
             if (e.code != null) throw e.cause ?: e
-            throw AskException("Couldn't reach api.anthropic.com. Check your connection - some networks block it.")
+            val why = e.reason?.let { ": $it" }.orEmpty()
+            throw AskException("Couldn't reach api.anthropic.com$why. Check your connection - some networks block it.")
         }
         val text = response.text()
         if (!response.isSuccessful) throw AskException(explainError(response.code, text))

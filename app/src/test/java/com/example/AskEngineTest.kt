@@ -246,6 +246,19 @@ class AskEngineTest {
     }
 
     @Test
+    fun `an unreachable Anthropic is explained with the reason`() = runBlocking {
+        val closed = MockWebServer().apply { start() }
+        val url = closed.url("/").toString().trimEnd('/')
+        closed.shutdown()
+        val engine = AskEngine(http = OkHttpHttp(connectSeconds = 5, readSeconds = 5), baseUrl = url, loadPack = { pack })
+        val answer = engine.ask("Anyone there?", "sk-ant-test", opus, "2026-10-25")
+        assertEquals(
+            "Couldn't reach api.anthropic.com: the connection was refused. Check your connection - some networks block it.",
+            answer.error
+        )
+    }
+
+    @Test
     fun `server errors and cost lines read plainly`() {
         assertTrue(AskEngine.explainError(429, "").contains("rate limit"))
         assertTrue(AskEngine.explainError(529, "").contains("busy"))

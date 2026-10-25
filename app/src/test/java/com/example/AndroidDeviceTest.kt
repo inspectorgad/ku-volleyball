@@ -133,7 +133,7 @@ class AndroidDeviceTest {
     }
 
     @Test
-    fun `an unreachable server is an HttpException`() = runBlocking {
+    fun `an unreachable server is an HttpException that says why`() = runBlocking {
         val server = MockWebServer().apply { start() }
         val url = server.url("/").toString()
         server.shutdown()
@@ -144,5 +144,7 @@ class AndroidDeviceTest {
             e
         }
         assertTrue(thrown != null)
+        assertEquals(null, thrown!!.code)
+        assertEquals("the connection was refused", thrown.reason)
     }
 }
