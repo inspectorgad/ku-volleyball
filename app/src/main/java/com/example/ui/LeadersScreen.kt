@@ -14,9 +14,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -116,10 +113,14 @@ fun LeadersScreen(
         .mapValues { (_, lines) -> aggregate(lines) }
 
     val wins = seasonMatches.count {
-        it.teamSets != null && it.opponentSets != null && it.teamSets > it.opponentSets
+        val us = it.teamSets
+        val them = it.opponentSets
+        us != null && them != null && us > them
     }
     val losses = seasonMatches.count {
-        it.teamSets != null && it.opponentSets != null && it.teamSets < it.opponentSets
+        val us = it.teamSets
+        val them = it.opponentSets
+        us != null && them != null && us < them
     }
     val setsFor = seasonMatches.sumOf { it.teamSets ?: 0 }
     val setsAgainst = seasonMatches.sumOf { it.opponentSets ?: 0 }
