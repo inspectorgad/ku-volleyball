@@ -74,12 +74,13 @@ fun MatchesScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
         } else {
+            val phone = LocalPhone.current
             LazyColumn(
                 contentPadding = ListContentPadding,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 val (upcoming, results) = splitSchedule(matches, todayIso())
-                item(key = "alerts") { LocalPhone.current.AlertsCard() }
+                if (phone.hasMatchAlerts) item(key = "alerts") { phone.AlertsCard() }
                 if (upcoming.isNotEmpty()) {
                     item(key = "h-upcoming") { SectionHeader("Upcoming") }
                     items(upcoming, key = { it.id }) { match ->
@@ -565,6 +566,7 @@ fun MatchDetailScreen(
     // Opens "Ask about the team" with a preview or recap question.
     onAskClaude: ((String) -> Unit)? = null
 ) {
+    val phone = LocalPhone.current
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
     // A stat line is one tap from gone, and gone for good: a sync never refills
@@ -702,9 +704,8 @@ fun MatchDetailScreen(
                 }
             }
             // The result as a picture for a text or a post.
-            resultCard(match, players, statLines, matches)?.let { card ->
+            resultCard(match, players, statLines, matches)?.takeIf { phone.sharesResultPictures }?.let { card ->
                 item {
-                    val phone = LocalPhone.current
                     OutlinedButton(onClick = { phone.shareResult(card) }, modifier = Modifier.fillMaxWidth()) {
                         Text("Share result image")
                     }

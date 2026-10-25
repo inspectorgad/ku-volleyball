@@ -6,12 +6,8 @@ package com.example.platform
 // extension functions, hence the whole package.
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.UnsafeNumber
-import kotlinx.cinterop.addressOf
-import kotlinx.cinterop.convert
-import kotlinx.cinterop.usePinned
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.*
-import platform.posix.memcpy
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -71,16 +67,4 @@ class DarwinHttp(connectSeconds: Long, readSeconds: Long) : Http {
             task.resume()
         }
     }
-}
-
-private fun ByteArray.toNSData(): NSData = NSMutableData().apply {
-    if (isEmpty()) return@apply
-    this@toNSData.usePinned { appendBytes(it.addressOf(0), size.convert()) }
-}
-
-private fun NSData.toByteArray(): ByteArray {
-    val result = ByteArray(length.toInt())
-    if (result.isEmpty()) return result
-    result.usePinned { memcpy(it.addressOf(0), bytes, length) }
-    return result
 }

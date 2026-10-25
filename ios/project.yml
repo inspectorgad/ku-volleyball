@@ -10,7 +10,7 @@ options:
   createIntermediateGroups: true
 settings:
   base:
-    MARKETING_VERSION: "0.1.0"
+    MARKETING_VERSION: "0.2.0"
     # CI replaces this with the workflow's run number: every upload to
     # TestFlight needs a build number higher than the last.
     CURRENT_PROJECT_VERSION: "1"
@@ -20,6 +20,20 @@ targets:
     platform: iOS
     sources:
       - path: App
+      # The season data the app starts from before its first sync, the same
+      # file the Android app bundles.
+      - path: ../app/src/main/assets/seed.json
+        buildPhase: resources
+    # Builds the shared Kotlin code into Shared.framework for whichever
+    # device and configuration Xcode is building, before Swift compiles
+    # against it. Gradle runs on every build and is quick when nothing changed.
+    preBuildScripts:
+      - name: Build the shared Kotlin framework
+        basedOnDependencyAnalysis: false
+        script: |
+          set -e
+          cd "$SRCROOT/.."
+          gradle :shared:embedAndSignAppleFrameworkForXcode
     info:
       path: Info.plist
       properties:
@@ -34,6 +48,9 @@ targets:
         # Apple exempts; saying so here skips the export-compliance question
         # on every TestFlight build.
         ITSAppUsesNonExemptEncryption: false
+        # Compose draws at the screen's full refresh rate, which iOS only
+        # allows with this set; Compose Multiplatform refuses to start without it.
+        CADisableMinimumFrameDurationOnPhone: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.inspectorgad.kuvolleyball
@@ -42,4 +59,10 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
+        # Where the build step above puts Shared.framework.
+        FRAMEWORK_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)"
+        # The Gradle step reads and writes outside Xcode's sandbox.
+        ENABLE_USER_SCRIPT_SANDBOXING: "NO"
     scheme: {}

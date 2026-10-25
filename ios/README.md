@@ -3,9 +3,15 @@
 The iPhone version of KU Volleyball, built by GitHub Actions and delivered
 through TestFlight.
 
+It is a thin shell around the shared Kotlin code in `shared/`: the same
+screens, database, season sync and Ask as the Android app, drawn with
+Compose Multiplatform. The Swift here only puts those screens on the phone.
+
 - `project.yml` describes the Xcode project for XcodeGen; CI generates the
-  `.xcodeproj` from it.
-- `App/` holds the app's code and its icon.
+  `.xcodeproj` from it. Its build step runs Gradle to compile `shared/` into
+  `Shared.framework` for the device or simulator being built.
+- `App/` holds the Swift entry point and the icon. The season data the app
+  starts from (`app/src/main/assets/seed.json`) is bundled too.
 - `check_apple_keys.py` (run by the "Apple keys check" workflow) confirms the
   Apple secrets work without printing them.
 
@@ -15,8 +21,8 @@ anything here changes on a branch, or by hand from the Actions tab. Each
 upload takes the workflow's run number as its build number, and Apple then
 spends 5-30 minutes processing it before it appears in the TestFlight app.
 
-For now the app is a test build that shows the season dashboard; the real
-app, sharing its code with the Android one, replaces it.
+Not on iPhone yet: match alerts (to come as push notifications from the
+match-night watcher), the home-screen widget, and the result picture.
 
 ## Secrets
 

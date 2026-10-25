@@ -10,6 +10,10 @@ name: iOS TestFlight build
 # needs no certificate stored in this repository and no registered device,
 # which a new developer account does not have. Xcode 26 is required: App Store
 # Connect has refused builds from older Xcodes since 28 April 2026.
+#
+# The app's screens and logic are the shared Kotlin code in shared/, which
+# Xcode builds into Shared.framework through Gradle as a step of its own build
+# (see ios/project.yml), so this job sets up Java and Gradle too.
 on:
   workflow_dispatch:
   push:
@@ -26,14 +30,38 @@ concurrency:
 jobs:
   testflight:
     runs-on: macos-26
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
-      - name: Show the toolchain
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.4.1'
+
+      # Kotlin 2.4.21 is tested with Xcode up to 26.4; the runner's default is
+      # newer. 26.4 still meets App Store Connect's Xcode 26 requirement.
+      - name: Use Xcode 26.4.1
         run: |
+          sudo xcode-select -s /Applications/Xcode_26.4.1.app/Contents/Developer
           xcodebuild -version
           echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
+
+      # Kotlin/Native's compiler and its iOS libraries, about 1 GB, fetched once.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+
+      # The same link Xcode's build step asks for, run first so a Kotlin error
+      # reads plainly here rather than deep in the Xcode log; Xcode then finds
+      # it already done.
+      - name: Build the shared Kotlin framework
+        run: gradle :shared:linkReleaseFrameworkIosArm64
 
       - name: Generate the Xcode project
         run: |

@@ -1,48 +1,26 @@
 import SwiftUI
-import WebKit
+import Shared
 
-// The TestFlight test build. Its job is to prove the path from GitHub to a
-// phone - Apple's signing, the upload, TestFlight - before the real app
-// arrives on it. Until then it shows the season dashboard, so it is useful
-// rather than blank. The shared Android/iPhone app replaces this file.
-
-private let dashboard = URL(string: "https://inspectorgad.github.io/ku-volleyball/")!
+// The iPhone app. Everything on screen is the shared Kotlin code - the same
+// screens, data and season sync as the Android app - built into the Shared
+// framework from shared/ and shown here full screen. MainViewController is
+// in shared/src/iosMain/kotlin/com/example/MainViewController.kt.
 
 @main
 struct KUVolleyballApp: App {
     var body: some Scene {
         WindowGroup {
-            DashboardView(url: dashboard)
-                .ignoresSafeArea(edges: .bottom)
+            // The shared screens lay themselves out around the notch, the
+            // home indicator and the keyboard, so they get the whole screen.
+            SharedScreens().ignoresSafeArea()
         }
     }
 }
 
-struct DashboardView: UIViewRepresentable {
-    let url: URL
-
-    func makeUIView(context: Context) -> WKWebView {
-        let view = WKWebView()
-        view.allowsBackForwardNavigationGestures = true
-        // Pull down to reload, as in the Android app.
-        let refresh = UIRefreshControl()
-        refresh.addTarget(context.coordinator, action: #selector(Coordinator.reload(_:)), for: .valueChanged)
-        view.scrollView.refreshControl = refresh
-        context.coordinator.webView = view
-        view.load(URLRequest(url: url))
-        return view
+struct SharedScreens: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        MainViewControllerKt.MainViewController()
     }
 
-    func updateUIView(_ view: WKWebView, context: Context) {}
-
-    func makeCoordinator() -> Coordinator { Coordinator() }
-
-    final class Coordinator: NSObject {
-        weak var webView: WKWebView?
-
-        @objc func reload(_ sender: UIRefreshControl) {
-            webView?.reload()
-            sender.endRefreshing()
-        }
-    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 }
