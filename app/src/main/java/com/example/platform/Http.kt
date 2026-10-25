@@ -19,8 +19,12 @@ class HttpResponse(val code: Int, val body: ByteArray) {
      * The body as UTF-8 text, which JSON always is. A leading byte-order mark
      * is dropped, as OkHttp's Response.string() drops it.
      */
-    fun text(): String = body.decodeToString().removePrefix("﻿")
+    fun text(): String = body.decodeToString().removePrefix("\uFEFF")
 }
 
-/** The server couldn't be reached, or the connection broke before the whole answer arrived. */
-class HttpException(message: String, cause: Throwable? = null) : Exception(message, cause)
+/**
+ * The server couldn't be reached, or the connection broke before the whole
+ * answer arrived. [code] is the status of an answer that broke off partway,
+ * or null if no answer arrived at all.
+ */
+class HttpException(message: String, cause: Throwable? = null, val code: Int? = null) : Exception(message, cause)

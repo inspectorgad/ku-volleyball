@@ -24,6 +24,19 @@ class OkHttpHttp(connectSeconds: Long, readSeconds: Long) : Http {
     private val client = OkHttpClient.Builder()
         .connectTimeout(connectSeconds, TimeUnit.SECONDS)
         .readTimeout(readSeconds, TimeUnit.SECONDS)
+        // A call runs on OkHttp's own thread, which rethrows anything that is
+        // not an IOException and so would crash the app (some phones' DNS
+        // throws SecurityException when the app's network access is turned
+        // off). As an IOException it becomes an ordinary failed request.
+        .addInterceptor { chain ->
+            try {
+                chain.proceed(chain.request())
+            } catch (e: IOException) {
+                throw e
+            } catch (e: Exception) {
+                throw IOException(e)
+            }
+        }
         .build()
 
     override suspend fun get(url: String, headers: Map<String, String>): HttpResponse =
@@ -47,7 +60,7 @@ class OkHttpHttp(connectSeconds: Long, readSeconds: Long) : Http {
                 try {
                     HttpResponse(it.code, it.body?.bytes() ?: ByteArray(0))
                 } catch (e: IOException) {
-                    throw HttpException("${request.url.host} stopped answering", e)
+                    throw HttpException("${request.url.host} stopped answering", e, code = it.code)
                 }
             }
         }

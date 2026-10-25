@@ -101,7 +101,7 @@ class AndroidDeviceTest {
             val bytes = byteArrayOf(0x7b, 0x7d, 0, -1, 0x0a)
             server.enqueue(MockResponse().setBody(Buffer().write(bytes)))
             server.enqueue(MockResponse().setResponseCode(404).setBody("missing"))
-            server.enqueue(MockResponse().setBody("﻿{\"a\":1}"))
+            server.enqueue(MockResponse().setBody("\uFEFF{\"a\":1}"))
             server.enqueue(MockResponse())
             val http = OkHttpHttp(connectSeconds = 10, readSeconds = 10)
 

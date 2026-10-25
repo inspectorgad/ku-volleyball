@@ -108,6 +108,16 @@ class SeasonSyncTest {
     }
 
     @Test
+    fun `an answer that breaks off reads as its status, or as unreachable if it was a success`() = runBlocking {
+        fun brokeOff(code: Int): suspend () -> HttpResponse = { throw HttpException("stopped answering", code = code) }
+        val http = FakeHttp(mapOf(pages to brokeOff(200), raw to brokeOff(502), release to unreachable))
+        assertEquals(
+            SyncResult.Failed("inspectorgad.github.io unreachable; raw.githubusercontent.com 502; github.com unreachable"),
+            SeasonSync.sync(device, db.dao(), http),
+        )
+    }
+
+    @Test
     fun `the first good feed wins, then the same data again is no change`() = runBlocking {
         val bytes = season("2026-10-25T07:42:36Z")
         val http = FakeHttp(mapOf(pages to answer(503, ByteArray(0)), raw to ok(bytes)))

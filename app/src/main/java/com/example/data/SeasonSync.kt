@@ -3,6 +3,7 @@ package com.example.data
 import com.example.json.JSONObject
 import com.example.platform.Device
 import com.example.platform.Http
+import com.example.platform.HttpException
 import com.example.platform.newHttp
 import com.example.text.currentTimeMs
 import com.example.text.hex2
@@ -98,6 +99,9 @@ object SeasonSync {
                 }
             } catch (e: CancellationException) {
                 throw e
+            } catch (e: HttpException) {
+                // An error status whose body broke off still reads as that status.
+                failures += e.code?.takeIf { it !in 200..299 }?.let { "$host $it" } ?: "$host unreachable"; null
             } catch (e: Exception) {
                 failures += "$host unreachable"; null
             } ?: continue
