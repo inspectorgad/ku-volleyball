@@ -8,6 +8,11 @@ on:
   push:
     branches-ignore:
       - main
+    # The iPhone app and the Apple checks have their own workflows.
+    paths-ignore:
+      - 'ios/**'
+      - '.github/workflows/ios-testflight.yml'
+      - '.github/workflows/apple-keys-check.yml'
 
 jobs:
   android:

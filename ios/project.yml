@@ -1,0 +1,45 @@
+# The iPhone app's Xcode project, described for XcodeGen. CI runs
+# `xcodegen generate` to turn this into KUVolleyball.xcodeproj, so the
+# project file itself is never committed or hand-edited; to open it in Xcode
+# on a Mac, install XcodeGen (`brew install xcodegen`) and run the same
+# command in this folder.
+name: KUVolleyball
+options:
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    # CI replaces this with the workflow's run number: every upload to
+    # TestFlight needs a build number higher than the last.
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  KUVolleyball:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: KU Volleyball
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # The app uses only the encryption built into iOS (HTTPS), which
+        # Apple exempts; saying so here skips the export-compliance question
+        # on every TestFlight build.
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.inspectorgad.kuvolleyball
+        PRODUCT_NAME: KUVolleyball
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+    scheme: {}

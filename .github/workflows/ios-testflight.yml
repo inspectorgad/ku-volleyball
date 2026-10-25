@@ -1,0 +1,88 @@
+name: iOS TestFlight build
+
+# Builds the iPhone app on one of GitHub's Macs and sends it to TestFlight,
+# from where it installs on the phone. Runs by hand, or when the iPhone app
+# changes on a branch.
+#
+# Signing happens at upload, not at build: the archive is built unsigned and
+# `xcodebuild -exportArchive`, given the App Store Connect key, signs it with
+# a distribution certificate Apple keeps for the team ("cloud signing"). That
+# needs no certificate stored in this repository and no registered device,
+# which a new developer account does not have. Xcode 26 is required: App Store
+# Connect has refused builds from older Xcodes since 28 April 2026.
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - 'ios/**'
+      - '!ios/check_apple_keys.py'
+      - '.github/workflows/ios-testflight.yml'
+
+concurrency:
+  group: ios-testflight
+
+jobs:
+  testflight:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show the toolchain
+        run: |
+          xcodebuild -version
+          echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
+
+      - name: Generate the Xcode project
+        run: |
+          brew install xcodegen
+          cd ios && xcodegen generate
+
+      - name: Build the archive
+        run: |
+          # Run number and attempt, so a re-run still uploads a new build number.
+          xcodebuild archive \
+            -project ios/KUVolleyball.xcodeproj \
+            -scheme KUVolleyball \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/KUVolleyball.xcarchive" \
+            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Sign and upload to TestFlight
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          KEY="$RUNNER_TEMP/AuthKey.p8"
+          printf '%s\n' "$ASC_KEY_P8" > "$KEY"
+          trap 'rm -f "$KEY"' EXIT
+          # Internal testing only: the build goes to testers on this team
+          # and never to Apple's beta review.
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>$APPLE_TEAM_ID</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+            <key>testFlightInternalTestingOnly</key><true/>
+          </dict>
+          </plist>
+          PLIST
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/KUVolleyball.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEY" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
