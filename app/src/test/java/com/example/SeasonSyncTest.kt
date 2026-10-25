@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.data.JayhawksDatabase
 import com.example.data.SeasonSync
+import com.example.data.Seeder
 import com.example.data.SimulationStore
 import com.example.data.SyncResult
 import com.example.json.JSONArray
@@ -139,6 +140,21 @@ class SeasonSyncTest {
         assertEquals(javaHash, prefs.getString("last_hash", null))
 
         assertEquals(SyncResult.NoChange, SeasonSync.sync(device, db.dao(), http))
+    }
+
+    @Test
+    fun `the season data bundled in the app never rolls back newer data from the feed`() = runBlocking {
+        // The feed's data is newer than the app's own copy (this repo's seed.json).
+        val newer = FakeHttp(mapOf(pages to ok(season("2099-01-01T00:00:00Z"))))
+        assertEquals(SyncResult.Updated("2099-01-01T00:00:00Z"), SeasonSync.sync(device, db.dao(), newer))
+        Seeder.sync(device, db.dao())
+        assertEquals(16, db.dao().matchesOnce().size)
+
+        // The feed's data is older: the app's own copy is merged in at launch.
+        val older = FakeHttp(mapOf(pages to ok(season("2000-01-01T00:00:00Z"))))
+        assertEquals(SyncResult.Updated("2000-01-01T00:00:00Z"), SeasonSync.sync(device, db.dao(), older))
+        Seeder.sync(device, db.dao())
+        assertTrue(db.dao().matchesOnce().size > 16)
     }
 
     @Test

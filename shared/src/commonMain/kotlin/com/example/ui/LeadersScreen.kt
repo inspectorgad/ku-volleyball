@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Card
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -141,7 +140,7 @@ fun LeadersScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             (seasons + ALL_SEASONS).forEach { s ->
-                FilterChip(
+                AppFilterChip(
                     selected = season == s,
                     onClick = { selectedSeason = s },
                     label = { Text(s) }
@@ -157,7 +156,7 @@ fun LeadersScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 MatchScope.entries.forEach { sc ->
-                    FilterChip(
+                    AppFilterChip(
                         selected = selectedScope == sc,
                         onClick = { selectedScope = sc },
                         label = { Text(sc.label) }
@@ -540,7 +539,8 @@ fun SeasonGoalsCard(
                     .fillMaxWidth()
                     .combinedClickable(
                         onClick = { openGoal = if (open) null else t.idx },
-                        onLongClick = toggleExplanation
+                        onLongClick = toggleExplanation,
+                        hapticFeedbackEnabled = false
                     )
                     .padding(vertical = 3.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -654,7 +654,7 @@ fun NationalLeadersCard(rows: List<NationalLeader>, modifier: Modifier = Modifie
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 categories.forEach { c ->
-                    FilterChip(
+                    AppFilterChip(
                         selected = category == c,
                         onClick = { selected = c; expanded = false },
                         label = { Text(c) }

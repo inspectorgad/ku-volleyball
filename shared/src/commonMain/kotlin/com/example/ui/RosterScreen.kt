@@ -412,7 +412,8 @@ fun PlayerDetailScreen(
                                     .fillMaxWidth()
                                     .combinedClickable(
                                         onClick = { openForm = if (open) null else f.label },
-                                        onLongClick = toggleExplanation
+                                        onLongClick = toggleExplanation,
+                                        hapticFeedbackEnabled = false
                                     )
                                     .padding(vertical = 4.dp)
                             )

@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -83,7 +82,7 @@ fun StandingsScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 seasons.forEach { s ->
-                    FilterChip(
+                    AppFilterChip(
                         selected = season == s,
                         onClick = { selectedSeason = s },
                         label = { Text(s) }
@@ -224,7 +223,7 @@ private fun ServingLeagueCard(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 ServingSort.entries.forEach { option ->
-                    FilterChip(
+                    AppFilterChip(
                         selected = sort == option,
                         onClick = { onSortChange(option) },
                         label = { Text(option.label, fontSize = 11.sp) }

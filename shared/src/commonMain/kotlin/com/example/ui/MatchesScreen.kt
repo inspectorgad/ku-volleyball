@@ -1,6 +1,5 @@
 package com.example.ui
 
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -508,7 +506,7 @@ fun MatchDialog(
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf("Home", "Away", "Neutral").forEach { option ->
-                        FilterChip(
+                        AppFilterChip(
                             selected = site == option,
                             onClick = { site = option },
                             label = { Text(option) }
@@ -690,7 +688,7 @@ fun MatchDetailScreen(
             // recap after it, through "Ask about the team".
             onAskClaude?.let { ask ->
                 item {
-                    OutlinedButton(
+                    AppOutlinedButton(
                         onClick = {
                             ask(
                                 if (match.played) recapQuestion(match.date, match.versus, match.opponent)
@@ -706,7 +704,7 @@ fun MatchDetailScreen(
             // The result as a picture for a text or a post.
             resultCard(match, players, statLines, matches)?.takeIf { phone.sharesResultPictures }?.let { card ->
                 item {
-                    OutlinedButton(onClick = { phone.shareResult(card) }, modifier = Modifier.fillMaxWidth()) {
+                    AppOutlinedButton(onClick = { phone.shareResult(card) }, modifier = Modifier.fillMaxWidth()) {
                         Text("Share result image")
                     }
                 }

@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -115,7 +114,7 @@ fun OpponentsScreen(
                 item(key = "seasons") {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         seasons.forEach { s ->
-                            FilterChip(
+                            AppFilterChip(
                                 selected = s == season,
                                 onClick = { selectedSeason = s },
                                 label = { Text(s) }

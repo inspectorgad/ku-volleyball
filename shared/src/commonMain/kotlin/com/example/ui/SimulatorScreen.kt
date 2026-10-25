@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -129,9 +128,9 @@ fun SimulatorScreen(inputs: SeasonSimulator.Inputs, onBack: () -> Unit) {
                         )
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        FilterChip(selected = forced[i] == null, onClick = { forced.remove(i) }, label = { Text("Model") })
-                        FilterChip(selected = forced[i] == true, onClick = { forced[i] = true }, label = { Text("Win") })
-                        FilterChip(selected = forced[i] == false, onClick = { forced[i] = false }, label = { Text("Loss") })
+                        AppFilterChip(selected = forced[i] == null, onClick = { forced.remove(i) }, label = { Text("Model") })
+                        AppFilterChip(selected = forced[i] == true, onClick = { forced[i] = true }, label = { Text("Win") })
+                        AppFilterChip(selected = forced[i] == false, onClick = { forced[i] = false }, label = { Text("Loss") })
                     }
                 }
             }

@@ -15,6 +15,12 @@ import com.example.platform.Device
  * This lets an updated APK (with fresh season data baked in) install over the
  * old one and pick up the new matches while keeping local edits intact.
  *
+ * The fields the feed owns - standings, polls, ranks, forecasts, first-serve
+ * times - are rewritten, though, so a bundled copy older than the season data
+ * the phone already took from the online feed is left alone: applied, it would
+ * roll those back on every launch, and the sync would not restore them while
+ * the feed is unchanged.
+ *
  * Seed match shape:
  * {
  *   "date": "2025-08-29", "opponent": "Wisconsin", "season": "2025",
@@ -32,10 +38,23 @@ object Seeder {
 
         runCatching {
             val root = JSONObject(json)
+            if (olderThan(root.optString("generatedAt"), SeasonSync.lastGeneratedAt(device))) return
             merge(root, dao)
             SimulationStore.save(device, root)
         }
     }
+
+    private val STAMP = Regex("""\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ""")
+
+    /**
+     * Whether the bundled data, generated at [seed], is older than the feed
+     * data last merged, generated at [feed]. Both are the scraper's UTC stamps
+     * ("2026-10-25T07:42:36Z"), which sort as text. The same stamp is not older,
+     * so a copy matching the feed is applied, which puts back anything an older
+     * copy rolled back; a missing or unreadable stamp never holds it back.
+     */
+    internal fun olderThan(seed: String?, feed: String?): Boolean =
+        seed != null && feed != null && STAMP.matches(seed) && STAMP.matches(feed) && seed < feed
 
     private fun matchKey(date: String, opponent: String) = "$date|${normTeam(opponent)}"
 

@@ -1,6 +1,7 @@
 package com.example.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -23,6 +24,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,10 +32,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
@@ -182,6 +188,42 @@ val STAT_GLOSSARY: Map<String, String> = buildMap {
 /** Tooltips are invisible until touched, so tables say out loud that they are there. */
 const val TOOLTIP_HINT = "Press and hold a heading to see what it means."
 
+// Material 3 1.4 recoloured outlined buttons and chips in quieter greys. The
+// app keeps the look it was designed with: outlined buttons in KU blue on a
+// mid-grey border, chip borders in that same grey. Screens use these in place
+// of OutlinedButton and FilterChip so the colours are set in one place.
+
+/** An OutlinedButton as the app has always drawn it: KU-blue text, mid-grey border. */
+@Composable
+fun AppOutlinedButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier,
+        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        content = content
+    )
+}
+
+/** A FilterChip whose unselected border is the mid-grey outline it has always had. */
+@Composable
+fun AppFilterChip(selected: Boolean, onClick: () -> Unit, label: @Composable () -> Unit) {
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = label,
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = true,
+            selected = selected,
+            borderColor = MaterialTheme.colorScheme.outline
+        )
+    )
+}
+
 /**
  * Wraps [content] in a long-press tooltip when [term] has a definition.
  *
@@ -199,7 +241,10 @@ fun StatTooltip(term: String, content: @Composable () -> Unit) {
     TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = { PlainTooltip { Text(explanation) } },
-        state = rememberTooltipState()
+        state = rememberTooltipState(),
+        // While the bubble shows, a tap or Back only closes it, as it always
+        // has; Material 3 1.4 made tooltips let them through by default.
+        focusable = true
     ) {
         content()
     }
@@ -355,7 +400,9 @@ const val HOLD_HINT = "Press and hold any card (or tap ⓘ) to see what its numb
  * corner, and the explanation opens underneath; do either again to close it.
  *
  * [content] gets the toggle, for a card whose rows are themselves tappable -
- * a row's own tap handler would otherwise swallow the hold.
+ * a row's own tap handler would otherwise swallow the hold. The toggle buzzes
+ * itself, so a combinedClickable that calls it on a hold must not buzz too:
+ * pass it hapticFeedbackEnabled = false.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -372,7 +419,7 @@ fun ExplainedCard(
         open = !open
     }
     val hold = if (onClick != null) {
-        Modifier.combinedClickable(onClick = onClick, onLongClick = toggle)
+        Modifier.combinedClickable(onClick = onClick, onLongClick = toggle, hapticFeedbackEnabled = false)
     } else {
         Modifier.pointerInput(Unit) { detectTapGestures(onLongPress = { toggle() }) }
     }

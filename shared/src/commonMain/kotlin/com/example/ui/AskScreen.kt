@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,7 +30,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,6 +45,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentDataType
+import androidx.compose.ui.platform.LocalAutofillManager
+import androidx.compose.ui.semantics.contentDataType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -240,7 +244,14 @@ fun AskScreen(onBack: () -> Unit, prefill: String? = null) {
                         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text("Try one of these:", style = MaterialTheme.typography.labelMedium)
                             EXAMPLES.forEach { ex ->
-                                AssistChip(onClick = { question = ex }, label = { Text(ex) })
+                                AssistChip(
+                                    onClick = { question = ex },
+                                    label = { Text(ex) },
+                                    border = AssistChipDefaults.assistChipBorder(
+                                        enabled = true,
+                                        borderColor = MaterialTheme.colorScheme.outline
+                                    )
+                                )
                             }
                         }
                     }
@@ -279,6 +290,7 @@ private fun KeyCard(
     var keep by rememberSaveable { mutableStateOf(true) }
     var problem by remember { mutableStateOf<String?>(null) }
     var menuOpen by remember { mutableStateOf(false) }
+    val autofill = LocalAutofillManager.current
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             if (savedKey == null) {
@@ -290,7 +302,11 @@ private fun KeyCard(
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    modifier = Modifier.fillMaxWidth()
+                    // The key stays in this app. The password keyboard (which keeps the
+                    // keyboard from learning it) also marks the field as a password for the
+                    // phone's password manager, which would offer to save the key - and sync
+                    // it to its cloud - once the field closes. So it is kept out of autofill.
+                    modifier = Modifier.fillMaxWidth().semantics { contentDataType = ContentDataType.None }
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(checked = keep, onCheckedChange = { keep = it })
@@ -301,6 +317,9 @@ private fun KeyCard(
                         if (!k.startsWith("sk-ant-")) {
                             problem = "That doesn't look like an Anthropic API key (they start with sk-ant-)."
                         } else {
+                            // Ends any autofill session another field opened, without
+                            // saving, before this field leaves the screen.
+                            autofill?.cancel()
                             onKey(k, keep)
                             entry = ""
                         }
@@ -321,7 +340,7 @@ private fun KeyCard(
             }
             Text("Model", style = MaterialTheme.typography.labelMedium)
             Box {
-                OutlinedButton(onClick = { menuOpen = true }, modifier = Modifier.fillMaxWidth()) {
+                AppOutlinedButton(onClick = { menuOpen = true }, modifier = Modifier.fillMaxWidth()) {
                     Text(model.label, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
                     Text("▾")
                 }
@@ -407,7 +426,7 @@ private fun AskInput(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (busy) {
-                OutlinedButton(onClick = onStop) { Text("Stop") }
+                AppOutlinedButton(onClick = onStop) { Text("Stop") }
             } else {
                 Button(onClick = onAsk, enabled = hasKey && question.isNotBlank()) { Text("Ask") }
             }
