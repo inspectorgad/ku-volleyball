@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.getValue
@@ -390,7 +387,7 @@ fun ExplainedCard(
                 modifier = Modifier.align(Alignment.TopEnd).size(36.dp)
             ) {
                 Icon(
-                    if (open) Icons.Filled.Info else Icons.Outlined.Info,
+                    if (open) AppIcons.Info else AppIcons.InfoOutlined,
                     contentDescription = if (open) "Hide explanation" else "What this card means",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(18.dp)
@@ -422,7 +419,7 @@ fun ExplainedHeading(
             Text(title, style = style, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
             IconButton(onClick = toggle, modifier = Modifier.size(36.dp)) {
                 Icon(
-                    if (open) Icons.Filled.Info else Icons.Outlined.Info,
+                    if (open) AppIcons.Info else AppIcons.InfoOutlined,
                     contentDescription = if (open) "Hide explanation" else "What this means",
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(18.dp)

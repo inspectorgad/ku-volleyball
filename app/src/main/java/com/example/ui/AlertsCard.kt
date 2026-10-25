@@ -32,9 +32,9 @@ const val EXPLAIN_ALERTS =
         "set. For the home-screen widget, long-press your home screen, choose Widgets, and find " +
         "KU Volleyball."
 
-/** The match-alerts switch, at the top of the Matches tab. */
+/** The match-alerts switch, at the top of the Matches tab: Android's, behind [Phone.AlertsCard]. */
 @Composable
-fun AlertsCard() {
+fun MatchAlertsCard() {
     val context = LocalContext.current
     var on by remember { mutableStateOf(AlertSettings.enabled(context)) }
     var denied by remember { mutableStateOf(false) }

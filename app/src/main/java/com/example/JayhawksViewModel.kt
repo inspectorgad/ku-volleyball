@@ -1,10 +1,9 @@
 package com.example
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.ConferenceStanding
-import com.example.data.JayhawksDatabase
+import com.example.data.JayhawksDao
 import com.example.data.Match
 import com.example.data.MatchGoal
 import com.example.data.MatchTeamStats
@@ -14,8 +13,6 @@ import com.example.data.OpponentSeasonStat
 import com.example.data.OpponentStatLine
 import com.example.data.Player
 import com.example.data.PollEntry
-import com.example.data.KuWidget
-import com.example.data.MatchAlertWorker
 import com.example.data.SeasonSimulator
 import com.example.data.SeasonSync
 import com.example.data.SimulationStore
@@ -23,8 +20,7 @@ import com.example.data.Seeder
 import com.example.data.StatLine
 import com.example.data.TeamServing
 import com.example.data.SyncResult
-import com.example.data.get
-import com.example.platform.AndroidDevice
+import com.example.platform.Device
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,10 +31,28 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
+/**
+ * Chores outside the app that follow the season data: on Android, the
+ * home-screen widget and the background check that sends match alerts.
+ */
+interface Upkeep {
+    /** The app opened: start or stop background checks to match the settings. */
+    fun appOpened()
 
-    private val dao = JayhawksDatabase.get(app).dao()
-    private val device = AndroidDevice(app)
+    /** New season data arrived: redraw anything outside the app that shows it. */
+    fun dataChanged()
+}
+
+/**
+ * The screens' data and actions. It is handed the database, the phone's
+ * storage and [Upkeep] rather than taking them from Android, so the same
+ * class can serve the iPhone app.
+ */
+class JayhawksViewModel(
+    private val dao: JayhawksDao,
+    private val device: Device,
+    private val upkeep: Upkeep
+) : ViewModel() {
 
     private val _isSyncing = MutableStateFlow(false)
     val isSyncing: StateFlow<Boolean> = _isSyncing.asStateFlow()
@@ -68,8 +82,8 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
             // throttled network sync for anything newer.
             Seeder.sync(device, dao)
             _simulation.value = SimulationStore.inputs(device)
-            runCatching { KuWidget.updateAll(app) }
-            MatchAlertWorker.reschedule(app)
+            upkeep.dataChanged()
+            upkeep.appOpened()
             if (SeasonSync.shouldAutoSync(device)) refreshInternal(manual = false)
         }
     }
@@ -86,7 +100,7 @@ class JayhawksViewModel(app: Application) : AndroidViewModel(app) {
         }
         _dataUpdatedAt.value = SeasonSync.lastGeneratedAt(device)
         _simulation.value = SimulationStore.inputs(device)
-        runCatching { KuWidget.updateAll(getApplication()) }
+        upkeep.dataChanged()
         _lastCheckedMs.value = SeasonSync.lastSuccessMs(device)
         _syncFailure.value = SeasonSync.lastFailure(device)
         if (manual) {

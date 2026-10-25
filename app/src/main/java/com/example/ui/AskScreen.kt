@@ -18,8 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -47,7 +45,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -57,7 +54,6 @@ import com.example.data.ASK_MODELS
 import com.example.data.AskEngine
 import com.example.data.AskKeyStore
 import com.example.data.AskModel
-import com.example.platform.AndroidDevice
 import com.example.text.todayIso
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -163,8 +159,7 @@ object AskSession {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AskScreen(onBack: () -> Unit, prefill: String? = null) {
-    val context = LocalContext.current.applicationContext
-    val device = remember(context) { AndroidDevice(context) }
+    val device = LocalPhone.current.device
     var savedKey by remember { mutableStateOf(AskSession.sessionKey ?: AskKeyStore.load(device)) }
     var model by remember { mutableStateOf(AskKeyStore.model(device)) }
     var question by rememberSaveable { mutableStateOf("") }
@@ -191,7 +186,7 @@ fun AskScreen(onBack: () -> Unit, prefill: String? = null) {
                 title = { Text("Ask about the team") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(AppIcons.ArrowBack, contentDescription = "Back")
                     }
                 }
             )

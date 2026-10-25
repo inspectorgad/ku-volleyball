@@ -3,13 +3,6 @@ package com.example.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.Leaderboard
-import androidx.compose.material.icons.filled.Shield
-import androidx.compose.material.icons.filled.SportsVolleyball
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -28,7 +21,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.JayhawksViewModel
 
 enum class Tab(val label: String) {
@@ -38,7 +30,7 @@ enum class Tab(val label: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
+fun JayhawksApp(viewModel: JayhawksViewModel) {
     var currentTab by rememberSaveable { mutableStateOf(Tab.Roster) }
     // Detail overlays: at most one is open at a time; back closes it.
     var openPlayerId by rememberSaveable { mutableStateOf<Long?>(null) }
@@ -153,12 +145,12 @@ fun JayhawksApp(viewModel: JayhawksViewModel = viewModel()) {
                             icon = {
                                 Icon(
                                     imageVector = when (tab) {
-                                        Tab.Roster -> Icons.Default.Groups
-                                        Tab.Matches -> Icons.AutoMirrored.Filled.List
-                                        Tab.Leaders -> Icons.Default.EmojiEvents
-                                        Tab.Serving -> Icons.Default.SportsVolleyball
-                                        Tab.Opponents -> Icons.Default.Shield
-                                        Tab.Big12 -> Icons.Default.Leaderboard
+                                        Tab.Roster -> AppIcons.Groups
+                                        Tab.Matches -> AppIcons.List
+                                        Tab.Leaders -> AppIcons.EmojiEvents
+                                        Tab.Serving -> AppIcons.SportsVolleyball
+                                        Tab.Opponents -> AppIcons.Shield
+                                        Tab.Big12 -> AppIcons.Leaderboard
                                     },
                                     contentDescription = tab.label
                                 )

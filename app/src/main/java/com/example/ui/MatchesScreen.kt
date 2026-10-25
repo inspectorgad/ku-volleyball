@@ -1,6 +1,5 @@
 package com.example.ui
 
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,11 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -85,7 +79,7 @@ fun MatchesScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 val (upcoming, results) = splitSchedule(matches, todayIso())
-                item(key = "alerts") { AlertsCard() }
+                item(key = "alerts") { LocalPhone.current.AlertsCard() }
                 if (upcoming.isNotEmpty()) {
                     item(key = "h-upcoming") { SectionHeader("Upcoming") }
                     items(upcoming, key = { it.id }) { match ->
@@ -107,7 +101,7 @@ fun MatchesScreen(
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Add match")
+            Icon(AppIcons.Add, contentDescription = "Add match")
         }
     }
 
@@ -609,15 +603,15 @@ fun MatchDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(AppIcons.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
                     IconButton(onClick = { showEditDialog = true }) {
-                        Icon(Icons.Default.Edit, contentDescription = "Edit match")
+                        Icon(AppIcons.Edit, contentDescription = "Edit match")
                     }
                     IconButton(onClick = { showDeleteConfirm = true }) {
-                        Icon(Icons.Default.Delete, contentDescription = "Delete match")
+                        Icon(AppIcons.Delete, contentDescription = "Delete match")
                     }
                 }
             )
@@ -710,8 +704,8 @@ fun MatchDetailScreen(
             // The result as a picture for a text or a post.
             resultCard(match, players, statLines, matches)?.let { card ->
                 item {
-                    val context = LocalContext.current
-                    OutlinedButton(onClick = { shareResultCard(context, card) }, modifier = Modifier.fillMaxWidth()) {
+                    val phone = LocalPhone.current
+                    OutlinedButton(onClick = { phone.shareResult(card) }, modifier = Modifier.fillMaxWidth()) {
                         Text("Share result image")
                     }
                 }
@@ -952,7 +946,7 @@ fun MatchDetailScreen(
                             if (line != null) {
                                 IconButton(onClick = { lineToDelete = line }) {
                                     Icon(
-                                        Icons.Default.Delete,
+                                        AppIcons.Delete,
                                         contentDescription = "Remove stat line",
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
