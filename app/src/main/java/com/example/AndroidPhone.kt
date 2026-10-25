@@ -29,7 +29,7 @@ class AndroidUpkeep(context: Context) : Upkeep {
 
     override fun appOpened() = MatchAlertWorker.reschedule(context)
 
-    override fun dataChanged() {
+    override suspend fun dataChanged() {
         runCatching { KuWidget.updateAll(context) }
     }
 }

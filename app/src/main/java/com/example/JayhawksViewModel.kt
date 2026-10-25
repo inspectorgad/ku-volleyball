@@ -40,7 +40,7 @@ interface Upkeep {
     fun appOpened()
 
     /** New season data arrived: redraw anything outside the app that shows it. */
-    fun dataChanged()
+    suspend fun dataChanged()
 }
 
 /**
