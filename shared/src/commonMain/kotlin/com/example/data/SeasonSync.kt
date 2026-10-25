@@ -10,6 +10,7 @@ import com.example.text.hex2
 import com.example.text.sha256
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 sealed interface SyncResult {

@@ -12,6 +12,8 @@ plugins {
   // AGP 9's Android target for multiplatform modules; the older
   // com.android.library cannot be combined with Kotlin Multiplatform.
   alias(libs.plugins.android.kotlin.multiplatform.library)
+  // Room's compiler, run once per platform (see dependencies below).
+  alias(libs.plugins.google.devtools.ksp)
 }
 
 kotlin {
@@ -34,12 +36,17 @@ kotlin {
 
   sourceSets {
     commonMain.dependencies {
+      // api: the app uses the database and its DAO directly.
+      api(libs.androidx.room.runtime)
       implementation(libs.kotlinx.coroutines.core)
       implementation(libs.kotlinx.datetime)
       implementation(libs.kotlinx.serialization.json)
     }
     androidMain.dependencies {
       implementation(libs.okhttp)
+    }
+    iosMain.dependencies {
+      implementation(libs.androidx.sqlite.bundled)
     }
     commonTest.dependencies {
       implementation(kotlin("test"))
@@ -53,6 +60,22 @@ kotlin {
   // and passes its id, since the default device name changes between Xcodes.
   targets.withType<KotlinNativeTargetWithSimulatorTests>().configureEach {
     providers.environmentVariable("IOS_SIMULATOR").orNull?.let { testRuns.getByName("test").deviceId = it }
+  }
+}
+
+// Room generates the database and DAO code separately for each platform.
+dependencies {
+  add("kspAndroid", libs.androidx.room.compiler)
+  add("kspIosArm64", libs.androidx.room.compiler)
+  add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+}
+
+// List every test with its result, on the JVM and the iPhone simulator alike,
+// so the CI log shows the cross-platform checks ran, and how any failed.
+tasks.withType<AbstractTestTask>().configureEach {
+  testLogging {
+    events("passed", "skipped", "failed")
+    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
   }
 }
 
