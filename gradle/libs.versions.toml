@@ -1,5 +1,7 @@
 [versions]
-agp = "9.1.1"
+# 9.2 is the first AGP that Compose 1.12 (under Compose Multiplatform 1.12)
+# accepts: it compiles against API 37. It needs Gradle 9.4.1.
+agp = "9.2.1"
 coreKtx = "1.18.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"

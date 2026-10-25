@@ -20,7 +20,7 @@ kotlin {
   android {
     // Must differ from the app's com.example; the Kotlin packages don't change.
     namespace = "io.github.inspectorgad.kuvolleyball.shared"
-    compileSdk = 36
+    compileSdk = 37
     minSdk = 24
     // commonTest runs on the JVM too (testAndroidHostTest), so the answers
     // the iPhone must match are checked where they were recorded.
