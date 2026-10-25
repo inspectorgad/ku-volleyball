@@ -586,10 +586,10 @@
   },
   "6625748": {
    "date": "2026-10-25",
-   "final": false,
+   "final": true,
    "home": "Baylor",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -8174,6 +8174,27 @@
    },
    "conferenceGame": true
   },
+  "6625748": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "home": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 2,
+    "winner": false,
+    "rank": 24,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 17,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -11240,6 +11261,27 @@
    },
    "conferenceGame": true
   },
+  "6628231": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 3,
+    "winner": true,
+    "rank": 25,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6628235": {
    "date": "2026-09-12",
    "season": "2026",
@@ -12088,6 +12130,15 @@
    ],
    "boxscored": true
   },
+  "6624254": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Indiana",
+    "Penn St."
+   ],
+   "boxscored": true
+  },
   "6624279": {
    "date": "2026-09-25",
    "season": "2026",
@@ -12881,6 +12932,14 @@
    ],
    "boxscored": true
   },
+  "6625288": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Purdue"
+   ],
+   "boxscored": true
+  },
   "6625289": {
    "date": "2026-10-23",
    "season": "2026",
@@ -13186,6 +13245,14 @@
    ],
    "boxscored": true
   },
+  "6625748": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Baylor"
+   ],
+   "boxscored": true
+  },
   "6625787": {
    "date": "2026-08-30",
    "season": "2026",
@@ -13365,6 +13432,14 @@
    "season": "2026",
    "teams": [
     "Pittsburgh"
+   ],
+   "boxscored": true
+  },
+  "6625913": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Louisville"
    ],
    "boxscored": true
   },
@@ -15546,6 +15621,14 @@
    "season": "2026",
    "teams": [
     "Iowa St.",
+    "Colorado"
+   ],
+   "boxscored": true
+  },
+  "6628231": {
+   "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
     "Colorado"
    ],
    "boxscored": true
