@@ -45,6 +45,11 @@ jobs:
       - name: Build debug APK
         run: gradle :app:assembleDebug
 
+      # The scripts' own tests: the scrape's parsers and the match-night
+      # watcher, including the iPhone alerts' wording and sending.
+      - name: Run the script tests
+        run: node --test scripts/*.test.mjs docs/sim.test.mjs
+
       - name: Keep the test report when something fails
         if: failure()
         uses: actions/upload-artifact@v4

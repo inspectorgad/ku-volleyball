@@ -20,7 +20,7 @@ import platform.UIKit.UIViewController
 // what it returns; everything on screen from there is the shared code, the
 // same screens the Android app draws.
 
-private val iosDevice: Device by lazy { IosDevice() }
+internal val iosDevice: Device by lazy { IosDevice() }
 private val database: JayhawksDatabase by lazy { createDatabase() }
 
 fun MainViewController(): UIViewController = ComposeUIViewController {
@@ -34,17 +34,15 @@ fun MainViewController(): UIViewController = ComposeUIViewController {
 }
 
 /**
- * [Phone] on iPhone. Match alerts will come as push notifications from the
- * match-night watcher, not from the app, and the result picture is not drawn
- * here yet, so neither shows.
+ * [Phone] on iPhone. Match alerts come as push notifications from the
+ * match-night watcher (IosAlerts.kt); the result picture is not drawn here
+ * yet, so it does not show.
  */
 private object IosPhone : Phone {
     override val device: Device get() = iosDevice
 
-    override val hasMatchAlerts: Boolean get() = false
-
     @Composable
-    override fun AlertsCard() = Unit
+    override fun AlertsCard() = IosAlertsCard()
 
     override val sharesResultPictures: Boolean get() = false
 

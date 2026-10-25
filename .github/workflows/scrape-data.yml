@@ -101,7 +101,7 @@ jobs:
       # parser fails here, before it can write a bad seed.
       - name: Test scripts
         run: |
-          node --test scripts/schedule-parser.test.mjs scripts/roster-parser.test.mjs scripts/match-night-watch.test.mjs docs/sim.test.mjs
+          node --test scripts/schedule-parser.test.mjs scripts/roster-parser.test.mjs scripts/match-night-watch.test.mjs scripts/match-alerts.test.mjs scripts/apns.test.mjs docs/sim.test.mjs
           python3 -m unittest discover -s scripts -p 'test_*.py'
 
       - name: Scrape NCAA + kuathletics data

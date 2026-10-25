@@ -80,6 +80,16 @@ jobs:
             CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" \
             CODE_SIGNING_ALLOWED=NO
 
+      # An unsigned archive carries no entitlements, so Apple's signing at
+      # export would not know the app asks for push notifications. Signing it
+      # ad hoc with the entitlements XcodeGen wrote records them in the app;
+      # the export re-signs it for real and keeps them.
+      - name: Record the app's entitlements
+        run: |
+          APP="$RUNNER_TEMP/KUVolleyball.xcarchive/Products/Applications/KUVolleyball.app"
+          codesign --force --sign - --entitlements ios/App/KUVolleyball.entitlements --generate-entitlement-der "$APP"
+          codesign -d --entitlements - "$APP"
+
       - name: Sign and upload to TestFlight
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -114,3 +124,20 @@ jobs:
             -authenticationKeyPath "$KEY" \
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+      # What Apple's signing actually granted, from the export's summary: push
+      # alerts need aps-environment, and without it the app cannot get its
+      # alert code, so the job says so here rather than on the phone.
+      - name: Check the signed app can receive alerts
+        run: |
+          ls "$RUNNER_TEMP/export"
+          SUMMARY="$RUNNER_TEMP/export/DistributionSummary.plist"
+          if [ ! -f "$SUMMARY" ]; then
+            echo "::warning::No DistributionSummary.plist; entitlements not checked"
+            exit 0
+          fi
+          plutil -p "$SUMMARY" | sed -n '/entitlements/,/}/p'
+          if ! plutil -p "$SUMMARY" | grep -q '"aps-environment" => "production"'; then
+            echo "::error::The signed app has no aps-environment entitlement; match alerts cannot reach it"
+            exit 1
+          fi

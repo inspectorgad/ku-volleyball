@@ -1,0 +1,27 @@
+name: iPhone test alert
+
+# Sends one test notification to every iPhone in APNS_DEVICE_TOKENS, the
+# same way the match-night watcher sends match alerts, so the setup can be
+# checked on any day rather than on a match night. Run it from the Actions
+# tab after adding a phone's alert code as that secret.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Send a test alert
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APNS_KEY_ID: ${{ secrets.APNS_KEY_ID }}
+          APNS_KEY_P8: ${{ secrets.APNS_KEY_P8 }}
+          APNS_DEVICE_TOKENS: ${{ secrets.APNS_DEVICE_TOKENS }}
+        run: node scripts/apns.mjs test

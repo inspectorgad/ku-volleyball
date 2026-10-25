@@ -34,6 +34,12 @@ targets:
           set -e
           cd "$SRCROOT/.."
           gradle :shared:embedAndSignAppleFrameworkForXcode
+    # Match alerts arrive through Apple's push service; this entitlement lets
+    # the app receive them (production: TestFlight's and the App Store's).
+    entitlements:
+      path: App/KUVolleyball.entitlements
+      properties:
+        aps-environment: production
     info:
       path: Info.plist
       properties:
