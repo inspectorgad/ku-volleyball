@@ -1,0 +1,72 @@
+name: Shared-code test APK
+
+# The Android app built from the shared-code branch, published as a
+# pre-release so it can be installed on a phone and checked before the branch
+# is merged into main.
+#
+# It is built exactly as build-apk.yml builds the everyday APK - the debug
+# build, signed with the same committed debug key - so Android installs it as
+# an update over the app already on the phone and keeps its data. Its version
+# number is one above main's newest build, so it installs as an update, and
+# the next build from main replaces it the same way.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - claude/ku-volleyball-app-feasibility-c4se1m
+    paths-ignore:
+      - 'ios/**'
+      - 'docs/**'
+      - 'scraped/**'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: shared-test-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.4.1'
+
+      - name: Restore keystores
+        run: |
+          base64 -d debug.keystore.base64 > debug.keystore
+          base64 -d upload.keystore.base64 > upload.keystore
+
+      - name: Number this build one above main's newest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/build-apk.yml/runs?branch=main&status=success&per_page=1" \
+            --jq '.workflow_runs[0].run_number')
+          echo "Newest main build: $latest"
+          echo "VERSION_CODE=$((latest + 1))" >> "$GITHUB_ENV"
+
+      - name: Build the APK
+        run: gradle :app:assembleDebug
+
+      - name: Publish it as the shared-code-test pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES="Test build of the Android app running on the code it now shares with the iPhone app (branch claude/ku-volleyball-app-feasibility-c4se1m, commit ${GITHUB_SHA::7}, version 1.0.${VERSION_CODE}). Install ku-volleyball-shared-test.apk over the current app; it keeps your data. Not the everyday build: that stays on the latest-apk release."
+          gh release view shared-code-test --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1 || \
+            gh release create shared-code-test --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+              --title "KU Volleyball - shared-code test build" --notes "$NOTES" --prerelease --latest=false
+          gh release edit shared-code-test --repo "$GITHUB_REPOSITORY" --notes "$NOTES" --target "$GITHUB_SHA"
+          cp app/build/outputs/apk/debug/app-debug.apk ku-volleyball-shared-test.apk
+          gh release upload shared-code-test ku-volleyball-shared-test.apk --repo "$GITHUB_REPOSITORY" --clobber
