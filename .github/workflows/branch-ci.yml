@@ -34,6 +34,11 @@ jobs:
           base64 -d debug.keystore.base64 > debug.keystore
           base64 -d upload.keystore.base64 > upload.keystore
 
+      # The Kotlin and KSP Gradle plugins the build actually resolved, for
+      # checking that one Kotlin version runs the whole build.
+      - name: Show the Kotlin plugin versions
+        run: gradle buildEnvironment --no-configuration-cache | grep -E 'kotlin-gradle-plugin:|symbol-processing-gradle-plugin:' | sort -u
+
       - name: Run unit tests
         run: gradle :app:testDebugUnitTest
 
