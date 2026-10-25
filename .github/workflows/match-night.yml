@@ -13,6 +13,12 @@ on:
       date:
         description: 'Match date, YYYY-MM-DD (Central)'
         required: true
+      # Set by a watcher handing over to a fresh run: the iPhone alerts it
+      # already sent ("2" for two sets, "3f" with the final), not to repeat.
+      sent:
+        description: 'iPhone alerts already sent (set by a handover)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -44,4 +50,4 @@ jobs:
           APNS_KEY_ID: ${{ secrets.APNS_KEY_ID }}
           APNS_KEY_P8: ${{ secrets.APNS_KEY_P8 }}
           APNS_DEVICE_TOKENS: ${{ secrets.APNS_DEVICE_TOKENS }}
-        run: node scripts/match-night-watch.mjs watch "${{ inputs.date }}"
+        run: node scripts/match-night-watch.mjs watch "${{ inputs.date }}" "${{ inputs.sent }}"

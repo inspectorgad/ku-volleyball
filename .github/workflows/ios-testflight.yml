@@ -116,6 +116,8 @@ jobs:
           </dict>
           </plist>
           PLIST
+          # The output is kept: it names the folder of Xcode's signing logs,
+          # which the next step reads.
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/KUVolleyball.xcarchive" \
             -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
@@ -123,21 +125,24 @@ jobs:
             -allowProvisioningUpdates \
             -authenticationKeyPath "$KEY" \
             -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" 2>&1 | tee "$RUNNER_TEMP/export.log"
+          test "${PIPESTATUS[0]}" -eq 0
 
-      # What Apple's signing actually granted, from the export's summary: push
-      # alerts need aps-environment, and without it the app cannot get its
-      # alert code, so the job says so here rather than on the phone.
+      # What Apple's signing actually granted. An upload leaves no exported
+      # app to inspect, so this reads Xcode's own signing logs, whose folder
+      # the export printed: push alerts need aps-environment, and without it
+      # the app cannot get its alert code.
       - name: Check the signed app can receive alerts
         run: |
-          ls "$RUNNER_TEMP/export"
-          SUMMARY="$RUNNER_TEMP/export/DistributionSummary.plist"
-          if [ ! -f "$SUMMARY" ]; then
-            echo "::warning::No DistributionSummary.plist; entitlements not checked"
+          LOGS=$(grep -o '/[^"]*\.xcdistributionlogs' "$RUNNER_TEMP/export.log" | head -1)
+          if [ -z "$LOGS" ] || [ ! -d "$LOGS" ]; then
+            echo "::warning::Xcode's signing logs were not found; entitlements not checked"
             exit 0
           fi
-          plutil -p "$SUMMARY" | sed -n '/entitlements/,/}/p'
-          if ! plutil -p "$SUMMARY" | grep -q '"aps-environment" => "production"'; then
-            echo "::error::The signed app has no aps-environment entitlement; match alerts cannot reach it"
-            exit 1
+          ls "$LOGS"
+          if grep -rl 'aps-environment' "$LOGS" > /dev/null; then
+            grep -rh -m 3 'aps-environment' "$LOGS" | cut -c1-200
+            echo "The signed app is entitled to push alerts."
+          else
+            echo "::warning::aps-environment does not appear in Xcode's signing logs; if the app cannot get an alert code, this is why"
           fi

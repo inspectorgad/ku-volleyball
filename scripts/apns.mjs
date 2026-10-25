@@ -97,14 +97,22 @@ export async function sendAlert(config, { title, body, collapseId }) {
   }
 }
 
-/** Sends, logs each device's outcome in a line, and never throws. */
+/**
+ * Sends, logs each device's outcome in a line, and never throws. True when
+ * every device has a final answer - delivered, or refused for good (a bad or
+ * expired code, which trying again would not change); false when one is
+ * worth another try: no answer, too many requests, or a fault at Apple.
+ */
 export async function sendAndLog(config, alert) {
   try {
-    for (const r of await sendAlert(config, alert)) {
+    const results = await sendAlert(config, alert);
+    for (const r of results) {
       console.log(`  push to ${r.device}: ${r.status === 200 ? 'delivered' : `${r.status} ${r.reason}`}`);
     }
+    return results.every((r) => r.status === 200 || (r.status >= 400 && r.status < 500 && r.status !== 429));
   } catch (e) {
     console.log(`  push failed: ${e.message}`);
+    return false;
   }
 }
 

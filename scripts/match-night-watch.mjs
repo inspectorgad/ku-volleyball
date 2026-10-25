@@ -138,42 +138,50 @@ async function getJson(url) {
  * The iPhone's alerts for one game, sent at most once each: every set as it
  * finishes and then the final, as MatchAlertWorker does on Android. A match
  * keeps one notification, replaced set by set (the collapse id).
+ *
+ * [sent] is what an earlier run already sent, as written by [sentState] -
+ * "2" for two sets, "3f" once the final is out - so a watcher that takes over
+ * from one that ran out of time does not send those again, as Android's saved
+ * per-game state keeps it from repeating. An alert counts as sent only once
+ * Apple has answered for every device; one that failed on the way is tried
+ * again at the next check. [deps] lets the tests stand in for the network.
  */
-function alerter(push, kuNames) {
-  let sentSets = 0;
-  let sentFinal = false;
+export function alerter(push, kuNames, sent = '', deps = { getJson, send: sendAndLog }) {
+  let sentSets = Number.parseInt(sent, 10) || 0;
+  let sentFinal = /f$/.test(sent);
   return {
     get sentFinal() { return sentFinal; },
+    get sentState() { return `${sentSets}${sentFinal ? 'f' : ''}`; },
     async check(gameId) {
-      const info = await getJson(`${API}/game/${gameId}`);
-      const box = await getJson(`${API}/game/${gameId}/boxscore`).catch(() => null);
+      const info = await deps.getJson(`${API}/game/${gameId}`);
+      const box = await deps.getJson(`${API}/game/${gameId}/boxscore`).catch(() => null);
       const l = live(info, box, kuNames);
       if (!l) return;
       const collapseId = `ku-${gameId}`;
       if (l.final && !sentFinal) {
         const [title, body] = finalMessage(l, box, kuNames);
         console.log(`${stamp()} alert: ${title}`);
-        await sendAndLog(push, { title, body, collapseId });
-        sentFinal = true;
-        sentSets = l.finished;
+        if (await deps.send(push, { title, body, collapseId })) {
+          sentFinal = true;
+          sentSets = l.finished;
+        }
       } else if (!l.final && l.finished > sentSets) {
         const [title, body] = setMessage(l);
         console.log(`${stamp()} alert: ${title}`);
-        await sendAndLog(push, { title, body, collapseId });
-        sentSets = l.finished;
+        if (await deps.send(push, { title, body, collapseId })) sentSets = l.finished;
       }
     },
   };
 }
 
-async function watch(date) {
+async function watch(date, sent = '') {
   const budgetEnd = Date.now() + RUN_BUDGET;
   const match = loadMatches().find((m) => m.date === date);
   if (!match) return console.log(`no KU match on ${date}; nothing to watch`);
   if (played(match)) return console.log(`${date} vs ${match.opponent} already has a result; nothing to do`);
   const start = centralToUtc(date, match.time || DEFAULT_TIME);
   const push = pushConfig();
-  const alerts = push ? alerter(push, loadKuNames()) : null;
+  const alerts = push ? alerter(push, loadKuNames(), sent) : null;
   const firstPoll = push ? start : start + FIRST_POLL_AFTER;
   const pollEvery = push ? ALERT_POLL_EVERY : POLL_EVERY;
   const deadline = start + GIVE_UP_AFTER;
@@ -184,7 +192,7 @@ async function watch(date) {
 
   const [y, mo, d] = date.split('-');
   while (Date.now() < deadline) {
-    if (Date.now() >= budgetEnd) return handOver(date);
+    if (Date.now() >= budgetEnd) return handOver(date, alerts);
     try {
       const resp = await fetch(`${API}/scoreboard/volleyball-women/d1/${y}/${mo}/${d}`,
         { headers: { accept: 'application/json' } });
@@ -213,11 +221,12 @@ async function watch(date) {
   console.log('gave up waiting; the scheduled scrape will pick the result up');
 }
 
-function handOver(date) {
+function handOver(date, alerts) {
   console.log('run budget spent before the final; handing over to a fresh watcher');
   // Queues behind this run in the per-date concurrency group, then starts.
+  // The alerts already sent go with it, so it does not send them again.
   execFileSync('gh', ['workflow', 'run', 'match-night.yml', '--repo', process.env.GITHUB_REPOSITORY,
-    '--ref', 'main', '-f', `date=${date}`], { stdio: 'inherit' });
+    '--ref', 'main', '-f', `date=${date}`, '-f', `sent=${alerts?.sentState ?? ''}`], { stdio: 'inherit' });
 }
 
 function dispatchScrape() {
@@ -235,7 +244,7 @@ async function main() {
       appendFileSync(process.env.GITHUB_OUTPUT, `watch=${p.watch}\n` + (p.watch ? `date=${p.date}\n` : ''));
     }
   } else if (mode === 'watch' && /^\d{4}-\d{2}-\d{2}$/.test(arg ?? '')) {
-    await watch(arg);
+    await watch(arg, process.argv[4] ?? '');
   } else {
     console.error('usage: match-night-watch.mjs plan | watch YYYY-MM-DD');
     process.exit(2);

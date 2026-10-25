@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import http2 from 'node:http2';
 import { generateKeyPairSync, verify } from 'node:crypto';
-import { BUNDLE_ID, deviceTokens, providerToken, pushConfig, sendAlert } from './apns.mjs';
+import { BUNDLE_ID, deviceTokens, providerToken, pushConfig, sendAlert, sendAndLog } from './apns.mjs';
 
 // A throwaway P-256 key standing in for the APNs .p8 (the same kind of key).
 const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'P-256' });
@@ -68,6 +68,8 @@ test('each device gets one request as APNs expects, and refusals are reported', 
       assert.equal(headers['apns-collapse-id'], 'ku-6625743');
       assert.deepEqual(body, { aps: { alert: { title: 'Kansas wins set 2, 25-20', body: 'Kansas leads 2-0 vs Utah' }, sound: 'default' } });
     }
+    // Delivered or refused for good: done, nothing to try again.
+    assert.equal(await sendAndLog(config, { title: 't', body: 'b' }), true);
   } finally {
     server.close();
   }
@@ -78,4 +80,6 @@ test('an unreachable push service is a reported failure, not a crash', async () 
   const [r] = await sendAlert(config, { title: 't', body: 'b' });
   assert.equal(r.status, 0);
   assert.ok(r.reason);
+  // No answer at all: worth another try.
+  assert.equal(await sendAndLog(config, { title: 't', body: 'b' }), false);
 });
