@@ -87,6 +87,9 @@ fun OpponentsScreen(
     matches: List<Match>,
     matchTeamStats: List<MatchTeamStats>,
     onOpenOpponent: (String) -> Unit,
+    // On a wide screen, the team whose page is open beside the list; its card
+    // is outlined. A phone passes none, so its cards are unchanged.
+    selectedOpponent: String? = null,
     modifier: Modifier = Modifier
 ) {
     val seasons = matches.map { it.season }.distinct().sortedDescending()
@@ -133,10 +136,15 @@ fun OpponentsScreen(
                 )
             }
             items(summaries, key = { it.name }) { opponent ->
+                // Compared as teams, not as text: the card carries the most
+                // recent spelling, which need not be the one that was opened.
+                val selected = selectedOpponent?.let { sameTeam(opponent.name, it) } == true
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onOpenOpponent(opponent.name) }
+                        .markSelected(selected),
+                    border = selectedCardBorder(selected)
                 ) {
                     Row(
                         modifier = Modifier.padding(12.dp),

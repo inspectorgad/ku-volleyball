@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,6 +82,14 @@ fun GoalTrendChart(
     Column(modifier = modifier.fillMaxWidth()) {
         Canvas(
             modifier = Modifier
+                // Stretched across a wide window the chart flattens to about
+                // 7:1 and the slopes it is there to show disappear, so it stops
+                // at 524. The chart is the window less 76dp of list and card
+                // padding, so the cap first bites at 600dp, where the wide
+                // layout takes over: no phone-layout window changes. The cap
+                // must come before fillMaxWidth; after it, the width is already
+                // fixed and the cap does nothing.
+                .widthIn(max = 524.dp)
                 .fillMaxWidth()
                 .height(120.dp)
                 .padding(top = 6.dp, bottom = 4.dp)

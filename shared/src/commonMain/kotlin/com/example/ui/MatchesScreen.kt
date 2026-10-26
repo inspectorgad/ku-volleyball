@@ -60,6 +60,9 @@ fun MatchesScreen(
     statLines: List<StatLine>,
     onSaveMatch: (Match) -> Unit,
     onOpenMatch: (Match) -> Unit,
+    // On a wide screen, the match whose page is open beside the list; its
+    // card is outlined. A phone passes none, so its cards are unchanged.
+    selectedMatchId: Long? = null,
     modifier: Modifier = Modifier
 ) {
     var showAddDialog by remember { mutableStateOf(false) }
@@ -82,13 +85,13 @@ fun MatchesScreen(
                 if (upcoming.isNotEmpty()) {
                     item(key = "h-upcoming") { SectionHeader("Upcoming") }
                     items(upcoming, key = { it.id }) { match ->
-                        MatchCard(match, matches, statLines, onOpenMatch)
+                        MatchCard(match, matches, statLines, onOpenMatch, selected = match.id == selectedMatchId)
                     }
                 }
                 if (results.isNotEmpty()) {
                     item(key = "h-results") { SectionHeader("Results") }
                     items(results, key = { it.id }) { match ->
-                        MatchCard(match, matches, statLines, onOpenMatch)
+                        MatchCard(match, matches, statLines, onOpenMatch, selected = match.id == selectedMatchId)
                     }
                 }
             }
@@ -132,13 +135,16 @@ private fun MatchCard(
     match: Match,
     matches: List<Match>,
     statLines: List<StatLine>,
-    onOpenMatch: (Match) -> Unit
+    onOpenMatch: (Match) -> Unit,
+    selected: Boolean = false
 ) {
     val lineCount = statLines.count { it.matchId == match.id }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onOpenMatch(match) }
+            .markSelected(selected),
+        border = selectedCardBorder(selected)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
