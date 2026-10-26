@@ -22,7 +22,9 @@ sealed interface SyncResult {
 /**
  * Downloads the latest parsed season data and folds it into the database via
  * [Seeder.merge] — the same gap-filling merge used for the bundled seed, so
- * user-entered data is never overwritten.
+ * user-entered data is never overwritten, apart from the exceptions described
+ * on [Seeder], among them the one-time correction of the stat lines of a
+ * match the feed marks linesChecked.
  */
 object SeasonSync {
 
@@ -124,13 +126,16 @@ object SeasonSync {
 
         val hash = sha256(body).joinToString("") { hex2(it) }
         val p = prefs(device)
-        if (hash == p.string(KEY_HASH)) {
+        // The same bytes have nothing new to say, with one exception: stat
+        // lines the feed marks for correction that this phone has not
+        // corrected yet (see Seeder.correctionPending).
+        if (hash == p.string(KEY_HASH) && !Seeder.correctionPending(root, device, dao)) {
             p.edit { putLong(KEY_SUCCESS_MS, currentTimeMs()) }
             return SyncResult.NoChange
         }
 
         try {
-            Seeder.merge(root, dao)
+            Seeder.merge(root, dao, device)
         } catch (e: Exception) {
             return SyncResult.Failed("merge failed: ${e.message}")
         }

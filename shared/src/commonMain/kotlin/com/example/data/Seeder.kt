@@ -2,15 +2,28 @@ package com.example.data
 
 import com.example.json.JSONObject
 import com.example.platform.Device
+import com.example.platform.Settings
 
 /**
  * Syncs the bundled assets/seed.json into the database on every launch,
- * gap-filling only — it never overwrites user-entered data:
+ * gap-filling only — it never overwrites user-entered data, with the one
+ * exception at the end of this list:
  * - players are added if their name isn't already present
  * - matches are added if no match exists for that date + opponent
  * - an existing match gets seed results only if it has none, or if what it has
  *   is the exact mirror of the feed's — the signature of a crossed box score
  * - an existing match gets seed stat lines only if it has none
+ * - the exception: the KU stat lines held for a match the feed marks
+ *   linesChecked (checked against Kansas Athletics' box score) are corrected
+ *   once, unless this version of the app took them from the feed after it
+ *   marked the match (lines an earlier build took are corrected like any
+ *   others). Each line's sets played becomes the feed's for that player, and a
+ *   line for a player the feed's lines leave out is deleted if it records
+ *   nothing (every counting stat and serves taken zero). A hand edit to sets
+ *   played made before then, or such a line typed in by hand, is lost.
+ *   Nothing else on a line changes, an edit made after is kept, and a match
+ *   the feed has not marked is never touched. It takes a [Device] to remember
+ *   which matches are done; without one it is not made.
  *
  * This lets an updated APK (with fresh season data baked in) install over the
  * old one and pick up the new matches while keeping local edits intact.
@@ -26,10 +39,12 @@ import com.example.platform.Device
  *   "date": "2025-08-29", "opponent": "Wisconsin", "season": "2025",
  *   "teamSets": 2, "opponentSets": 3,
  *   "setScores": "16-25, 25-18, 18-25, 28-26, 10-15",
+ *   "linesChecked": true,
  *   "lines": [{"player": "<player name>", "sp": 5, "k": 15, "e": 6, "ta": 36,
  *              "a": 1, "sa": 0, "se": 2, "d": 3, "bs": 0, "ba": 3,
  *              "re": 0, "bhe": 0}]
  * }
+ * linesChecked is there only on a match whose lines the feed has checked.
  */
 object Seeder {
 
@@ -49,13 +64,42 @@ object Seeder {
                 settings.edit { putBoolean(KEY_CHECKED, true) }
             }
             if (older) return
-            merge(root, dao)
+            merge(root, dao, device)
             SimulationStore.save(device, root)
         }
     }
 
     private const val PREFS = "season_seed"
     private const val KEY_CHECKED = "rollback_checked"
+    // The matches whose stat lines this phone has corrected to the feed's
+    // linesChecked lines, or taken from them in the first place: matchKey()
+    // strings, one per line.
+    private const val KEY_LINES_CHECKED = "lines_checked"
+
+    private fun linesChecked(settings: Settings): MutableSet<String> =
+        settings.string(KEY_LINES_CHECKED).orEmpty().split('\n').filter { it.isNotEmpty() }.toMutableSet()
+
+    /**
+     * Whether merging [root] would correct stat lines this phone holds: a match
+     * the feed marks linesChecked has lines here, and they have not been
+     * corrected yet (see [merge]). [SeasonSync] merges a feed it has merged
+     * before when this is so. A phone could otherwise wait months for it: one
+     * whose bundled copy is held back, and whose last sync took this very feed
+     * on a build that ignored the mark, finds nothing new in it.
+     */
+    suspend fun correctionPending(root: JSONObject, device: Device, dao: JayhawksDao): Boolean {
+        val done = linesChecked(device.settings(PREFS))
+        val matches = root.optJSONArray("matches") ?: return false
+        val marked = (0 until matches.length())
+            .map { matches.getJSONObject(it) }
+            .filter { it.optBoolean("linesChecked") }
+            .map { matchKey(it.optString("date"), it.optString("opponent")) }
+            .filter { it !in done }
+            .toSet()
+        if (marked.isEmpty()) return false
+        val withLines = dao.statLinesOnce().map { it.matchId }.toSet()
+        return dao.matchesOnce().any { it.id in withLines && matchKey(it.date, it.opponent) in marked }
+    }
 
     private val STAMP = Regex("""\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ""")
 
@@ -78,8 +122,14 @@ object Seeder {
      * "Florida St." where kuathletics' schedule says "Florida State" — so a raw
      * lowercase name filed one match as two.
      */
-    /** Also used by [SeasonSync] for network-fetched season data. */
-    suspend fun merge(root: JSONObject, dao: JayhawksDao) {
+    /**
+     * Also used by [SeasonSync] for network-fetched season data.
+     *
+     * [device] is where the stat-line correction below remembers which matches
+     * it has done; without one (the tests that only exercise the merge) the
+     * correction is not made and nothing is remembered.
+     */
+    suspend fun merge(root: JSONObject, dao: JayhawksDao, device: Device? = null) {
         val players = root.optJSONArray("players")
 
         // Sources capitalize names inconsistently ("McCarthy" vs "Mccarthy"),
@@ -185,6 +235,25 @@ object Seeder {
         // every match.
         val goalDefs = root.optJSONArray("goalDefinitions")
 
+        // Stat lines already on the phone are never merged again (see below),
+        // so a mistake the feed corrects stays wrong on every phone that synced
+        // it. The NCAA feed's was one: it credited every Kansas player on the
+        // team sheet with every set of the match, including players who never
+        // came on, so bench players' matches and sets played were inflated and
+        // their per-set numbers diluted. The feed now takes sets played from
+        // Kansas Athletics' box scores and drops the lines of players who did not
+        // play, match by match as each box score is read - which can be days
+        // after the match, or a run or two into a backfill - and marks each
+        // match it has done linesChecked. A phone holding lines for a marked
+        // match corrects them, once per match: sets played from the feed, and a
+        // line the feed does not have removed if it records nothing. Nothing
+        // else on a line is touched, so a hand edit to a kill or a dig survives;
+        // once done, a later hand edit to sets played does too. A match the
+        // feed has not marked is never touched, whatever its lines say.
+        val seedSettings = device?.settings(PREFS)
+        val checked = seedSettings?.let { linesChecked(it) } ?: mutableSetOf()
+        val checkedBefore = checked.toSet()
+
         val matches = root.optJSONArray("matches") ?: return
         for (i in 0 until matches.length()) {
             val m = matches.getJSONObject(i)
@@ -223,7 +292,8 @@ object Seeder {
             val seedVenue = m.optString("venue")
             val seedCity = m.optString("city")
 
-            val existing = matchesByKey[matchKey(date, opponent)]
+            val key = matchKey(date, opponent)
+            val existing = matchesByKey[key]
             val matchId: Long
             if (existing == null) {
                 matchId = dao.insertMatch(
@@ -326,23 +396,48 @@ object Seeder {
             mergeOpponentBox(m, matchId, dao)
             mergeMatchGoals(goalDefs, seedGoals, matchId, dao)
 
+            // Only with a device to remember it on: see above.
+            val marked = seedSettings != null && m.optBoolean("linesChecked")
+
             if (existing != null && matchId in matchesWithLines) {
                 // Stat lines are never re-merged once a match has them, because
                 // they can be edited here. Serve attempts are the exception: they
                 // were not carried until v13, nobody can type them, and a zero
                 // is simply "not recorded yet". So that one field is filled in
                 // where it is still zero, and nothing else on the line is touched.
-                val seedLines = m.optJSONArray("lines") ?: continue
-                for (j in 0 until seedLines.length()) {
+                // The once-per-match correction of sets played (above) is the
+                // other.
+                val correct = marked && key !in checked
+                val seedLines = m.optJSONArray("lines")
+                val seedPlayerIds = mutableSetOf<Long>()
+                if (seedLines != null) for (j in 0 until seedLines.length()) {
                     val l = seedLines.getJSONObject(j)
-                    val sat = l.optInt("sat")
-                    if (sat <= 0) continue
                     val playerId = playerIdsByKey[l.getString("player").lowercase()] ?: continue
+                    seedPlayerIds += playerId
                     val stored = storedLinesByKey[playerId to matchId] ?: continue
-                    if (stored.serveAttempts == 0) dao.upsertStatLine(stored.copy(serveAttempts = sat))
+                    var fixed = stored
+                    val sat = l.optInt("sat")
+                    if (sat > 0 && stored.serveAttempts == 0) fixed = fixed.copy(serveAttempts = sat)
+                    if (correct) fixed = fixed.copy(setsPlayed = l.optInt("sp"))
+                    if (fixed != stored) dao.upsertStatLine(fixed)
+                }
+                if (correct) {
+                    // A feed with no lines for the match says nothing about who
+                    // played, so it removes nothing.
+                    if (seedPlayerIds.isNotEmpty()) {
+                        storedLines
+                            .filter { it.matchId == matchId && it.playerId !in seedPlayerIds && it.recordsNothing() }
+                            .forEach { dao.deleteStatLine(it) }
+                    }
+                    // Recorded whatever the feed's lines held, so that
+                    // correctionPending() is never left true for good.
+                    checked += key
                 }
                 continue
             }
+            // Lines taken fresh from a marked match need no correcting later,
+            // and must not get one: anything changed from here on is an edit.
+            if (marked) checked += key
             val lines = m.optJSONArray("lines") ?: continue
             for (j in 0 until lines.length()) {
                 val l = lines.getJSONObject(j)
@@ -368,10 +463,25 @@ object Seeder {
                 )
             }
         }
+        if (seedSettings != null && checked != checkedBefore) {
+            seedSettings.edit { putString(KEY_LINES_CHECKED, checked.sorted().joinToString("\n")) }
+        }
 
         mergeStandings(root, dao)
         mergeOpponentRosters(root, dao)
     }
+
+    /**
+     * Whether a line records nothing done on the floor: every counting stat and
+     * serves taken are zero. Sets played is left out, being the figure in
+     * question. update-seed.py asks the same before it drops a player the NCAA
+     * listed, and also counts serve receptions, which a line here does not
+     * carry.
+     */
+    private fun StatLine.recordsNothing(): Boolean = listOf(
+        kills, attackErrors, attackAttempts, assists, serviceAces, serviceErrors,
+        digs, blockSolos, blockAssists, receptionErrors, ballHandlingErrors, serveAttempts
+    ).all { it == 0 }
 
     /**
      * Opponents' published rosters and season form, replaced per team for the

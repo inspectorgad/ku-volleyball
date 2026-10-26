@@ -5,6 +5,7 @@ Inputs (all optional, produced by scrape-ku-volleyball.mjs):
   scraped/ncaa-game-*.json  one per finished match: {gameId, date, info, box}
   scraped/roster.json       current roster from kuathletics.com
   scraped/upcoming.json     upcoming matches from kuathletics.com
+  scraped/ku-boxscores.json Kansas Athletics' own box scores, for sets played
 
 The seed is regenerated in full on every run — all data is scraper-owned, and
 the app's Seeder merge is what protects user edits on-device.
@@ -14,6 +15,7 @@ from collections import defaultdict
 import json
 import os
 import re
+import unicodedata
 from datetime import datetime, timezone
 
 TEAM_SEO = "kansas"
@@ -129,6 +131,10 @@ def stat_line(src):
         # total - which makes a true (aces - errors) / attempts possible.
         "sat": to_int(src.get("serveAttempts")),
     }
+
+
+# The keys of a stat line, in the order the seed has always written them.
+STAT_LINE_KEYS = tuple(stat_line({}))
 
 
 # The roster, read early because the box-score loop needs it to tell KU's own
@@ -401,6 +407,130 @@ def ku_side(blocks, ku_team_id):
     return labelled[0]
 
 
+# --- Who played: Kansas Athletics' box scores --------------------------------
+# The NCAA feed lists every Kansas player dressed for a match and credits each
+# of them with every set of it, whether she came on or not. The data cross-check
+# found it against Kansas Athletics' own box scores: Heidi Devers played one set
+# at Baylor on 10/25/2026 and none at most other matches, and Cydnee Bryant had
+# 43 sets in 14 matches against an official 3 in 3. The app counts a player's
+# matches as her lines and her sets as the sum of their sets played, so nine
+# bench players had both inflated and every per-set number diluted. Every other
+# figure agreed, so only sets played - and whether there is a line at all - is
+# taken from Kansas Athletics (scraped/ku-boxscores.json, read by
+# scripts/ku-boxscores.mjs). The other team's lines are inflated the same way
+# and corrected the same way, from the other table on the same page. A match
+# with no Kansas Athletics box score keeps the NCAA's lines as they are.
+
+# Everything that shows a player was on the floor: the counting stats, serves
+# taken ("sat") and serve receptions ("rcp", carried beside the line). Sets
+# played is the figure in question. A serving sub can take serves and do
+# nothing else anybody counts, and that is still a set she played.
+ON_THE_FLOOR = ("k", "e", "ta", "a", "sa", "se", "d", "bs", "ba", "re", "bhe", "sat", "rcp")
+
+
+def person_key(name):
+    """"Stanley, Taylor" or "Taylor Stanley" -> "taylor stanley", for matching a
+    name across the two sources: no accents, no punctuation, any case."""
+    n = str(name or "").strip()
+    if "," in n:
+        last, first = n.split(",", 1)
+        n = f"{first} {last}"
+    n = "".join(c for c in unicodedata.normalize("NFD", n) if not unicodedata.combining(c))
+    return re.sub(r"[^a-z]+", " ", n.lower()).strip()
+
+
+def ku_boxscore_lookup(raw, norm):
+    """A function (date, opponent, set_scores) -> Kansas Athletics' box score
+    of that match, or None.
+
+    Matched on the date and the opponent as [norm] writes it. Where the names
+    still disagree - the NCAA's "South Fla." is no spelling of "South Florida"
+    that norm knows - the set scores settle it if exactly one of that day's box
+    scores has the match's. Failing that, the date alone does, if Kansas
+    Athletics has only one match that day. Anything else is left alone rather
+    than guessed at.
+    """
+    by_key, by_date = {}, defaultdict(list)
+    for season in ((raw or {}).get("seasons") or {}).values():
+        for box in (season or {}).values():
+            if not isinstance(box, dict) or not box.get("date") or not box.get("players"):
+                continue
+            by_key[(box["date"], norm(box.get("opponent") or ""))] = box
+            by_date[box["date"]].append(box)
+
+    def lookup(date, opponent, set_scores=""):
+        box = by_key.get((date, norm(opponent or "")))
+        if box is not None:
+            return box
+        same_day = by_date.get(date, [])
+        by_sets = [b for b in same_day if set_scores and box_set_scores(b) == set_scores]
+        if len(by_sets) == 1:
+            return by_sets[0]
+        return same_day[0] if len(same_day) == 1 else None
+    return lookup
+
+
+def box_set_scores(box):
+    """A Kansas Athletics box score's sets written the way a match's setScores
+    are, Kansas first: "23-25, 22-25, 25-21"."""
+    return ", ".join(f"{s[0]}-{s[1]}" for s in box.get("sets") or [] if len(s) == 2)
+
+
+def apply_ku_boxscore(official, players, label=""):
+    """One side's NCAA lines for one match, corrected by that side's rows in
+    Kansas Athletics' box score ([official]).
+
+    [players] are the NCAA's lines, each a dict with "name", "number", "rcp"
+    and the stat-line keys (and anything else, passed through). Returns (kept,
+    dropped, notes):
+      - a player Kansas Athletics lists keeps her line, with its sets played;
+      - one it does not list, whose line shows nothing done on the floor (see
+        ON_THE_FLOOR), is dropped: she was on the team sheet and never came on;
+      - one it does not list but whose line does show something is kept as
+        the NCAA has it, and a WARNING says so - the two sources disagree about
+        more than sets played, and a person should look.
+    A player is matched by name, and by shirt number only where Kansas
+    Athletics' name for that number is nobody's in the NCAA list (the two
+    spelling one player differently).
+    """
+    official = official or []
+    by_name = {person_key(r.get("name")): r for r in official}
+    by_number = {str(r.get("number") or "").strip(): r for r in official
+                 if str(r.get("number") or "").strip()}
+    ncaa_names = {person_key(p.get("name")) for p in players}
+    kept, dropped, notes, used = [], [], [], set()
+    for p in players:
+        row = by_name.get(person_key(p.get("name")))
+        if row is None:
+            by_shirt = by_number.get(str(p.get("number") or "").strip())
+            if by_shirt is not None and person_key(by_shirt.get("name")) not in ncaa_names:
+                row = by_shirt
+                notes.append(f"  {label}: {p.get('name')} matched to Kansas Athletics' "
+                             f"{by_shirt.get('name')} by shirt number {p.get('number')}")
+        if row is not None:
+            used.add(id(row))
+            kept.append({**p, "sp": int(row.get("sp") or 0)})
+        elif not any(p.get(k) for k in ON_THE_FLOOR):
+            dropped.append(p.get("name"))
+        else:
+            kept.append(p)
+            notes.append(f"  WARNING: {label}: {p.get('name')} has stats in the NCAA box score "
+                         f"but is not in Kansas Athletics'; kept as the NCAA has it")
+    for row in official:
+        if id(row) not in used and int(row.get("sp") or 0) > 0:
+            notes.append(f"  WARNING: {label}: Kansas Athletics has {row.get('name')} playing "
+                         f"{row.get('sp')} set(s) but the NCAA box score has no line for her")
+    return kept, dropped, notes
+
+
+ku_boxscores_raw = load_json("scraped/ku-boxscores.json", {})
+if not isinstance(ku_boxscores_raw, dict):
+    ku_boxscores_raw = {}
+ku_boxscore_for = ku_boxscore_lookup(ku_boxscores_raw, norm_team)
+ku_box_used = set()
+ku_box_stats = {"matches": 0, "sets": 0, "dropped": 0, "opp_sets": 0, "opp_dropped": 0}
+
+
 # --- Finished matches from NCAA box scores ---------------------------------
 for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
     data = fix_tree(load_json(path, None))
@@ -492,6 +622,7 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
     # Position and serve-receive load are what the goal roles are read from, and
     # neither survives into the stat line, so they are kept aside here.
     ku_players = []
+    opp_players = []
     for tb in blocks:
         is_ku = tb is ku_block
         # Team totals are recorded, not summed from the player lines: every stat
@@ -516,9 +647,11 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
             line = stat_line(p)
             if is_ku:
                 add_player(name, str(p.get("number") or ""), p.get("position") or "")
-                match["lines"].append({"player": name, **line})
+                # The match's lines are written from these below, once Kansas
+                # Athletics' box score has had its say on who played.
                 ku_players.append({
                     "name": name,
+                    "number": str(p.get("number") or ""),
                     "pos": (p.get("position") or "").strip(),
                     "rcp": to_int(p.get("receptionAttempts")),
                     **line,
@@ -528,12 +661,83 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
                 # the players list: names collide across teams, and we only ever
                 # see their games against KU, so there is no season to aggregate
                 # them into. Number/position are denormalized for the same reason.
-                match["opponentLines"].append({
-                    "player": name,
-                    "jerseyNumber": str(p.get("number") or ""),
+                # Written to the match below, like KU's.
+                opp_players.append({
+                    "name": name,
+                    "number": str(p.get("number") or ""),
                     "position": p.get("position") or "",
+                    "rcp": to_int(p.get("receptionAttempts")),
                     **line,
                 })
+
+    # Sets played, and who played at all, from Kansas Athletics where it has
+    # this match. A player dropped here leaves the goal roles too: a bench
+    # player who never came on is nobody's L2.
+    #
+    # Only when the two agree on the set scores. That is what makes the box
+    # score this match's - two matches on one day are told apart by it - and a
+    # finished one: a page read while the match was still on would hand out
+    # too few sets.
+    #
+    # A match corrected here is marked linesChecked, and only such a match.
+    # The app never merges stat lines again into a match that already has
+    # some (they can be edited by hand), so a phone that took this match's
+    # NCAA lines would keep them for good; the mark is what has it correct
+    # them, once (Seeder.merge). A match whose box score is not in yet, or
+    # disagrees, goes out unmarked and is marked on the run that corrects it,
+    # however late that is.
+    #
+    # The mark is permanent on a phone: it corrects a marked match once and
+    # never again. So figures that cannot be right - no sets at all, or a
+    # player credited with no sets or more sets than the match had - refuse
+    # the box score rather than be applied. For the same reason a later copy of
+    # the box score (ku-boxscores.mjs reads it again for a few days) reaches the
+    # seed, new installs and the dashboard, but not a phone that already
+    # corrected the match from an earlier copy.
+    ku_box = ku_boxscore_for(match["date"], match["opponent"], match["setScores"])
+    if ku_box is not None:
+        ku_box_used.add(id(ku_box))
+        if box_set_scores(ku_box) != match["setScores"]:
+            print(f"  WARNING: {match['date']} {match['opponent']}: Kansas Athletics' box score "
+                  f"has sets {box_set_scores(ku_box) or '(none)'} against the NCAA's "
+                  f"{match['setScores'] or '(none)'}; keeping the NCAA's sets played")
+            ku_box = None
+    if ku_box is not None:
+        n_sets = len(ku_box.get("sets") or [])
+        odd = [f"{r.get('name')} {r.get('sp')}" for side in ("players", "opponentPlayers")
+               for r in ku_box.get(side) or [] if not 1 <= int(r.get("sp") or 0) <= n_sets]
+        if not n_sets or odd:
+            print(f"  WARNING: {match['date']} {match['opponent']}: Kansas Athletics' box score "
+                  f"looks misread ({', '.join(odd) or 'no sets'}); keeping the NCAA's sets played")
+            ku_box = None
+    if ku_box is not None:
+        label = f"{match['date']} {match['opponent']}"
+        before = {p["name"]: p["sp"] for p in ku_players}
+        ku_players, dropped, notes = apply_ku_boxscore(ku_box.get("players"), ku_players, label)
+        ku_box_stats["matches"] += 1
+        ku_box_stats["sets"] += sum(1 for p in ku_players if p["sp"] != before[p["name"]])
+        ku_box_stats["dropped"] += len(dropped)
+        # The other team's table, where the page had one to tell apart. The
+        # phone replaces a match's opponent lines on every sync, so these need
+        # no mark.
+        if ku_box.get("opponentPlayers"):
+            before = {p["name"]: p["sp"] for p in opp_players}
+            opp_players, dropped, opp_notes = apply_ku_boxscore(
+                ku_box["opponentPlayers"], opp_players, f"{label} ({match['opponent']}'s side)")
+            notes += opp_notes
+            ku_box_stats["opp_sets"] += sum(1 for p in opp_players if p["sp"] != before[p["name"]])
+            ku_box_stats["opp_dropped"] += len(dropped)
+        for note in notes:
+            print(note)
+        match["linesChecked"] = True
+    match["lines"] = [
+        {"player": p["name"], **{k: p[k] for k in STAT_LINE_KEYS}} for p in ku_players
+    ]
+    match["opponentLines"] = [
+        {"player": p["name"], "jerseyNumber": p["number"], "position": p["position"],
+         **{k: p[k] for k in STAT_LINE_KEYS}}
+        for p in opp_players
+    ]
 
     # Does the recorded result actually belong to the side whose box score we
     # just filed? Each team's points are recoverable from the two team blocks,
@@ -569,6 +773,23 @@ for path in sorted(glob.glob("scraped/ncaa-game-*.json")):
         match["goals"] = goals
 
     matches[match_key(match["date"], match["opponent"])] = match
+
+played_ku = sum(1 for m in matches.values() if m.get("lines"))
+print(f"Kansas Athletics box scores: {ku_box_stats['matches']} of {played_ku} played matches "
+      f"checked; sets played corrected on {ku_box_stats['sets']} lines, "
+      f"{ku_box_stats['dropped']} lines dropped for players who did not play "
+      f"(opponents: {ku_box_stats['opp_sets']} corrected, {ku_box_stats['opp_dropped']} dropped)")
+# One that matched no NCAA match is usually a match the NCAA capture has not
+# reached yet. Otherwise it is a name or a date the two disagree on, and that
+# match keeps the NCAA's sets played until someone looks.
+_unmatched = sorted(
+    f"{box['date']} {box.get('opponent')}"
+    for season in (ku_boxscores_raw.get("seasons") or {}).values()
+    for box in (season or {}).values()
+    if isinstance(box, dict) and box.get("date") and box.get("players") and id(box) not in ku_box_used
+)
+if _unmatched:
+    print(f"  Kansas Athletics box scores with no NCAA match: {', '.join(_unmatched)}")
 
 # --- Current roster (preferred source for number/position) ------------------
 roster_names = set()

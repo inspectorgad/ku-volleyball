@@ -49,9 +49,13 @@ jobs:
         run: gradle :app:assembleDebug
 
       # The scripts' own tests: the scrape's parsers and the match-night
-      # watcher, including the iPhone alerts' wording and sending.
+      # watcher, including the iPhone alerts' wording and sending, and the
+      # seed builder's, among them the sets-played correction from Kansas
+      # Athletics' box scores.
       - name: Run the script tests
-        run: node --test scripts/*.test.mjs docs/sim.test.mjs
+        run: |
+          node --test scripts/*.test.mjs docs/sim.test.mjs
+          python3 -m unittest discover -s scripts -p 'test_*.py'
 
       - name: Keep the test report when something fails
         if: failure()
