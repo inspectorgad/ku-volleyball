@@ -38,7 +38,9 @@ concurrency:
 
 jobs:
   testflight:
-    runs-on: macos-26
+    # Xcode 27 is only on GitHub's separate Xcode 27 image (arm64, macOS 27);
+    # the macos-26 image stops at Xcode 26.6.
+    runs-on: ${{ inputs.xcode == '27.1' && 'xcode-27' || 'macos-26' }}
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
@@ -66,7 +68,11 @@ jobs:
         env:
           XCODE_VERSION: ${{ inputs.xcode || '26.4.1' }}
         run: |
-          sudo xcode-select -s "/Applications/Xcode_${XCODE_VERSION}.app/Contents/Developer" || { ls /Applications | grep Xcode; exit 1; }
+          # Images name an install Xcode_27.1.app or Xcode_27.1.0.app; take either.
+          for app in "/Applications/Xcode_${XCODE_VERSION}.app" "/Applications/Xcode_${XCODE_VERSION}.0.app"; do
+            if [ -d "$app" ]; then sudo xcode-select -s "$app/Contents/Developer"; break; fi
+          done
+          xcodebuild -version | grep -q "^Xcode ${XCODE_VERSION}" || { echo "No Xcode ${XCODE_VERSION} on this image:"; ls /Applications | grep Xcode; exit 1; }
           xcodebuild -version
           echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
 
