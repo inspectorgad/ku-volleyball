@@ -36,7 +36,6 @@ import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -185,7 +184,7 @@ fun WideFrame(
                                     modifier = Modifier.padding(horizontal = 4.dp)
                                 )
                             },
-                            label = { Text(tab.label) },
+                            label = { TabLabel(tab.label) },
                             // The rail would colour the selected label KU
                             // crimson; keep it dark, as the bar does.
                             colors = NavigationRailItemDefaults.colors(

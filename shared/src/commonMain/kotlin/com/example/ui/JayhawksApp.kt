@@ -11,7 +11,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -362,7 +361,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel) {
                                     modifier = Modifier.padding(horizontal = 4.dp)
                                 )
                             },
-                            label = { Text(tab.label) },
+                            label = { TabLabel(tab.label) },
                             // Material 3 1.4 turned the selected label the
                             // secondary colour, KU crimson here; keep it dark.
                             colors = NavigationBarItemDefaults.colors(

@@ -32,12 +32,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -53,6 +55,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.stats.VolleyballTotals
@@ -206,6 +209,24 @@ fun AppOutlinedButton(
         colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         content = content
+    )
+}
+
+/**
+ * A tab's name, kept on one line. Six tabs share the bar, and where it is
+ * narrow - the iPhone Duo's front screen beside its status column, a small
+ * phone - "Matches" and "Opponents" broke mid-word onto two lines. Now the
+ * name shrinks a little instead, down to 9sp, and stays whole.
+ */
+@Composable
+fun TabLabel(text: String) {
+    // The bar's own label size (labelMedium, 12sp) is the most it grows to.
+    val full = LocalTextStyle.current.fontSize.takeIf { it.isSp && it.value > 9f } ?: 12.sp
+    Text(
+        text,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = full)
     )
 }
 
