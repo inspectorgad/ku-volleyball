@@ -16,6 +16,15 @@ name: iOS TestFlight build
 # (see ios/project.yml), so this job sets up Java and Gradle too.
 on:
   workflow_dispatch:
+    inputs:
+      # A list rather than free text, so nothing arbitrary reaches the shell.
+      xcode:
+        description: "Xcode to build with. 27.1 gives the iPhone Duo's inner screen the wide layout"
+        type: choice
+        options:
+          - '26.4.1'
+          - '27.1'
+        default: '26.4.1'
   push:
     branches-ignore:
       - main
@@ -45,9 +54,19 @@ jobs:
 
       # Kotlin 2.4.21 is tested with Xcode up to 26.4; the runner's default is
       # newer. 26.4 still meets App Store Connect's Xcode 26 requirement.
-      - name: Use Xcode 26.4.1
+      #
+      # A run started by hand can choose 27.1 instead. An app built with an
+      # older Xcode runs on the iPhone Duo's inner screen in a phone-sized
+      # window, so it shows the phone layout there; 27.1 lets it fill the
+      # screen and use the wide one. Kotlin 2.4.21 is not tested with Xcode 27,
+      # and the build goes to every TestFlight tester. Builds started by a push
+      # stay on 26.4.1. If this runner image has no Xcode 27.1, the step lists
+      # the Xcodes it does have.
+      - name: Use Xcode ${{ inputs.xcode || '26.4.1' }}
+        env:
+          XCODE_VERSION: ${{ inputs.xcode || '26.4.1' }}
         run: |
-          sudo xcode-select -s /Applications/Xcode_26.4.1.app/Contents/Developer
+          sudo xcode-select -s "/Applications/Xcode_${XCODE_VERSION}.app/Contents/Developer" || { ls /Applications | grep Xcode; exit 1; }
           xcodebuild -version
           echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
 
