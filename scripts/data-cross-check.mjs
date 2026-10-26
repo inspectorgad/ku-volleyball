@@ -521,7 +521,7 @@ async function probe(urls) {
       console.log(`---- text (first 4000 of ${d.text.length} chars)\n${d.text.slice(0, 4000)}`);
       d.tables.forEach((t, i) => {
         console.log(`---- table ${i + 1}/${d.tables.length} "${t.caption}" ${t.rows.length} rows`);
-        for (const r of t.rows.slice(0, 8)) console.log('  | ' + r.join(' | '));
+        for (const r of t.rows) console.log('  | ' + r.join(' | '));
       });
       const links = d.links.filter(([text, href]) => /box|stat|pdf|recap|game/i.test(text + ' ' + href));
       console.log(`---- ${links.length} links about box scores / stats`);
@@ -536,7 +536,10 @@ async function probe(urls) {
 
 const [mode, ...rest] = process.argv.slice(2);
 if (mode === 'check') await check(rest[0] || String(new Date().getUTCFullYear()));
-else if (mode === 'probe') await probe(rest);
+else if (mode === 'probe') {
+  const fromEnv = (process.env.PROBE_URLS || '').split(/\s+/).filter((u) => /^https:\/\/[^\s]+$/.test(u));
+  await probe(rest.length ? rest : fromEnv);
+}
 else {
   console.error('usage: data-cross-check.mjs check [season] | probe [url...]');
   process.exit(2);

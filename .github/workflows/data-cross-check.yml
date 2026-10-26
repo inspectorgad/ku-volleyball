@@ -14,6 +14,10 @@ on:
         type: choice
         options: ['check', 'probe']
         default: 'check'
+      urls:
+        description: 'probe only: pages to print, separated by spaces (default: the usual ones)'
+        type: string
+        default: ''
   push:
     branches-ignore:
       - main
@@ -44,4 +48,6 @@ jobs:
       - name: Cross-check
         env:
           MODE: ${{ inputs.mode || 'check' }}
+          # Passed through the environment, not pasted into the command.
+          PROBE_URLS: ${{ inputs.urls }}
         run: node scripts/data-cross-check.mjs "$MODE"
