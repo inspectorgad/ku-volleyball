@@ -24,6 +24,8 @@ const APP_DATA = [
 const KU = 'https://kuathletics.com/sports/womens-volleyball';
 const NCAA = 'https://www.ncaa.com';
 const STANDINGS_PAGES = [
+  'https://big12sports.com/standings.aspx?path=wvball',
+  `${NCAA}/standings/volleyball-women/d1/big-12`,
   `${NCAA}/standings/volleyball-women/d1`,
   'https://www.espn.com/womens-college-volleyball/standings',
 ];
@@ -38,10 +40,17 @@ const PROBE_PAGES = [
 // --- Page reading ------------------------------------------------------------
 
 async function newContext(browser) {
-  return browser.newContext({
+  const context = await browser.newContext({
     userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36',
+    locale: 'en-US',
+    viewport: { width: 1366, height: 900 },
   });
+  // Some sites (the Big 12's) turn away a browser that says it is automated.
+  await context.addInitScript(() => Object.defineProperty(navigator, 'webdriver', { get: () => undefined }));
+  return context;
 }
+
+const launch = () => chromium.launch({ args: ['--disable-blink-features=AutomationControlled'] });
 
 /** Opens [url] and returns its text, tables (rows of cell text) and links. */
 async function read(context, url, { settleMs = 6_000 } = {}) {
@@ -184,7 +193,7 @@ async function check(season) {
   const played = matches.filter((m) => m.teamSets != null && m.opponentSets != null);
   const byDate = new Map(played.map((m) => [m.date, m]));
 
-  const browser = await chromium.launch();
+  const browser = await launch();
   const context = await newContext(browser);
 
   // 1. Kansas Athletics' cumulative statistics page.
@@ -305,6 +314,12 @@ async function check(season) {
     const at = (names) => names.map((n) => H.indexOf(n)).find((j) => j >= 0) ?? -1;
     const colOf = { sp: at(['SP']), k: at(['K']), e: at(['E']), ta: at(['TA']), a: at(['A', 'AST']), sa: at(['SA']), se: at(['SE']), re: at(['RE']), d: at(['DIG', 'DIGS']), bs: at(['BS']), ba: at(['BA']), bhe: at(['BHE']) };
     const appLines = new Map((m.lines ?? []).map((l) => [personKey(l.player), l]));
+    const officialNames = new Set(best.t.rows.slice(best.h.at + 1).map((r) => personKey(r[best.col])));
+    for (const l of m.lines ?? []) {
+      if ((Number(l.sp) || 0) > 0 && !officialNames.has(personKey(l.player))) {
+        same(`${date} ${m.opponent} · ${l.player}: SP (not in the official box score)`, Number(l.sp), 0);
+      }
+    }
     for (const r of best.t.rows.slice(best.h.at + 1)) {
       const who = r[best.col];
       const key = personKey(who);
@@ -348,7 +363,7 @@ async function check(season) {
     const p = await read(context, `${NCAA}/rankings/volleyball-women/d1/avca-rankings`);
     const appPoll = (data.polls ?? []).find((x) => x.season === season && /avca/i.test(x.name));
     const through = (p.text.match(/Through Games[^\n]*/i) || [''])[0].trim();
-    same('poll week', String(appPoll?.name.match(/Through Games.*/i)?.[0] ?? '').toUpperCase(), through.toUpperCase());
+    same('poll week', String(appPoll?.updated ?? appPoll?.name ?? '').match(/Through Games.*/i)?.[0]?.toUpperCase(), through.toUpperCase());
     const t = p.tables.find((x) => headerOf(x, ['RANK', 'SCHOOL', 'RECORD']));
     const h = t && headerOf(t, ['RANK', 'SCHOOL', 'RECORD']);
     const rows = t ? t.rows.slice(h.at + 1).filter((r) => /^\d+$/.test(r[0])) : [];
@@ -438,7 +453,8 @@ async function check(season) {
         const h = headerOf(t, ['RANK', 'NAME', 'TEAM']);
         const H = t.rows[h.at].map((c) => c.toUpperCase());
         const valueCol = H.length - 1;
-        const official = t.rows.slice(h.at + 1).filter((r) => r[h.col('NAME')]);
+        // The table repeats its header in a second row.
+        const official = t.rows.slice(h.at + 1).filter((r) => r[h.col('NAME')] && !/^name$/i.test(r[h.col('NAME')]));
         const appTop = cat.rows.slice(0, official.length);
         let diffs = 0;
         for (const [j, r] of official.entries()) {
@@ -495,7 +511,7 @@ function summarize(dataUrl, data) {
 }
 
 async function probe(urls) {
-  const browser = await chromium.launch();
+  const browser = await launch();
   const context = await newContext(browser);
   for (const url of urls.length ? urls : PROBE_PAGES) {
     console.log(`\n######## ${url}`);
