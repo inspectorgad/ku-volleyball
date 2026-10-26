@@ -2,6 +2,9 @@ package com.example
 
 import com.example.data.ASK_MODELS
 import com.example.data.AskEngine
+import com.example.json.JSONArray
+import com.example.json.JSONObject
+import com.example.platform.OkHttpHttp
 import com.example.ui.MdBlock
 import com.example.ui.inlineMarkdown
 import com.example.ui.parseMarkdown
@@ -9,11 +12,9 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.json.JSONArray
-import org.json.JSONObject
+import okhttp3.mockwebserver.SocketPolicy
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -54,7 +55,8 @@ class AskEngineTest {
     }
 
     private fun engine() = AskEngine(
-        client = OkHttpClient(),
+        // OkHttp's own defaults, which these tests were written against.
+        http = OkHttpHttp(connectSeconds = 10, readSeconds = 10),
         baseUrl = server.url("/").toString().trimEnd('/'),
         loadPack = { pack }
     )
@@ -220,6 +222,40 @@ class AskEngineTest {
         server.enqueue(reply("end_turn", text("Quick.")))
         engine.ask("Quick?", "sk-ant-test", opus, "2026-09-26")
         assertEquals(1, nextBody().getJSONArray("messages").length())
+    }
+
+    @Test
+    fun `an answer that breaks off partway is not blamed on the network, and is rolled back`() = runBlocking {
+        val engine = engine()
+        server.enqueue(
+            reply("end_turn", text("x".repeat(20_000))).setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+        )
+        // As before the HTTP layer moved: the read error itself comes out, and
+        // the screen shows it as "Something went wrong", not "Couldn't reach".
+        val thrown = try {
+            engine.ask("Long?", "sk-ant-test", opus, "2026-09-26")
+            null
+        } catch (e: java.io.IOException) {
+            e
+        }
+        assertTrue(thrown != null)
+        server.takeRequest()
+        server.enqueue(reply("end_turn", text("Short.")))
+        engine.ask("Short?", "sk-ant-test", opus, "2026-09-26")
+        assertEquals(1, nextBody().getJSONArray("messages").length())
+    }
+
+    @Test
+    fun `an unreachable Anthropic is explained with the reason`() = runBlocking {
+        val closed = MockWebServer().apply { start() }
+        val url = closed.url("/").toString().trimEnd('/')
+        closed.shutdown()
+        val engine = AskEngine(http = OkHttpHttp(connectSeconds = 5, readSeconds = 5), baseUrl = url, loadPack = { pack })
+        val answer = engine.ask("Anyone there?", "sk-ant-test", opus, "2026-10-25")
+        assertEquals(
+            "Couldn't reach api.anthropic.com: the connection was refused. Check your connection - some networks block it.",
+            answer.error
+        )
     }
 
     @Test

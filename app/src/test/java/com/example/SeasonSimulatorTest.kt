@@ -1,7 +1,7 @@
 package com.example
 
 import com.example.data.SeasonSimulator
-import org.json.JSONObject
+import com.example.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

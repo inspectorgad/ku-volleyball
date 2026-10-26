@@ -2,7 +2,7 @@ package com.example
 
 import com.example.data.Match
 import com.example.data.MatchAlerts
-import org.json.JSONObject
+import com.example.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -51,7 +51,7 @@ class MatchAlertsTest {
         val c = partial.getJSONArray("contests").getJSONObject(0)
         c.put("gameState", "I").put("currentPeriod", "3RD")
         val lines = contest.getJSONArray("linescores")
-        c.put("linescores", org.json.JSONArray().put(lines.get(0)).put(lines.get(1))
+        c.put("linescores", com.example.json.JSONArray().put(lines.get(0)).put(lines.get(1))
             .put(JSONObject().put("period", 3).put("home", "4").put("visit", "6")))
         val live = MatchAlerts.live(partial, box, kuNames)!!
         assertFalse(live.final)

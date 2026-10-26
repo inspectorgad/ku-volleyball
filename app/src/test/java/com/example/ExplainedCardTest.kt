@@ -2,6 +2,10 @@ package com.example
 
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.hapticfeedback.HapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -11,6 +15,7 @@ import androidx.compose.ui.test.performTouchInput
 import com.example.ui.ExplainedCard
 import com.example.ui.ExplainedHeading
 import com.example.ui.theme.MyApplicationTheme
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -55,6 +60,28 @@ class ExplainedCardTest {
         rule.onNodeWithContentDescription("Hide explanation").performClick()
         rule.waitForIdle()
         rule.onNodeWithText(note).assertDoesNotExist()
+    }
+
+    @Test
+    fun `holding a card that also takes taps buzzes once`() {
+        val buzzes = mutableListOf<HapticFeedbackType>()
+        val haptics = object : HapticFeedback {
+            override fun performHapticFeedback(hapticFeedbackType: HapticFeedbackType) {
+                buzzes += hapticFeedbackType
+            }
+        }
+        rule.setContent {
+            MyApplicationTheme {
+                Surface {
+                    CompositionLocalProvider(LocalHapticFeedback provides haptics) {
+                        ExplainedCard(note, onClick = {}) { Text("Record 8-3") }
+                    }
+                }
+            }
+        }
+        rule.onNodeWithText("Record 8-3").performTouchInput { longClick() }
+        rule.onNodeWithText(note).assertExists()
+        assertEquals(listOf(HapticFeedbackType.LongPress), buzzes)
     }
 
     @Test

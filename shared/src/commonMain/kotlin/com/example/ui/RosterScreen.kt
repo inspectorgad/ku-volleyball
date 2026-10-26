@@ -1,0 +1,583 @@
+package com.example.ui
+
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.data.Match
+import com.example.data.Player
+import com.example.data.StatLine
+import com.example.stats.aggregate
+import com.example.stats.formatAverage
+import com.example.stats.formatPerSet
+import com.example.stats.summarize
+
+@Composable
+fun RosterScreen(
+    players: List<Player>,
+    statLines: List<StatLine>,
+    onSavePlayer: (Player) -> Unit,
+    onOpenPlayer: (Player) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var editingPlayer by remember { mutableStateOf<Player?>(null) }
+    var showAddDialog by remember { mutableStateOf(false) }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        if (players.isEmpty()) {
+            EmptyState(
+                title = "No players yet",
+                subtitle = "Pull down to sync the Jayhawks roster, or add players manually.",
+                modifier = Modifier.align(Alignment.Center)
+            )
+        } else {
+            val (current, former) = players.partition { it.active }
+            LazyColumn(
+                contentPadding = ListContentPadding,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(current, key = { it.id }) { player ->
+                    PlayerCard(player, statLines, onOpenPlayer)
+                }
+                if (former.isNotEmpty()) {
+                    item(key = "former-header") {
+                        Text(
+                            "Former Players",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                        )
+                    }
+                    items(former, key = { it.id }) { player ->
+                        PlayerCard(player, statLines, onOpenPlayer)
+                    }
+                }
+            }
+        }
+
+        FloatingActionButton(
+            onClick = { showAddDialog = true },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(AppIcons.Add, contentDescription = "Add player")
+        }
+    }
+
+    if (showAddDialog) {
+        PlayerDialog(
+            player = null,
+            onDismiss = { showAddDialog = false },
+            onSave = {
+                onSavePlayer(it)
+                showAddDialog = false
+            }
+        )
+    }
+    editingPlayer?.let { player ->
+        PlayerDialog(
+            player = player,
+            onDismiss = { editingPlayer = null },
+            onSave = {
+                onSavePlayer(it)
+                editingPlayer = null
+            }
+        )
+    }
+}
+
+@Composable
+private fun PlayerCard(
+    player: Player,
+    statLines: List<StatLine>,
+    onOpenPlayer: (Player) -> Unit
+) {
+    val career = aggregate(statLines.filter { it.playerId == player.id })
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onOpenPlayer(player) }
+    ) {
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            JerseyBadge(player.jerseyNumber)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 12.dp)
+            ) {
+                Text(
+                    player.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+                val details = listOf(
+                    player.position, player.height,
+                    // A departed player's class is the one she last had here, so
+                    // it is shown only for the current roster.
+                    if (player.active) player.classYear else ""
+                ).filter { it.isNotBlank() }
+                if (details.isNotEmpty()) {
+                    Text(details.joinToString(" · "), style = MaterialTheme.typography.bodyMedium)
+                }
+                backgroundLine(player)?.let {
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    formatPerSet(career.killsPerSet) + " K/S",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    "${career.kills} K · ${career.digs} D · ${career.totalBlocks} BLK",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun JerseyBadge(number: String) {
+    Surface(
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.primaryContainer,
+        modifier = Modifier.size(40.dp)
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = number.ifBlank { "–" },
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        }
+    }
+}
+
+@Composable
+fun PlayerDialog(
+    player: Player?,
+    onDismiss: () -> Unit,
+    onSave: (Player) -> Unit
+) {
+    var name by remember { mutableStateOf(player?.name ?: "") }
+    var number by remember { mutableStateOf(player?.jerseyNumber ?: "") }
+    var position by remember { mutableStateOf(player?.position ?: "") }
+    var height by remember { mutableStateOf(player?.height ?: "") }
+    var active by remember { mutableStateOf(player?.active ?: true) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(if (player == null) "Add Player" else "Edit Player") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Name") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = number,
+                    onValueChange = { new -> number = new.filter { it.isDigit() }.take(3) },
+                    label = { Text("Jersey #") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = position,
+                    onValueChange = { position = it },
+                    label = { Text("Position (e.g. OH, S, L/DS)") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = height,
+                    onValueChange = { height = it },
+                    label = { Text("Height (e.g. 6-1)") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        "On current roster",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(checked = active, onCheckedChange = { active = it })
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                enabled = name.isNotBlank(),
+                onClick = {
+                    // copy() so an edit keeps the roster background the
+                    // dialog does not show.
+                    onSave(
+                        (player ?: Player(name = "")).copy(
+                            name = name.trim(),
+                            jerseyNumber = number.trim(),
+                            position = position.trim(),
+                            height = height.trim(),
+                            active = active
+                        )
+                    )
+                }
+            ) { Text("Save") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+fun PlayerDetailScreen(
+    player: Player,
+    matches: List<Match>,
+    statLines: List<StatLine>,
+    onSavePlayer: (Player) -> Unit,
+    onDeletePlayer: (Player) -> Unit,
+    onBack: () -> Unit
+) {
+    var showEditDialog by remember { mutableStateOf(false) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+    // The form stat whose match-by-match chart is open, if any.
+    var openForm by remember { mutableStateOf<String?>(null) }
+
+    val matchesById = matches.associateBy { it.id }
+    val playerLines = statLines
+        .filter { it.playerId == player.id }
+        .sortedByDescending { matchesById[it.matchId]?.date ?: "" }
+
+    // Season order: most recent first, based on the latest match date in each season.
+    val seasonOrder = matches
+        .sortedByDescending { it.date }
+        .map { it.season }
+        .distinct()
+    val linesBySeason = playerLines.groupBy { matchesById[it.matchId]?.season ?: "Unknown" }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        if (player.jerseyNumber.isBlank()) player.name
+                        else "#${player.jerseyNumber} ${player.name}"
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(AppIcons.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { showEditDialog = true }) {
+                        Icon(AppIcons.Edit, contentDescription = "Edit player")
+                    }
+                    IconButton(onClick = { showDeleteConfirm = true }) {
+                        Icon(AppIcons.Delete, contentDescription = "Delete player")
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentPadding = ListContentPadding,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            item {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        val details = listOf(
+                            player.position,
+                            player.height.takeIf { it.isNotBlank() }?.let { "$it tall" } ?: "",
+                            if (player.active) classYearName(player.classYear) else ""
+                        ).filter { it.isNotBlank() }
+                        if (details.isNotEmpty()) {
+                            Text(details.joinToString(" · "), style = MaterialTheme.typography.bodyMedium)
+                        }
+                        backgroundRows(player).forEach { (label, value) ->
+                            Row(modifier = Modifier.padding(top = 2.dp)) {
+                                Text(
+                                    label,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.width(112.dp)
+                                )
+                                Text(value, style = MaterialTheme.typography.bodyMedium)
+                            }
+                        }
+                        if (backgroundRows(player).isNotEmpty()) {
+                            Text(
+                                EXPLAIN_BACKGROUND,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            "Stats by Season",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        val rows = seasonOrder
+                            .filter { linesBySeason.containsKey(it) }
+                            .map { season -> season to aggregate(linesBySeason.getValue(season)) } +
+                            listOf("Career" to aggregate(playerLines))
+                        StatsTable(rows = rows)
+                    }
+                }
+            }
+
+            // Form and milestones for the current season: the latest one this
+            // player has lines in.
+            val currentSeason = seasonOrder.firstOrNull { linesBySeason.containsKey(it) }
+            val form = currentSeason?.let { playerForm(playerLines, matches, it) }.orEmpty()
+            if (form.isNotEmpty()) {
+                item {
+                    ExplainedCard(EXPLAIN_FORM) { toggleExplanation ->
+                        Text(
+                            "Form — $currentSeason",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        form.forEach { f ->
+                            val open = openForm == f.label
+                            Text(
+                                formLine(f),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = when (f.trend) {
+                                    "up" -> MaterialTheme.colorScheme.primary
+                                    "down" -> MaterialTheme.colorScheme.error
+                                    else -> MaterialTheme.colorScheme.onSurface
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .combinedClickable(
+                                        onClick = { openForm = if (open) null else f.label },
+                                        onLongClick = toggleExplanation,
+                                        hapticFeedbackEnabled = false
+                                    )
+                                    .padding(vertical = 4.dp)
+                            )
+                            if (open) {
+                                GoalTrendChart(
+                                    points = f.series.map { (opp, v) -> GoalPoint(opp, v) },
+                                    target = f.season,
+                                    ceiling = false,
+                                    format = f.format,
+                                    targetLabel = "Season"
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            val splits = currentSeason?.let { cs ->
+                // Only the matches this player has a line in.
+                val mine = playerLines.map { it.matchId }.toSet()
+                venueSplits(matches.filter { it.season == cs && it.id in mine }, playerLines, { (it as StatLine).matchId })
+            }.orEmpty()
+            if (splits.size > 1) {
+                item {
+                    ExplainedCard(EXPLAIN_PLAYER_SPLITS) {
+                        Text(
+                            "Home, away and neutral — $currentSeason",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        splits.forEach {
+                            Text(playerSplitLine(it), style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                }
+            }
+            val nearMilestones = currentSeason?.let { milestones(playerLines, matches, it) }.orEmpty()
+            if (nearMilestones.isNotEmpty()) {
+                item {
+                    ExplainedCard(EXPLAIN_MILESTONES) {
+                        Text(
+                            "Milestones in reach",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        nearMilestones.forEach {
+                            Text(milestoneLine(it), style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                }
+            }
+
+            item {
+                Text(
+                    "Match Log",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            if (playerLines.isEmpty()) {
+                item {
+                    EmptyState(
+                        title = "No matches recorded",
+                        subtitle = "Add this player's stats from a match on the Matches tab."
+                    )
+                }
+            } else {
+                items(playerLines, key = { it.id }) { line ->
+                    val match = matchesById[line.matchId]
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    match?.let { "${it.date} ${it.versus} ${it.opponent}" }
+                                        ?: "Unknown match",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Text(
+                                    summarize(line),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            match?.let {
+                                Text(
+                                    it.season,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Below the match log, as on Leaders and Serving. The stats table at
+            // the top is seventeen abbreviations wide and this is what they mean.
+            item { StatGlossaryCard(modifier = Modifier.padding(top = 8.dp)) }
+        }
+    }
+
+    if (showEditDialog) {
+        PlayerDialog(
+            player = player,
+            onDismiss = { showEditDialog = false },
+            onSave = {
+                onSavePlayer(it)
+                showEditDialog = false
+            }
+        )
+    }
+
+    if (showDeleteConfirm) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirm = false },
+            title = { Text("Delete ${player.name}?") },
+            text = { Text("This removes the player and all of their recorded stats. This cannot be undone.") },
+            confirmButton = {
+                Button(onClick = { onDeletePlayer(player) }) { Text("Delete") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancel") }
+            }
+        )
+    }
+}
+
+/** Where the background lines come from, under them on the player page. */
+const val EXPLAIN_BACKGROUND =
+    "Class, hometown, high school and previous college are from kuathletics.com's roster and " +
+        "refresh nightly. Players no longer on the roster keep what it last said, without a class year."
+
+/**
+ * "Olathe, Kan. · Saint James Academy · from USC" for a roster card: where she
+ * is from, her high school, and the college a transfer came from.
+ */
+fun backgroundLine(player: Player): String? = listOfNotNull(
+    player.hometown.takeIf { it.isNotBlank() },
+    player.highSchool.takeIf { it.isNotBlank() },
+    player.previousSchool.takeIf { it.isNotBlank() }?.let { "from $it" }
+).takeIf { it.isNotEmpty() }?.joinToString(" · ")
+
+/** The same facts spelled out for the player page, one per row. */
+fun backgroundRows(player: Player): List<Pair<String, String>> = listOf(
+    "Hometown" to player.hometown,
+    "High school" to player.highSchool,
+    "Transferred from" to player.previousSchool
+).filter { it.second.isNotBlank() }
+
+/** "Jr." as "Junior", for the player page where there is room for the word. */
+fun classYearName(short: String): String = when (short.trim().lowercase().trimEnd('.')) {
+    "fr" -> "Freshman"
+    "so" -> "Sophomore"
+    "jr" -> "Junior"
+    "sr" -> "Senior"
+    "gr", "grad" -> "Graduate student"
+    "r-fr" -> "Redshirt freshman"
+    "r-so" -> "Redshirt sophomore"
+    "r-jr" -> "Redshirt junior"
+    "r-sr" -> "Redshirt senior"
+    else -> short.trim()
+}

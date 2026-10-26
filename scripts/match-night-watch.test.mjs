@@ -51,3 +51,69 @@ test('finds the KU game on a scoreboard', () => {
   assert.equal(kuGame(board).gameState, 'live');
   assert.equal(kuGame({ games: [] }), null);
 });
+
+// The iPhone alerts, on the real Kansas-Utah feed with the network stood in.
+import { readFileSync } from 'node:fs';
+import { alerter } from './match-night-watch.mjs';
+
+const game = JSON.parse(readFileSync(new URL('../app/src/test/resources/ncaa-game-utah-2026-10-01.json', import.meta.url), 'utf8'));
+const kuNames = new Set(['taylor stanley', 'grace nelson', 'reese messer', 'aisha aiono', 'reese ptacek']);
+
+/** The game two sets in (third under way), or final. */
+function feed(stage) {
+  const info = structuredClone(game.info);
+  if (stage === 'two sets') {
+    const c = info.contests[0];
+    c.gameState = 'I';
+    c.currentPeriod = '3RD';
+    c.linescores = [c.linescores[0], c.linescores[1], { period: 3, home: '4', visit: '6' }];
+  }
+  return info;
+}
+
+function harness(sent, answers = []) {
+  const state = { stage: 'two sets', sends: [] };
+  const deps = {
+    getJson: async (url) => (url.endsWith('/boxscore') ? game.box : feed(state.stage)),
+    send: async (_push, alert) => {
+      state.sends.push(alert.title);
+      return answers.length ? answers.shift() : true;
+    },
+  };
+  return { state, alerts: alerter({ tokens: ['x'] }, kuNames, sent, deps) };
+}
+
+test('each set and the final go out once', async () => {
+  const { state, alerts } = harness('');
+  await alerts.check('6625743');
+  await alerts.check('6625743');
+  state.stage = 'final';
+  await alerts.check('6625743');
+  await alerts.check('6625743');
+  assert.deepEqual(state.sends, ['Kansas wins set 2, 25-20', 'Final: Kansas def. Utah 3-0']);
+  assert.equal(alerts.sentState, '3f');
+});
+
+test('a watcher taking over does not repeat what the last one sent', async () => {
+  const { state, alerts } = harness('2');
+  await alerts.check('6625743');
+  assert.deepEqual(state.sends, []);
+  state.stage = 'final';
+  await alerts.check('6625743');
+  assert.deepEqual(state.sends, ['Final: Kansas def. Utah 3-0']);
+
+  const after = harness('3f');
+  after.state.stage = 'final';
+  await after.alerts.check('6625743');
+  assert.deepEqual(after.state.sends, []);
+});
+
+test('an alert that did not get through is tried again at the next check', async () => {
+  const { state, alerts } = harness('', [false, true]);
+  await alerts.check('6625743');
+  assert.equal(alerts.sentState, '0');
+  await alerts.check('6625743');
+  await alerts.check('6625743');
+  assert.deepEqual(state.sends, ['Kansas wins set 2, 25-20', 'Kansas wins set 2, 25-20']);
+  assert.equal(alerts.sentState, '2');
+});

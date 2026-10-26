@@ -1,0 +1,148 @@
+name: iOS TestFlight build
+
+# Builds the iPhone app on one of GitHub's Macs and sends it to TestFlight,
+# from where it installs on the phone. Runs by hand, or when the iPhone app
+# changes on a branch.
+#
+# Signing happens at upload, not at build: the archive is built unsigned and
+# `xcodebuild -exportArchive`, given the App Store Connect key, signs it with
+# a distribution certificate Apple keeps for the team ("cloud signing"). That
+# needs no certificate stored in this repository and no registered device,
+# which a new developer account does not have. Xcode 26 is required: App Store
+# Connect has refused builds from older Xcodes since 28 April 2026.
+#
+# The app's screens and logic are the shared Kotlin code in shared/, which
+# Xcode builds into Shared.framework through Gradle as a step of its own build
+# (see ios/project.yml), so this job sets up Java and Gradle too.
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - 'ios/**'
+      - '!ios/check_apple_keys.py'
+      - '.github/workflows/ios-testflight.yml'
+
+concurrency:
+  group: ios-testflight
+
+jobs:
+  testflight:
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.4.1'
+
+      # Kotlin 2.4.21 is tested with Xcode up to 26.4; the runner's default is
+      # newer. 26.4 still meets App Store Connect's Xcode 26 requirement.
+      - name: Use Xcode 26.4.1
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.4.1.app/Contents/Developer
+          xcodebuild -version
+          echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
+
+      # Kotlin/Native's compiler and its iOS libraries, about 1 GB, fetched once.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+
+      # The same link Xcode's build step asks for, run first so a Kotlin error
+      # reads plainly here rather than deep in the Xcode log; Xcode then finds
+      # it already done.
+      - name: Build the shared Kotlin framework
+        run: gradle :shared:linkReleaseFrameworkIosArm64
+
+      - name: Generate the Xcode project
+        run: |
+          brew install xcodegen
+          cd ios && xcodegen generate
+
+      - name: Build the archive
+        run: |
+          # Run number and attempt, so a re-run still uploads a new build number.
+          xcodebuild archive \
+            -project ios/KUVolleyball.xcodeproj \
+            -scheme KUVolleyball \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/KUVolleyball.xcarchive" \
+            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER.$GITHUB_RUN_ATTEMPT" \
+            CODE_SIGNING_ALLOWED=NO
+
+      # An unsigned archive carries no entitlements, so Apple's signing at
+      # export would not know the app asks for push notifications. Signing it
+      # ad hoc with the entitlements XcodeGen wrote records them in the app;
+      # the export re-signs it for real and keeps them.
+      - name: Record the app's entitlements
+        run: |
+          APP="$RUNNER_TEMP/KUVolleyball.xcarchive/Products/Applications/KUVolleyball.app"
+          codesign --force --sign - --entitlements ios/App/KUVolleyball.entitlements --generate-entitlement-der "$APP"
+          codesign -d --entitlements - "$APP"
+
+      - name: Sign and upload to TestFlight
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          KEY="$RUNNER_TEMP/AuthKey.p8"
+          printf '%s\n' "$ASC_KEY_P8" > "$KEY"
+          trap 'rm -f "$KEY"' EXIT
+          # Internal testing only: the build goes to testers on this team
+          # and never to Apple's beta review.
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>$APPLE_TEAM_ID</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+            <key>testFlightInternalTestingOnly</key><true/>
+          </dict>
+          </plist>
+          PLIST
+          # The output is kept: it names the folder of Xcode's signing logs,
+          # which the next step reads.
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/KUVolleyball.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEY" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" 2>&1 | tee "$RUNNER_TEMP/export.log"
+          test "${PIPESTATUS[0]}" -eq 0
+
+      # What Apple's signing actually granted. An upload leaves no exported
+      # app to inspect, so this reads Xcode's own signing logs, whose folder
+      # the export printed: push alerts need aps-environment, and without it
+      # the app cannot get its alert code.
+      - name: Check the signed app can receive alerts
+        run: |
+          LOGS=$(grep -o '/[^"]*\.xcdistributionlogs' "$RUNNER_TEMP/export.log" | head -1)
+          if [ -z "$LOGS" ] || [ ! -d "$LOGS" ]; then
+            echo "::warning::Xcode's signing logs were not found; entitlements not checked"
+            exit 0
+          fi
+          ls "$LOGS"
+          if grep -rl 'aps-environment' "$LOGS" > /dev/null; then
+            grep -rh -m 3 'aps-environment' "$LOGS" | cut -c1-200
+            echo "The signed app is entitled to push alerts."
+          else
+            echo "::warning::aps-environment does not appear in Xcode's signing logs; if the app cannot get an alert code, this is why"
+          fi

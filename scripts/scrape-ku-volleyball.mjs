@@ -9,8 +9,9 @@
 //     captures the latest and update-seed.py keys it by season.
 //     Note: /standings/volleyball-women/d1 returns HTTP 500 for this sport,
 //     which is why conference records are computed rather than fetched.
-//  3. kuathletics.com (Sidearm) via headless Chromium — current roster and
-//     upcoming schedule (which the NCAA scoreboard only shows day-of).
+//  3. kuathletics.com (Sidearm) via headless Chromium — current roster,
+//     upcoming schedule (which the NCAA scoreboard only shows day-of), and
+//     Kansas Athletics' own box scores, the source for sets played.
 // Runs in GitHub Actions where outbound network is open. Incremental: an
 // index in scraped/ku-index.json records scanned dates and finished games so
 // nightly runs only touch new dates.
@@ -18,6 +19,7 @@ import { chromium } from 'playwright';
 import fs from 'fs';
 import { parseRoster, playersFromJson } from './roster-parser.mjs';
 import { parseSchedule } from './schedule-parser.mjs';
+import { readKuBoxScores } from './ku-boxscores.mjs';
 
 const API = 'https://ncaa-api.henrygd.me';
 const SEASONS = (process.env.SEASONS || '2026').trim().split(/\s+/);
@@ -484,6 +486,47 @@ try {
   const uniqueUpcoming = parseSchedule(schedText, { stripRank, postalCity });
   fs.writeFileSync('scraped/upcoming.json', JSON.stringify(uniqueUpcoming, null, 1));
   console.log(`upcoming: ${uniqueUpcoming.length} matches`);
+
+  // --- 3a. Kansas Athletics' own box scores --------------------------------
+  // The NCAA feed above credits every Kansas player it lists with every set of
+  // the match, including players who never came on. Kansas Athletics' box
+  // scores list only who played and for how many sets, so update-seed.py takes
+  // sets played from these (scripts/ku-boxscores.mjs has the details).
+  // A failure here is logged and nothing more: the NCAA data still builds the
+  // seed, only with the sets played it had before, and a match is corrected on
+  // phones whenever its box score is read on a later run (update-seed.py marks
+  // each match it corrects).
+  //
+  // The reading stops opening pages five minutes in, and no page may take more
+  // than ninety seconds, so this step cannot run the job past its time limit -
+  // a job killed for time commits nothing, the night's NCAA results included.
+  // The cap on reads is a second stop, set high enough for the first run's
+  // backfill of about fifty-five pages; the time limit is the one that counts.
+  // The current season goes first, so whatever is left over is last season's.
+  const KU_BOX_PATH = 'scraped/ku-boxscores.json';
+  const kuBoxes = (() => {
+    try {
+      const held = JSON.parse(fs.readFileSync(KU_BOX_PATH, 'utf8'));
+      return held?.formatVersion === 1 && held.seasons ? held : null;
+    } catch {
+      return null;
+    }
+  })() ?? { formatVersion: 1, seasons: {} };
+  const kuBoxBudget = {
+    left: Number(process.env.MAX_KU_BOXSCORE_READS || 60),
+    until: Date.now() + 5 * 60_000,
+  };
+  for (const season of [...SEASONS].sort().reverse()) {
+    try {
+      kuBoxes.seasons[season] = await readKuBoxScores(context, season, kuBoxes.seasons[season] ?? {}, {
+        rosterNames: roster.map((p) => p.name),
+        budget: kuBoxBudget,
+      });
+      fs.writeFileSync(KU_BOX_PATH, JSON.stringify(kuBoxes, null, 1));
+    } catch (e) {
+      console.log(`kuathletics box scores ${season} failed (non-fatal): ${String(e?.message ?? e).split('\n')[0]}`);
+    }
+  }
 
   // --- 3b. Opponent rosters -----------------------------------------------
   // The NCAA has no roster endpoint (probed: every candidate 404s or 422s), so

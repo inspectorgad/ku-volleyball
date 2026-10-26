@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.data.JayhawksDatabase
 import com.example.data.Match
 import com.example.data.Seeder
+import com.example.json.JSONObject
 import com.example.ui.kickoffLine
 import com.example.ui.lastMeeting
 import com.example.ui.meetingLabel
@@ -17,7 +18,6 @@ import com.example.ui.rankedSplit
 import com.example.ui.seasonOutlook
 import com.example.ui.splitSchedule
 import kotlinx.coroutines.test.runTest
-import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

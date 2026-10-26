@@ -1,0 +1,53 @@
+name: Data cross-check
+
+# Compares the app's season data with the official sites it is not built from
+# (scripts/data-cross-check.mjs) and prints the differences. It only reads:
+# nothing is committed or published.
+#
+# Start it from the Actions tab. A push to the script or this file runs it too,
+# so a change to a page reader checks itself straight away.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'probe prints what each official page holds; check compares'
+        type: choice
+        options: ['check', 'probe']
+        default: 'check'
+      urls:
+        description: 'probe only: pages to print, separated by spaces (default: the usual ones)'
+        type: string
+        default: ''
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - 'scripts/data-cross-check.mjs'
+      - '.github/workflows/data-cross-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  cross-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright Chromium
+        run: |
+          npm init -y > /dev/null
+          npm install playwright@1.49.0 > /dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Cross-check
+        env:
+          MODE: ${{ inputs.mode || 'check' }}
+          # Passed through the environment, not pasted into the command.
+          PROBE_URLS: ${{ inputs.urls }}
+        run: node scripts/data-cross-check.mjs "$MODE"

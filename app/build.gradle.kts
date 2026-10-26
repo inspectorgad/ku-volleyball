@@ -8,7 +8,7 @@ plugins {
 
 android {
   namespace = "com.example"
-  compileSdk { version = release(36) { minorApiLevel = 1 } }
+  compileSdk { version = release(37) }
 
   defaultConfig {
     // Play-compatible id (com.example.* is rejected by Google Play); also
@@ -57,12 +57,22 @@ android {
   compileOptions {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+    // kotlinx-datetime is built on java.time, which Android only ships from
+    // API 26; desugaring supplies it on the API 24-25 phones minSdk allows.
+    isCoreLibraryDesugaringEnabled = true
   }
   buildFeatures {
     compose = true
     buildConfig = true
   }
-  testOptions { unitTests { isIncludeAndroidResources = true } }
+  testOptions {
+    unitTests {
+      isIncludeAndroidResources = true
+      // CI is the only place these run, so a failure has to explain itself in
+      // the log: print the expected and actual values, not just the line.
+      all { it.testLogging { exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL } }
+    }
+  }
 }
 
 // Configure the Secrets Gradle Plugin to use .env and .env.example files
@@ -75,7 +85,8 @@ secrets {
 // Some unused dependencies are commented out below instead of being removed.
 // This makes it easy to add them back in the future if needed.
 dependencies {
-  implementation(platform(libs.androidx.compose.bom))
+  // The code shared with the iPhone app.
+  implementation(project(":shared"))
   implementation(platform(libs.firebase.bom))
   // implementation(libs.accompanist.permissions)
   implementation(libs.androidx.activity.compose)
@@ -83,12 +94,6 @@ dependencies {
   // implementation(libs.androidx.camera.core)
   // implementation(libs.androidx.camera.lifecycle)
   // implementation(libs.androidx.camera.view)
-  implementation(libs.androidx.compose.material.icons.core)
-  implementation(libs.androidx.compose.material.icons.extended)
-  implementation(libs.androidx.compose.material3)
-  implementation(libs.androidx.compose.ui)
-  implementation(libs.androidx.compose.ui.graphics)
-  implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.core.ktx)
   // implementation(libs.androidx.datastore.preferences)
   implementation(libs.androidx.lifecycle.runtime.compose)
@@ -103,6 +108,8 @@ dependencies {
   // implementation(libs.firebase.ai)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.kotlinx.datetime)
+  implementation(libs.kotlinx.serialization.json)
   implementation(libs.logging.interceptor)
   implementation(libs.moshi.kotlin)
   implementation(libs.okhttp)
@@ -118,13 +125,12 @@ dependencies {
   testImplementation(libs.roborazzi)
   testImplementation(libs.roborazzi.compose)
   testImplementation(libs.roborazzi.junit.rule)
-  androidTestImplementation(platform(libs.androidx.compose.bom))
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)
   androidTestImplementation(libs.androidx.espresso.core)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.runner)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
   debugImplementation(libs.androidx.compose.ui.tooling)
-  "ksp"(libs.androidx.room.compiler)
+  coreLibraryDesugaring(libs.desugar.jdk.libs)
   "ksp"(libs.moshi.kotlin.codegen)
 }

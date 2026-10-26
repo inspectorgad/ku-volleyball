@@ -1,5 +1,6 @@
 package com.example.data
 
+import com.example.text.todayIso
 import com.example.ui.played
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -64,8 +65,7 @@ class KuWidget : AppWidgetProvider() {
             manager.updateAppWidget(ids, views)
         }
 
-        private fun today(): String =
-            java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US).format(java.util.Date())
+        private fun today(): String = todayIso()
     }
 }
 

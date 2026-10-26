@@ -1,20 +1,32 @@
 [versions]
-agp = "9.1.1"
+# 9.2 is the first AGP that Compose 1.12 (under Compose Multiplatform 1.12)
+# accepts: it compiles against API 37. It needs Gradle 9.4.1.
+agp = "9.2.1"
 coreKtx = "1.18.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-lifecycleRuntimeKtx = "2.8.7"
-lifecycleViewmodelCompose = "2.8.7"
-lifecycleRuntimeCompose = "2.8.7"
-activityCompose = "1.10.1"
-kotlin = "2.2.10"
-composeBom = "2024.09.00"
-googleDevtoolsKsp = "2.3.5"
+lifecycleRuntimeKtx = "2.11.0"
+lifecycleViewmodelCompose = "2.11.0"
+lifecycleRuntimeCompose = "2.11.0"
+activityCompose = "1.13.0"
+# 2.4.20+ is the first Kotlin tested with both AGP 9.1.1 and the Xcode 26
+# that App Store uploads require; it also drives AGP's built-in Kotlin.
+kotlin = "2.4.21"
+# The screens are Compose Multiplatform, shared with the iPhone app. On
+# Android it brings Jetpack Compose 1.12.1, the version the app's own Compose
+# tests and tooling below must match.
+composeMultiplatform = "1.12.2"
+composeMultiplatformMaterial3 = "1.12.0-alpha03"
+jetbrainsLifecycle = "2.11.0"
+androidxCompose = "1.12.1"
+googleDevtoolsKsp = "2.3.12"
 navigationCompose = "2.8.9"
-roomRuntime = "2.7.0"
-roomKtx = "2.7.0"
-roomCompiler = "2.7.0"
+roomRuntime = "2.8.5"
+roomKtx = "2.8.5"
+roomCompiler = "2.8.5"
+# The SQLite Room uses on iPhone, built into the app.
+sqliteBundled = "2.6.2"
 kotlinxCoroutinesTest = "1.10.2"
 core = "1.6.1"
 runner = "1.6.2"
@@ -23,6 +35,9 @@ retrofit = "2.12.0"
 converterMoshi = "2.12.0"
 kotlinxCoroutinesAndroid = "1.10.2"
 kotlinxCoroutinesCore = "1.10.2"
+kotlinxSerializationJson = "1.9.0"
+kotlinxDatetime = "0.7.1"
+desugarJdkLibs = "2.1.5"
 workRuntime = "2.10.0"
 accompanistPermissions = "0.37.3"
 playServicesLocation = "21.3.0"
@@ -50,28 +65,31 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidxCompose" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "androidxCompose" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidxCompose" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
+androidx-sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqliteBundled" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
-androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "composeMultiplatform" }
+compose-foundation = { group = "org.jetbrains.compose.foundation", name = "foundation", version.ref = "composeMultiplatform" }
+compose-ui = { group = "org.jetbrains.compose.ui", name = "ui", version.ref = "composeMultiplatform" }
+compose-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "composeMultiplatformMaterial3" }
+jetbrains-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "jetbrainsLifecycle" }
+jetbrains-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "jetbrainsLifecycle" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "converterMoshi" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraCamera2" }
@@ -93,7 +111,10 @@ firebase-ai = { group = "com.google.firebase", name = "firebase-ai" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "googleDevtoolsKsp" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }

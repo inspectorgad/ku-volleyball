@@ -1,0 +1,74 @@
+# The iPhone app's Xcode project, described for XcodeGen. CI runs
+# `xcodegen generate` to turn this into KUVolleyball.xcodeproj, so the
+# project file itself is never committed or hand-edited; to open it in Xcode
+# on a Mac, install XcodeGen (`brew install xcodegen`) and run the same
+# command in this folder.
+name: KUVolleyball
+options:
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    MARKETING_VERSION: "0.2.0"
+    # CI replaces this with the workflow's run number: every upload to
+    # TestFlight needs a build number higher than the last.
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  KUVolleyball:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      # The season data the app starts from before its first sync, the same
+      # file the Android app bundles.
+      - path: ../app/src/main/assets/seed.json
+        buildPhase: resources
+    # Builds the shared Kotlin code into Shared.framework for whichever
+    # device and configuration Xcode is building, before Swift compiles
+    # against it. Gradle runs on every build and is quick when nothing changed.
+    preBuildScripts:
+      - name: Build the shared Kotlin framework
+        basedOnDependencyAnalysis: false
+        script: |
+          set -e
+          cd "$SRCROOT/.."
+          gradle :shared:embedAndSignAppleFrameworkForXcode
+    # Match alerts arrive through Apple's push service; this entitlement lets
+    # the app receive them (production: TestFlight's and the App Store's).
+    entitlements:
+      path: App/KUVolleyball.entitlements
+      properties:
+        aps-environment: production
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: KU Volleyball
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # The app uses only the encryption built into iOS (HTTPS), which
+        # Apple exempts; saying so here skips the export-compliance question
+        # on every TestFlight build.
+        ITSAppUsesNonExemptEncryption: false
+        # Compose draws at the screen's full refresh rate, which iOS only
+        # allows with this set; Compose Multiplatform refuses to start without it.
+        CADisableMinimumFrameDurationOnPhone: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.inspectorgad.kuvolleyball
+        PRODUCT_NAME: KUVolleyball
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+        # Where the build step above puts Shared.framework.
+        FRAMEWORK_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)"
+        # The Gradle step reads and writes outside Xcode's sandbox.
+        ENABLE_USER_SCRIPT_SANDBOXING: "NO"
+    scheme: {}

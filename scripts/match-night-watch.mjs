@@ -12,10 +12,17 @@
 //   node scripts/match-night-watch.mjs watch YYYY-MM-DD
 //       Run by match-night.yml. Sleeps to first serve, polls the NCAA
 //       scoreboard until KU's game is final, then dispatches scrape-data.yml.
+//
+// With the push secrets set (see apns.mjs), the watcher also sends the
+// iPhone's match alerts: from first serve it reads the game every few minutes
+// and pushes each finished set and the final, worded as the Android app words
+// its own (match-alerts.mjs mirrors MatchAlerts.kt).
 
 import { readFileSync, appendFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { finalMessage, live, setMessage } from './match-alerts.mjs';
+import { pushConfig, sendAndLog } from './apns.mjs';
 
 const API = 'https://ncaa-api.henrygd.me';
 const TEAM_SEO = 'kansas';
@@ -30,6 +37,9 @@ export const PLAN_WINDOW = 4.5 * HOUR;
 // A best-of-five rarely finishes inside 75 minutes, so polling starts then.
 const FIRST_POLL_AFTER = 75 * MIN;
 const POLL_EVERY = 5 * MIN;
+// With iPhone alerts on, the game is read from first serve and this often, so
+// a set's alert comes within a few minutes of its last point.
+const ALERT_POLL_EVERY = 3 * MIN;
 // Give up this long after first serve: a postponed match, or a scoreboard that
 // never flips. The normal scrape still catches it later.
 const GIVE_UP_AFTER = 4.5 * HOUR;
@@ -105,25 +115,84 @@ export function kuGame(scoreboard) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, Math.max(0, ms)));
 const stamp = () => new Date().toISOString().slice(11, 16) + 'Z';
 
-function loadMatches() {
-  return JSON.parse(readFileSync('app/src/main/assets/seed.json', 'utf8')).matches ?? [];
+function loadSeed() {
+  return JSON.parse(readFileSync('app/src/main/assets/seed.json', 'utf8'));
 }
 
-async function watch(date) {
+function loadMatches() {
+  return loadSeed().matches ?? [];
+}
+
+/** The roster's names, lowercase "first last", to tell Kansas's box-score block from the opponent's. */
+function loadKuNames() {
+  return new Set((loadSeed().players ?? []).map((p) => String(p.name ?? '').trim().toLowerCase()).filter(Boolean));
+}
+
+async function getJson(url) {
+  const resp = await fetch(url, { headers: { accept: 'application/json' } });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  return resp.json();
+}
+
+/**
+ * The iPhone's alerts for one game, sent at most once each: every set as it
+ * finishes and then the final, as MatchAlertWorker does on Android. A match
+ * keeps one notification, replaced set by set (the collapse id).
+ *
+ * [sent] is what an earlier run already sent, as written by [sentState] -
+ * "2" for two sets, "3f" once the final is out - so a watcher that takes over
+ * from one that ran out of time does not send those again, as Android's saved
+ * per-game state keeps it from repeating. An alert counts as sent only once
+ * Apple has answered for every device; one that failed on the way is tried
+ * again at the next check. [deps] lets the tests stand in for the network.
+ */
+export function alerter(push, kuNames, sent = '', deps = { getJson, send: sendAndLog }) {
+  let sentSets = Number.parseInt(sent, 10) || 0;
+  let sentFinal = /f$/.test(sent);
+  return {
+    get sentFinal() { return sentFinal; },
+    get sentState() { return `${sentSets}${sentFinal ? 'f' : ''}`; },
+    async check(gameId) {
+      const info = await deps.getJson(`${API}/game/${gameId}`);
+      const box = await deps.getJson(`${API}/game/${gameId}/boxscore`).catch(() => null);
+      const l = live(info, box, kuNames);
+      if (!l) return;
+      const collapseId = `ku-${gameId}`;
+      if (l.final && !sentFinal) {
+        const [title, body] = finalMessage(l, box, kuNames);
+        console.log(`${stamp()} alert: ${title}`);
+        if (await deps.send(push, { title, body, collapseId })) {
+          sentFinal = true;
+          sentSets = l.finished;
+        }
+      } else if (!l.final && l.finished > sentSets) {
+        const [title, body] = setMessage(l);
+        console.log(`${stamp()} alert: ${title}`);
+        if (await deps.send(push, { title, body, collapseId })) sentSets = l.finished;
+      }
+    },
+  };
+}
+
+async function watch(date, sent = '') {
   const budgetEnd = Date.now() + RUN_BUDGET;
   const match = loadMatches().find((m) => m.date === date);
   if (!match) return console.log(`no KU match on ${date}; nothing to watch`);
   if (played(match)) return console.log(`${date} vs ${match.opponent} already has a result; nothing to do`);
   const start = centralToUtc(date, match.time || DEFAULT_TIME);
-  const firstPoll = start + FIRST_POLL_AFTER;
+  const push = pushConfig();
+  const alerts = push ? alerter(push, loadKuNames(), sent) : null;
+  const firstPoll = push ? start : start + FIRST_POLL_AFTER;
+  const pollEvery = push ? ALERT_POLL_EVERY : POLL_EVERY;
   const deadline = start + GIVE_UP_AFTER;
   console.log(`watching ${match.opponent} on ${date}: first serve ${new Date(start).toISOString()}` +
     (match.time ? '' : ' (no time published; assumed 6 p.m. CT)'));
+  console.log(push ? `iPhone alerts on, for ${push.tokens.length} device(s)` : 'iPhone alerts off: the push secrets are not all set');
   await sleep(Math.min(firstPoll, budgetEnd) - Date.now());
 
   const [y, mo, d] = date.split('-');
   while (Date.now() < deadline) {
-    if (Date.now() >= budgetEnd) return handOver(date);
+    if (Date.now() >= budgetEnd) return handOver(date, alerts);
     try {
       const resp = await fetch(`${API}/scoreboard/volleyball-women/d1/${y}/${mo}/${d}`,
         { headers: { accept: 'application/json' } });
@@ -131,24 +200,33 @@ async function watch(date) {
       const g = kuGame(await resp.json());
       const state = g?.gameState ?? 'not on the scoreboard';
       console.log(`${stamp()} ${state}` + (g ? ` · ${g.away?.names?.short} ${g.away?.score ?? ''} at ${g.home?.names?.short} ${g.home?.score ?? ''}` : ''));
+      if (alerts && g?.gameID) await alerts.check(g.gameID).catch((e) => console.log(`${stamp()} alert check: ${e.message}`));
       if (g?.gameState === 'final') {
-        await sleep(SETTLE);
+        // The game's own feed can trail the scoreboard; keep trying for the
+        // final alert while the box score settles before the scrape.
+        for (let waited = 0; waited < SETTLE; waited += 2 * MIN) {
+          await sleep(2 * MIN);
+          if (alerts && !alerts.sentFinal) {
+            await alerts.check(g.gameID).catch((e) => console.log(`${stamp()} alert check: ${e.message}`));
+          }
+        }
         dispatchScrape();
         return;
       }
     } catch (e) {
       console.log(`${stamp()} scoreboard: ${e.message}`);
     }
-    await sleep(POLL_EVERY);
+    await sleep(pollEvery);
   }
   console.log('gave up waiting; the scheduled scrape will pick the result up');
 }
 
-function handOver(date) {
+function handOver(date, alerts) {
   console.log('run budget spent before the final; handing over to a fresh watcher');
   // Queues behind this run in the per-date concurrency group, then starts.
+  // The alerts already sent go with it, so it does not send them again.
   execFileSync('gh', ['workflow', 'run', 'match-night.yml', '--repo', process.env.GITHUB_REPOSITORY,
-    '--ref', 'main', '-f', `date=${date}`], { stdio: 'inherit' });
+    '--ref', 'main', '-f', `date=${date}`, '-f', `sent=${alerts?.sentState ?? ''}`], { stdio: 'inherit' });
 }
 
 function dispatchScrape() {
@@ -166,7 +244,7 @@ async function main() {
       appendFileSync(process.env.GITHUB_OUTPUT, `watch=${p.watch}\n` + (p.watch ? `date=${p.date}\n` : ''));
     }
   } else if (mode === 'watch' && /^\d{4}-\d{2}-\d{2}$/.test(arg ?? '')) {
-    await watch(arg);
+    await watch(arg, process.argv[4] ?? '');
   } else {
     console.error('usage: match-night-watch.mjs plan | watch YYYY-MM-DD');
     process.exit(2);

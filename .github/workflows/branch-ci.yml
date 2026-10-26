@@ -1,0 +1,116 @@
+name: Branch CI
+
+# Tests and builds on any branch but main, so larger changes (the shared
+# Android/iOS code, to begin with) can be checked before they land. Unlike
+# build-apk.yml it publishes nothing: the latest-apk release only ever
+# carries what is on main.
+on:
+  push:
+    branches-ignore:
+      - main
+    # The iPhone app and the Apple checks have their own workflows.
+    paths-ignore:
+      - 'ios/**'
+      - '.github/workflows/ios-testflight.yml'
+      - '.github/workflows/apple-keys-check.yml'
+      # The data cross-check checks itself when it changes (data-cross-check.yml).
+      - 'scripts/data-cross-check.mjs'
+      - '.github/workflows/data-cross-check.yml'
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.4.1'
+
+      - name: Restore keystores
+        run: |
+          base64 -d debug.keystore.base64 > debug.keystore
+          base64 -d upload.keystore.base64 > upload.keystore
+
+      # The Kotlin and KSP Gradle plugins the build actually resolved, for
+      # checking that one Kotlin version runs the whole build.
+      - name: Show the Kotlin plugin versions
+        run: gradle buildEnvironment --no-configuration-cache | grep -E 'kotlin-gradle-plugin:|symbol-processing-gradle-plugin:' | sort -u
+
+      - name: Run unit tests
+        run: gradle :app:testDebugUnitTest :shared:testAndroidHostTest
+
+      - name: Build debug APK
+        run: gradle :app:assembleDebug
+
+      # The scripts' own tests: the scrape's parsers and the match-night
+      # watcher, including the iPhone alerts' wording and sending, and the
+      # seed builder's, among them the sets-played correction from Kansas
+      # Athletics' box scores.
+      - name: Run the script tests
+        run: |
+          node --test scripts/*.test.mjs docs/sim.test.mjs
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+
+      - name: Keep the test report when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-report
+          path: app/build/reports/tests/testDebugUnitTest
+
+  # The shared module compiled for iPhone, which only a Mac can do: the
+  # device and the simulator, and the Shared framework the iPhone app links.
+  ios-shared:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.4.1'
+
+      # Kotlin 2.4.21 is tested with Xcode up to 26.4; the runner's default is
+      # newer. 26.4 still meets App Store Connect's Xcode 26 requirement.
+      - name: Use Xcode 26.4.1
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.4.1.app/Contents/Developer || { ls /Applications | grep Xcode; exit 1; }
+          xcodebuild -version
+
+      # Kotlin/Native's compiler and its iOS libraries, about 1 GB, fetched once.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+
+      - name: Compile the shared code for iPhone and link the framework
+        run: gradle :shared:compileKotlinIosArm64 :shared:linkDebugFrameworkIosSimulatorArm64
+
+      # The shared tests on an iPhone simulator: the same answers as Android.
+      - name: Run the shared tests on an iPhone simulator
+        run: |
+          IOS_SIMULATOR=$(xcrun simctl list devices available --json | python3 -c '
+          import json, sys
+          devices = [d for runtime, ds in json.load(sys.stdin)["devices"].items() if "iOS" in runtime for d in ds]
+          print(next(d["udid"] for d in devices if d["name"].startswith("iPhone")))')
+          echo "Simulator $IOS_SIMULATOR"
+          export IOS_SIMULATOR
+          gradle :shared:iosSimulatorArm64Test
+
+      - name: Keep the shared test report when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shared-ios-test-report
+          path: shared/build/reports/tests

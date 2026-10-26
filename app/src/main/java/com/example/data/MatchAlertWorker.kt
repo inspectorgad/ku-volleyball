@@ -22,11 +22,12 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.example.MainActivity
 import com.example.R
+import com.example.json.JSONObject
+import com.example.platform.AndroidDevice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 /**
@@ -46,7 +47,8 @@ class MatchAlertWorker(context: Context, params: WorkerParameters) : CoroutineWo
     override suspend fun doWork(): Result {
         val ctx = applicationContext
         val dao = JayhawksDatabase.get(ctx).dao()
-        if (SeasonSync.shouldAutoSync(ctx)) runCatching { SeasonSync.sync(ctx, dao) }
+        val device = AndroidDevice(ctx)
+        if (SeasonSync.shouldAutoSync(device)) runCatching { SeasonSync.sync(device, dao) }
         runCatching { KuWidget.updateAll(ctx) }
         if (!AlertSettings.enabled(ctx)) return Result.success()
 
