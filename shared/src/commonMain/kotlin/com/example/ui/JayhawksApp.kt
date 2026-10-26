@@ -11,11 +11,11 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.JayhawksViewModel
+import com.example.data.normTeam
+import com.example.data.sameTeam
 
 enum class Tab(val label: String) {
     Roster("Roster"), Matches("Matches"), Leaders("Leaders"),
@@ -88,6 +90,204 @@ fun JayhawksApp(viewModel: JayhawksViewModel) {
 
     val openPlayer = openPlayerId?.let { id -> players.firstOrNull { it.id == id } }
     val openMatch = openMatchId?.let { id -> matches.firstOrNull { it.id == id } }
+
+    // From 600dp wide (an unfolded iPhone Duo or Android foldable, a tablet, an
+    // Android phone on its side) the tabs move to a rail and a page opens beside
+    // its list: see WideLayout.kt. Everything above is shared by both layouts,
+    // so folding or unfolding keeps the tab and whatever page was open. Narrower
+    // windows - every phone held upright - skip this and run the phone layout
+    // below exactly as before.
+    val windowWidth = windowWidthDp()
+    if (isWideWindow(windowWidth)) {
+        // In two panes the list stays visible, so every tap must replace what is
+        // open on the right rather than slide in behind it (the when below shows
+        // Ask > Simulator > player > match > opponent).
+        fun closeAll() {
+            openPlayerId = null
+            openMatchId = null
+            openOpponent = null
+            askOpen = false
+            askPrefill = null
+            simOpen = false
+        }
+        val sim = simulation
+        // A renamed or not-yet-synced team shows the placeholder, not "0 meetings".
+        val shownOpponent = openOpponent?.takeIf { name ->
+            matches.any { sameTeam(it.opponent, name) && it.teamSets != null }
+        }
+        // The phone's order. Anything that does not resolve yet (just restored,
+        // just saved, deleted by a sync) leaves the placeholder showing; its id
+        // is kept, never cleared or replaced to fill the space.
+        val right = when {
+            askOpen -> RightPane.Ask
+            simOpen && sim != null -> RightPane.Simulator
+            openPlayer != null -> RightPane.Player
+            openMatch != null -> RightPane.Match
+            shownOpponent != null -> RightPane.Opponent
+            else -> null
+        }
+        // Each page belongs to one tab, so choosing another tab closes it:
+        // folding afterwards then never shows a page from a different tab.
+        WideFrame(
+            currentTab = currentTab,
+            onSelectTab = { tab ->
+                if (tab != currentTab) {
+                    closeAll()
+                    currentTab = tab
+                }
+            }
+        ) {
+            ListDetailPanes(
+                windowWidth = windowWidth.dp,
+                showsDetail = right != null,
+                placeholder = placeholderFor(currentTab),
+                isRefreshing = isSyncing,
+                onRefresh = viewModel::refresh,
+                snackbarHostState = snackbarHostState,
+                list = {
+                    when (currentTab) {
+                        Tab.Roster -> RosterScreen(
+                            players = players,
+                            statLines = statLines,
+                            onSavePlayer = viewModel::savePlayer,
+                            onOpenPlayer = { closeAll(); openPlayerId = it.id },
+                            selectedPlayerId = openPlayerId
+                        )
+
+                        Tab.Matches -> MatchesScreen(
+                            matches = matches,
+                            statLines = statLines,
+                            // A slow save must not open its match after you
+                            // have moved to another tab.
+                            onSaveMatch = { match ->
+                                viewModel.saveMatch(match) { id ->
+                                    if (currentTab == Tab.Matches) {
+                                        closeAll()
+                                        openMatchId = id
+                                    }
+                                }
+                            },
+                            onOpenMatch = { closeAll(); openMatchId = it.id },
+                            selectedMatchId = openMatchId
+                        )
+
+                        Tab.Leaders -> LeadersScreen(
+                            players = players,
+                            matches = matches,
+                            statLines = statLines,
+                            nationalLeaders = nationalLeaders,
+                            matchGoals = matchGoals,
+                            dataUpdatedAt = dataUpdatedAt,
+                            lastCheckedMs = lastCheckedMs,
+                            syncFailure = syncFailure,
+                            pollEntries = pollEntries,
+                            standings = standings,
+                            onOpenAsk = { closeAll(); askOpen = true },
+                            simulation = simulation,
+                            onOpenSimulator = { closeAll(); simOpen = true }
+                        )
+
+                        Tab.Serving -> ServingScreen(
+                            players = players,
+                            matches = matches,
+                            statLines = statLines
+                        )
+
+                        Tab.Opponents -> OpponentsScreen(
+                            matches = matches,
+                            matchTeamStats = matchTeamStats,
+                            onOpenOpponent = { closeAll(); openOpponent = it },
+                            selectedOpponent = openOpponent
+                        )
+
+                        Tab.Big12 -> StandingsScreen(
+                            standings = standings,
+                            pollEntries = pollEntries,
+                            teamServing = teamServing
+                        )
+                    }
+                },
+                detail = {
+                    // Each page is keyed on what it shows, so nothing it
+                    // remembers - an open dialog, a delete confirmation, the
+                    // scroll position - carries over to the next one picked
+                    // from the list. The Simulator is keyed on its inputs too:
+                    // a sync that changes them starts its picks afresh.
+                    when (right) {
+                        RightPane.Ask -> key("ask") {
+                            AskScreen(onBack = { askOpen = false; askPrefill = null }, prefill = askPrefill)
+                        }
+
+                        RightPane.Simulator -> if (sim != null) {
+                            key("sim", sim) {
+                                SimulatorScreen(sim, onBack = { simOpen = false })
+                            }
+                        }
+
+                        RightPane.Player -> if (openPlayer != null) {
+                            key("player", openPlayer.id) {
+                                PlayerDetailScreen(
+                                    player = openPlayer,
+                                    matches = matches,
+                                    statLines = statLines,
+                                    onSavePlayer = viewModel::savePlayer,
+                                    onDeletePlayer = {
+                                        viewModel.deletePlayer(it)
+                                        openPlayerId = null
+                                    },
+                                    onBack = { openPlayerId = null }
+                                )
+                            }
+                        }
+
+                        RightPane.Match -> if (openMatch != null) {
+                            key("match", openMatch.id) {
+                                MatchDetailScreen(
+                                    match = openMatch,
+                                    players = players,
+                                    statLines = statLines,
+                                    matchGoals = matchGoals.filter { it.matchId == openMatch.id },
+                                    matches = matches,
+                                    opponentStatLines = opponentStatLines,
+                                    matchTeamStats = matchTeamStats,
+                                    opponentRoster = opponentRoster,
+                                    opponentSeasonStats = opponentSeasonStats,
+                                    onSaveMatch = { viewModel.saveMatch(it) },
+                                    onDeleteMatch = {
+                                        viewModel.deleteMatch(it)
+                                        openMatchId = null
+                                    },
+                                    onSaveStatLine = viewModel::saveStatLine,
+                                    onDeleteStatLine = viewModel::deleteStatLine,
+                                    onBack = { openMatchId = null },
+                                    // Ask opens over the match, which stays
+                                    // open (and outlined) underneath: Ask's
+                                    // arrow or Back brings it back.
+                                    onAskClaude = { q -> askPrefill = q; askOpen = true }
+                                )
+                            }
+                        }
+
+                        RightPane.Opponent -> if (shownOpponent != null) {
+                            key("opponent", normTeam(shownOpponent)) {
+                                OpponentDetailScreen(
+                                    opponentName = shownOpponent,
+                                    matches = matches,
+                                    opponentStatLines = opponentStatLines,
+                                    matchTeamStats = matchTeamStats,
+                                    opponentRoster = opponentRoster,
+                                    onBack = { openOpponent = null }
+                                )
+                            }
+                        }
+
+                        null -> Unit
+                    }
+                }
+            )
+        }
+        return
+    }
 
     when {
         askOpen -> AskScreen(onBack = { askOpen = false; askPrefill = null }, prefill = askPrefill)
@@ -161,7 +361,7 @@ fun JayhawksApp(viewModel: JayhawksViewModel) {
                                     modifier = Modifier.padding(horizontal = 4.dp)
                                 )
                             },
-                            label = { Text(tab.label) },
+                            label = { TabLabel(tab.label) },
                             // Material 3 1.4 turned the selected label the
                             // secondary colour, KU crimson here; keep it dark.
                             colors = NavigationBarItemDefaults.colors(

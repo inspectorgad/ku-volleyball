@@ -56,6 +56,9 @@ fun RosterScreen(
     statLines: List<StatLine>,
     onSavePlayer: (Player) -> Unit,
     onOpenPlayer: (Player) -> Unit,
+    // On a wide screen, the player whose page is open beside the list; her
+    // card is outlined. A phone passes none, so its cards are unchanged.
+    selectedPlayerId: Long? = null,
     modifier: Modifier = Modifier
 ) {
     var editingPlayer by remember { mutableStateOf<Player?>(null) }
@@ -75,7 +78,7 @@ fun RosterScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(current, key = { it.id }) { player ->
-                    PlayerCard(player, statLines, onOpenPlayer)
+                    PlayerCard(player, statLines, onOpenPlayer, selected = player.id == selectedPlayerId)
                 }
                 if (former.isNotEmpty()) {
                     item(key = "former-header") {
@@ -88,7 +91,7 @@ fun RosterScreen(
                         )
                     }
                     items(former, key = { it.id }) { player ->
-                        PlayerCard(player, statLines, onOpenPlayer)
+                        PlayerCard(player, statLines, onOpenPlayer, selected = player.id == selectedPlayerId)
                     }
                 }
             }
@@ -130,13 +133,16 @@ fun RosterScreen(
 private fun PlayerCard(
     player: Player,
     statLines: List<StatLine>,
-    onOpenPlayer: (Player) -> Unit
+    onOpenPlayer: (Player) -> Unit,
+    selected: Boolean = false
 ) {
     val career = aggregate(statLines.filter { it.playerId == player.id })
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onOpenPlayer(player) }
+            .markSelected(selected),
+        border = selectedCardBorder(selected)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),

@@ -16,6 +16,15 @@ name: iOS TestFlight build
 # (see ios/project.yml), so this job sets up Java and Gradle too.
 on:
   workflow_dispatch:
+    inputs:
+      # A list rather than free text, so nothing arbitrary reaches the shell.
+      xcode:
+        description: "Xcode to build with. 27.1 gives the iPhone Duo's inner screen the wide layout"
+        type: choice
+        options:
+          - '26.4.1'
+          - '27.1'
+        default: '26.4.1'
   push:
     branches-ignore:
       - main
@@ -29,7 +38,9 @@ concurrency:
 
 jobs:
   testflight:
-    runs-on: macos-26
+    # Xcode 27 is only on GitHub's separate Xcode 27 image (arm64, macOS 27);
+    # the macos-26 image stops at Xcode 26.6.
+    runs-on: ${{ inputs.xcode == '27.1' && 'xcode-27' || 'macos-26' }}
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
@@ -45,9 +56,23 @@ jobs:
 
       # Kotlin 2.4.21 is tested with Xcode up to 26.4; the runner's default is
       # newer. 26.4 still meets App Store Connect's Xcode 26 requirement.
-      - name: Use Xcode 26.4.1
+      #
+      # A run started by hand can choose 27.1 instead. An app built with an
+      # older Xcode runs on the iPhone Duo's inner screen in a phone-sized
+      # window, so it shows the phone layout there; 27.1 lets it fill the
+      # screen and use the wide one. Kotlin 2.4.21 is not tested with Xcode 27,
+      # and the build goes to every TestFlight tester. Builds started by a push
+      # stay on 26.4.1. If this runner image has no Xcode 27.1, the step lists
+      # the Xcodes it does have.
+      - name: Use Xcode ${{ inputs.xcode || '26.4.1' }}
+        env:
+          XCODE_VERSION: ${{ inputs.xcode || '26.4.1' }}
         run: |
-          sudo xcode-select -s /Applications/Xcode_26.4.1.app/Contents/Developer
+          # Images name an install Xcode_27.1.app or Xcode_27.1.0.app; take either.
+          for app in "/Applications/Xcode_${XCODE_VERSION}.app" "/Applications/Xcode_${XCODE_VERSION}.0.app"; do
+            if [ -d "$app" ]; then sudo xcode-select -s "$app/Contents/Developer"; break; fi
+          done
+          xcodebuild -version | grep -q "^Xcode ${XCODE_VERSION}" || { echo "No Xcode ${XCODE_VERSION} on this image:"; ls /Applications | grep Xcode; exit 1; }
           xcodebuild -version
           echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
 
