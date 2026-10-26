@@ -43,5 +43,5 @@ jobs:
 
       - name: Cross-check
         env:
-          MODE: ${{ inputs.mode || 'probe' }}
+          MODE: ${{ inputs.mode || 'check' }}
         run: node scripts/data-cross-check.mjs "$MODE"
