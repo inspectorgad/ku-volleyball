@@ -13,6 +13,9 @@ on:
       - 'ios/**'
       - '.github/workflows/ios-testflight.yml'
       - '.github/workflows/apple-keys-check.yml'
+      # The data cross-check checks itself when it changes (data-cross-check.yml).
+      - 'scripts/data-cross-check.mjs'
+      - '.github/workflows/data-cross-check.yml'
 
 jobs:
   android:

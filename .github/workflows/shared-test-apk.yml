@@ -18,6 +18,9 @@ on:
       - 'ios/**'
       - 'docs/**'
       - 'scraped/**'
+      # The data cross-check only reads the official sites; the app is unchanged.
+      - 'scripts/data-cross-check.mjs'
+      - '.github/workflows/data-cross-check.yml'
 
 permissions:
   contents: write
