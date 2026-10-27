@@ -1,12 +1,12 @@
 {
- "capturedAt": "2026-10-26T21:50:16.711Z",
+ "capturedAt": "2026-10-27T00:54:25.681Z",
  "sport": "Women's Volleyball",
  "categories": [
   {
    "id": "42",
    "name": "Aces Per Set",
    "title": "Aces Per Set",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -564,7 +564,7 @@
    "id": "3",
    "name": "Assists Per Set",
    "title": "Assists Per Set",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -1122,7 +1122,7 @@
    "id": "890",
    "name": "Attacks Per Set",
    "title": "Attacks Per Set",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -1698,19 +1698,6 @@
     },
     {
      "Rank": "45",
-     "Name": "Taylor Cripe",
-     "Team": "Central Mich.",
-     "Cl": "So.",
-     "Height": "5-8",
-     "Position": "OH",
-     "S": "75",
-     "Kills": "265",
-     "Errors": "150",
-     "Total Attacks": "808",
-     "Per Set": "10.77"
-    },
-    {
-     "Rank": "46",
      "Name": "Maria Tabacuks",
      "Team": "LMU (CA)",
      "Cl": "Fr.",
@@ -1721,6 +1708,19 @@
      "Errors": "100",
      "Total Attacks": "851",
      "Per Set": "10.77"
+    },
+    {
+     "Rank": "46",
+     "Name": "Taylor Cripe",
+     "Team": "Central Mich.",
+     "Cl": "So.",
+     "Height": "5-8",
+     "Position": "OH",
+     "S": "75",
+     "Kills": "264",
+     "Errors": "150",
+     "Total Attacks": "806",
+     "Per Set": "10.75"
     },
     {
      "Rank": "47",
@@ -1780,7 +1780,7 @@
    "id": "43",
    "name": "Blocks Per Set",
    "title": "Blocks Per Set",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -1992,6 +1992,19 @@
     },
     {
      "Rank": "17",
+     "Name": "Ayen Nhial",
+     "Team": "James Madison",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "76",
+     "Block Solos": "13",
+     "Block Assists": "94",
+     "Total": "107",
+     "Per Set": "1.41"
+    },
+    {
+     "Rank": "18",
      "Name": "Eliza Sharp",
      "Team": "Texas A&M",
      "Cl": "So.",
@@ -2004,7 +2017,7 @@
      "Per Set": "1.41"
     },
     {
-     "Rank": "18",
+     "Rank": "19",
      "Name": "Eve Wilson",
      "Team": "Colorado St.",
      "Cl": "Sr.",
@@ -2017,7 +2030,7 @@
      "Per Set": "1.41"
     },
     {
-     "Rank": "19",
+     "Rank": "20",
      "Name": "Talia Francom",
      "Team": "NC State",
      "Cl": "So.",
@@ -2028,19 +2041,6 @@
      "Block Assists": "97",
      "Total": "108",
      "Per Set": "1.40"
-    },
-    {
-     "Rank": "20",
-     "Name": "Ayen Nhial",
-     "Team": "James Madison",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "76",
-     "Block Solos": "13",
-     "Block Assists": "93",
-     "Total": "106",
-     "Per Set": "1.39"
     },
     {
      "Rank": "21",
@@ -2438,7 +2438,7 @@
    "id": "44",
    "name": "Digs Per Set",
    "title": "Digs Per Set",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -2502,9 +2502,9 @@
      "Cl": "Sr.",
      "Height": "5-5",
      "Position": "DS",
-     "S": "76",
-     "Digs": "394",
-     "Per Set": "5.18"
+     "S": "79",
+     "Digs": "404",
+     "Per Set": "5.11"
     },
     {
      "Rank": "7",
@@ -2574,6 +2574,17 @@
     },
     {
      "Rank": "13",
+     "Name": "MeMe Davis",
+     "Team": "App State",
+     "Cl": "Jr.",
+     "Height": "5-7",
+     "Position": "L/DS",
+     "S": "95",
+     "Digs": "456",
+     "Per Set": "4.80"
+    },
+    {
+     "Rank": "14",
      "Name": "Ashton Rogers",
      "Team": "UIW",
      "Cl": "So.",
@@ -2584,7 +2595,7 @@
      "Per Set": "4.76"
     },
     {
-     "Rank": "14",
+     "Rank": "15",
      "Name": "Emmarie McFarland",
      "Team": "Northwestern St.",
      "Cl": "So.",
@@ -2595,7 +2606,7 @@
      "Per Set": "4.75"
     },
     {
-     "Rank": "15",
+     "Rank": "16",
      "Name": "Madeline Sanderson",
      "Team": "Montana",
      "Cl": "So.",
@@ -2606,7 +2617,7 @@
      "Per Set": "4.75"
     },
     {
-     "Rank": "16",
+     "Rank": "17",
      "Name": "Surabhi Srinivasan",
      "Team": "Eastern Mich.",
      "Cl": "Sr.",
@@ -2617,7 +2628,7 @@
      "Per Set": "4.72"
     },
     {
-     "Rank": "17",
+     "Rank": "18",
      "Name": "Leddy Rae Guinn",
      "Team": "Tarleton St.",
      "Cl": "Jr.",
@@ -2628,7 +2639,7 @@
      "Per Set": "4.72"
     },
     {
-     "Rank": "18",
+     "Rank": "19",
      "Name": "Aspen Boice",
      "Team": "Idaho St.",
      "Cl": "Fr.",
@@ -2637,17 +2648,6 @@
      "S": "78",
      "Digs": "368",
      "Per Set": "4.72"
-    },
-    {
-     "Rank": "19",
-     "Name": "MeMe Davis",
-     "Team": "App State",
-     "Cl": "Jr.",
-     "Height": "5-7",
-     "Position": "L/DS",
-     "S": "95",
-     "Digs": "447",
-     "Per Set": "4.71"
     },
     {
      "Rank": "20",
@@ -2996,7 +2996,7 @@
    "id": "1",
    "name": "Hitting Percentage",
    "title": "Hitting Percentage",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -3481,6 +3481,19 @@
     },
     {
      "Rank": "38",
+     "Name": "Hannah Whittingstall",
+     "Team": "Iowa",
+     "Cl": "Sr.",
+     "Height": "6-2",
+     "Position": "MH",
+     "S": "92",
+     "Kills": "229",
+     "Errors": "38",
+     "Total Attacks": "488",
+     "Pct.": ".391"
+    },
+    {
+     "Rank": "39",
      "Name": "Skyler Gartin",
      "Team": "Sacramento St.",
      "Cl": "Jr.",
@@ -3493,7 +3506,7 @@
      "Pct.": ".391"
     },
     {
-     "Rank": "39",
+     "Rank": "40",
      "Name": "Karolina T. Rodriguez Mendez",
      "Team": "Saint Peter's",
      "Cl": "Sr.",
@@ -3504,19 +3517,6 @@
      "Errors": "34",
      "Total Attacks": "417",
      "Pct.": ".391"
-    },
-    {
-     "Rank": "40",
-     "Name": "Hannah Whittingstall",
-     "Team": "Iowa",
-     "Cl": "Sr.",
-     "Height": "6-2",
-     "Position": "MH",
-     "S": "92",
-     "Kills": "228",
-     "Errors": "38",
-     "Total Attacks": "488",
-     "Pct.": ".389"
     },
     {
      "Rank": "41",
@@ -3654,7 +3654,7 @@
    "id": "2",
    "name": "Kills Per Set",
    "title": "Kills Per Set",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -4212,7 +4212,7 @@
    "id": "553",
    "name": "Points",
    "title": "Points",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -4870,7 +4870,7 @@
    "id": "552",
    "name": "Points Per Set",
    "title": "Points Per Set",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -5578,7 +5578,7 @@
    "id": "883",
    "name": "Service Aces",
    "title": "Service Aces",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -6086,7 +6086,7 @@
    "id": "880",
    "name": "Total Assists",
    "title": "Total Assists",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -6159,17 +6159,17 @@
      "Assists": "878"
     },
     {
-     "Rank": "8",
+     "Rank": "-",
      "Name": "Raegan Richardson",
      "Team": "App State",
      "Cl": "Jr.",
      "Height": "6-0",
      "Position": "S",
      "S": "95",
-     "Assists": "875"
+     "Assists": "878"
     },
     {
-     "Rank": "-",
+     "Rank": "9",
      "Name": "Chloe Wilmot",
      "Team": "Duquesne",
      "Cl": "Sr.",
@@ -6594,7 +6594,7 @@
    "id": "889",
    "name": "Total Attacks",
    "title": "Total Attacks",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -7101,7 +7101,19 @@
      "Total Attacks": "842"
     },
     {
-     "Rank": "43",
+     "Rank": "-",
+     "Name": "LaDonna Trantham",
+     "Team": "Florida A&M",
+     "Cl": "So.",
+     "Height": "5-9",
+     "Position": "OH",
+     "S": "83",
+     "Kills": "299",
+     "Errors": "129",
+     "Total Attacks": "842"
+    },
+    {
+     "Rank": "44",
      "Name": "Olivia Keckler",
      "Team": "Central Conn. St.",
      "Cl": "Jr.",
@@ -7113,7 +7125,7 @@
      "Total Attacks": "840"
     },
     {
-     "Rank": "44",
+     "Rank": "45",
      "Name": "Izzy Castelloe",
      "Team": "Furman",
      "Cl": "Sr.",
@@ -7125,7 +7137,7 @@
      "Total Attacks": "837"
     },
     {
-     "Rank": "45",
+     "Rank": "46",
      "Name": "Suli Davis",
      "Team": "SMU",
      "Cl": "So.",
@@ -7137,7 +7149,7 @@
      "Total Attacks": "836"
     },
     {
-     "Rank": "46",
+     "Rank": "47",
      "Name": "Nataly Moravec",
      "Team": "Duke",
      "Cl": "Sr.",
@@ -7161,7 +7173,7 @@
      "Total Attacks": "833"
     },
     {
-     "Rank": "48",
+     "Rank": "49",
      "Name": "Kendall Timme",
      "Team": "DePaul",
      "Cl": "So.",
@@ -7173,7 +7185,7 @@
      "Total Attacks": "832"
     },
     {
-     "Rank": "49",
+     "Rank": "50",
      "Name": "Cassidy Hartman",
      "Team": "UNI",
      "Cl": "Sr.",
@@ -7183,18 +7195,6 @@
      "Kills": "312",
      "Errors": "131",
      "Total Attacks": "831"
-    },
-    {
-     "Rank": "50",
-     "Name": "Avery Hobson",
-     "Team": "Bowling Green",
-     "Cl": "Sr.",
-     "Height": "6-1",
-     "Position": "OH",
-     "S": "79",
-     "Kills": "300",
-     "Errors": "116",
-     "Total Attacks": "829"
     }
    ]
   },
@@ -7202,7 +7202,7 @@
    "id": "887",
    "name": "Total Blocks",
    "title": "Total Blocks",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -7422,6 +7422,18 @@
     },
     {
      "Rank": "-",
+     "Name": "Ayen Nhial",
+     "Team": "James Madison",
+     "Cl": "Jr.",
+     "Height": "6-2",
+     "Position": "MB",
+     "S": "76",
+     "Block Solos": "13",
+     "Block Assists": "94",
+     "TB": "107.0"
+    },
+    {
+     "Rank": "-",
      "Name": "Damisi Osibodu",
      "Team": "Stony Brook",
      "Cl": "So.",
@@ -7433,7 +7445,7 @@
      "TB": "107.0"
     },
     {
-     "Rank": "20",
+     "Rank": "21",
      "Name": "Eloise Brandewie",
      "Team": "Creighton",
      "Cl": "Sr.",
@@ -7442,18 +7454,6 @@
      "S": "87",
      "Block Solos": "9",
      "Block Assists": "97",
-     "TB": "106.0"
-    },
-    {
-     "Rank": "-",
-     "Name": "Ayen Nhial",
-     "Team": "James Madison",
-     "Cl": "Jr.",
-     "Height": "6-2",
-     "Position": "MB",
-     "S": "76",
-     "Block Solos": "13",
-     "Block Assists": "93",
      "TB": "106.0"
     },
     {
@@ -7810,7 +7810,7 @@
    "id": "885",
    "name": "Total Digs",
    "title": "Total Digs",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -7860,7 +7860,7 @@
      "Height": "5-7",
      "Position": "L/DS",
      "S": "95",
-     "Digs": "447"
+     "Digs": "456"
     },
     {
      "Rank": "6",
@@ -7954,6 +7954,16 @@
     },
     {
      "Rank": "15",
+     "Name": "Najah Harris",
+     "Team": "Southern U.",
+     "Cl": "Sr.",
+     "Height": "5-5",
+     "Position": "DS",
+     "S": "79",
+     "Digs": "404"
+    },
+    {
+     "Rank": "16",
      "Name": "Coco Figueroa",
      "Team": "Coppin St.",
      "Cl": "Sr.",
@@ -7961,16 +7971,6 @@
      "Position": "L/DS",
      "S": "94",
      "Digs": "396"
-    },
-    {
-     "Rank": "16",
-     "Name": "Najah Harris",
-     "Team": "Southern U.",
-     "Cl": "Sr.",
-     "Height": "5-5",
-     "Position": "DS",
-     "S": "76",
-     "Digs": "394"
     },
     {
      "Rank": "17",
@@ -8318,7 +8318,7 @@
    "id": "879",
    "name": "Total Kills",
    "title": "Total Kills",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
@@ -8876,7 +8876,7 @@
    "id": "928",
    "name": "Triple Doubles",
    "title": "Triple Doubles",
-   "updated": "Monday, October 26, 2026 8:10 am - Through games Sunday, October 25, 2026",
+   "updated": "Monday, October 26, 2026 7:10 pm - Through games Monday, October 26, 2026",
    "rows": [
     {
      "Rank": "1",
