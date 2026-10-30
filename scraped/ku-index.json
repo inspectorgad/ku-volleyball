@@ -11294,6 +11294,27 @@
    },
    "conferenceGame": true
   },
+  "6628232": {
+   "date": "2026-10-29",
+   "season": "2026",
+   "home": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6628235": {
    "date": "2026-09-12",
    "season": "2026",
@@ -13790,6 +13811,14 @@
    ],
    "boxscored": true
   },
+  "6626297": {
+   "date": "2026-10-29",
+   "season": "2026",
+   "teams": [
+    "Creighton"
+   ],
+   "boxscored": true
+  },
   "6626304": {
    "date": "2026-08-30",
    "season": "2026",
@@ -15674,6 +15703,15 @@
    "season": "2026",
    "teams": [
     "Colorado"
+   ],
+   "boxscored": true
+  },
+  "6628232": {
+   "date": "2026-10-29",
+   "season": "2026",
+   "teams": [
+    "Colorado",
+    "Cincinnati"
    ],
    "boxscored": true
   },
