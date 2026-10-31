@@ -599,10 +599,10 @@
   },
   "6627522": {
    "date": "2026-10-30",
-   "final": false,
+   "final": true,
    "home": "Kansas",
    "away": "Kansas St.",
-   "boxscored": false
+   "boxscored": true
   }
  },
  "big12Games": {
@@ -9153,6 +9153,27 @@
    },
    "conferenceGame": true
   },
+  "6626577": {
+   "date": "2026-10-30",
+   "season": "2026",
+   "home": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626681": {
    "date": "2026-09-05",
    "season": "2026",
@@ -10490,6 +10511,27 @@
    "away": {
     "name": "Texas Tech",
     "seo": "texas-tech",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6627522": {
+   "date": "2026-10-30",
+   "season": "2026",
+   "home": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 15,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
     "score": 0,
     "winner": false,
     "rank": null,
@@ -12534,6 +12576,14 @@
    ],
    "boxscored": true
   },
+  "6624643": {
+   "date": "2026-10-30",
+   "season": "2026",
+   "teams": [
+    "Oregon"
+   ],
+   "boxscored": true
+  },
   "6624646": {
    "date": "2026-09-03",
    "season": "2026",
@@ -13834,6 +13884,14 @@
    ],
    "boxscored": true
   },
+  "6626282": {
+   "date": "2026-10-30",
+   "season": "2026",
+   "teams": [
+    "SMU"
+   ],
+   "boxscored": true
+  },
   "6626287": {
    "date": "2026-09-06",
    "season": "2026",
@@ -14203,6 +14261,15 @@
    "teams": [
     "West Virginia",
     "Arizona"
+   ],
+   "boxscored": true
+  },
+  "6626577": {
+   "date": "2026-10-30",
+   "season": "2026",
+   "teams": [
+    "Iowa St.",
+    "West Virginia"
    ],
    "boxscored": true
   },
@@ -14711,6 +14778,14 @@
   },
   "6627002": {
    "date": "2026-10-17",
+   "season": "2026",
+   "teams": [
+    "Creighton"
+   ],
+   "boxscored": true
+  },
+  "6627003": {
+   "date": "2026-10-30",
    "season": "2026",
    "teams": [
     "Creighton"
@@ -15232,6 +15307,14 @@
   },
   "6627521": {
    "date": "2026-10-25",
+   "season": "2026",
+   "teams": [
+    "Kansas St."
+   ],
+   "boxscored": true
+  },
+  "6627522": {
+   "date": "2026-10-30",
    "season": "2026",
    "teams": [
     "Kansas St."
