@@ -216,7 +216,8 @@
   "2026-10-28": true,
   "2026-10-29": true,
   "2026-10-30": true,
-  "2026-10-31": true
+  "2026-10-31": true,
+  "2026-11-01": true
  },
  "games": {
   "6479442": {
@@ -596,6 +597,13 @@
    "home": "Baylor",
    "away": "Kansas",
    "boxscored": true
+  },
+  "6625749": {
+   "date": "2026-11-01",
+   "final": false,
+   "home": "Iowa St.",
+   "away": "Kansas",
+   "boxscored": false
   },
   "6627522": {
    "date": "2026-10-30",
@@ -12506,6 +12514,15 @@
    "season": "2026",
    "teams": [
     "Michigan St."
+   ],
+   "boxscored": true
+  },
+  "6624373": {
+   "date": "2026-10-31",
+   "season": "2026",
+   "teams": [
+    "Michigan St.",
+    "Nebraska"
    ],
    "boxscored": true
   },
