@@ -10085,6 +10085,27 @@
    },
    "conferenceGame": true
   },
+  "6627014": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "home": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627016": {
    "date": "2026-09-04",
    "season": "2026",
@@ -15060,6 +15081,14 @@
    ],
    "boxscored": true
   },
+  "6627014": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "Arizona"
+   ],
+   "boxscored": true
+  },
   "6627015": {
    "date": "2026-09-09",
    "season": "2026",
@@ -15261,6 +15290,14 @@
    "season": "2026",
    "teams": [
     "Texas"
+   ],
+   "boxscored": true
+  },
+  "6627182": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "Vanderbilt"
    ],
    "boxscored": true
   },
@@ -15940,6 +15977,14 @@
    "season": "2026",
    "teams": [
     "Pittsburgh"
+   ],
+   "boxscored": true
+  },
+  "6628096": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "North Carolina"
    ],
    "boxscored": true
   },
