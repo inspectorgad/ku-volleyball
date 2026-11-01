@@ -600,10 +600,10 @@
   },
   "6625749": {
    "date": "2026-11-01",
-   "final": false,
+   "final": true,
    "home": "Iowa St.",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   },
   "6627522": {
    "date": "2026-10-30",
@@ -8216,6 +8216,27 @@
    },
    "conferenceGame": true
   },
+  "6625749": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "home": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 15,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -9188,6 +9209,27 @@
    "home": {
     "name": "Iowa St.",
     "seo": "iowa-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6626579": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "home": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
     "score": 3,
     "winner": true,
     "rank": null,
@@ -13512,6 +13554,14 @@
    ],
    "boxscored": true
   },
+  "6625749": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "Iowa St."
+   ],
+   "boxscored": true
+  },
   "6625787": {
    "date": "2026-08-30",
    "season": "2026",
@@ -14014,6 +14064,14 @@
    ],
    "boxscored": true
   },
+  "6626283": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "SMU"
+   ],
+   "boxscored": true
+  },
   "6626287": {
    "date": "2026-09-06",
    "season": "2026",
@@ -14391,6 +14449,15 @@
    "season": "2026",
    "teams": [
     "Iowa St.",
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
+  "6626579": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "Cincinnati",
     "West Virginia"
    ],
    "boxscored": true
@@ -15086,6 +15153,14 @@
   },
   "6627034": {
    "date": "2026-10-30",
+   "season": "2026",
+   "teams": [
+    "Louisville"
+   ],
+   "boxscored": true
+  },
+  "6627035": {
+   "date": "2026-11-01",
    "season": "2026",
    "teams": [
     "Louisville"
@@ -16305,6 +16380,14 @@
    ],
    "boxscored": true
   },
+  "6628333": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "Pittsburgh"
+   ],
+   "boxscored": true
+  },
   "6628335": {
    "date": "2026-09-18",
    "season": "2026",
@@ -16557,6 +16640,15 @@
    ],
    "boxscored": true
   },
+  "6628583": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "Texas",
+    "Texas A&M"
+   ],
+   "boxscored": true
+  },
   "6628592": {
    "date": "2026-08-29",
    "season": "2026",
@@ -16611,6 +16703,14 @@
    "season": "2026",
    "teams": [
     "Texas A&M"
+   ],
+   "boxscored": true
+  },
+  "6628684": {
+   "date": "2026-11-01",
+   "season": "2026",
+   "teams": [
+    "Florida"
    ],
    "boxscored": true
   },
