@@ -9908,6 +9908,27 @@
    },
    "conferenceGame": true
   },
+  "6626896": {
+   "date": "2026-11-05",
+   "season": "2026",
+   "home": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 0,
+    "winner": false,
+    "rank": 25,
+    "inConference": true
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 8,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626979": {
    "date": "2026-09-04",
    "season": "2026",
@@ -12714,6 +12735,14 @@
    ],
    "boxscored": true
   },
+  "6624374": {
+   "date": "2026-11-05",
+   "season": "2026",
+   "teams": [
+    "Wisconsin"
+   ],
+   "boxscored": true
+  },
   "6624379": {
    "date": "2026-09-01",
    "season": "2026",
@@ -12841,6 +12870,14 @@
    "season": "2026",
    "teams": [
     "Minnesota"
+   ],
+   "boxscored": true
+  },
+  "6624641": {
+   "date": "2026-11-05",
+   "season": "2026",
+   "teams": [
+    "Southern California"
    ],
    "boxscored": true
   },
@@ -15050,6 +15087,14 @@
    "teams": [
     "BYU",
     "Utah"
+   ],
+   "boxscored": true
+  },
+  "6626896": {
+   "date": "2026-11-05",
+   "season": "2026",
+   "teams": [
+    "Colorado"
    ],
    "boxscored": true
   },
