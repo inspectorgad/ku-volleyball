@@ -114,9 +114,17 @@ export function simulate(inputs, forced = {}, runs = RUNS) {
   };
 }
 
-/** "37%", with the ends said in words rather than as a false 0% or 100%. */
+/**
+ * "37%", with the ends said in words rather than as a false 0% or 100%.
+ *
+ * >= at the top, not >: 0.995 * 100 is exactly 99.5, which Math.round takes
+ * up to 100, so a strict > let that one value through as "100%" - the single
+ * certainty this function exists to refuse. Reachable rather than theoretical:
+ * these are counts over RUNS, so 19,900 of 20,000 lands on it exactly.
+ * The twin of chance() in SeasonSimulator.kt, which has the same guard.
+ */
 export function chance(p) {
   if (p < 0.005) return "under 1%";
-  if (p > 0.995) return "over 99%";
+  if (p >= 0.995) return "over 99%";
   return Math.round(p * 100) + "%";
 }

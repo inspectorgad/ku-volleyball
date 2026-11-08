@@ -68,4 +68,16 @@ class SeasonSimulatorTest {
         assertEquals("over 99%", SeasonSimulator.chance(0.999))
         assertEquals("37%", SeasonSimulator.chance(0.374))
     }
+
+    @Test
+    fun `the top boundary does not print a certainty`() {
+        // 0.995 * 100 is exactly 99.5, which roundHalfUp takes to 100, so a
+        // strict > here printed "100%" - the one thing chance() exists to
+        // refuse. These are counts over RUNS, so 19,900 of 20,000 lands on it
+        // exactly. Same cases as docs/sim.test.mjs.
+        assertEquals("over 99%", SeasonSimulator.chance(0.995))
+        assertEquals("99%", SeasonSimulator.chance(0.9949))
+        // The low end needs no matching guard: it reads as 1%, never 0%.
+        assertEquals("1%", SeasonSimulator.chance(0.005))
+    }
 }

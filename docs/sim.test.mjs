@@ -58,3 +58,14 @@ test('chances read in words at the ends', () => {
   assert.equal(chance(0.999), 'over 99%');
   assert.equal(chance(0.374), '37%');
 });
+
+test('the top boundary does not print a certainty', () => {
+  // 0.995 * 100 is exactly 99.5, which rounds up to 100, so a strict > here
+  // printed "100%" - the one thing chance() exists to refuse. These are
+  // counts over RUNS, so 19,900 of 20,000 lands on it exactly.
+  // Same cases as SeasonSimulatorTest.kt.
+  assert.equal(chance(0.995), 'over 99%');
+  assert.equal(chance(0.9949), '99%');
+  // The low end needs no matching guard: it reads as 1%, never 0%.
+  assert.equal(chance(0.005), '1%');
+});

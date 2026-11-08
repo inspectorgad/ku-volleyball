@@ -177,10 +177,18 @@ object SeasonSimulator {
         )
     }
 
-    /** "37%", with the ends said in words rather than as a false 0% or 100%. */
+    /**
+     * "37%", with the ends said in words rather than as a false 0% or 100%.
+     *
+     * >= at the top, not >: 0.995 * 100 is exactly 99.5, which roundHalfUp
+     * takes up to 100, so a strict > let that one value through as "100%" -
+     * the single certainty this exists to refuse. Reachable rather than
+     * theoretical: these are counts over RUNS, so 19,900 of 20,000 lands on
+     * it exactly. The twin of chance() in docs/sim.js, same guard.
+     */
     fun chance(p: Double): String = when {
         p < 0.005 -> "under 1%"
-        p > 0.995 -> "over 99%"
+        p >= 0.995 -> "over 99%"
         else -> "${roundHalfUp(p * 100)}%"
     }
 }
