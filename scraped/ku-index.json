@@ -223,7 +223,8 @@
   "2026-11-04": true,
   "2026-11-05": true,
   "2026-11-06": true,
-  "2026-11-07": true
+  "2026-11-07": true,
+  "2026-11-08": true
  },
  "games": {
   "6479442": {
@@ -617,6 +618,13 @@
    "home": "Kansas",
    "away": "Baylor",
    "boxscored": true
+  },
+  "6625751": {
+   "date": "2026-11-08",
+   "final": false,
+   "home": "Kansas",
+   "away": "Cincinnati",
+   "boxscored": false
   },
   "6627522": {
    "date": "2026-10-30",
@@ -9930,6 +9938,27 @@
    },
    "conferenceGame": true
   },
+  "6626899": {
+   "date": "2026-11-07",
+   "season": "2026",
+   "home": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 8,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626979": {
    "date": "2026-09-04",
    "season": "2026",
@@ -15265,6 +15294,15 @@
    ],
    "boxscored": true
   },
+  "6626899": {
+   "date": "2026-11-07",
+   "season": "2026",
+   "teams": [
+    "Iowa St.",
+    "BYU"
+   ],
+   "boxscored": true
+  },
   "6626911": {
    "date": "2026-08-30",
    "season": "2026",
@@ -15383,6 +15421,14 @@
   },
   "6627003": {
    "date": "2026-10-30",
+   "season": "2026",
+   "teams": [
+    "Creighton"
+   ],
+   "boxscored": true
+  },
+  "6627004": {
+   "date": "2026-11-07",
    "season": "2026",
    "teams": [
     "Creighton"
@@ -17498,7 +17544,7 @@
    "teams": [
     "Southern California"
    ],
-   "boxscored": false
+   "boxscored": true
   },
   "6639663": {
    "date": "2026-09-25",
