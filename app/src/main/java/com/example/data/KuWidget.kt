@@ -93,7 +93,12 @@ fun widgetLines(
 
     val next = matches.filter { !it.played && it.date >= today }.minByOrNull { it.date }?.let { m ->
         "Next: ${m.versus} ${m.opponent} · ${kickoffLine(m)}" +
-            (m.winProbability?.let { " · ${Math.round(it * 100)}% win" } ?: "")
+            // chance(), not a bare rounded percent: this is the same forecast
+            // the simulator words, and rounding it here would let a strong
+            // enough favourite read "100% win" on the home screen - a promise
+            // no model makes, and the one a widget would be remembered for on
+            // the night it was wrong.
+            (m.winProbability?.let { " · ${SeasonSimulator.chance(it)} win" } ?: "")
     } ?: "No match scheduled"
 
     val last = matches.filter { it.played }.maxByOrNull { it.date }?.let { m ->

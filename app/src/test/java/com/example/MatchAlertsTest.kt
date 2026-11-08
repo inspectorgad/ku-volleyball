@@ -97,4 +97,21 @@ class MatchAlertsTest {
         assertEquals("Next: at UCF · Sun Oct 11 · 12:00 PM CT · 61% win", lines.next)
         assertEquals("Last: L 0-3 vs BYU", lines.last)
     }
+
+    @Test
+    fun `the widget never promises a certain win`() {
+        // The widget used to round the forecast itself, so a strong enough
+        // favourite would have read "100% win" on the home screen. It words
+        // the number through SeasonSimulator.chance() now, the same way every
+        // other screen does.
+        fun next(p: Double): String = com.example.data.widgetLines(
+            listOf(Match(id = 1, date = "2026-10-11", opponent = "UCF", season = "2026",
+                home = false, time = "12:00", winProbability = p)),
+            emptyList(), emptyList(), "2026-10-06"
+        ).next
+        assertTrue(next(0.995), next(0.995).endsWith("over 99% win"))
+        assertTrue(next(0.9999), next(0.9999).endsWith("over 99% win"))
+        assertTrue(next(0.0001), next(0.0001).endsWith("under 1% win"))
+        assertTrue(next(0.6118), next(0.6118).endsWith("61% win"))
+    }
 }
