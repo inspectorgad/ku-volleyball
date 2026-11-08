@@ -1,14 +1,5 @@
 [
  {
-  "date": "2026-11-08",
-  "opponent": "Cincinnati",
-  "home": true,
-  "time": "13:00",
-  "city": "Lawrence, KS",
-  "venue": "Horejsi Family Volleyball Arena",
-  "tv": "ESPN+"
- },
- {
   "date": "2026-11-12",
   "opponent": "Colorado",
   "home": false,
@@ -48,9 +39,9 @@
   "date": "2026-11-27",
   "opponent": "Arizona State",
   "home": false,
+  "time": "19:00",
   "city": "Tempe, AZ",
   "venue": "Desert Financial Arena",
-  "time": "19:00",
   "tv": "ESPN+"
  }
 ]
