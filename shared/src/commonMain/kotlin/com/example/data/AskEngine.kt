@@ -150,11 +150,12 @@ class AskEngine(
 
             val usage = LongArray(5) // input, cache write, cache read, output, web searches
             var stop = ""
+            var before = JSONArray() // the reply before this request, for a rejected request's error
             for (hop in 0 until MAX_HOPS) {
                 answerWithSources(mark).let { (text, sources) ->
                     onStatus(if (hop == 0) "Thinking…" else "Still working…", text, sources)
                 }
-                val reply = send(apiKey, requestBody(model, system, withWeb), requestDetail(hop, stop))
+                val reply = send(apiKey, requestBody(model, system, withWeb), requestDetail(hop, stop, before))
                 reply.optJSONObject("usage")?.let { u ->
                     usage[0] += u.optLong("input_tokens")
                     usage[1] += u.optLong("cache_creation_input_tokens")
@@ -167,11 +168,15 @@ class AskEngine(
                 stop = reply.optString("stop_reason")
                 if (stop == "refusal") break
                 val content = reply.optJSONArray("content") ?: JSONArray()
+                before = content
                 val calls = blocks(content).filter { it.optString("type") == "tool_use" }
                 if (stop == "tool_use" && calls.isNotEmpty()) {
                     // Claude's code asked for tables: answer every pending call
-                    // in one message of tool_result blocks only.
-                    conversation += JSONObject().put("role", "assistant").put("content", content)
+                    // in one message of tool_result blocks only. A web search
+                    // asked for at the same moment is dropped (see
+                    // withoutWaitingSearches).
+                    conversation += JSONObject().put("role", "assistant")
+                        .put("content", withoutWaitingSearches(content))
                     val results = JSONArray()
                     calls.forEach { results.put(tableResult(it, data)) }
                     conversation += JSONObject().put("role", "user").put("content", results)
@@ -187,12 +192,14 @@ class AskEngine(
                 // Paused: Anthropic stopped a long turn (a run of web searches,
                 // say), or stopped for a tool call the app has nothing to run.
                 // Anthropic's guide says to send a paused reply back as it is, to
-                // resume from the search it hadn't run yet - but that request ends
-                // on Claude's own reply, and these models refused it as a prefill.
-                // So the reply is kept up to its last finished step (the search
-                // not yet run is dropped; Claude can run it again), and Claude is
-                // asked, in a message of its own, to carry on. Every request then
-                // ends with a user message.
+                // resume from the search it hadn't run yet. That leaves Claude's
+                // own reply last, the shape these models refuse as a prefill, and
+                // a search left waiting across requests is what got refused
+                // after a tool_use stop (see withoutWaitingSearches). So the
+                // reply is kept up to its last finished step (the search not yet
+                // run is dropped; Claude can run it again), and Claude is asked,
+                // in a message of its own, to carry on. Every request then ends
+                // with a user message.
                 val finished = finishedPart(content)
                 if (finished.length() > 0) {
                     conversation += JSONObject().put("role", "assistant").put("content", finished)
@@ -255,12 +262,13 @@ class AskEngine(
      * Where in the answer a request sits, added to a rejected request's error
      * so a screenshot of it says which step failed and how the request ended.
      */
-    private fun requestDetail(hop: Int, previousStop: String): String {
+    private fun requestDetail(hop: Int, previousStop: String, previousReply: JSONArray): String {
         val last = conversation.lastOrNull()
         val types = blocks(last?.optJSONArray("content")).map { it.optString("type") }.takeLast(3)
         return "(For the developer: request ${hop + 1} of this answer" +
             (if (hop > 0 && previousStop.isNotEmpty()) ", after $previousStop" else "") +
-            "; it ended with a ${last?.optString("role") ?: "missing"} message: ${types.joinToString(", ")}.)"
+            "; it ended with a ${last?.optString("role") ?: "missing"} message: ${types.joinToString(", ")}." +
+            (if (hop > 0) " Reply before it: ${describe(previousReply)}." else "") + ")"
     }
 
     private suspend fun send(apiKey: String, body: JSONObject, detail: String = ""): JSONObject {
@@ -424,7 +432,15 @@ class AskEngine(
 
         /** Told to Claude with every question, so it knows whether this one may search. */
         fun webLine(on: Boolean) =
-            if (on) "Web search is on for this question." else "Web search is off for this question."
+            if (on) "Web search is on for this question. $SEARCH_APART" else "Web search is off for this question."
+
+        /**
+         * A search asked for while Claude's Python waits on the app's tables is
+         * dropped (see withoutWaitingSearches), so Claude is asked not to.
+         */
+        const val SEARCH_APART =
+            "Search before or after running Python, not in the same step: a search " +
+                "asked for while your code is waiting on get_table is dropped."
 
         /** usage = input, cache write, cache read, output tokens, and optionally web searches. */
         fun costLine(model: AskModel, usage: LongArray): String {
@@ -464,6 +480,45 @@ class AskEngine(
 
         private fun isContinueNote(message: JSONObject) =
             blocks(message.optJSONArray("content")).any { it.optString("text") == CONTINUE_NOTE }
+
+        /**
+         * Claude's reply less any web search it asked for at the same moment
+         * its Python asked the app for tables. Anthropic's guide says such a
+         * search runs when the tables go back, but with the code waiting on
+         * them too, Anthropic refused that request ("This model does not
+         * support assistant message prefill"). Dropped, the search simply
+         * hasn't happened, and Claude can ask for it again once its code is
+         * done. A search followed by a thinking block is kept, since removing
+         * a block from before a thinking block invalidates it.
+         */
+        fun withoutWaitingSearches(content: JSONArray): JSONArray {
+            val all = blocks(content)
+            val answered = all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
+            val waiting = all.indices.filter {
+                all[it].optString("type") == "server_tool_use" && all[it].optString("name") == "web_search" &&
+                    all[it].optString("id") !in answered
+            }
+            if (waiting.isEmpty()) return content
+            if (all.drop(waiting.first()).any { it.optString("type") in setOf("thinking", "redacted_thinking") }) {
+                return content
+            }
+            return JSONArray(all.filterIndexed { i, _ -> i !in waiting })
+        }
+
+        /** A reply's blocks in a few words, for a rejected request's error. */
+        fun describe(content: JSONArray): String {
+            val all = blocks(content)
+            val answered = all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
+            val words = all.map { b ->
+                val type = b.optString("type")
+                val name = b.optString("name").takeIf { type.endsWith("tool_use") && it.isNotEmpty() }
+                listOfNotNull(
+                    type, name,
+                    "(waiting)".takeIf { type == "server_tool_use" && b.optString("id") !in answered }
+                ).joinToString(" ")
+            }
+            return if (words.isEmpty()) "nothing" else words.takeLast(6).joinToString(", ")
+        }
 
         /**
          * A paused reply cut back to its last finished step: everything before

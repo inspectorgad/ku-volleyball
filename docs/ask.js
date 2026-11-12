@@ -75,12 +75,41 @@ function echoable(content) {
 
 // Where in the answer a request sits, added to a rejected request's error so a
 // screenshot of it says which step failed and how the request ended.
-function requestDetail(hop, previousStop) {
+function requestDetail(hop, previousStop, previousReply) {
   const last = conversation[conversation.length - 1];
   const types = (last?.content || []).map((b) => b.type).slice(-3);
   return `(For the developer: request ${hop + 1} of this answer` +
     (hop > 0 && previousStop ? `, after ${previousStop}` : "") +
-    `; it ended with a ${last?.role || "missing"} message: ${types.join(", ")}.)`;
+    `; it ended with a ${last?.role || "missing"} message: ${types.join(", ")}.` +
+    (hop > 0 ? ` Reply before it: ${describe(previousReply || [])}.` : "") + ")";
+}
+
+// A reply's blocks in a few words, for a rejected request's error.
+function describe(content) {
+  const answered = new Set(content.filter((b) => b.tool_use_id).map((b) => b.tool_use_id));
+  const words = content.map((b) => [b.type, b.type.endsWith("tool_use") ? b.name : null,
+    b.type === "server_tool_use" && !answered.has(b.id) ? "(waiting)" : null].filter(Boolean).join(" "));
+  return words.length ? words.slice(-6).join(", ") : "nothing";
+}
+
+// Asked of Claude with every web-search question; same words as the app's.
+const SEARCH_APART = "Search before or after running Python, not in the same step: a search " +
+  "asked for while your code is waiting on get_table is dropped.";
+
+// Claude's reply less any web search it asked for at the same moment its
+// Python asked the page for tables. Anthropic's guide says such a search runs
+// when the tables go back, but with the code waiting on them too, Anthropic
+// refused that request ("This model does not support assistant message
+// prefill"). Dropped, the search simply hasn't happened, and Claude can ask
+// for it again once its code is done. A search followed by a thinking block
+// is kept, since removing a block from before a thinking block invalidates it.
+function withoutWaitingSearches(content) {
+  const answered = new Set(content.filter((b) => b.tool_use_id).map((b) => b.tool_use_id));
+  const waiting = content.map((b, i) => (b.type === "server_tool_use" && b.name === "web_search" && !answered.has(b.id) ? i : -1))
+    .filter((i) => i >= 0);
+  if (!waiting.length) return content;
+  if (content.slice(waiting[0]).some((b) => b.type === "thinking" || b.type === "redacted_thinking")) return content;
+  return content.filter((b, i) => !waiting.includes(i));
 }
 const TABLES = ["matches", "sets", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
   "standings", "poll", "roster", "definitions",
@@ -201,7 +230,7 @@ async function ask(question) {
     await loadPack();
     conversation.push({ role: "user", content: [
       { type: "text", text: `Today is ${new Date().toLocaleDateString("en-CA")}. ` +
-        `Web search is ${web ? "on" : "off"} for this question. ${question}` }] });
+        `Web search is ${web ? "on" : "off"} for this question. ${web ? SEARCH_APART + " " : ""}${question}` }] });
 
     const usage = { input: 0, write: 0, read: 0, output: 0, searches: 0 };
     let final = null;
@@ -218,7 +247,7 @@ async function ask(question) {
         ...(cfg.effort ? { output_config: { effort: cfg.effort } } : {}),
         ...(cfg.fallbacks ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" } : {}),
       };
-      detail = requestDetail(hop, final?.stop_reason);
+      detail = requestDetail(hop, final?.stop_reason, final?.content);
       running = client.beta.messages.stream(params);
       running.on("streamEvent", (ev) => {
         if (ev.type === "content_block_start" && ev.content_block.type === "server_tool_use") {
@@ -247,7 +276,8 @@ async function ask(question) {
       if (final.stop_reason === "tool_use" && calls.length) {
         // Claude's code asked for tables: answer every pending call in one
         // message of tool_result blocks only, then let the code carry on.
-        conversation.push({ role: "assistant", content });
+        // A web search asked for at the same moment is dropped (see withoutWaitingSearches).
+        conversation.push({ role: "assistant", content: withoutWaitingSearches(content) });
         conversation.push({ role: "user", content: calls.map((c) => tableResult(c)) });
         setBusy(true, "Running Python on the season data…");
         continue;

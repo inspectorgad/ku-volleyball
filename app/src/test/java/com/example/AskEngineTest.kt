@@ -297,7 +297,43 @@ class AskEngineTest {
         val error = answer.error!!
         assertTrue(error, error.startsWith("Anthropic couldn't accept the request: Something about the request."))
         assertTrue(error, error.endsWith(
-            "(For the developer: request 2 of this answer, after pause_turn; it ended with a user message: text.)"))
+            "(For the developer: request 2 of this answer, after pause_turn; it ended with a user message: text. " +
+                "Reply before it: text.)"))
+    }
+
+    @Test
+    fun `a web search asked for while Claude's code waits on a table is dropped before the table goes back`() = runBlocking {
+        val thinking = JSONObject().put("type", "thinking").put("thinking", "").put("signature", "sig")
+        val search = JSONObject().put("type", "server_tool_use").put("id", "srv_w").put("name", "web_search")
+            .put("input", JSONObject().put("query", "Colorado volleyball injuries"))
+        val code = JSONObject().put("type", "server_tool_use").put("id", "srv_c").put("name", "code_execution")
+            .put("input", JSONObject().put("code", "await get_table({'table': 'opponent_rosters'})"))
+        val call = JSONObject().put("type", "tool_use").put("id", "tu_9").put("name", "get_table")
+            .put("input", JSONObject().put("table", "matches"))
+            .put("caller", JSONObject().put("type", "code_execution_20260120").put("tool_id", "srv_c"))
+        server.enqueue(reply("tool_use", thinking, search, code, call))
+        server.enqueue(reply("end_turn", text("No injuries reported.")))
+
+        val answer = engine().ask("Injuries?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        assertNull(answer.error)
+        val first = nextBody().getJSONArray("messages").getJSONObject(0).getJSONArray("content")
+            .getJSONObject(0).getString("text")
+        assertTrue(first, first.contains(AskEngine.SEARCH_APART))
+
+        val messages = nextBody().getJSONArray("messages")
+        val sent = messages.getJSONObject(1).getJSONArray("content")
+        assertEquals(listOf("thinking", "server_tool_use", "tool_use"),
+            (0 until sent.length()).map { sent.getJSONObject(it).getString("type") })
+        assertEquals("srv_c", sent.getJSONObject(1).getString("id"))
+        assertEquals("tu_9", messages.getJSONObject(2).getJSONArray("content").getJSONObject(0).getString("tool_use_id"))
+
+        // Followed by a thinking block, the search stays: removing it would invalidate that block.
+        val kept = JSONArray(listOf(search, thinking, code, call))
+        assertEquals(4, AskEngine.withoutWaitingSearches(kept).length())
+        assertEquals(
+            "thinking, server_tool_use web_search (waiting), server_tool_use code_execution (waiting), tool_use get_table",
+            AskEngine.describe(JSONArray(listOf(thinking, search, code, call)))
+        )
     }
 
     @Test
