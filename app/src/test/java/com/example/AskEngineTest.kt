@@ -111,11 +111,12 @@ class AskEngineTest {
         assertEquals("RULES\n\nsummary", body1.getJSONArray("system").getJSONObject(0).getString("text"))
         assertFalse(body1.has("container"))
         val tools = body1.getJSONArray("tools")
+        assertEquals(2, tools.length()) // no web search unless the reader turns it on
         assertEquals("code_execution_20260120", tools.getJSONObject(0).getString("type"))
         assertEquals("code_execution_20260120",
             tools.getJSONObject(1).getJSONArray("allowed_callers").getString(0))
         assertEquals(
-            "Today is 2026-09-26. How did we do?",
+            "Today is 2026-09-26. Web search is off for this question. How did we do?",
             body1.getJSONArray("messages").getJSONObject(0).getJSONArray("content").getJSONObject(0).getString("text")
         )
 
@@ -132,6 +133,70 @@ class AskEngineTest {
         assertEquals("tool_result", result.getString("type"))
         assertEquals("tu_1", result.getString("tool_use_id"))
         assertEquals("Houston", JSONArray(result.getString("content")).getJSONObject(0).getString("opponent"))
+    }
+
+    private fun cited(t: String, vararg urls: String) = text(t).put(
+        "citations",
+        JSONArray(urls.map {
+            JSONObject().put("type", "web_search_result_location").put("url", it)
+                .put("title", "Page $it").put("encrypted_index", "idx").put("cited_text", "...")
+        })
+    )
+
+    @Test
+    fun `with web search on, the tool is offered and cited pages are numbered and listed`() = runBlocking {
+        val engine = engine()
+        server.enqueue(
+            MockResponse().setBody(
+                JSONObject().put("type", "message").put("role", "assistant").put("stop_reason", "end_turn")
+                    .put("content", JSONArray(listOf(
+                        text("Here is what I found."),
+                        JSONObject().put("type", "server_tool_use").put("id", "srv_w").put("name", "web_search")
+                            .put("input", JSONObject().put("query", "Iowa State volleyball injuries")),
+                        JSONObject().put("type", "web_search_tool_result").put("tool_use_id", "srv_w")
+                            .put("content", JSONArray().put(JSONObject().put("type", "web_search_result")
+                                .put("url", "https://cyclones.com/a").put("title", "A")
+                                .put("encrypted_content", "enc"))),
+                        text("Iowa State "),
+                        cited("lost their libero to injury", "https://cyclones.com/a"),
+                        text(" and "),
+                        cited("start a freshman setter.", "https://cyclones.com/b", "https://cyclones.com/a")
+                    )))
+                    .put("usage", JSONObject().put("input_tokens", 10_000).put("output_tokens", 1_000)
+                        .put("server_tool_use", JSONObject().put("web_search_requests", 2)))
+                    .toString()
+            )
+        )
+        val answer = engine.ask("Any news on Iowa State?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        assertEquals(
+            "Here is what I found.\n\nIowa State lost their libero to injury [1] and start a freshman setter. [2] [1]",
+            answer.text
+        )
+        assertEquals(listOf("https://cyclones.com/a", "https://cyclones.com/b"), answer.sources.map { it.url })
+        assertEquals(listOf(1, 2), answer.sources.map { it.number })
+        assertEquals(listOf("Iowa State volleyball injuries"), answer.searches)
+        // 10k at $4 + 1k at $20 = 6 cents, plus 2 searches at 1 cent.
+        assertTrue(answer.notes.last(), answer.notes.last().startsWith("Claude Opus 5.5 · about 8.0¢ · 2 web searches included"))
+
+        val body = nextBody()
+        val web = body.getJSONArray("tools").getJSONObject(2)
+        assertEquals("web_search_20250305", web.getString("type"))
+        assertEquals(AskEngine.MAX_SEARCHES, web.getInt("max_uses"))
+        assertTrue(body.getJSONArray("messages").getJSONObject(0).getJSONArray("content").getJSONObject(0)
+            .getString("text").contains("Web search is on for this question."))
+
+        // Turned off for a follow-up: the tool stays declared, since the thread
+        // holds its results, and the question says search is off.
+        server.enqueue(reply("end_turn", text("From the tables only.")))
+        engine.ask("And their serving?", "sk-ant-test", opus, "2026-11-12", webSearch = false)
+        val body2 = nextBody()
+        assertEquals(3, body2.getJSONArray("tools").length())
+        val messages = body2.getJSONArray("messages")
+        // The search results go back exactly as received, encrypted content and all.
+        val result = messages.getJSONObject(1).getJSONArray("content").getJSONObject(2)
+        assertEquals("enc", result.getJSONArray("content").getJSONObject(0).getString("encrypted_content"))
+        assertTrue(messages.getJSONObject(2).getJSONArray("content").getJSONObject(0)
+            .getString("text").contains("Web search is off for this question."))
     }
 
     @Test

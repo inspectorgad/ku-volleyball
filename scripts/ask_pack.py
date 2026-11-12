@@ -42,23 +42,37 @@ DEFINITIONS = {
             "attempts in that set (ku_k, ku_e, ku_ta, opp_k, opp_e, opp_ta) - the only stats the NCAA splits by set",
     "goals": "the coaching staff's per-match targets; met is judged on the value as published; "
              "ceiling=true means lower is better",
+    "opponent_rosters": "every player on the rosters of the schools KU plays, from each school's athletics site: "
+                        "team, player, jersey, position, height, class_year, hometown, high_school, previous_school",
+    "opponent_form": "season totals so far for every player of each team still to play KU (team, matches = the "
+                     "team's matches, mp = matches the player played, then the usual stat columns)",
+    "team_serving": "season serving totals for every Big 12 and ranked team: matches, sets, service_aces, "
+                    "service_errors, serve_attempts; big12 marks conference members",
+    "national_leaders": "the NCAA's Division I individual leaders, one row per player per category; value is "
+                        "as the NCAA prints it (a rate like .74 or a total), sets = sets played",
+    "d1_results": "every final Division I result of the current season: date, home team, home sets won, away "
+                  "team, away sets won (team names as the NCAA scoreboard spells them)",
 }
 
 
 # The instructions Claude is given, shared by the dashboard (docs/ask.js) and
 # the app (AskEngine.kt) so both ask the same way. The tables are fetched by
 # Claude's own code through the get_table tool; this only says how.
-SYSTEM_RULES = """You are the analyst behind the Kansas Jayhawks women's volleyball app and dashboard. You answer questions from coaches and fans about the team, using only the season data you are given.
+SYSTEM_RULES = """You are the analyst behind the Kansas Jayhawks women's volleyball app and dashboard. You answer questions from coaches and fans about the team and the teams it plays, using the season data you are given - and the web, when the reader turns web search on for a question.
 
-The complete data is available to your Python code through the get_table tool: tables matches, sets (each set's score and both teams' kills, attack errors and attempts in it), ku_lines (KU player lines per match), team_totals, opponent_lines, goals (the staff's per-match goals), upcoming, standings, poll, roster, and definitions. Call it from inside code execution, for example: import json, pandas as pd; lines = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))). Join tables on (season, date, opponent). A summary of the smaller tables is below for orientation.
+The complete data is available to your Python code through the get_table tool: tables matches, sets (each set's score and both teams' kills, attack errors and attempts in it), ku_lines (KU player lines per match), team_totals, opponent_lines, goals (the staff's per-match goals), upcoming, standings, poll, roster, and definitions. Call it from inside code execution, for example: import json, pandas as pd; lines = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))). Join tables on (season, date, opponent). There are also tables about other teams: opponent_rosters, opponent_form, team_serving, national_leaders and d1_results. A summary of the smaller tables is below for orientation.
 
 How to answer:
 - Compute every number with code from the tables. Do not estimate, recall, or do arithmetic in your head, even for a simple total.
 - Lead with the answer in a sentence or two. Add a small markdown table when it helps. End with one short line saying what the figures cover (which season, which matches, any filter).
 - Use volleyball conventions: hitting percentage as .300, per-set rates to two decimals, team blocks as solos plus half of assists.
 - Name small samples plainly (for example "only 3 matches").
-- If the data cannot answer the question - injuries, practice, line-ups, serve-receive ratings, anything not in the box scores - say so in a sentence instead of guessing.
-- Season 2026 is the current season. "This season" means 2026 unless the reader says otherwise."""
+- If the data cannot answer the question - injuries, practice, line-ups, serve-receive ratings, anything not in the box scores - say so in a sentence instead of guessing; with web search on, look for it on the web instead.
+- Season 2026 is the current season. "This season" means 2026 unless the reader says otherwise.
+
+Other teams: opponent_rosters, opponent_form, team_serving, national_leaders and d1_results (every Division I result this season) let you analyse other teams too - an opponent's players and form, records against common opponents, results against ranked teams, serving, and where players rank nationally. Use them for any question about another team.
+
+Web search: the reader can turn on web search for a question, and each question says whether it is on. When it is off, answer from the data only, and say plainly when the data cannot answer. When it is on, you may use the web_search tool for what the tables cannot tell you - previews, recaps, injuries and line-up news, coaches' comments, transfers, rankings commentary - preferring official athletics sites, the Big 12, the NCAA, the AVCA and established news outlets. Even then, take every statistic from the tables when they have it, and keep web material for context. Make clear which statements come from the web, and give each article's date when it matters, since news goes out of date. Search only as much as the question needs."""
 
 
 def _cell(v):
@@ -111,7 +125,9 @@ def _site(m):
     return None
 
 
-def build_pack(seed):
+def build_pack(seed, results=None):
+    """results: this season's Division I results as [date, home, home sets,
+    away, away sets] rows, de-duplicated by update-seed.py."""
     players = {p["name"].lower(): p for p in seed.get("players", [])}
     big12 = {}
     for st in seed.get("standings", []):
@@ -190,6 +206,31 @@ def build_pack(seed):
         "roster": [{k: p.get(k) for k in ("name", "jerseyNumber", "position", "height", "active",
                                           "classYear", "hometown", "highSchool", "previousSchool")}
                    for p in seed.get("players", [])],
+        "opponent_rosters": [
+            {"team": r.get("team"), "player": pl.get("player"), "jersey": pl.get("jerseyNumber"),
+             "position": pl.get("position"), "height": pl.get("height"), "class_year": pl.get("classYear"),
+             "hometown": pl.get("hometown"), "high_school": pl.get("highSchool"),
+             "previous_school": pl.get("previousSchool")}
+            for r in seed.get("opponentRosters") or [] for pl in r.get("players") or []],
+        "opponent_form": [
+            {"team": f.get("team"), "matches": f.get("matches"), "player": pl.get("player"),
+             "jersey": pl.get("jerseyNumber"), "position": pl.get("position"), "mp": pl.get("mp", 0),
+             **{c: pl.get(c, 0) for c in STAT_COLS}}
+            for f in seed.get("opponentForm") or [] for pl in f.get("players") or []],
+        "team_serving": [
+            {"team": t.get("team"), "season": t.get("season"), "matches": t.get("matches"),
+             "sets": t.get("sets"), "service_aces": t.get("serviceAces"),
+             "service_errors": t.get("serviceErrors"), "serve_attempts": t.get("serveAttempts"),
+             "big12": bool(t.get("big12"))}
+            for t in seed.get("teamServing") or []],
+        "national_leaders": [
+            {"category": c.get("name"), "rank": r.get("rank"), "player": r.get("player"),
+             "team": r.get("team"), "class_year": r.get("cls"), "position": r.get("position"),
+             "sets": r.get("sets"), "value": r.get("value")}
+            for c in (seed.get("nationalLeaders") or {}).get("categories") or [] for r in c.get("rows") or []],
+        "d1_results": [
+            {"date": g[0], "home": g[1], "home_sets": g[2], "away": g[3], "away_sets": g[4]}
+            for g in results or []],
     }
     pack["system_prompt"] = system_prompt(pack)
     return pack
@@ -201,9 +242,9 @@ def _norm(name):
     return re.sub(r"\s+", " ", n).strip()
 
 
-def write_pack(seed, path):
+def write_pack(seed, path, results=None):
     """Writes the pack; returns False when only the timestamp would change."""
-    pack = build_pack(seed)
+    pack = build_pack(seed, results)
     try:
         with open(path) as f:
             old = json.load(f)

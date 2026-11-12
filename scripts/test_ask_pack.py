@@ -6,6 +6,16 @@ SEED = {
     "generatedAt": "2026-09-26T00:00:00Z",
     "players": [{"name": "Taylor Stanley", "jerseyNumber": "23", "position": "OH", "height": "6-3", "active": True}],
     "standings": [{"season": "2026", "team": "Houston", "confW": 0, "confL": 1}],
+    "opponentRosters": [{"team": "Houston", "fetchedAt": "x", "players": [
+        {"player": "Ana Lee", "jerseyNumber": "7", "position": "OH", "height": "6-1", "classYear": "Jr.",
+         "hometown": "Austin, Texas", "previousSchool": "Rice"}]}],
+    "opponentForm": [{"team": "Texas Tech", "matches": 22, "players": [
+        {"player": "Kim Ross", "jerseyNumber": "9", "position": "OH", "mp": 22, "sp": 80, "k": 300}]}],
+    "teamServing": [{"team": "Houston", "season": "2026", "matches": 20, "sets": 70, "serviceAces": 90,
+                     "serviceErrors": 120, "serveAttempts": 1500, "big12": True}],
+    "nationalLeaders": {"season": "2026", "categories": [
+        {"name": "Kills Per Set", "rows": [{"rank": 1, "player": "Kim Ross", "team": "Texas Tech", "cls": "Sr.",
+                                            "position": "OH", "sets": 80, "value": "5.10"}]}]},
     "goalDefinitions": [
         {"name": "Hit %", "group": "team", "target": 0.29, "decimals": 3, "ceiling": False},
         {"name": "Errors/set", "group": "team", "target": 7.5, "decimals": 2, "ceiling": True},
@@ -24,9 +34,12 @@ SEED = {
 }
 
 
+RESULTS = [["2026-09-20", "Houston", 3, "Texas Tech", 1]]
+
+
 class AskPackTest(unittest.TestCase):
     def setUp(self):
-        self.p = build_pack(SEED)
+        self.p = build_pack(SEED, RESULTS)
 
     def test_played_and_upcoming_are_separate_flat_tables(self):
         self.assertEqual(len(self.p["matches"]), 1)
@@ -52,6 +65,28 @@ class AskPackTest(unittest.TestCase):
         self.assertIn("Roster:\nname,jerseyNumber,position,height,active", t)
         # Same input, same text: the prompt cache depends on it.
         self.assertEqual(t, build_pack(SEED)["system_prompt"])
+
+
+    def test_other_teams_come_as_flat_tables(self):
+        r = self.p["opponent_rosters"][0]
+        self.assertEqual((r["team"], r["player"], r["class_year"], r["previous_school"], r["high_school"]),
+                         ("Houston", "Ana Lee", "Jr.", "Rice", None))
+        self.assertNotIn("fetchedAt", r)
+        f = self.p["opponent_form"][0]
+        self.assertEqual((f["team"], f["matches"], f["mp"], f["k"], f["e"]), ("Texas Tech", 22, 22, 300, 0))
+        self.assertEqual(self.p["team_serving"][0]["service_aces"], 90)
+        self.assertEqual(self.p["national_leaders"][0]["category"], "Kills Per Set")
+        self.assertEqual(self.p["d1_results"], [
+            {"date": "2026-09-20", "home": "Houston", "home_sets": 3, "away": "Texas Tech", "away_sets": 1}])
+
+    def test_new_tables_are_defined_and_named_in_the_prompt(self):
+        for t in ("opponent_rosters", "opponent_form", "team_serving", "national_leaders", "d1_results"):
+            self.assertIn(t, self.p["definitions"])
+            self.assertIn(t, self.p["system_prompt"])
+        self.assertIn("web_search", self.p["system_prompt"])
+
+    def test_without_results_the_table_is_empty(self):
+        self.assertEqual(build_pack(SEED)["d1_results"], [])
 
 
 if __name__ == "__main__":

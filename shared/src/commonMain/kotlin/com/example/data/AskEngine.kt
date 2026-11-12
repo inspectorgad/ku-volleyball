@@ -37,12 +37,17 @@ val ASK_MODELS = listOf(
 )
 val DEFAULT_ASK_MODEL = ASK_MODELS.first()
 
+/** A web page an answer cites; [number] matches the [n] marker in the text. */
+data class AskSource(val number: Int, val title: String, val url: String)
+
 /** One answered (or failed) question. */
 data class AskAnswer(
     val text: String,
     val code: List<String> = emptyList(),
     val notes: List<String> = emptyList(),
-    val error: String? = null
+    val error: String? = null,
+    val sources: List<AskSource> = emptyList(),
+    val searches: List<String> = emptyList()
 )
 
 /** A plain-words failure, shown in place of an answer. */
@@ -60,6 +65,12 @@ class AskException(message: String) : Exception(message)
  * than recalled, and the tables reach the code without being billed as
  * tokens. The instructions and the short summary of the smaller tables come
  * from the same file, so the app and the dashboard send the same prompt.
+ *
+ * With web search on for a question, Claude may also search the web
+ * (Anthropic's web search tool, run on Anthropic's side) for what the tables
+ * cannot tell it - news, previews, injuries. Pages it cites are numbered in
+ * the text, [1], and listed as [AskAnswer.sources]: Anthropic requires the
+ * sources to be shown with the answer.
  *
  * Only /v1/messages on api.anthropic.com is called, and the key goes nowhere
  * else. Requests are not streamed: the response content is kept exactly as
@@ -89,16 +100,17 @@ class AskEngine(
     }
 
     /**
-     * Asks one question and returns the answer. [onStatus] gets a short
-     * progress line and the answer text written so far. Cancelling the
-     * coroutine stops the request in flight and leaves the thread as it was
-     * before the question.
+     * Asks one question and returns the answer. [webSearch] lets Claude search
+     * the web for this question. [onStatus] gets a short progress line and the
+     * answer text written so far. Cancelling the coroutine stops the request in
+     * flight and leaves the thread as it was before the question.
      */
     suspend fun ask(
         question: String,
         apiKey: String,
         model: AskModel,
         today: String,
+        webSearch: Boolean = false,
         onStatus: (status: String, partial: String) -> Unit = { _, _ -> }
     ): AskAnswer {
         val mark = conversation.size
@@ -110,18 +122,23 @@ class AskEngine(
                 ?: throw AskException("The season data is out of date. Try again after the next refresh.")
             conversation += JSONObject()
                 .put("role", "user")
-                .put("content", JSONArray().put(textBlock("Today is $today. $question")))
+                .put("content", JSONArray().put(textBlock("Today is $today. ${webLine(webSearch)} $question")))
+            // Once the thread holds web results, the tool stays declared so they
+            // still have a tool to belong to; the line above says whether this
+            // question may search.
+            val withWeb = webSearch || searchedBefore()
 
-            val usage = LongArray(4) // input, cache write, cache read, output
+            val usage = LongArray(5) // input, cache write, cache read, output, web searches
             var stop = ""
             for (hop in 0 until MAX_HOPS) {
                 onStatus(if (hop == 0) "Thinking…" else "Still working…", answerText(mark))
-                val reply = send(apiKey, requestBody(model, system))
+                val reply = send(apiKey, requestBody(model, system, withWeb))
                 reply.optJSONObject("usage")?.let { u ->
                     usage[0] += u.optLong("input_tokens")
                     usage[1] += u.optLong("cache_creation_input_tokens")
                     usage[2] += u.optLong("cache_read_input_tokens")
                     usage[3] += u.optLong("output_tokens")
+                    usage[4] += u.optJSONObject("server_tool_use")?.optLong("web_search_requests") ?: 0L
                 }
                 reply.optJSONObject("container")?.optString("id")?.takeIf { it.isNotEmpty() }
                     ?.let { containerId = it }
@@ -152,8 +169,9 @@ class AskEngine(
                     error = "Claude declined to answer that one. Try rephrasing it as a question about the stats."
                 )
             }
-            val text = answerText(mark)
+            val (text, sources) = answerWithSources(mark)
             val code = codeRun(mark)
+            val searches = searchesRun(mark)
             if (stop == "tool_use" || stop == "pause_turn") {
                 // Out of round trips mid-answer. The thread cannot continue
                 // from a pending tool call, so the question is rolled back.
@@ -163,7 +181,7 @@ class AskEngine(
             if (stop == "max_tokens") notes += "The answer hit its length limit and was cut short."
             notes += costLine(model, usage)
             done = true
-            return AskAnswer(text = text, code = code, notes = notes)
+            return AskAnswer(text = text, code = code, notes = notes, sources = sources, searches = searches)
         } catch (e: AskException) {
             return AskAnswer(text = "", error = e.message)
         } finally {
@@ -171,14 +189,14 @@ class AskEngine(
         }
     }
 
-    private fun requestBody(model: AskModel, system: String): JSONObject {
+    private fun requestBody(model: AskModel, system: String, withWeb: Boolean): JSONObject {
         val ephemeral = { JSONObject().put("type", "ephemeral") }
         return JSONObject()
             .put("model", model.id)
             .put("max_tokens", 16000)
             .put("cache_control", ephemeral())
             .put("system", JSONArray().put(textBlock(system).put("cache_control", ephemeral())))
-            .put("tools", tools())
+            .put("tools", tools(withWeb))
             .put("messages", JSONArray(conversation))
             .apply {
                 containerId?.let { put("container", it) }
@@ -223,12 +241,54 @@ class AskEngine(
     }
 
     /** The text Claude has written for this question so far. */
-    private fun answerText(mark: Int): String =
+    private fun answerText(mark: Int): String = answerWithSources(mark).first
+
+    /**
+     * The answer text with each cited passage followed by its source numbers,
+     * and the sources in order. A cited answer arrives as a run of text blocks
+     * that together make up the sentences, so neighbouring text blocks are
+     * joined as they are; text separated by Claude's code or searches starts a
+     * new paragraph, as before.
+     */
+    private fun answerWithSources(mark: Int): Pair<String, List<AskSource>> {
+        val out = StringBuilder()
+        val sources = mutableListOf<AskSource>()
+        for (message in conversation.drop(mark).filter { it.optString("role") == "assistant" }) {
+            var joined = false
+            for (block in blocks(message.optJSONArray("content"))) {
+                if (block.optString("type") != "text") {
+                    joined = false
+                    continue
+                }
+                if (!joined && out.isNotBlank()) out.append("\n\n")
+                out.append(block.optString("text"))
+                val numbers = blocks(block.optJSONArray("citations")).mapNotNull { c ->
+                    val url = c.optString("url")
+                    if (!url.startsWith("https://") && !url.startsWith("http://")) return@mapNotNull null
+                    (sources.firstOrNull { it.url == url } ?: AskSource(
+                        sources.size + 1, c.optString("title").ifBlank { url }, url
+                    ).also { sources += it }).number
+                }.distinct()
+                if (numbers.isNotEmpty()) out.append(numbers.joinToString("") { " [$it]" })
+                joined = true
+            }
+        }
+        return out.toString().trim() to sources
+    }
+
+    /** What Claude searched the web for, in order. */
+    private fun searchesRun(mark: Int): List<String> =
         conversation.drop(mark).filter { it.optString("role") == "assistant" }
             .flatMap { blocks(it.optJSONArray("content")) }
-            .filter { it.optString("type") == "text" }
-            .joinToString("\n\n") { it.optString("text") }
-            .trim()
+            .filter { it.optString("type") == "server_tool_use" && it.optString("name") == "web_search" }
+            .mapNotNull { it.optJSONObject("input")?.optString("query")?.takeIf { q -> q.isNotBlank() } }
+
+    private fun searchedBefore(): Boolean =
+        conversation.any { m ->
+            blocks(m.optJSONArray("content")).any {
+                it.optString("type") == "server_tool_use" && it.optString("name") == "web_search"
+            }
+        }
 
     /** The Python Claude ran, for anyone who wants to check the working. */
     private fun codeRun(mark: Int): List<String> =
@@ -253,7 +313,8 @@ class AskEngine(
         const val FALLBACK_BETA = "server-side-fallback-2026-07-01"
         val TABLES = listOf(
             "matches", "sets", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
-            "standings", "poll", "roster", "definitions"
+            "standings", "poll", "roster", "definitions",
+            "opponent_rosters", "opponent_form", "team_serving", "national_leaders", "d1_results"
         )
 
         /** The dashboard's copy first, the repository's as a fallback, as for the season data. */
@@ -298,10 +359,22 @@ class AskEngine(
             }
         }
 
-        /** usage = input, cache write, cache read, output tokens. */
+        /** Anthropic's price for one web search: $10 per 1,000. */
+        const val SEARCH_DOLLARS = 0.01
+
+        /** Searches per question, at most: enough for a scouting report, and a cap on cost. */
+        const val MAX_SEARCHES = 5
+
+        /** Told to Claude with every question, so it knows whether this one may search. */
+        fun webLine(on: Boolean) =
+            if (on) "Web search is on for this question." else "Web search is off for this question."
+
+        /** usage = input, cache write, cache read, output tokens, and optionally web searches. */
         fun costLine(model: AskModel, usage: LongArray): String {
+            val searches = usage.getOrElse(4) { 0L }
             val dollars = (usage[0] * model.input + usage[1] * model.input * 1.25 +
-                usage[2] * model.input * model.cacheRead + usage[3] * model.output) / 1e6
+                usage[2] * model.input * model.cacheRead + usage[3] * model.output) / 1e6 +
+                searches * SEARCH_DOLLARS
             val cents = dollars * 100
             val price = when {
                 cents < 1 -> "under 1¢"
@@ -310,6 +383,7 @@ class AskEngine(
             }
             return "${model.shortName} · $price" +
                 (if (usage[2] > 0) " (season data read from cache)" else "") +
+                (if (searches > 0) " · ${searches} web search${if (searches == 1L) "" else "es"} included" else "") +
                 " · plus a little code-execution time"
         }
 
@@ -321,14 +395,29 @@ class AskEngine(
         private fun hasText(message: JSONObject) =
             blocks(message.optJSONArray("content")).any { it.optString("type") == "text" }
 
-        private fun tools(): JSONArray = JSONArray()
+        // The basic web search, called by Claude directly rather than from its
+        // Python: its results and citations then reach the answer as they are,
+        // and it cannot be confused with the code-execution sandbox the season
+        // tables live in. Localized to Lawrence so local coverage ranks well.
+        private fun webSearchTool(): JSONObject = JSONObject()
+            .put("type", "web_search_20250305")
+            .put("name", "web_search")
+            .put("max_uses", MAX_SEARCHES)
+            .put(
+                "user_location",
+                JSONObject().put("type", "approximate").put("city", "Lawrence").put("region", "Kansas")
+                    .put("country", "US").put("timezone", "America/Chicago")
+            )
+
+        private fun tools(withWeb: Boolean): JSONArray = JSONArray()
             .put(JSONObject().put("type", "code_execution_20260120").put("name", "code_execution"))
             .put(
                 JSONObject()
                     .put("name", "get_table")
                     .put(
                         "description",
-                        "Returns one table of the Kansas volleyball season data as a JSON string: a list of " +
+                        "Returns one table of the Kansas volleyball season data (or, for the opponent_*, team_serving, " +
+                            "national_leaders and d1_results tables, data on other teams) as a JSON string: a list of " +
                             "records (one per row) for every table except 'definitions' (a dict of column meanings) and " +
                             "'poll' (a dict with season, updated and rows). Call it from Python and load it with " +
                             "pandas, e.g. df = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'})))."
@@ -345,5 +434,6 @@ class AskEngine(
                     )
                     .put("allowed_callers", JSONArray().put("code_execution_20260120"))
             )
+            .apply { if (withWeb) put(webSearchTool()) }
     }
 }

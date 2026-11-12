@@ -20,6 +20,11 @@
 // allow that endpoint to be called from a web page (its CORS preflight answers
 // "Disallowed CORS origin"), so every question failed as a connection error.
 // Only /v1/messages is used now, which does allow browser calls.
+//
+// With the "Search the web" box ticked, Claude may also search the internet
+// (Anthropic's web search tool, run on Anthropic's side) for what the tables
+// cannot tell it. Pages it cites are numbered in the answer, [1], and listed
+// under it - Anthropic requires the sources to be shown with the answer.
 import { Anthropic } from "./vendor/anthropic-sdk-0.128.0.mjs";
 
 // Opus 5.5 by default: the newest Opus, about 20% cheaper than Opus 5, and
@@ -37,12 +42,25 @@ const DEFAULT_MODEL = "claude-opus-5-5";
 // Round trips per question: pause_turn resumptions plus get_table answers.
 const MAX_HOPS = 16;
 const TABLES = ["matches", "sets", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
-  "standings", "poll", "roster", "definitions"];
+  "standings", "poll", "roster", "definitions",
+  "opponent_rosters", "opponent_form", "team_serving", "national_leaders", "d1_results"];
+// Anthropic's price for one web search ($10 per 1,000), and the most one
+// question may use - the same as the app (AskEngine.kt).
+const SEARCH_DOLLARS = 0.01;
+const MAX_SEARCHES = 5;
+// The basic web search, called by Claude directly rather than from its Python,
+// so results and citations reach the answer as they are. Localized to
+// Lawrence so local coverage ranks well.
+const WEB_SEARCH = {
+  type: "web_search_20250305", name: "web_search", max_uses: MAX_SEARCHES,
+  user_location: { type: "approximate", city: "Lawrence", region: "Kansas", country: "US", timezone: "America/Chicago" },
+};
 const TOOLS = [
   { type: "code_execution_20260120", name: "code_execution" },
   {
     name: "get_table",
-    description: "Returns one table of the Kansas volleyball season data as a JSON string: a list of " +
+    description: "Returns one table of the Kansas volleyball season data (or, for the opponent_*, team_serving, " +
+      "national_leaders and d1_results tables, data on other teams) as a JSON string: a list of " +
       "records (one per row) for every table except 'definitions' (a dict of column meanings) and " +
       "'poll' (a dict with season, updated and rows). Call it from Python and load it with " +
       "pandas, e.g. df = pd.DataFrame(json.loads(await get_table({'table': 'ku_lines'}))).",
@@ -82,6 +100,7 @@ const OLD_FILE_SLOT = "ku-ask-file"; // left by the Files API version; cleared o
 // "-v2" since Opus 5.5 became the default: a choice saved under the old slot
 // was usually just the old default, so it is not carried over.
 const MODEL_SLOT = "ku-ask-model-v2";
+const WEB_SLOT = "ku-ask-web";
 
 let memoryKey = null; // used when browser storage is blocked
 let pack = null;
@@ -117,13 +136,18 @@ async function ask(question) {
 
   const turn = addTurn(question);
   let mark = conversation.length;
+  const web = $("ask-web").checked;
+  // Once the thread holds web results the tool stays declared, so they still
+  // have a tool to belong to; the question says whether it may search.
+  const tools = web || searchedBefore() ? [...TOOLS, WEB_SEARCH] : TOOLS;
   setBusy(true, "Loading the season data…");
   try {
     await loadPack();
     conversation.push({ role: "user", content: [
-      { type: "text", text: `Today is ${new Date().toLocaleDateString("en-CA")}. ${question}` }] });
+      { type: "text", text: `Today is ${new Date().toLocaleDateString("en-CA")}. ` +
+        `Web search is ${web ? "on" : "off"} for this question. ${question}` }] });
 
-    const usage = { input: 0, write: 0, read: 0, output: 0 };
+    const usage = { input: 0, write: 0, read: 0, output: 0, searches: 0 };
     let final = null;
     for (let hop = 0; hop < MAX_HOPS; hop++) {
       setBusy(true, hop ? "Still working…" : "Thinking…");
@@ -132,7 +156,7 @@ async function ask(question) {
         max_tokens: 16000,
         cache_control: { type: "ephemeral" },
         system: [{ type: "text", text: systemText, cache_control: { type: "ephemeral" } }],
-        tools: TOOLS,
+        tools,
         messages: conversation,
         ...(containerId ? { container: containerId } : {}),
         ...(cfg.effort ? { output_config: { effort: cfg.effort } } : {}),
@@ -141,7 +165,7 @@ async function ask(question) {
       running = client.beta.messages.stream(params);
       running.on("streamEvent", (ev) => {
         if (ev.type === "content_block_start" && ev.content_block.type === "server_tool_use") {
-          setBusy(true, "Running Python on the season data…");
+          setBusy(true, ev.content_block.name === "web_search" ? "Searching the web…" : "Running Python on the season data…");
         } else if (ev.type === "content_block_start" && ev.content_block.type === "text") {
           setBusy(true, "Writing the answer…");
         }
@@ -155,6 +179,7 @@ async function ask(question) {
       usage.write += u.cache_creation_input_tokens || 0;
       usage.read += u.cache_read_input_tokens || 0;
       usage.output += u.output_tokens || 0;
+      usage.searches += u.server_tool_use?.web_search_requests || 0;
       if (final.container?.id) containerId = final.container.id;
       if (final.stop_reason === "refusal") break;
       conversation.push({ role: "assistant", content: final.content });
@@ -183,6 +208,7 @@ async function ask(question) {
       }
       if (final.stop_reason === "max_tokens") note(turn, "The answer hit its length limit and was cut short.");
     }
+    showSources(turn, conversation.slice(mark));
     showCode(turn, conversation.slice(mark));
     note(turn, costLine(cfg, usage, model));
   } catch (e) {
@@ -219,12 +245,21 @@ function explainError(e) {
   return "Something went wrong: " + (e?.message || e);
 }
 
+function searchedBefore() {
+  return conversation.some((m) => Array.isArray(m.content) &&
+    m.content.some((b) => b.type === "server_tool_use" && b.name === "web_search"));
+}
+
 function costLine(cfg, u, model) {
-  const dollars = (u.input * cfg.input + u.write * cfg.input * 1.25 + u.read * cfg.input * cfg.cacheRead + u.output * cfg.output) / 1e6;
+  const searches = u.searches || 0;
+  const dollars = (u.input * cfg.input + u.write * cfg.input * 1.25 + u.read * cfg.input * cfg.cacheRead + u.output * cfg.output) / 1e6 +
+    searches * SEARCH_DOLLARS;
   const cents = dollars * 100;
   const price = cents < 1 ? "under 1¢" : `about ${cents < 10 ? cents.toFixed(1) : Math.round(cents)}¢`;
   return `${MODELS[model].label.split(" —")[0]} · ${price}` +
-    (u.read ? " (season data read from cache)" : "") + " · plus a little code-execution time";
+    (u.read ? " (season data read from cache)" : "") +
+    (searches ? ` · ${searches} web search${searches === 1 ? "" : "es"} included` : "") +
+    " · plus a little code-execution time";
 }
 
 // --- Rendering --------------------------------------------------------------------
@@ -248,15 +283,68 @@ function addTurn(question) {
 }
 
 let pendingRender = null;
+// The answer text with each cited passage followed by its source numbers, and
+// the sources in order - the same as the app's AskEngine. A cited answer
+// arrives as a run of text blocks that together make up the sentences, so
+// neighbouring text blocks are joined as they are; text separated by code or
+// searches starts a new paragraph.
+function answerWithSources(messages) {
+  let out = "";
+  const sources = [];
+  for (const m of messages.filter((x) => x && x.role === "assistant")) {
+    let joined = false;
+    for (const b of m.content || []) {
+      if (b.type !== "text") { joined = false; continue; }
+      if (!joined && out.trim()) out += "\n\n";
+      out += b.text;
+      const numbers = [];
+      for (const c of b.citations || []) {
+        if (!/^https?:\/\//.test(c.url || "")) continue;
+        let s = sources.find((x) => x.url === c.url);
+        if (!s) { s = { number: sources.length + 1, title: c.title || c.url, url: c.url }; sources.push(s); }
+        if (!numbers.includes(s.number)) numbers.push(s.number);
+      }
+      out += numbers.map((n) => ` [${n}]`).join("");
+      joined = true;
+    }
+  }
+  return { text: out.trim(), sources };
+}
+
 function renderAnswer(turn, messages) {
-  const text = messages.filter((m) => m && m.role === "assistant")
-    .flatMap((m) => m.content).filter((b) => b.type === "text").map((b) => b.text).join("\n\n");
+  const { text } = answerWithSources(messages);
   if (pendingRender) cancelAnimationFrame(pendingRender);
   pendingRender = requestAnimationFrame(() => { turn.answer.innerHTML = markdown(text); });
 }
 
 function note(turn, text) {
   turn.wrap.appendChild(el("p", "ask-note", text));
+}
+
+// The web pages the answer cites, numbered as in its text, and what Claude
+// searched for.
+function showSources(turn, messages) {
+  const { sources } = answerWithSources(messages);
+  if (sources.length) {
+    const box = el("div", "ask-sources");
+    box.appendChild(el("p", "ask-label", "Sources from the web"));
+    const ol = el("ol");
+    for (const s of sources) {
+      const li = el("li");
+      const a = el("a", null, s.title);
+      a.href = s.url; // only http(s), checked when collected
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      li.appendChild(a);
+      ol.appendChild(li);
+    }
+    box.appendChild(ol);
+    turn.wrap.appendChild(box);
+  }
+  const searches = messages.filter((m) => m.role === "assistant").flatMap((m) => m.content)
+    .filter((b) => b.type === "server_tool_use" && b.name === "web_search" && b.input?.query)
+    .map((b) => `"${b.input.query}"`);
+  if (searches.length) note(turn, "Searched the web for: " + searches.join("; "));
 }
 
 // The Python Claude ran, for anyone who wants to check the working.
@@ -347,6 +435,9 @@ function init() {
   }
   sel.value = store.get(MODEL_SLOT) in MODELS ? store.get(MODEL_SLOT) : DEFAULT_MODEL;
   sel.onchange = () => store.set(MODEL_SLOT, sel.value, true);
+  const web = $("ask-web");
+  web.checked = store.get(WEB_SLOT) === "1";
+  web.onchange = () => store.set(WEB_SLOT, web.checked ? "1" : "0", true);
 
   $("ask-key-save").onclick = () => {
     const v = $("ask-key").value.trim();

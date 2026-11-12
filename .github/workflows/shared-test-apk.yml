@@ -59,6 +59,16 @@ jobs:
           echo "Newest main build: $latest"
           echo "VERSION_CODE=$((latest + 1))" >> "$GITHUB_ENV"
 
+      # Ask Claude reads its tables and instructions from ask-data.json, which
+      # the app downloads from main's dashboard. A branch that changes them is
+      # tested against the branch's own copy, so the test build reads that one
+      # first; main's build is untouched.
+      - name: Point Ask Claude at this branch's data
+        run: |
+          sed -i "s#\"https://inspectorgad.github.io/ku-volleyball/ask-data.json\",#\"https://raw.githubusercontent.com/$GITHUB_REPOSITORY/$GITHUB_SHA/docs/ask-data.json\", &#" \
+            shared/src/commonMain/kotlin/com/example/data/AskEngine.kt
+          grep -n "ask-data.json" shared/src/commonMain/kotlin/com/example/data/AskEngine.kt
+
       - name: Build the APK
         run: gradle :app:assembleDebug
 

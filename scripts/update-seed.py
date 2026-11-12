@@ -1085,7 +1085,8 @@ d1_raw = load_json("scraped/d1-results.json", {})
 # 0-3 Southern Miss. on Aug 29 appears as 6625557 and 6640466), which would
 # count it twice. Same day, same two teams, same score is taken as one match;
 # a genuine double-header with an identical score is rare enough to accept.
-d1_games, _seen = [], set()
+# d1_results keeps the scoreboard's own spelling of each name, for Ask Claude.
+d1_games, d1_results, _seen = [], [], set()
 for g in sorted((d1_raw.get("games") or {}).items()):
     row = [g[1][0], norm_team(g[1][1]), g[1][2], norm_team(g[1][3]), g[1][4]]
     key = (row[0],) + tuple(sorted([(row[1], row[2]), (row[3], row[4])]))
@@ -1093,6 +1094,7 @@ for g in sorted((d1_raw.get("games") or {}).items()):
         continue
     _seen.add(key)
     d1_games.append(row)
+    d1_results.append(list(g[1][:5]))
 current_season = max((m["season"] for m in matches.values()), default=None)
 # Computed whether or not the NCAA has published: the win model below rates
 # unranked teams from these values, and the NCAA's table carries ranks only.
@@ -1917,7 +1919,9 @@ if latest_season:
 # Flat tables Claude can load and compute on (scripts/ask_pack.py).
 from ask_pack import write_pack  # noqa: E402
 
-if write_pack(seed, "docs/ask-data.json"):
+# Only the current season's results: the scrape keeps no other season's.
+ask_results = d1_results if d1_raw.get("season") == current_season else []
+if write_pack(seed, "docs/ask-data.json", ask_results):
     print("ask data written: docs/ask-data.json")
 else:
     print("ask data unchanged; not rewriting")
