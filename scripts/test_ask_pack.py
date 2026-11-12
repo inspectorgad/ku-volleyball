@@ -1,6 +1,9 @@
+import json
+import os
+import tempfile
 import unittest
 
-from ask_pack import build_pack
+from ask_pack import build_pack, team_key, write_pack
 
 SEED = {
     "generatedAt": "2026-09-26T00:00:00Z",
@@ -13,7 +16,7 @@ SEED = {
         {"player": "Kim Ross", "jerseyNumber": "9", "position": "OH", "mp": 22, "sp": 80, "k": 300}]}],
     "teamServing": [{"team": "Houston", "season": "2026", "matches": 20, "sets": 70, "serviceAces": 90,
                      "serviceErrors": 120, "serveAttempts": 1500, "big12": True}],
-    "nationalLeaders": {"season": "2026", "categories": [
+    "nationalLeaders": {"season": "2026", "updated": "Through games Tuesday, November 10, 2026", "categories": [
         {"name": "Kills Per Set", "rows": [{"rank": 1, "player": "Kim Ross", "team": "Texas Tech", "cls": "Sr.",
                                             "position": "OH", "sets": 80, "value": "5.10"}]}]},
     "goalDefinitions": [
@@ -77,7 +80,30 @@ class AskPackTest(unittest.TestCase):
         self.assertEqual(self.p["team_serving"][0]["service_aces"], 90)
         self.assertEqual(self.p["national_leaders"][0]["category"], "Kills Per Set")
         self.assertEqual(self.p["d1_results"], [
-            {"date": "2026-09-20", "home": "Houston", "home_sets": 3, "away": "Texas Tech", "away_sets": 1}])
+            {"date": "2026-09-20", "home": "Houston", "home_key": "houston", "home_sets": 3,
+             "away": "Texas Tech", "away_key": "texas tech", "away_sets": 1}])
+        self.assertEqual(self.p["national_leaders"][0]["season"], "2026")
+        self.assertIn("National leaders (2026 season): Through games Tuesday, November 10, 2026.",
+                      self.p["system_prompt"])
+
+    def test_every_spelling_of_a_school_shares_one_key(self):
+        self.assertEqual({team_key(n) for n in ("Arizona State", "Arizona St.", "#8 Arizona State",
+                                                 "Arizona State (12)")}, {"arizona st"})
+        self.assertEqual(team_key("USC"), team_key("Southern California"))
+        self.assertEqual(self.p["matches"][0]["opponent_key"], "houston")
+        self.assertEqual(self.p["ku_lines"][0]["opponent_key"], "houston")
+        self.assertEqual(self.p["team_serving"][0]["team_key"], "houston")
+
+    def test_a_pack_differing_only_in_its_timestamp_is_not_rewritten(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "ask-data.json")
+            self.assertTrue(write_pack(SEED, path, RESULTS))
+            later = dict(SEED, generatedAt="2026-09-27T00:00:00Z")
+            self.assertFalse(write_pack(later, path, RESULTS))
+            with open(path) as f:
+                self.assertEqual(json.load(f)["generated_at"], SEED["generatedAt"])
+            changed = dict(later, players=SEED["players"] + [{"name": "New Player"}])
+            self.assertTrue(write_pack(changed, path, RESULTS))
 
     def test_new_tables_are_defined_and_named_in_the_prompt(self):
         for t in ("opponent_rosters", "opponent_form", "team_serving", "national_leaders", "d1_results"):

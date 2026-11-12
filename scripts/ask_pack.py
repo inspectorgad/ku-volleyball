@@ -49,7 +49,12 @@ DEFINITIONS = {
     "team_serving": "season serving totals for every Big 12 and ranked team: matches, sets, service_aces, "
                     "service_errors, serve_attempts; big12 marks conference members",
     "national_leaders": "the NCAA's Division I individual leaders, one row per player per category; value is "
-                        "as the NCAA prints it (a rate like .74 or a total), sets = sets played",
+                        "as the NCAA prints it (a rate like .74 or a total), sets = sets played; season is the "
+                        "season the list covers, and the date it runs through is given with the summary below",
+    "team_key / opponent_key / home_key / away_key": "one normalized spelling per school ('Arizona State', "
+                                                     "'Arizona St.' and '#8 Arizona State' all become 'arizona st'); "
+                                                     "the tables spell schools as their sources do, so match teams "
+                                                     "across tables on these keys, never on the display names",
     "d1_results": "every final Division I result of the current season: date, home team, home sets won, away "
                   "team, away sets won (team names as the NCAA scoreboard spells them)",
 }
@@ -70,7 +75,7 @@ How to answer:
 - If the data cannot answer the question - injuries, practice, line-ups, serve-receive ratings, anything not in the box scores - say so in a sentence instead of guessing; with web search on, look for it on the web instead.
 - Season 2026 is the current season. "This season" means 2026 unless the reader says otherwise.
 
-Other teams: opponent_rosters, opponent_form, team_serving, national_leaders and d1_results (every Division I result this season) let you analyse other teams too - an opponent's players and form, records against common opponents, results against ranked teams, serving, and where players rank nationally. Use them for any question about another team.
+Other teams: opponent_rosters, opponent_form, team_serving, national_leaders and d1_results (every Division I result this season) let you analyse other teams too - an opponent's players and form, records against common opponents, results against ranked teams, serving, and where players rank nationally. Use them for any question about another team. The tables spell schools differently (the poll says "Arizona State", d1_results "Arizona St."), so match teams across tables on the team_key, opponent_key, home_key and away_key columns.
 
 Web search: the reader can turn on web search for a question, and each question says whether it is on. When it is off, answer from the data only, and say plainly when the data cannot answer. When it is on, you may use the web_search tool for what the tables cannot tell you - previews, recaps, injuries and line-up news, coaches' comments, transfers, rankings commentary - preferring official athletics sites, the Big 12, the NCAA, the AVCA and established news outlets. Even then, take every statistic from the tables when they have it, and keep web material for context. Make clear which statements come from the web, and give each article's date when it matters, since news goes out of date. Search only as much as the question needs."""
 
@@ -109,6 +114,9 @@ def system_prompt(p):
                                                  "nationalRank", "rpiRank", "rpiSource"]),
         (f"AVCA poll ({p['poll']['updated']}):\n" + _csv(p["poll"]["rows"], ["rank", "team", "record", "points", "previous"]))
         if p.get("poll") else "",
+        (f"National leaders ({p['national_leaders'][0]['season']} season): {p['national_leaders_as_of']}. "
+         "This list can lag the other tables, so give its date when you use it.")
+        if p.get("national_leaders") and p.get("national_leaders_as_of") else "",
         "Roster:\n" + _csv(p["roster"], ["name", "jerseyNumber", "position", "height", "active",
                                          "classYear", "hometown", "highSchool", "previousSchool"]),
     ]
@@ -136,7 +144,8 @@ def build_pack(seed, results=None):
 
     matches, ku_lines, team_totals, opp_lines, goals, upcoming, set_attack = [], [], [], [], [], [], []
     for m in sorted(seed.get("matches", []), key=lambda x: x["date"]):
-        base = {"season": m["season"], "date": m["date"], "opponent": m["opponent"]}
+        base = {"season": m["season"], "date": m["date"], "opponent": m["opponent"],
+                "opponent_key": team_key(m["opponent"])}
         conf = _norm(m["opponent"]) in big12.get(m["season"], set())
         if m.get("teamSets") is None:
             upcoming.append({**base, "site": _site(m), "conference": conf,
@@ -180,6 +189,7 @@ def build_pack(seed, results=None):
                               "target": d["target"], "ceiling": bool(d.get("ceiling")),
                               "value": v, "met": met})
 
+    leaders = seed.get("nationalLeaders") or {}
     polls = seed.get("polls") or []
     current_poll = polls[-1] if polls else None
     rpi = seed.get("rpi") or {}
@@ -196,50 +206,69 @@ def build_pack(seed, results=None):
         "goals": goals,
         "sets": set_attack,
         "upcoming": upcoming,
-        "standings": [{k: st.get(k) for k in ("season", "team", "confW", "confL", "overallW",
-                                             "overallL", "nationalRank", "rpiRank", "rpiSource")}
+        "standings": [{**{k: st.get(k) for k in ("season", "team", "confW", "confL", "overallW",
+                                                "overallL", "nationalRank", "rpiRank", "rpiSource")},
+                       "team_key": team_key(st.get("team"))}
                       for st in seed.get("standings", [])],
         "poll": None if not current_poll else {
             "season": current_poll["season"], "updated": current_poll.get("updated"),
-            "rows": [{k: r.get(k) for k in ("rank", "team", "record", "points", "previous", "firstPlaceVotes")}
+            "rows": [{**{k: r.get(k) for k in ("rank", "team", "record", "points", "previous", "firstPlaceVotes")},
+                      "team_key": team_key(r.get("team"))}
                      for r in current_poll.get("rows", [])]},
         "roster": [{k: p.get(k) for k in ("name", "jerseyNumber", "position", "height", "active",
                                           "classYear", "hometown", "highSchool", "previousSchool")}
                    for p in seed.get("players", [])],
         "opponent_rosters": [
-            {"team": r.get("team"), "player": pl.get("player"), "jersey": pl.get("jerseyNumber"),
+            {"team": r.get("team"), "team_key": team_key(r.get("team")),
+             "player": pl.get("player"), "jersey": pl.get("jerseyNumber"),
              "position": pl.get("position"), "height": pl.get("height"), "class_year": pl.get("classYear"),
              "hometown": pl.get("hometown"), "high_school": pl.get("highSchool"),
              "previous_school": pl.get("previousSchool")}
             for r in seed.get("opponentRosters") or [] for pl in r.get("players") or []],
         "opponent_form": [
-            {"team": f.get("team"), "matches": f.get("matches"), "player": pl.get("player"),
+            {"team": f.get("team"), "team_key": team_key(f.get("team")),
+             "matches": f.get("matches"), "player": pl.get("player"),
              "jersey": pl.get("jerseyNumber"), "position": pl.get("position"), "mp": pl.get("mp", 0),
              **{c: pl.get(c, 0) for c in STAT_COLS}}
             for f in seed.get("opponentForm") or [] for pl in f.get("players") or []],
         "team_serving": [
-            {"team": t.get("team"), "season": t.get("season"), "matches": t.get("matches"),
+            {"team": t.get("team"), "team_key": team_key(t.get("team")),
+             "season": t.get("season"), "matches": t.get("matches"),
              "sets": t.get("sets"), "service_aces": t.get("serviceAces"),
              "service_errors": t.get("serviceErrors"), "serve_attempts": t.get("serveAttempts"),
              "big12": bool(t.get("big12"))}
             for t in seed.get("teamServing") or []],
         "national_leaders": [
-            {"category": c.get("name"), "rank": r.get("rank"), "player": r.get("player"),
-             "team": r.get("team"), "class_year": r.get("cls"), "position": r.get("position"),
+            {"season": leaders.get("season"), "category": c.get("name"), "rank": r.get("rank"),
+             "player": r.get("player"), "team": r.get("team"), "team_key": team_key(r.get("team")),
+             "class_year": r.get("cls"), "position": r.get("position"),
              "sets": r.get("sets"), "value": r.get("value")}
-            for c in (seed.get("nationalLeaders") or {}).get("categories") or [] for r in c.get("rows") or []],
+            for c in leaders.get("categories") or [] for r in c.get("rows") or []],
+        "national_leaders_as_of": leaders.get("updated") or None,
         "d1_results": [
-            {"date": g[0], "home": g[1], "home_sets": g[2], "away": g[3], "away_sets": g[4]}
+            {"date": g[0], "home": g[1], "home_key": team_key(g[1]), "home_sets": g[2],
+             "away": g[3], "away_key": team_key(g[3]), "away_sets": g[4]}
             for g in results or []],
     }
     pack["system_prompt"] = system_prompt(pack)
     return pack
 
 
-def _norm(name):
-    n = re.sub(r"^#\d+\s+", "", (name or "").strip()).lower().replace(".", "")
-    n = re.sub(r"\bstate\b", "st", n)
-    return re.sub(r"\s+", " ", n).strip()
+# Kept in step with update-seed.py's norm_team(), which the seed's own joins use.
+_ALIASES = {"southern california": "southern cal", "usc": "southern cal"}
+
+
+def team_key(name):
+    """One spelling per school: 'Arizona State', 'Arizona St.' and '#8 Arizona
+    State' all become 'arizona st'. The tables spell schools as their sources
+    do, so Claude matches teams across them on this key."""
+    n = re.sub(r"^#\d+\s+", "", (name or "").strip())
+    n = re.sub(r"\s*\((?:\d+|[Ee]xh\.?|[Ee]xhibition)\)\s*$", "", n).lower().replace(".", "")
+    n = re.sub(r"\s+", " ", re.sub(r"\bstate\b", "st", n)).strip()
+    return _ALIASES.get(n, n)
+
+
+_norm = team_key
 
 
 def write_pack(seed, path, results=None):
@@ -250,9 +279,15 @@ def write_pack(seed, path, results=None):
             old = json.load(f)
     except (OSError, ValueError):
         old = None
-    strip = lambda p: {k: v for k, v in (p or {}).items() if k != "generated_at"}
-    if old is not None and strip(old) == strip(pack):
-        return False
+    # The timestamp is also inside system_prompt ("Data generated ..."), so the
+    # comparison gives the new pack the old timestamp and rebuilds its prompt;
+    # otherwise every run counts as a change, rewrites the pack and rebuilds
+    # the app for nothing.
+    if old is not None:
+        same = dict(pack, generated_at=old.get("generated_at"))
+        same["system_prompt"] = system_prompt(same)
+        if same == old:
+            return False
     with open(path, "w") as f:
         json.dump(pack, f, separators=(",", ":"))
         f.write("\n")

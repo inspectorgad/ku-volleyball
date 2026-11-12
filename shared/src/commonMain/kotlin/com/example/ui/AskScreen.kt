@@ -140,9 +140,12 @@ object AskSession {
         val job = scope.launch(Dispatchers.Default, start = CoroutineStart.LAZY) {
             try {
                 resetting?.join()
-                val result = engine.ask(question, key, model, today, webSearch) { status, partial ->
+                val result = engine.ask(question, key, model, today, webSearch) { status, partial, sources ->
                     turn.status = status
-                    if (partial.isNotEmpty()) turn.answer = partial
+                    if (partial.isNotEmpty()) {
+                        turn.answer = partial
+                        turn.sources = sources
+                    }
                 }
                 turn.answer = result.text
                 turn.code = result.code

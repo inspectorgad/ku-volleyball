@@ -108,6 +108,7 @@ let systemText = null;
 let conversation = []; // Anthropic message params, appended in full each turn
 let containerId = null;
 let running = null; // the stream in flight, for Stop
+let shown = []; // the messages the answer on screen was drawn from
 
 // --- The data -------------------------------------------------------------------
 
@@ -136,6 +137,7 @@ async function ask(question) {
 
   const turn = addTurn(question);
   let mark = conversation.length;
+  shown = []; // nothing drawn yet for this question
   const web = $("ask-web").checked;
   // Once the thread holds web results the tool stays declared, so they still
   // have a tool to belong to; the question says whether it may search.
@@ -171,7 +173,10 @@ async function ask(question) {
         }
       });
       const earlier = conversation.slice(mark);
-      running.on("text", () => renderAnswer(turn, [...earlier, running.currentMessage]));
+      running.on("text", () => {
+        shown = [...earlier, running.currentMessage];
+        renderAnswer(turn, shown);
+      });
       final = await running.finalMessage();
       running = null;
       const u = final.usage || {};
@@ -194,12 +199,15 @@ async function ask(question) {
       if (final.stop_reason !== "pause_turn") break;
     }
 
+    // Taken before any rollback, so the sources and code shown always match
+    // the text shown, [n] marks included.
+    const answered = conversation.slice(mark);
     if (final.stop_reason === "refusal") {
       conversation.length = mark; // the declined question leaves no trace in the thread
       turn.answer.replaceChildren(el("p", "ask-note",
         "Claude declined to answer that one. Try rephrasing it as a question about the stats."));
     } else {
-      renderAnswer(turn, conversation.slice(mark));
+      renderAnswer(turn, answered);
       if (final.stop_reason === "tool_use" || final.stop_reason === "pause_turn") {
         // Out of round trips mid-answer. The thread cannot continue from a
         // pending tool call, so it is rolled back; the reader can ask again.
@@ -208,12 +216,17 @@ async function ask(question) {
       }
       if (final.stop_reason === "max_tokens") note(turn, "The answer hit its length limit and was cut short.");
     }
-    showSources(turn, conversation.slice(mark));
-    showCode(turn, conversation.slice(mark));
+    if (final.stop_reason !== "refusal") {
+      showSources(turn, answered);
+      showCode(turn, answered);
+    }
     note(turn, costLine(cfg, usage, model));
   } catch (e) {
+    // What was on screen when it stopped, so its [n] marks keep their sources.
+    const partial = shown.length ? shown : conversation.slice(mark);
     conversation.length = mark;
     if (e instanceof Anthropic.APIUserAbortError) {
+      showSources(turn, partial);
       note(turn, "Stopped.");
     } else {
       turn.answer.replaceChildren(el("p", "ask-error", explainError(e)));

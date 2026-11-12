@@ -197,6 +197,8 @@
   .ask-table { overflow-x: auto; margin: 0 0 8px; }
   .ask-note { font-size: 11px; color: var(--ink-3); margin: 4px 0 0; }
   .ask-error { color: var(--loss); }
+  .ask-web-check { align-items: flex-start; margin: 6px 0; }
+  .ask-web-check input { margin-top: 2px; flex: none; }
   .ask-sources { font-size: 12px; margin-top: 6px; }
   .ask-sources ol { margin: 2px 0 0; padding-left: 22px; }
   .ask-sources a { color: var(--ku-blue); overflow-wrap: anywhere; }
@@ -243,10 +245,10 @@
       <button class="chip ask-go" id="ask-go">Ask</button>
       <button class="chip" id="ask-stop" hidden>Stop</button>
     </div>
-    <label class="ask-check"><input type="checkbox" id="ask-web"> Search the web too
+    <label class="ask-check ask-web-check"><input type="checkbox" id="ask-web"><span>Search the web too
       <span class="muted">— lets Claude look up news, previews and injury reports, and list the pages it used
       (numbered like [1] in the answer). Statistics still come from the box scores. Each search costs 1¢ on your
-      Anthropic account plus reading the pages, at most 5 searches a question; web pages can be wrong or dated.</span></label>
+      Anthropic account plus reading the pages, at most 5 searches a question; web pages can be wrong or dated.</span></span></label>
     <div class="ask-row"><span id="ask-status" class="ask-status" role="status"></span>
       <button class="chip" id="ask-new" hidden>New conversation</button></div>
     <div class="ask-examples" id="ask-examples"></div>

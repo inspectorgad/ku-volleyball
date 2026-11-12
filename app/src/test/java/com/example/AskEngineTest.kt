@@ -200,6 +200,33 @@ class AskEngineTest {
     }
 
     @Test
+    fun `a page without a title is listed by its address, and partial answers carry their sources`() = runBlocking {
+        val noTitle = text("Reported out.").put(
+            "citations",
+            JSONArray().put(
+                JSONObject().put("type", "web_search_result_location").put("url", "https://x.example/a")
+                    .put("title", JSONObject.NULL).put("encrypted_index", "i").put("cited_text", "...")
+            )
+        )
+        // A cited paragraph, then Claude's code asks for a table before finishing.
+        server.enqueue(
+            reply(
+                "tool_use",
+                noTitle,
+                JSONObject().put("type", "tool_use").put("id", "tu_2").put("name", "get_table")
+                    .put("input", JSONObject().put("table", "matches"))
+            )
+        )
+        server.enqueue(reply("end_turn", text("Done.")))
+        val partials = mutableListOf<Pair<String, List<String>>>()
+        val answer = engine().ask("News?", "sk-ant-test", opus, "2026-11-12", webSearch = true) { _, text, sources ->
+            partials += text to sources.map { it.title }
+        }
+        assertEquals(listOf("https://x.example/a"), answer.sources.map { it.title })
+        assertTrue(partials.any { (text, titles) -> text.contains("[1]") && titles == listOf("https://x.example/a") })
+    }
+
+    @Test
     fun `an unknown table comes back as an error the code can read`() = runBlocking {
         server.enqueue(
             reply(

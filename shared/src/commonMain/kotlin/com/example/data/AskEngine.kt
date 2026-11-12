@@ -101,9 +101,11 @@ class AskEngine(
 
     /**
      * Asks one question and returns the answer. [webSearch] lets Claude search
-     * the web for this question. [onStatus] gets a short progress line and the
-     * answer text written so far. Cancelling the coroutine stops the request in
-     * flight and leaves the thread as it was before the question.
+     * the web for this question. [onStatus] gets a short progress line, the
+     * answer text written so far, and the sources that text's [n] marks point
+     * to, so a partial answer left on screen keeps them. Cancelling the
+     * coroutine stops the request in flight and leaves the thread as it was
+     * before the question.
      */
     suspend fun ask(
         question: String,
@@ -111,12 +113,12 @@ class AskEngine(
         model: AskModel,
         today: String,
         webSearch: Boolean = false,
-        onStatus: (status: String, partial: String) -> Unit = { _, _ -> }
+        onStatus: (status: String, partial: String, sources: List<AskSource>) -> Unit = { _, _, _ -> }
     ): AskAnswer {
         val mark = conversation.size
         var done = false
         try {
-            onStatus("Loading the season data…", "")
+            onStatus("Loading the season data…", "", emptyList())
             val data = pack ?: loadPack().also { pack = it }
             val system = data.optString("system_prompt").takeIf { it.isNotBlank() }
                 ?: throw AskException("The season data is out of date. Try again after the next refresh.")
@@ -131,7 +133,9 @@ class AskEngine(
             val usage = LongArray(5) // input, cache write, cache read, output, web searches
             var stop = ""
             for (hop in 0 until MAX_HOPS) {
-                onStatus(if (hop == 0) "Thinking…" else "Still working…", answerText(mark))
+                answerWithSources(mark).let { (text, sources) ->
+                    onStatus(if (hop == 0) "Thinking…" else "Still working…", text, sources)
+                }
                 val reply = send(apiKey, requestBody(model, system, withWeb))
                 reply.optJSONObject("usage")?.let { u ->
                     usage[0] += u.optLong("input_tokens")
@@ -153,7 +157,9 @@ class AskEngine(
                     blocks(content).filter { it.optString("type") == "tool_use" }
                         .forEach { results.put(tableResult(it, data)) }
                     conversation += JSONObject().put("role", "user").put("content", results)
-                    onStatus("Running Python on the season data…", answerText(mark))
+                    answerWithSources(mark).let { (text, sources) ->
+                        onStatus("Running Python on the season data…", text, sources)
+                    }
                     continue
                 }
                 if (stop != "pause_turn") break
@@ -240,9 +246,6 @@ class AskEngine(
         return result.put("content", table)
     }
 
-    /** The text Claude has written for this question so far. */
-    private fun answerText(mark: Int): String = answerWithSources(mark).first
-
     /**
      * The answer text with each cited passage followed by its source numbers,
      * and the sources in order. A cited answer arrives as a run of text blocks
@@ -265,8 +268,10 @@ class AskEngine(
                 val numbers = blocks(block.optJSONArray("citations")).mapNotNull { c ->
                     val url = c.optString("url")
                     if (!url.startsWith("https://") && !url.startsWith("http://")) return@mapNotNull null
+                    // The API allows a null title; this JSON layer would read it as "null".
+                    val title = if (c.isNull("title")) "" else c.optString("title")
                     (sources.firstOrNull { it.url == url } ?: AskSource(
-                        sources.size + 1, c.optString("title").ifBlank { url }, url
+                        sources.size + 1, title.ifBlank { url }, url
                     ).also { sources += it }).number
                 }.distinct()
                 if (numbers.isNotEmpty()) out.append(numbers.joinToString("") { " [$it]" })
