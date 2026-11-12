@@ -146,7 +146,9 @@ def build_pack(seed, results=None):
     for m in sorted(seed.get("matches", []), key=lambda x: x["date"]):
         base = {"season": m["season"], "date": m["date"], "opponent": m["opponent"],
                 "opponent_key": team_key(m["opponent"])}
-        conf = _norm(m["opponent"]) in big12.get(m["season"], set())
+        # An exhibition against a conference school is not a conference match
+        # (update-seed.py skips them too); the key alone would hide the "(Exh.)".
+        conf = "(exh" not in m["opponent"].lower() and _norm(m["opponent"]) in big12.get(m["season"], set())
         if m.get("teamSets") is None:
             upcoming.append({**base, "site": _site(m), "conference": conf,
                              "venue": m.get("venue") or None, "city": m.get("city") or None,

@@ -109,6 +109,7 @@ let conversation = []; // Anthropic message params, appended in full each turn
 let containerId = null;
 let running = null; // the stream in flight, for Stop
 let shown = []; // the messages the answer on screen was drawn from
+let asking = false; // a question is in hand, from loading the data to the answer
 
 // --- The data -------------------------------------------------------------------
 
@@ -135,6 +136,7 @@ async function ask(question) {
   const cfg = MODELS[model];
   const client = new Anthropic({ apiKey: key, dangerouslyAllowBrowser: true });
 
+  asking = true;
   const turn = addTurn(question);
   let mark = conversation.length;
   shown = []; // nothing drawn yet for this question
@@ -204,6 +206,7 @@ async function ask(question) {
     const answered = conversation.slice(mark);
     if (final.stop_reason === "refusal") {
       conversation.length = mark; // the declined question leaves no trace in the thread
+      cancelDraw(); // a draw of text streamed just before must not cover this
       turn.answer.replaceChildren(el("p", "ask-note",
         "Claude declined to answer that one. Try rephrasing it as a question about the stats."));
     } else {
@@ -229,10 +232,12 @@ async function ask(question) {
       showSources(turn, partial);
       note(turn, "Stopped.");
     } else {
+      cancelDraw();
       turn.answer.replaceChildren(el("p", "ask-error", explainError(e)));
     }
   } finally {
     running = null;
+    asking = false;
     setBusy(false);
   }
 }
@@ -296,6 +301,10 @@ function addTurn(question) {
 }
 
 let pendingRender = null;
+function cancelDraw() {
+  if (pendingRender) cancelAnimationFrame(pendingRender);
+  pendingRender = null;
+}
 // The answer text with each cited passage followed by its source numbers, and
 // the sources in order - the same as the app's AskEngine. A cited answer
 // arrives as a run of text blocks that together make up the sentences, so
@@ -469,7 +478,7 @@ function init() {
   };
   const submit = () => {
     const q = $("ask-q").value.trim();
-    if (!q || running) return;
+    if (!q || running || asking) return;
     $("ask-q").value = "";
     ask(q);
   };
@@ -497,7 +506,7 @@ function init() {
   // note that a key is needed.
   window.kuAskAbout = (q) => {
     $("ask-wrap").scrollIntoView({ behavior: "smooth", block: "start" });
-    if (running) return;
+    if (running || asking) return;
     if (apiKey()) {
       ask(q);
     } else {

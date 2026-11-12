@@ -111,6 +111,10 @@ class AskPackTest(unittest.TestCase):
             self.assertIn(t, self.p["system_prompt"])
         self.assertIn("web_search", self.p["system_prompt"])
 
+    def test_an_exhibition_against_a_conference_school_is_not_a_conference_match(self):
+        seed = dict(SEED, matches=[{"date": "2026-08-20", "opponent": "Houston (Exh.)", "season": "2026"}])
+        self.assertFalse(build_pack(seed)["upcoming"][0]["conference"])
+
     def test_without_results_the_table_is_empty(self):
         self.assertEqual(build_pack(SEED)["d1_results"], [])
 
