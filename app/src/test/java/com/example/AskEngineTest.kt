@@ -227,7 +227,7 @@ class AskEngineTest {
     }
 
     @Test
-    fun `a paused answer is resumed without ever ending on Claude's own reply unless a search is pending`() = runBlocking {
+    fun `a paused answer is resumed with a message of the app's own, so no request ends on Claude's reply`() = runBlocking {
         val engine = engine()
         val search = { id: String, q: String ->
             JSONObject().put("type", "server_tool_use").put("id", id).put("name", "web_search")
@@ -238,35 +238,66 @@ class AskEngineTest {
                 .put("content", JSONArray().put(JSONObject().put("type", "web_search_result")
                     .put("url", "https://cubuffs.com/r").put("title", "Roster").put("encrypted_content", "enc")))
         }
-        // 1. Paused on a search that hasn't run yet: goes back as it is.
-        server.enqueue(reply("pause_turn", text("Checking the news."), search("srv_1", "Colorado volleyball injuries")))
-        // 2. Paused after a finished search and some text: needs a nudge.
-        server.enqueue(reply("pause_turn", results("srv_1"), text("Colorado's lineup")))
+        val thinking = JSONObject().put("type", "thinking").put("thinking", "").put("signature", "sig")
+        // 1. Paused on a search that hasn't run yet: that search is dropped.
+        server.enqueue(reply("pause_turn", text("Checking the news."), thinking, search("srv_1", "Colorado injuries")))
+        // 2. Paused after a finished search, with thinking left at the end.
+        server.enqueue(reply("pause_turn", search("srv_2", "Colorado volleyball injuries"), results("srv_2"),
+            text("Colorado's lineup"), thinking))
+        // 3. A tool_use stop with nothing for the app to run counts as a pause too.
+        server.enqueue(reply("tool_use", search("srv_3", "Colorado roster")))
         server.enqueue(reply("end_turn", text("has no reported injuries.")))
 
         val answer = engine.ask("Any injuries for Colorado?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
         assertNull(answer.error)
+        assertTrue(answer.text, answer.text.startsWith("Checking the news."))
         assertTrue(answer.text, answer.text.endsWith("has no reported injuries."))
         assertEquals(listOf("Colorado volleyball injuries"), answer.searches)
 
         nextBody()
-        val second = nextBody().getJSONArray("messages")
-        assertEquals(2, second.length())
-        assertEquals("assistant", second.getJSONObject(1).getString("role"))
-        assertEquals("server_tool_use",
-            second.getJSONObject(1).getJSONArray("content").getJSONObject(1).getString("type"))
+        val roles = { body: JSONObject ->
+            val m = body.getJSONArray("messages")
+            (0 until m.length()).map { m.getJSONObject(it).getString("role") }
+        }
+        val second = nextBody()
+        assertEquals(listOf("user", "assistant", "user"), roles(second))
+        val kept = second.getJSONArray("messages").getJSONObject(1).getJSONArray("content")
+        // The text alone: the search not yet run is gone, and so is the thinking left before it.
+        assertEquals(1, kept.length())
+        assertEquals("text", kept.getJSONObject(0).getString("type"))
+        assertEquals(AskEngine.CONTINUE_NOTE, second.getJSONArray("messages").getJSONObject(2)
+            .getJSONArray("content").getJSONObject(0).getString("text"))
 
-        val third = nextBody().getJSONArray("messages")
-        assertEquals(4, third.length())
-        val last = third.getJSONObject(3)
-        assertEquals("user", last.getString("role"))
-        assertEquals(AskEngine.CONTINUE_NOTE, last.getJSONArray("content").getJSONObject(0).getString("text"))
-        // The nudge isn't one of the reader's questions.
+        val third = nextBody()
+        assertEquals(listOf("user", "assistant", "user", "assistant", "user"), roles(third))
+        val finished = third.getJSONArray("messages").getJSONObject(3).getJSONArray("content")
+        assertEquals(3, finished.length()) // the finished search and the text; the trailing thinking is gone
+        assertEquals("text", finished.getJSONObject(2).getString("type"))
+
+        // Nothing finished in reply 3, and the last message is already the note: sent again as it is.
+        val fourth = nextBody()
+        assertEquals(listOf("user", "assistant", "user", "assistant", "user"), roles(fourth))
+        // The notes aren't the reader's questions.
         assertEquals(1, engine.turns)
 
-        assertTrue(AskEngine.waitsOnServerTool(JSONArray().put(search("a", "q"))))
-        assertFalse(AskEngine.waitsOnServerTool(JSONArray().put(search("a", "q")).put(results("a"))))
-        assertFalse(AskEngine.waitsOnServerTool(JSONArray().put(text("Hi"))))
+        assertEquals(0, AskEngine.finishedPart(JSONArray().put(search("a", "q"))).length())
+        assertEquals(2, AskEngine.finishedPart(JSONArray().put(search("a", "q")).put(results("a"))).length())
+    }
+
+    @Test
+    fun `a rejected request says which step failed and how it ended`() = runBlocking {
+        server.enqueue(reply("pause_turn", text("Looking.")))
+        server.enqueue(
+            MockResponse().setResponseCode(400).setBody(
+                JSONObject().put("type", "error").put("error", JSONObject().put("type", "invalid_request_error")
+                    .put("message", "Something about the request.")).toString()
+            )
+        )
+        val answer = engine().ask("News?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        val error = answer.error!!
+        assertTrue(error, error.startsWith("Anthropic couldn't accept the request: Something about the request."))
+        assertTrue(error, error.endsWith(
+            "(For the developer: request 2 of this answer, after pause_turn; it ended with a user message: text.)"))
     }
 
     @Test

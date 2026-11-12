@@ -154,7 +154,7 @@ class AskEngine(
                 answerWithSources(mark).let { (text, sources) ->
                     onStatus(if (hop == 0) "Thinking…" else "Still working…", text, sources)
                 }
-                val reply = send(apiKey, requestBody(model, system, withWeb))
+                val reply = send(apiKey, requestBody(model, system, withWeb), requestDetail(hop, stop))
                 reply.optJSONObject("usage")?.let { u ->
                     usage[0] += u.optLong("input_tokens")
                     usage[1] += u.optLong("cache_creation_input_tokens")
@@ -167,29 +167,41 @@ class AskEngine(
                 stop = reply.optString("stop_reason")
                 if (stop == "refusal") break
                 val content = reply.optJSONArray("content") ?: JSONArray()
-                conversation += JSONObject().put("role", "assistant").put("content", content)
-                if (stop == "tool_use") {
+                val calls = blocks(content).filter { it.optString("type") == "tool_use" }
+                if (stop == "tool_use" && calls.isNotEmpty()) {
                     // Claude's code asked for tables: answer every pending call
                     // in one message of tool_result blocks only.
+                    conversation += JSONObject().put("role", "assistant").put("content", content)
                     val results = JSONArray()
-                    blocks(content).filter { it.optString("type") == "tool_use" }
-                        .forEach { results.put(tableResult(it, data)) }
+                    calls.forEach { results.put(tableResult(it, data)) }
                     conversation += JSONObject().put("role", "user").put("content", results)
                     answerWithSources(mark).let { (text, sources) ->
                         onStatus("Running Python on the season data…", text, sources)
                     }
                     continue
                 }
-                if (stop != "pause_turn") break
-                // Anthropic paused a long turn (a run of web searches, say). It
-                // picks the turn up again from a search or code run that hasn't
-                // happened yet, so a reply ending in one goes back as it is. A
-                // reply that stopped anywhere else would be the last message,
-                // which these models refuse as a prefill: ask Claude to carry on.
-                if (!waitsOnServerTool(content)) {
+                if (stop != "pause_turn" && stop != "tool_use") {
+                    conversation += JSONObject().put("role", "assistant").put("content", content)
+                    break
+                }
+                // Paused: Anthropic stopped a long turn (a run of web searches,
+                // say), or stopped for a tool call the app has nothing to run.
+                // Anthropic's guide says to send a paused reply back as it is, to
+                // resume from the search it hadn't run yet - but that request ends
+                // on Claude's own reply, and these models refused it as a prefill.
+                // So the reply is kept up to its last finished step (the search
+                // not yet run is dropped; Claude can run it again), and Claude is
+                // asked, in a message of its own, to carry on. Every request then
+                // ends with a user message.
+                val finished = finishedPart(content)
+                if (finished.length() > 0) {
+                    conversation += JSONObject().put("role", "assistant").put("content", finished)
+                }
+                if (!isContinueNote(conversation.last())) {
                     conversation += JSONObject().put("role", "user")
                         .put("content", JSONArray().put(textBlock(CONTINUE_NOTE)))
                 }
+                stop = "pause_turn"
             }
 
             val notes = mutableListOf<String>()
@@ -239,7 +251,19 @@ class AskEngine(
             }
     }
 
-    private suspend fun send(apiKey: String, body: JSONObject): JSONObject {
+    /**
+     * Where in the answer a request sits, added to a rejected request's error
+     * so a screenshot of it says which step failed and how the request ended.
+     */
+    private fun requestDetail(hop: Int, previousStop: String): String {
+        val last = conversation.lastOrNull()
+        val types = blocks(last?.optJSONArray("content")).map { it.optString("type") }.takeLast(3)
+        return "(For the developer: request ${hop + 1} of this answer" +
+            (if (hop > 0 && previousStop.isNotEmpty()) ", after $previousStop" else "") +
+            "; it ended with a ${last?.optString("role") ?: "missing"} message: ${types.joinToString(", ")}.)"
+    }
+
+    private suspend fun send(apiKey: String, body: JSONObject, detail: String = ""): JSONObject {
         val headers = buildMap {
             put("x-api-key", apiKey)
             put("anthropic-version", "2023-06-01")
@@ -255,7 +279,10 @@ class AskEngine(
             throw AskException("Couldn't reach api.anthropic.com$why. Check your connection - some networks block it.")
         }
         val text = response.text()
-        if (!response.isSuccessful) throw AskException(explainError(response.code, text))
+        if (!response.isSuccessful) {
+            val why = explainError(response.code, text)
+            throw AskException(if (response.code == 400 && detail.isNotEmpty()) "$why\n\n$detail" else why)
+        }
         return try {
             JSONObject(text)
         } catch (e: Exception) {
@@ -426,25 +453,33 @@ class AskEngine(
             blocks(message.optJSONArray("content")).any { it.optString("type") == "text" }
 
         /**
-         * Sent in the reader's place when a paused answer has to be resumed by
-         * a new message (see [ask]); it isn't one of the reader's questions.
+         * Sent in the reader's place when a paused answer is resumed (see
+         * [ask]); it isn't one of the reader's questions. Same words as the
+         * dashboard's.
          */
         const val CONTINUE_NOTE =
             "(Sent by the app, not the reader: Anthropic paused your answer partway through. " +
-                "Carry on from where it stopped, without repeating what you've already written.)"
+                "Carry on from where it stopped - run again any search that hadn't happened yet - " +
+                "without repeating what you've already written.)"
 
         private fun isContinueNote(message: JSONObject) =
             blocks(message.optJSONArray("content")).any { it.optString("text") == CONTINUE_NOTE }
 
         /**
-         * True when a paused reply ends on a search or code run Anthropic hasn't
-         * carried out yet: a server tool call with no result after it. Sending
-         * that reply back as it is resumes the turn.
+         * A paused reply cut back to its last finished step: everything before
+         * the first search or code run Anthropic hadn't carried out yet (a
+         * server tool call with no result), less any thinking left at the end.
+         * Only the end is cut, so what is kept reads exactly as Claude wrote it.
          */
-        fun waitsOnServerTool(content: JSONArray): Boolean {
+        fun finishedPart(content: JSONArray): JSONArray {
             val all = blocks(content)
             val answered = all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
-            return all.any { it.optString("type") == "server_tool_use" && it.optString("id") !in answered }
+            val pending = all.indexOfFirst { it.optString("type") == "server_tool_use" && it.optString("id") !in answered }
+            var kept = if (pending < 0) all else all.subList(0, pending)
+            while (kept.isNotEmpty() && kept.last().optString("type") in setOf("thinking", "redacted_thinking")) {
+                kept = kept.dropLast(1)
+            }
+            return JSONArray(kept)
         }
 
         // The basic web search, called by Claude directly rather than from its

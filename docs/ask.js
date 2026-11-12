@@ -42,17 +42,45 @@ const DEFAULT_MODEL = "claude-opus-5-5";
 // Round trips per question: pause_turn resumptions plus get_table answers.
 const MAX_HOPS = 16;
 
-// Sent in the reader's place when a paused answer has to be resumed by a new
-// message; it isn't one of the reader's questions. Same words as the app's.
+// Sent in the reader's place when a paused answer is resumed; it isn't one of
+// the reader's questions. Same words as the app's.
 const CONTINUE_NOTE = "(Sent by the app, not the reader: Anthropic paused your answer partway through. " +
-  "Carry on from where it stopped, without repeating what you've already written.)";
+  "Carry on from where it stopped - run again any search that hadn't happened yet - " +
+  "without repeating what you've already written.)";
 
-// True when a paused reply ends on a search or code run Anthropic hasn't
-// carried out yet: a server tool call with no result after it. Sending that
-// reply back as it is resumes the turn.
-function waitsOnServerTool(content) {
+// A paused reply cut back to its last finished step: everything before the
+// first search or code run Anthropic hadn't carried out yet (a server tool
+// call with no result), less any thinking left at the end. Only the end is
+// cut, so what is kept reads exactly as Claude wrote it.
+function finishedPart(content) {
   const answered = new Set(content.filter((b) => b.tool_use_id).map((b) => b.tool_use_id));
-  return content.some((b) => b.type === "server_tool_use" && !answered.has(b.id));
+  const pending = content.findIndex((b) => b.type === "server_tool_use" && !answered.has(b.id));
+  const kept = pending < 0 ? content.slice() : content.slice(0, pending);
+  while (kept.length && ["thinking", "redacted_thinking"].includes(kept[kept.length - 1].type)) kept.pop();
+  return kept;
+}
+
+// After a refusal partway through a streamed answer, a fallback model carries
+// on from it, marked by a "fallback" block. Before that block, Anthropic takes
+// back only the text, finished searches and code runs, and the block itself.
+function echoable(content) {
+  const cut = content.map((b) => b.type).lastIndexOf("fallback");
+  if (cut < 0) return content;
+  const results = new Set(content.filter((b) => b.tool_use_id && b.type !== "tool_result").map((b) => b.tool_use_id));
+  const calls = new Set(content.filter((b) => b.type === "server_tool_use").map((b) => b.id));
+  return content.filter((b, i) => i >= cut || b.type === "text" || b.type === "fallback" ||
+    (b.type === "server_tool_use" && results.has(b.id)) ||
+    (b.tool_use_id && b.type !== "tool_result" && calls.has(b.tool_use_id)));
+}
+
+// Where in the answer a request sits, added to a rejected request's error so a
+// screenshot of it says which step failed and how the request ended.
+function requestDetail(hop, previousStop) {
+  const last = conversation[conversation.length - 1];
+  const types = (last?.content || []).map((b) => b.type).slice(-3);
+  return `(For the developer: request ${hop + 1} of this answer` +
+    (hop > 0 && previousStop ? `, after ${previousStop}` : "") +
+    `; it ended with a ${last?.role || "missing"} message: ${types.join(", ")}.)`;
 }
 const TABLES = ["matches", "sets", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
   "standings", "poll", "roster", "definitions",
@@ -168,6 +196,7 @@ async function ask(question) {
   // Fixed for the whole conversation; the question says whether it may search.
   const tools = webDeclared ? [...TOOLS, WEB_SEARCH] : TOOLS;
   setBusy(true, "Loading the season data…");
+  let detail = ""; // where the last request sat, for a rejected request's error
   try {
     await loadPack();
     conversation.push({ role: "user", content: [
@@ -189,6 +218,7 @@ async function ask(question) {
         ...(cfg.effort ? { output_config: { effort: cfg.effort } } : {}),
         ...(cfg.fallbacks ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" } : {}),
       };
+      detail = requestDetail(hop, final?.stop_reason);
       running = client.beta.messages.stream(params);
       running.on("streamEvent", (ev) => {
         if (ev.type === "content_block_start" && ev.content_block.type === "server_tool_use") {
@@ -212,24 +242,34 @@ async function ask(question) {
       usage.searches += u.server_tool_use?.web_search_requests || 0;
       if (final.container?.id) containerId = final.container.id;
       if (final.stop_reason === "refusal") break;
-      conversation.push({ role: "assistant", content: final.content });
-      if (final.stop_reason === "tool_use") {
+      const content = echoable(final.content);
+      const calls = content.filter((b) => b.type === "tool_use");
+      if (final.stop_reason === "tool_use" && calls.length) {
         // Claude's code asked for tables: answer every pending call in one
         // message of tool_result blocks only, then let the code carry on.
-        const calls = final.content.filter((b) => b.type === "tool_use");
+        conversation.push({ role: "assistant", content });
         conversation.push({ role: "user", content: calls.map((c) => tableResult(c)) });
         setBusy(true, "Running Python on the season data…");
         continue;
       }
-      if (final.stop_reason !== "pause_turn") break;
-      // Anthropic paused a long turn (a run of web searches, say). It picks the
-      // turn up again from a search or code run that hasn't happened yet, so a
-      // reply ending in one goes back as it is. A reply that stopped anywhere
-      // else would be the last message, which these models refuse as a
-      // prefill: ask Claude to carry on.
-      if (!waitsOnServerTool(final.content)) {
+      if (final.stop_reason !== "pause_turn" && final.stop_reason !== "tool_use") {
+        conversation.push({ role: "assistant", content });
+        break;
+      }
+      // Paused: Anthropic stopped a long turn (a run of web searches, say), or
+      // stopped for a tool call the page has nothing to run. Anthropic's guide
+      // says to send a paused reply back as it is, to resume from the search it
+      // hadn't run yet - but that request ends on Claude's own reply, and these
+      // models refused it as a prefill. So the reply is kept up to its last
+      // finished step (the search not yet run is dropped; Claude can run it
+      // again), and Claude is asked, in a message of its own, to carry on.
+      // Every request then ends with a user message.
+      const finished = finishedPart(content);
+      if (finished.length) conversation.push({ role: "assistant", content: finished });
+      if (conversation[conversation.length - 1].content?.[0]?.text !== CONTINUE_NOTE) {
         conversation.push({ role: "user", content: [{ type: "text", text: CONTINUE_NOTE }] });
       }
+      final = { ...final, stop_reason: "pause_turn" };
     }
 
     // Taken before any rollback, so the sources and code shown always match
@@ -265,6 +305,7 @@ async function ask(question) {
     } else {
       cancelDraw();
       turn.answer.replaceChildren(el("p", "ask-error", explainError(e)));
+      if (e instanceof Anthropic.BadRequestError && detail) turn.answer.append(el("p", "ask-note", detail));
     }
   } finally {
     running = null;
