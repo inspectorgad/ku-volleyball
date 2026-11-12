@@ -48,69 +48,109 @@ const CONTINUE_NOTE = "(Sent by the app, not the reader: Anthropic paused your a
   "Carry on from where it stopped - run again any search that hadn't happened yet - " +
   "without repeating what you've already written.)";
 
+// Sent in the reader's place when an answer is set back because Claude searched
+// while its code waited on get_table; same words as the app's.
+const SEPARATE_NOTE = "(Sent by the app, not the reader: your last step asked for a web search while your " +
+  "Python was waiting on get_table, which the app can't handle, so it was set aside. " +
+  "Start again, and run your searches and your Python in separate steps.)";
+// Times an answer is set back and asked again for that.
+const MAX_ASK_AGAIN = 1;
+
+// Asked of Claude with every web-search question; same words as the app's.
+const SEARCH_APART = "Search before or after running Python, not in the same step: the app can't " +
+  "run a search while your code is waiting on get_table.";
+
+const answeredIds = (content) => new Set(content.filter((b) => b.tool_use_id).map((b) => b.tool_use_id));
+// A server tool call with no result after it: not carried out yet.
+const isWaiting = (b, answered) => b.type === "server_tool_use" && !answered.has(b.id);
+
+// True when a reply that stopped for the page's tables also holds a web search
+// Claude asked for at the same moment. Anthropic's guide says that search runs
+// when the tables go back, but a web-search question of exactly that kind was
+// refused there as a prefill.
+function waitsOnSearch(content) {
+  const answered = answeredIds(content);
+  return content.some((b) => isWaiting(b, answered) && b.name === "web_search");
+}
+
+// True when a paused reply ends on a search or code run Anthropic hasn't carried
+// out yet - the shape its guide resumes by sending the reply back as it is.
+function endsOnWaitingServerTool(content) {
+  return content.length > 0 && isWaiting(content[content.length - 1], answeredIds(content));
+}
+
 // A paused reply cut back to its last finished step: everything before the
-// first search or code run Anthropic hadn't carried out yet (a server tool
-// call with no result), less any thinking left at the end. Only the end is
-// cut, so what is kept reads exactly as Claude wrote it.
+// first search or code run Anthropic hadn't carried out yet, less any thinking
+// left at the end. Only the end is cut, so what is kept reads exactly as Claude
+// wrote it.
 function finishedPart(content) {
-  const answered = new Set(content.filter((b) => b.tool_use_id).map((b) => b.tool_use_id));
-  const pending = content.findIndex((b) => b.type === "server_tool_use" && !answered.has(b.id));
+  const answered = answeredIds(content);
+  const pending = content.findIndex((b) => isWaiting(b, answered));
   const kept = pending < 0 ? content.slice() : content.slice(0, pending);
   while (kept.length && ["thinking", "redacted_thinking"].includes(kept[kept.length - 1].type)) kept.pop();
   return kept;
 }
 
+// A reply that was cut short (max_tokens), kept as far as it is complete: no
+// search, code run or table request left half made, and no thinking at the end.
+function settledPart(content) {
+  const kept = finishedPart(content);
+  while (kept.length && ["tool_use", "thinking", "redacted_thinking"].includes(kept[kept.length - 1].type)) kept.pop();
+  return kept;
+}
+
 // After a refusal partway through a streamed answer, a fallback model carries
-// on from it, marked by a "fallback" block. Before that block, Anthropic takes
-// back only the text, finished searches and code runs, and the block itself.
+// on from it, marked by a "fallback" block. Before that block Anthropic takes
+// back the text, the results of searches and code runs (including one whose
+// call was in an earlier message), the calls that have their result here, and
+// the block itself - not thinking, table requests or calls left waiting.
 function echoable(content) {
   const cut = content.map((b) => b.type).lastIndexOf("fallback");
   if (cut < 0) return content;
-  const results = new Set(content.filter((b) => b.tool_use_id && b.type !== "tool_result").map((b) => b.tool_use_id));
-  const calls = new Set(content.filter((b) => b.type === "server_tool_use").map((b) => b.id));
+  const answered = answeredIds(content);
   return content.filter((b, i) => i >= cut || b.type === "text" || b.type === "fallback" ||
-    (b.type === "server_tool_use" && results.has(b.id)) ||
-    (b.tool_use_id && b.type !== "tool_result" && calls.has(b.tool_use_id)));
+    (b.type === "server_tool_use" && answered.has(b.id)) ||
+    (b.tool_use_id && b.type !== "tool_result"));
 }
 
 // Where in the answer a request sits, added to a rejected request's error so a
 // screenshot of it says which step failed and how the request ended.
-function requestDetail(hop, previousStop, previousReply) {
+function requestDetail(hop, previous) {
   const last = conversation[conversation.length - 1];
   const types = (last?.content || []).map((b) => b.type).slice(-3);
-  return `(For the developer: request ${hop + 1} of this answer` +
-    (hop > 0 && previousStop ? `, after ${previousStop}` : "") +
-    `; it ended with a ${last?.role || "missing"} message: ${types.join(", ")}.` +
-    (hop > 0 ? ` Reply before it: ${describe(previousReply || [])}.` : "") + ")";
+  const n = (previous?.content || []).length;
+  const reply = previous ? ` Reply before it (${previous.model}, ${previous.stop_reason}, ` +
+    `${n} block${n === 1 ? "" : "s"}): ${describe(previous.content || [])}.` : "";
+  return `(For the developer: request ${hop + 1} of this answer; it ended with a ` +
+    `${last?.role || "missing"} message: ${types.join(", ")}.${reply})`;
 }
 
-// A reply's blocks in a few words, for a rejected request's error.
+// A reply's blocks in a few words, for a rejected request's error: each block's
+// type, the tool it calls and who called it, a search or code run not yet
+// carried out, and a server tool's error. Long replies keep their first two
+// and last six.
 function describe(content) {
-  const answered = new Set(content.filter((b) => b.tool_use_id).map((b) => b.tool_use_id));
-  const words = content.map((b) => [b.type, b.type.endsWith("tool_use") ? b.name : null,
-    b.type === "server_tool_use" && !answered.has(b.id) ? "(waiting)" : null].filter(Boolean).join(" "));
-  return words.length ? words.slice(-6).join(", ") : "nothing";
+  const answered = answeredIds(content);
+  const words = content.map((b) => [b.type,
+    b.type.endsWith("tool_use") ? b.name : null,
+    b.caller?.type ? `via ${b.caller.type}` : null,
+    isWaiting(b, answered) ? "(waiting)" : null,
+    b.content?.error_code ? `(error ${b.content.error_code})` : null].filter(Boolean).join(" "));
+  if (!words.length) return "nothing";
+  return (words.length > 8 ? [...words.slice(0, 2), "...", ...words.slice(-6)] : words).join(", ");
 }
 
-// Asked of Claude with every web-search question; same words as the app's.
-const SEARCH_APART = "Search before or after running Python, not in the same step: a search " +
-  "asked for while your code is waiting on get_table is dropped.";
-
-// Claude's reply less any web search it asked for at the same moment its
-// Python asked the page for tables. Anthropic's guide says such a search runs
-// when the tables go back, but with the code waiting on them too, Anthropic
-// refused that request ("This model does not support assistant message
-// prefill"). Dropped, the search simply hasn't happened, and Claude can ask
-// for it again once its code is done. A search followed by a thinking block
-// is kept, since removing a block from before a thinking block invalidates it.
-function withoutWaitingSearches(content) {
-  const answered = new Set(content.filter((b) => b.tool_use_id).map((b) => b.tool_use_id));
-  const waiting = content.map((b, i) => (b.type === "server_tool_use" && b.name === "web_search" && !answered.has(b.id) ? i : -1))
-    .filter((i) => i >= 0);
-  if (!waiting.length) return content;
-  if (content.slice(waiting[0]).some((b) => b.type === "thinking" || b.type === "redacted_thinking")) return content;
-  return content.filter((b, i) => !waiting.includes(i));
+// Forgets the thread back to `size` messages. If what goes held Claude's code,
+// its sandbox may be left paused on a call nobody will answer, so the next
+// request starts a fresh one; the season tables come again through get_table.
+function rollBack(size) {
+  if (conversation.length <= size) return;
+  const gone = conversation.slice(size);
+  const blocks = gone.flatMap((m) => (Array.isArray(m.content) ? m.content : []));
+  if (blocks.some((b) => (b.type || "").endsWith("tool_use"))) containerId = null;
+  conversation.length = size;
 }
+
 const TABLES = ["matches", "sets", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
   "standings", "poll", "roster", "definitions",
   "opponent_rosters", "opponent_form", "team_serving", "national_leaders", "d1_results"];
@@ -234,6 +274,7 @@ async function ask(question) {
 
     const usage = { input: 0, write: 0, read: 0, output: 0, searches: 0 };
     let final = null;
+    let asksAgain = 0;
     for (let hop = 0; hop < MAX_HOPS; hop++) {
       setBusy(true, hop ? "Still working…" : "Thinking…");
       const params = {
@@ -247,7 +288,7 @@ async function ask(question) {
         ...(cfg.effort ? { output_config: { effort: cfg.effort } } : {}),
         ...(cfg.fallbacks ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" } : {}),
       };
-      detail = requestDetail(hop, final?.stop_reason, final?.content);
+      detail = requestDetail(hop, final);
       running = client.beta.messages.stream(params);
       running.on("streamEvent", (ev) => {
         if (ev.type === "content_block_start" && ev.content_block.type === "server_tool_use") {
@@ -274,39 +315,57 @@ async function ask(question) {
       const content = echoable(final.content);
       const calls = content.filter((b) => b.type === "tool_use");
       if (final.stop_reason === "tool_use" && calls.length) {
+        if (waitsOnSearch(content) && asksAgain < MAX_ASK_AGAIN) {
+          // Claude asked for a web search at the same moment its Python asked
+          // the page for a table. Anthropic's guide says the search runs when
+          // the table goes back, but that request is the one refused as a
+          // prefill. So the answer so far is set aside, paused code and all,
+          // and the question asked again with a note to keep the two apart.
+          asksAgain++;
+          rollBack(mark + 1);
+          containerId = null; // this reply's code is paused in it
+          conversation.push({ role: "user", content: [{ type: "text", text: SEPARATE_NOTE }] });
+          continue;
+        }
         // Claude's code asked for tables: answer every pending call in one
         // message of tool_result blocks only, then let the code carry on.
-        // A web search asked for at the same moment is dropped (see withoutWaitingSearches).
-        conversation.push({ role: "assistant", content: withoutWaitingSearches(content) });
+        conversation.push({ role: "assistant", content });
         conversation.push({ role: "user", content: calls.map((c) => tableResult(c)) });
         setBusy(true, "Running Python on the season data…");
         continue;
       }
-      if (final.stop_reason !== "pause_turn" && final.stop_reason !== "tool_use") {
-        conversation.push({ role: "assistant", content });
-        break;
+      if (final.stop_reason === "pause_turn" || final.stop_reason === "tool_use") {
+        // Paused: Anthropic stopped a long turn (a run of web searches, say), or
+        // stopped for a tool call the page has nothing to run.
+        if (endsOnWaitingServerTool(content)) {
+          // Anthropic's documented continuation: the reply goes back as it is,
+          // and the API resumes from the search or code run it hadn't carried out.
+          conversation.push({ role: "assistant", content });
+        } else {
+          // Paused anywhere else, the reply as it is would read as a prefill. It
+          // is kept up to its last finished step and Claude is asked, in a
+          // message of its own, to carry on.
+          const finished = finishedPart(content);
+          if (finished.length) conversation.push({ role: "assistant", content: finished });
+          if (conversation[conversation.length - 1].content?.[0]?.text !== CONTINUE_NOTE) {
+            conversation.push({ role: "user", content: [{ type: "text", text: CONTINUE_NOTE }] });
+          }
+        }
+        continue;
       }
-      // Paused: Anthropic stopped a long turn (a run of web searches, say), or
-      // stopped for a tool call the page has nothing to run. Anthropic's guide
-      // says to send a paused reply back as it is, to resume from the search it
-      // hadn't run yet - but that request ends on Claude's own reply, and these
-      // models refused it as a prefill. So the reply is kept up to its last
-      // finished step (the search not yet run is dropped; Claude can run it
-      // again), and Claude is asked, in a message of its own, to carry on.
-      // Every request then ends with a user message.
-      const finished = finishedPart(content);
-      if (finished.length) conversation.push({ role: "assistant", content: finished });
-      if (conversation[conversation.length - 1].content?.[0]?.text !== CONTINUE_NOTE) {
-        conversation.push({ role: "user", content: [{ type: "text", text: CONTINUE_NOTE }] });
-      }
-      final = { ...final, stop_reason: "pause_turn" };
+      // Finished, or cut short (max_tokens): kept as far as it is complete, so a
+      // follow-up never comes after a half-made tool call, and an empty reply
+      // isn't kept at all - the API refuses an empty message anywhere but last.
+      const kept = final.stop_reason === "end_turn" ? content : settledPart(content);
+      if (kept.length) conversation.push({ role: "assistant", content: kept });
+      break;
     }
 
     // Taken before any rollback, so the sources and code shown always match
     // the text shown, [n] marks included.
     const answered = conversation.slice(mark);
     if (final.stop_reason === "refusal") {
-      conversation.length = mark; // the declined question leaves no trace in the thread
+      rollBack(mark); // the declined question leaves no trace in the thread
       cancelDraw(); // a draw of text streamed just before must not cover this
       turn.answer.replaceChildren(el("p", "ask-note",
         "Claude declined to answer that one. Try rephrasing it as a question about the stats."));
@@ -315,7 +374,7 @@ async function ask(question) {
       if (final.stop_reason === "tool_use" || final.stop_reason === "pause_turn") {
         // Out of round trips mid-answer. The thread cannot continue from a
         // pending tool call, so it is rolled back; the reader can ask again.
-        conversation.length = mark;
+        rollBack(mark);
         note(turn, "Claude was still working when this page stopped waiting. Try a narrower question.");
       }
       if (final.stop_reason === "max_tokens") note(turn, "The answer hit its length limit and was cut short.");
@@ -328,7 +387,7 @@ async function ask(question) {
   } catch (e) {
     // What was on screen when it stopped, so its [n] marks keep their sources.
     const partial = shown.length ? shown : conversation.slice(mark);
-    conversation.length = mark;
+    rollBack(mark);
     if (e instanceof Anthropic.APIUserAbortError) {
       showSources(turn, partial);
       note(turn, "Stopped.");

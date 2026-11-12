@@ -97,7 +97,7 @@ class AskEngine(
     // signature in thinking block ... The tools list differs") once they do.
     private var webDeclared: Boolean? = null
 
-    val turns: Int get() = conversation.count { it.optString("role") == "user" && hasText(it) && !isContinueNote(it) }
+    val turns: Int get() = conversation.count { it.optString("role") == "user" && hasText(it) && !isAppNote(it) }
 
     /** Forgets the thread, so the next question starts fresh. */
     fun reset() {
@@ -150,12 +150,14 @@ class AskEngine(
 
             val usage = LongArray(5) // input, cache write, cache read, output, web searches
             var stop = ""
-            var before = JSONArray() // the reply before this request, for a rejected request's error
+            var before: JSONObject? = null // the reply before this request, for a rejected request's error
+            var asksAgain = 0
             for (hop in 0 until MAX_HOPS) {
                 answerWithSources(mark).let { (text, sources) ->
                     onStatus(if (hop == 0) "Thinking…" else "Still working…", text, sources)
                 }
-                val reply = send(apiKey, requestBody(model, system, withWeb), requestDetail(hop, stop, before))
+                val reply = send(apiKey, requestBody(model, system, withWeb), requestDetail(hop, before))
+                before = reply
                 reply.optJSONObject("usage")?.let { u ->
                     usage[0] += u.optLong("input_tokens")
                     usage[1] += u.optLong("cache_creation_input_tokens")
@@ -168,15 +170,25 @@ class AskEngine(
                 stop = reply.optString("stop_reason")
                 if (stop == "refusal") break
                 val content = reply.optJSONArray("content") ?: JSONArray()
-                before = content
                 val calls = blocks(content).filter { it.optString("type") == "tool_use" }
                 if (stop == "tool_use" && calls.isNotEmpty()) {
+                    if (waitsOnSearch(content) && asksAgain < MAX_ASK_AGAIN) {
+                        // Claude asked for a web search at the same moment its
+                        // Python asked the app for a table. Anthropic's guide says
+                        // the search runs when the table goes back, but that
+                        // request is the one refused as a prefill. So the answer so
+                        // far is set aside, paused code and all, and the question
+                        // asked again with a note to keep the two apart.
+                        asksAgain++
+                        rollBack(mark + 1)
+                        containerId = null // this reply's code is paused in it
+                        conversation += JSONObject().put("role", "user")
+                            .put("content", JSONArray().put(textBlock(SEPARATE_NOTE)))
+                        continue
+                    }
                     // Claude's code asked for tables: answer every pending call
-                    // in one message of tool_result blocks only. A web search
-                    // asked for at the same moment is dropped (see
-                    // withoutWaitingSearches).
-                    conversation += JSONObject().put("role", "assistant")
-                        .put("content", withoutWaitingSearches(content))
+                    // in one message of tool_result blocks only.
+                    conversation += JSONObject().put("role", "assistant").put("content", content)
                     val results = JSONArray()
                     calls.forEach { results.put(tableResult(it, data)) }
                     conversation += JSONObject().put("role", "user").put("content", results)
@@ -185,36 +197,45 @@ class AskEngine(
                     }
                     continue
                 }
-                if (stop != "pause_turn" && stop != "tool_use") {
-                    conversation += JSONObject().put("role", "assistant").put("content", content)
-                    break
+                if (stop == "pause_turn" || stop == "tool_use") {
+                    // Paused: Anthropic stopped a long turn (a run of web
+                    // searches, say), or stopped for a tool call the app has
+                    // nothing to run.
+                    if (endsOnWaitingServerTool(content)) {
+                        // Anthropic's documented continuation: the reply goes
+                        // back as it is, and the API resumes from the search or
+                        // code run it hadn't carried out yet.
+                        conversation += JSONObject().put("role", "assistant").put("content", content)
+                    } else {
+                        // Paused anywhere else, the reply as it is would read as
+                        // a prefill. It is kept up to its last finished step and
+                        // Claude is asked, in a message of its own, to carry on.
+                        val finished = finishedPart(content)
+                        if (finished.length() > 0) {
+                            conversation += JSONObject().put("role", "assistant").put("content", finished)
+                        }
+                        if (!isContinueNote(conversation.last())) {
+                            conversation += JSONObject().put("role", "user")
+                                .put("content", JSONArray().put(textBlock(CONTINUE_NOTE)))
+                        }
+                    }
+                    continue
                 }
-                // Paused: Anthropic stopped a long turn (a run of web searches,
-                // say), or stopped for a tool call the app has nothing to run.
-                // Anthropic's guide says to send a paused reply back as it is, to
-                // resume from the search it hadn't run yet. That leaves Claude's
-                // own reply last, the shape these models refuse as a prefill, and
-                // a search left waiting across requests is what got refused
-                // after a tool_use stop (see withoutWaitingSearches). So the
-                // reply is kept up to its last finished step (the search not yet
-                // run is dropped; Claude can run it again), and Claude is asked,
-                // in a message of its own, to carry on. Every request then ends
-                // with a user message.
-                val finished = finishedPart(content)
-                if (finished.length() > 0) {
-                    conversation += JSONObject().put("role", "assistant").put("content", finished)
+                // Finished, or cut short (max_tokens): kept as far as it is
+                // complete, so a follow-up never comes after a half-made tool
+                // call, and an empty reply isn't kept at all - the API refuses
+                // an empty message anywhere but last.
+                val kept = if (stop == "end_turn") content else settledPart(content)
+                if (kept.length() > 0) {
+                    conversation += JSONObject().put("role", "assistant").put("content", kept)
                 }
-                if (!isContinueNote(conversation.last())) {
-                    conversation += JSONObject().put("role", "user")
-                        .put("content", JSONArray().put(textBlock(CONTINUE_NOTE)))
-                }
-                stop = "pause_turn"
+                break
             }
 
             val notes = mutableListOf<String>()
             if (restarted) notes += NEW_CONVERSATION_NOTE
             if (stop == "refusal") {
-                conversation.subList(mark, conversation.size).clear()
+                rollBack(mark)
                 done = true
                 return AskAnswer(
                     text = "",
@@ -228,7 +249,7 @@ class AskEngine(
             if (stop == "tool_use" || stop == "pause_turn") {
                 // Out of round trips mid-answer. The thread cannot continue
                 // from a pending tool call, so the question is rolled back.
-                conversation.subList(mark, conversation.size).clear()
+                rollBack(mark)
                 notes += "Claude was still working when the app stopped waiting. Try a narrower question."
             }
             if (stop == "max_tokens") notes += "The answer hit its length limit and was cut short."
@@ -238,8 +259,23 @@ class AskEngine(
         } catch (e: AskException) {
             return AskAnswer(text = "", error = e.message)
         } finally {
-            if (!done && conversation.size > mark) conversation.subList(mark, conversation.size).clear()
+            if (!done) rollBack(mark)
         }
+    }
+
+    /**
+     * Forgets the thread back to [size] messages. If what goes held Claude's
+     * code, its sandbox may be left paused on a call nobody will answer, so the
+     * next request starts a fresh one; the season tables are fetched again
+     * through get_table anyway.
+     */
+    private fun rollBack(size: Int) {
+        if (conversation.size <= size) return
+        val gone = conversation.subList(size, conversation.size)
+        if (gone.any { m -> blocks(m.optJSONArray("content")).any { it.optString("type").endsWith("tool_use") } }) {
+            containerId = null
+        }
+        gone.clear()
     }
 
     private fun requestBody(model: AskModel, system: String, withWeb: Boolean): JSONObject {
@@ -262,13 +298,17 @@ class AskEngine(
      * Where in the answer a request sits, added to a rejected request's error
      * so a screenshot of it says which step failed and how the request ended.
      */
-    private fun requestDetail(hop: Int, previousStop: String, previousReply: JSONArray): String {
+    private fun requestDetail(hop: Int, previous: JSONObject?): String {
         val last = conversation.lastOrNull()
         val types = blocks(last?.optJSONArray("content")).map { it.optString("type") }.takeLast(3)
-        return "(For the developer: request ${hop + 1} of this answer" +
-            (if (hop > 0 && previousStop.isNotEmpty()) ", after $previousStop" else "") +
-            "; it ended with a ${last?.optString("role") ?: "missing"} message: ${types.joinToString(", ")}." +
-            (if (hop > 0) " Reply before it: ${describe(previousReply)}." else "") + ")"
+        val reply = previous?.let { r ->
+            val content = r.optJSONArray("content") ?: JSONArray()
+            val n = content.length()
+            " Reply before it (${r.optString("model")}, ${r.optString("stop_reason")}, " +
+                "$n block${if (n == 1) "" else "s"}): ${describe(content)}."
+        }.orEmpty()
+        return "(For the developer: request ${hop + 1} of this answer; it ended with a " +
+            "${last?.optString("role") ?: "missing"} message: ${types.joinToString(", ")}.$reply)"
     }
 
     private suspend fun send(apiKey: String, body: JSONObject, detail: String = ""): JSONObject {
@@ -435,12 +475,24 @@ class AskEngine(
             if (on) "Web search is on for this question. $SEARCH_APART" else "Web search is off for this question."
 
         /**
-         * A search asked for while Claude's Python waits on the app's tables is
-         * dropped (see withoutWaitingSearches), so Claude is asked not to.
+         * A search asked for while Claude's Python waits on the app's tables
+         * sets the answer back (see [ask]), so Claude is asked not to.
          */
         const val SEARCH_APART =
-            "Search before or after running Python, not in the same step: a search " +
-                "asked for while your code is waiting on get_table is dropped."
+            "Search before or after running Python, not in the same step: the app can't " +
+                "run a search while your code is waiting on get_table."
+
+        /**
+         * Sent in the reader's place when an answer is set back because Claude
+         * searched while its code waited on get_table (see [ask]).
+         */
+        const val SEPARATE_NOTE =
+            "(Sent by the app, not the reader: your last step asked for a web search while your " +
+                "Python was waiting on get_table, which the app can't handle, so it was set aside. " +
+                "Start again, and run your searches and your Python in separate steps.)"
+
+        /** Times an answer is set back and asked again for that. */
+        const val MAX_ASK_AGAIN = 1
 
         /** usage = input, cache write, cache read, output tokens, and optionally web searches. */
         fun costLine(model: AskModel, usage: LongArray): String {
@@ -481,43 +533,76 @@ class AskEngine(
         private fun isContinueNote(message: JSONObject) =
             blocks(message.optJSONArray("content")).any { it.optString("text") == CONTINUE_NOTE }
 
+        /** One of the app's own notes to Claude, not a question of the reader's. */
+        private fun isAppNote(message: JSONObject) =
+            blocks(message.optJSONArray("content")).any { it.optString("text") in setOf(CONTINUE_NOTE, SEPARATE_NOTE) }
+
+        private fun answeredIds(all: List<JSONObject>): Set<String> =
+            all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
+
+        /** A server tool call in [all] with no result after it: not carried out yet. */
+        private fun isWaiting(b: JSONObject, answered: Set<String>) =
+            b.optString("type") == "server_tool_use" && b.optString("id") !in answered
+
         /**
-         * Claude's reply less any web search it asked for at the same moment
-         * its Python asked the app for tables. Anthropic's guide says such a
-         * search runs when the tables go back, but with the code waiting on
-         * them too, Anthropic refused that request ("This model does not
-         * support assistant message prefill"). Dropped, the search simply
-         * hasn't happened, and Claude can ask for it again once its code is
-         * done. A search followed by a thinking block is kept, since removing
-         * a block from before a thinking block invalidates it.
+         * True when a reply that stopped for the app's tables also holds a web
+         * search Claude asked for at the same moment. Anthropic's guide says
+         * that search runs when the tables go back, but a web-search question
+         * of exactly that kind was refused there as a prefill.
          */
-        fun withoutWaitingSearches(content: JSONArray): JSONArray {
+        fun waitsOnSearch(content: JSONArray): Boolean {
             val all = blocks(content)
-            val answered = all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
-            val waiting = all.indices.filter {
-                all[it].optString("type") == "server_tool_use" && all[it].optString("name") == "web_search" &&
-                    all[it].optString("id") !in answered
-            }
-            if (waiting.isEmpty()) return content
-            if (all.drop(waiting.first()).any { it.optString("type") in setOf("thinking", "redacted_thinking") }) {
-                return content
-            }
-            return JSONArray(all.filterIndexed { i, _ -> i !in waiting })
+            val answered = answeredIds(all)
+            return all.any { isWaiting(it, answered) && it.optString("name") == "web_search" }
         }
 
-        /** A reply's blocks in a few words, for a rejected request's error. */
+        /**
+         * True when a paused reply ends on a search or code run Anthropic hasn't
+         * carried out yet - the shape its guide resumes by sending the reply
+         * back as it is.
+         */
+        fun endsOnWaitingServerTool(content: JSONArray): Boolean {
+            val all = blocks(content)
+            return all.isNotEmpty() && isWaiting(all.last(), answeredIds(all))
+        }
+
+        /**
+         * A reply's blocks in a few words, for a rejected request's error: each
+         * block's type, the tool it calls and who called it, a search or code run
+         * not yet carried out, and a server tool's error. Long replies keep their
+         * first two and last six.
+         */
         fun describe(content: JSONArray): String {
             val all = blocks(content)
-            val answered = all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
+            val answered = answeredIds(all)
             val words = all.map { b ->
                 val type = b.optString("type")
-                val name = b.optString("name").takeIf { type.endsWith("tool_use") && it.isNotEmpty() }
                 listOfNotNull(
-                    type, name,
-                    "(waiting)".takeIf { type == "server_tool_use" && b.optString("id") !in answered }
+                    type,
+                    b.optString("name").takeIf { type.endsWith("tool_use") && it.isNotEmpty() },
+                    b.optJSONObject("caller")?.optString("type")?.takeIf { it.isNotEmpty() }?.let { "via $it" },
+                    "(waiting)".takeIf { isWaiting(b, answered) },
+                    b.optJSONObject("content")?.optString("error_code")?.takeIf { it.isNotEmpty() }?.let { "(error $it)" }
                 ).joinToString(" ")
             }
-            return if (words.isEmpty()) "nothing" else words.takeLast(6).joinToString(", ")
+            return when {
+                words.isEmpty() -> "nothing"
+                words.size > 8 -> (words.take(2) + "..." + words.takeLast(6)).joinToString(", ")
+                else -> words.joinToString(", ")
+            }
+        }
+
+        /**
+         * A reply that was cut short (max_tokens), kept as far as it is
+         * complete: no search, code run or table request left half made, and no
+         * thinking left at the end.
+         */
+        fun settledPart(content: JSONArray): JSONArray {
+            var kept = blocks(finishedPart(content))
+            while (kept.isNotEmpty() && kept.last().optString("type") in setOf("tool_use", "thinking", "redacted_thinking")) {
+                kept = kept.dropLast(1)
+            }
+            return JSONArray(kept)
         }
 
         /**
@@ -528,8 +613,8 @@ class AskEngine(
          */
         fun finishedPart(content: JSONArray): JSONArray {
             val all = blocks(content)
-            val answered = all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
-            val pending = all.indexOfFirst { it.optString("type") == "server_tool_use" && it.optString("id") !in answered }
+            val answered = answeredIds(all)
+            val pending = all.indexOfFirst { isWaiting(it, answered) }
             var kept = if (pending < 0) all else all.subList(0, pending)
             while (kept.isNotEmpty() && kept.last().optString("type") in setOf("thinking", "redacted_thinking")) {
                 kept = kept.dropLast(1)

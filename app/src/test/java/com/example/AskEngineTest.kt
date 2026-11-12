@@ -66,6 +66,7 @@ class AskEngineTest {
             JSONObject()
                 .put("type", "message")
                 .put("role", "assistant")
+                .put("model", "claude-opus-5-5")
                 .put("stop_reason", stop)
                 .put("content", JSONArray(blocks.toList()))
                 .put("usage", JSONObject().put("input_tokens", 1000).put("output_tokens", 200)
@@ -226,66 +227,126 @@ class AskEngineTest {
         assertTrue(partials.any { (text, titles) -> text.contains("[1]") && titles == listOf("https://x.example/a") })
     }
 
+    private val thinking = JSONObject().put("type", "thinking").put("thinking", "").put("signature", "sig")
+    private fun search(id: String, q: String) =
+        JSONObject().put("type", "server_tool_use").put("id", id).put("name", "web_search")
+            .put("input", JSONObject().put("query", q))
+    private fun results(id: String) =
+        JSONObject().put("type", "web_search_tool_result").put("tool_use_id", id)
+            .put("content", JSONArray().put(JSONObject().put("type", "web_search_result")
+                .put("url", "https://cubuffs.com/r").put("title", "Roster").put("encrypted_content", "enc")))
+    private fun code(id: String) =
+        JSONObject().put("type", "server_tool_use").put("id", id).put("name", "code_execution")
+            .put("input", JSONObject().put("code", "await get_table({'table': 'opponent_rosters'})"))
+    private fun tableCall(id: String, codeId: String) =
+        JSONObject().put("type", "tool_use").put("id", id).put("name", "get_table")
+            .put("input", JSONObject().put("table", "matches"))
+            .put("caller", JSONObject().put("type", "code_execution_20260120").put("tool_id", codeId))
+    private fun roles(body: JSONObject): List<String> {
+        val m = body.getJSONArray("messages")
+        return (0 until m.length()).map { m.getJSONObject(it).getString("role") }
+    }
+
     @Test
-    fun `a paused answer is resumed with a message of the app's own, so no request ends on Claude's reply`() = runBlocking {
+    fun `a paused answer goes back as it is when it ends on a search not yet run, and is nudged otherwise`() = runBlocking {
         val engine = engine()
-        val search = { id: String, q: String ->
-            JSONObject().put("type", "server_tool_use").put("id", id).put("name", "web_search")
-                .put("input", JSONObject().put("query", q))
-        }
-        val results = { id: String ->
-            JSONObject().put("type", "web_search_tool_result").put("tool_use_id", id)
-                .put("content", JSONArray().put(JSONObject().put("type", "web_search_result")
-                    .put("url", "https://cubuffs.com/r").put("title", "Roster").put("encrypted_content", "enc")))
-        }
-        val thinking = JSONObject().put("type", "thinking").put("thinking", "").put("signature", "sig")
-        // 1. Paused on a search that hasn't run yet: that search is dropped.
+        // 1. Paused on a search not yet run: Anthropic's documented continuation.
         server.enqueue(reply("pause_turn", text("Checking the news."), thinking, search("srv_1", "Colorado injuries")))
-        // 2. Paused after a finished search, with thinking left at the end.
-        server.enqueue(reply("pause_turn", search("srv_2", "Colorado volleyball injuries"), results("srv_2"),
-            text("Colorado's lineup"), thinking))
-        // 3. A tool_use stop with nothing for the app to run counts as a pause too.
-        server.enqueue(reply("tool_use", search("srv_3", "Colorado roster")))
+        // 2. Paused after a finished search, with thinking at the end: cut back and nudged.
+        server.enqueue(reply("pause_turn", results("srv_1"), search("srv_2", "Colorado volleyball injuries"),
+            results("srv_2"), text("Colorado's lineup"), thinking))
         server.enqueue(reply("end_turn", text("has no reported injuries.")))
 
         val answer = engine.ask("Any injuries for Colorado?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
         assertNull(answer.error)
         assertTrue(answer.text, answer.text.startsWith("Checking the news."))
         assertTrue(answer.text, answer.text.endsWith("has no reported injuries."))
-        assertEquals(listOf("Colorado volleyball injuries"), answer.searches)
+        assertEquals(listOf("Colorado injuries", "Colorado volleyball injuries"), answer.searches)
 
         nextBody()
-        val roles = { body: JSONObject ->
-            val m = body.getJSONArray("messages")
-            (0 until m.length()).map { m.getJSONObject(it).getString("role") }
-        }
         val second = nextBody()
-        assertEquals(listOf("user", "assistant", "user"), roles(second))
-        val kept = second.getJSONArray("messages").getJSONObject(1).getJSONArray("content")
-        // The text alone: the search not yet run is gone, and so is the thinking left before it.
-        assertEquals(1, kept.length())
-        assertEquals("text", kept.getJSONObject(0).getString("type"))
-        assertEquals(AskEngine.CONTINUE_NOTE, second.getJSONArray("messages").getJSONObject(2)
-            .getJSONArray("content").getJSONObject(0).getString("text"))
+        assertEquals(listOf("user", "assistant"), roles(second))
+        assertEquals(3, second.getJSONArray("messages").getJSONObject(1).getJSONArray("content").length())
 
         val third = nextBody()
-        assertEquals(listOf("user", "assistant", "user", "assistant", "user"), roles(third))
-        val finished = third.getJSONArray("messages").getJSONObject(3).getJSONArray("content")
-        assertEquals(3, finished.length()) // the finished search and the text; the trailing thinking is gone
-        assertEquals("text", finished.getJSONObject(2).getString("type"))
-
-        // Nothing finished in reply 3, and the last message is already the note: sent again as it is.
-        val fourth = nextBody()
-        assertEquals(listOf("user", "assistant", "user", "assistant", "user"), roles(fourth))
-        // The notes aren't the reader's questions.
+        assertEquals(listOf("user", "assistant", "assistant", "user"), roles(third))
+        val kept = third.getJSONArray("messages").getJSONObject(2).getJSONArray("content")
+        assertEquals(4, kept.length()) // the trailing thinking is gone
+        assertEquals("text", kept.getJSONObject(3).getString("type"))
+        assertEquals(AskEngine.CONTINUE_NOTE, third.getJSONArray("messages").getJSONObject(3)
+            .getJSONArray("content").getJSONObject(0).getString("text"))
+        // The nudge isn't one of the reader's questions.
         assertEquals(1, engine.turns)
 
         assertEquals(0, AskEngine.finishedPart(JSONArray().put(search("a", "q"))).length())
         assertEquals(2, AskEngine.finishedPart(JSONArray().put(search("a", "q")).put(results("a"))).length())
+        assertTrue(AskEngine.endsOnWaitingServerTool(JSONArray().put(text("x")).put(search("a", "q"))))
+        assertFalse(AskEngine.endsOnWaitingServerTool(JSONArray().put(search("a", "q")).put(thinking)))
     }
 
     @Test
-    fun `a rejected request says which step failed and how it ended`() = runBlocking {
+    fun `an empty or cut-short reply never leaves the thread unable to take a follow-up`() = runBlocking {
+        val engine = engine()
+        // A nudged pause, then an empty end_turn: nothing empty is kept.
+        server.enqueue(reply("pause_turn", text("Colorado lists no injuries.")))
+        server.enqueue(reply("end_turn"))
+        engine.ask("Injuries?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        // Cut short with code half made: only the finished part is kept.
+        server.enqueue(reply("max_tokens", text("Working it out."), code("srv_c")))
+        engine.ask("Their serving?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        server.enqueue(reply("end_turn", text("Done.")))
+        engine.ask("And ours?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+
+        repeat(3) { nextBody() }
+        val last = nextBody().getJSONArray("messages")
+        for (i in 0 until last.length()) {
+            assertTrue("message $i is empty", last.getJSONObject(i).getJSONArray("content").length() > 0)
+        }
+        // The cut-short reply kept its text and lost the half-made code run.
+        val cut = last.getJSONObject(last.length() - 2).getJSONArray("content")
+        assertEquals(listOf("text"), (0 until cut.length()).map { cut.getJSONObject(it).getString("type") })
+        assertEquals(1, AskEngine.settledPart(JSONArray().put(text("x")).put(tableCall("tu", "srv_c"))).length())
+    }
+
+    @Test
+    fun `a web search asked for while Claude's code waits on a table sets the answer back once`() = runBlocking {
+        val engine = engine()
+        server.enqueue(reply("tool_use", thinking, search("srv_w", "Colorado volleyball injuries"),
+            code("srv_c"), tableCall("tu_9", "srv_c"), container = "cont_a"))
+        server.enqueue(reply("tool_use", thinking, code("srv_d"), tableCall("tu_10", "srv_d"), container = "cont_b"))
+        server.enqueue(reply("end_turn", text("No injuries reported."), container = "cont_b"))
+
+        val answer = engine.ask("Injuries?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        assertNull(answer.error)
+        assertEquals("No injuries reported.", answer.text)
+        val first = nextBody().getJSONArray("messages").getJSONObject(0).getJSONArray("content")
+            .getJSONObject(0).getString("text")
+        assertTrue(first, first.contains(AskEngine.SEARCH_APART))
+
+        // Asked again: the question and the app's note, in a fresh sandbox.
+        val second = nextBody()
+        assertEquals(listOf("user", "user"), roles(second))
+        assertEquals(AskEngine.SEPARATE_NOTE, second.getJSONArray("messages").getJSONObject(1)
+            .getJSONArray("content").getJSONObject(0).getString("text"))
+        assertFalse(second.has("container"))
+
+        val third = nextBody()
+        assertEquals(listOf("user", "user", "assistant", "user"), roles(third))
+        assertEquals("cont_b", third.getString("container"))
+        assertEquals(1, engine.turns)
+
+        // Only once: a second such reply goes back as Anthropic's guide says.
+        val again = engine()
+        server.enqueue(reply("tool_use", search("w1", "q"), code("c1"), tableCall("t1", "c1")))
+        server.enqueue(reply("tool_use", search("w2", "q"), code("c2"), tableCall("t2", "c2")))
+        server.enqueue(reply("end_turn", text("Done.")))
+        again.ask("Injuries?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        repeat(2) { nextBody() }
+        assertEquals(listOf("user", "user", "assistant", "user"), roles(nextBody()))
+    }
+
+    @Test
+    fun `a rejected request says which step failed, how it ended and what the reply before it held`() = runBlocking {
         server.enqueue(reply("pause_turn", text("Looking.")))
         server.enqueue(
             MockResponse().setResponseCode(400).setBody(
@@ -297,42 +358,12 @@ class AskEngineTest {
         val error = answer.error!!
         assertTrue(error, error.startsWith("Anthropic couldn't accept the request: Something about the request."))
         assertTrue(error, error.endsWith(
-            "(For the developer: request 2 of this answer, after pause_turn; it ended with a user message: text. " +
-                "Reply before it: text.)"))
-    }
-
-    @Test
-    fun `a web search asked for while Claude's code waits on a table is dropped before the table goes back`() = runBlocking {
-        val thinking = JSONObject().put("type", "thinking").put("thinking", "").put("signature", "sig")
-        val search = JSONObject().put("type", "server_tool_use").put("id", "srv_w").put("name", "web_search")
-            .put("input", JSONObject().put("query", "Colorado volleyball injuries"))
-        val code = JSONObject().put("type", "server_tool_use").put("id", "srv_c").put("name", "code_execution")
-            .put("input", JSONObject().put("code", "await get_table({'table': 'opponent_rosters'})"))
-        val call = JSONObject().put("type", "tool_use").put("id", "tu_9").put("name", "get_table")
-            .put("input", JSONObject().put("table", "matches"))
-            .put("caller", JSONObject().put("type", "code_execution_20260120").put("tool_id", "srv_c"))
-        server.enqueue(reply("tool_use", thinking, search, code, call))
-        server.enqueue(reply("end_turn", text("No injuries reported.")))
-
-        val answer = engine().ask("Injuries?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
-        assertNull(answer.error)
-        val first = nextBody().getJSONArray("messages").getJSONObject(0).getJSONArray("content")
-            .getJSONObject(0).getString("text")
-        assertTrue(first, first.contains(AskEngine.SEARCH_APART))
-
-        val messages = nextBody().getJSONArray("messages")
-        val sent = messages.getJSONObject(1).getJSONArray("content")
-        assertEquals(listOf("thinking", "server_tool_use", "tool_use"),
-            (0 until sent.length()).map { sent.getJSONObject(it).getString("type") })
-        assertEquals("srv_c", sent.getJSONObject(1).getString("id"))
-        assertEquals("tu_9", messages.getJSONObject(2).getJSONArray("content").getJSONObject(0).getString("tool_use_id"))
-
-        // Followed by a thinking block, the search stays: removing it would invalidate that block.
-        val kept = JSONArray(listOf(search, thinking, code, call))
-        assertEquals(4, AskEngine.withoutWaitingSearches(kept).length())
+            "(For the developer: request 2 of this answer; it ended with a user message: text. " +
+                "Reply before it (claude-opus-5-5, pause_turn, 1 block): text.)"))
         assertEquals(
-            "thinking, server_tool_use web_search (waiting), server_tool_use code_execution (waiting), tool_use get_table",
-            AskEngine.describe(JSONArray(listOf(thinking, search, code, call)))
+            "thinking, server_tool_use web_search (waiting), server_tool_use code_execution (waiting), " +
+                "tool_use get_table via code_execution_20260120",
+            AskEngine.describe(JSONArray(listOf(thinking, search("w", "q"), code("c"), tableCall("t", "c"))))
         )
     }
 
