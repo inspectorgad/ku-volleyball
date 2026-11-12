@@ -90,6 +90,12 @@ class AskEngine(
     // Anthropic message params, appended in full each turn.
     private val conversation = mutableListOf<JSONObject>()
     private var containerId: String? = null
+    // Whether this conversation declares the web search tool, settled by its
+    // first question; null before that. The tool list can't change partway
+    // through: on Claude Opus 5.5 each turn's reasoning is bound to the tools
+    // it was written with, and Anthropic rejects the conversation ("Invalid
+    // signature in thinking block ... The tools list differs") once they do.
+    private var webDeclared: Boolean? = null
 
     val turns: Int get() = conversation.count { it.optString("role") == "user" && hasText(it) }
 
@@ -97,7 +103,17 @@ class AskEngine(
     fun reset() {
         conversation.clear()
         containerId = null
+        webDeclared = null
     }
+
+    /**
+     * True when a question with [webSearch] on can't join the conversation
+     * under way, because that conversation began without web search: [ask]
+     * then starts a new one. Turning search off is fine - the tool stays
+     * declared and the question says not to search.
+     */
+    fun startsNewConversation(webSearch: Boolean): Boolean =
+        webSearch && conversation.isNotEmpty() && webDeclared == false
 
     /**
      * Asks one question and returns the answer. [webSearch] lets Claude search
@@ -115,6 +131,9 @@ class AskEngine(
         webSearch: Boolean = false,
         onStatus: (status: String, partial: String, sources: List<AskSource>) -> Unit = { _, _, _ -> }
     ): AskAnswer {
+        val restarted = startsNewConversation(webSearch)
+        if (restarted) reset()
+        if (conversation.isEmpty()) webDeclared = webSearch
         val mark = conversation.size
         var done = false
         try {
@@ -125,10 +144,9 @@ class AskEngine(
             conversation += JSONObject()
                 .put("role", "user")
                 .put("content", JSONArray().put(textBlock("Today is $today. ${webLine(webSearch)} $question")))
-            // Once the thread holds web results, the tool stays declared so they
-            // still have a tool to belong to; the line above says whether this
-            // question may search.
-            val withWeb = webSearch || searchedBefore()
+            // Fixed for the whole conversation (see webDeclared); the line above
+            // says whether this question may search.
+            val withWeb = webDeclared == true
 
             val usage = LongArray(5) // input, cache write, cache read, output, web searches
             var stop = ""
@@ -166,6 +184,7 @@ class AskEngine(
             }
 
             val notes = mutableListOf<String>()
+            if (restarted) notes += NEW_CONVERSATION_NOTE
             if (stop == "refusal") {
                 conversation.subList(mark, conversation.size).clear()
                 done = true
@@ -288,13 +307,6 @@ class AskEngine(
             .filter { it.optString("type") == "server_tool_use" && it.optString("name") == "web_search" }
             .mapNotNull { it.optJSONObject("input")?.optString("query")?.takeIf { q -> q.isNotBlank() } }
 
-    private fun searchedBefore(): Boolean =
-        conversation.any { m ->
-            blocks(m.optJSONArray("content")).any {
-                it.optString("type") == "server_tool_use" && it.optString("name") == "web_search"
-            }
-        }
-
     /** The Python Claude ran, for anyone who wants to check the working. */
     private fun codeRun(mark: Int): List<String> =
         conversation.drop(mark).filter { it.optString("role") == "assistant" }
@@ -369,6 +381,10 @@ class AskEngine(
 
         /** Searches per question, at most: enough for a scouting report, and a cap on cost. */
         const val MAX_SEARCHES = 5
+
+        const val NEW_CONVERSATION_NOTE =
+            "Web search was turned on, so this question started a new conversation: Claude can't " +
+                "take on web search partway through one."
 
         /** Told to Claude with every question, so it knows whether this one may search. */
         fun webLine(on: Boolean) =

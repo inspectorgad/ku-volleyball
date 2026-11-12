@@ -110,6 +110,12 @@ let containerId = null;
 let running = null; // the stream in flight, for Stop
 let shown = []; // the messages the answer on screen was drawn from
 let asking = false; // a question is in hand, from loading the data to the answer
+// Whether this conversation declares the web search tool, settled by its first
+// question (null before that). The tool list can't change partway through: on
+// Claude Opus 5.5 each turn's reasoning is bound to the tools it was written
+// with, and Anthropic rejects the conversation once they differ. Turning search
+// on in a conversation begun without it therefore starts a new one.
+let webDeclared = null;
 
 // --- The data -------------------------------------------------------------------
 
@@ -137,13 +143,17 @@ async function ask(question) {
   const client = new Anthropic({ apiKey: key, dangerouslyAllowBrowser: true });
 
   asking = true;
+  const web = $("ask-web").checked;
+  const restarted = web && conversation.length > 0 && webDeclared === false;
+  if (restarted) newConversation();
+  if (!conversation.length) webDeclared = web;
   const turn = addTurn(question);
+  if (restarted) note(turn, "Web search was turned on, so this question started a new conversation: " +
+    "Claude can't take on web search partway through one.");
   let mark = conversation.length;
   shown = []; // nothing drawn yet for this question
-  const web = $("ask-web").checked;
-  // Once the thread holds web results the tool stays declared, so they still
-  // have a tool to belong to; the question says whether it may search.
-  const tools = web || searchedBefore() ? [...TOOLS, WEB_SEARCH] : TOOLS;
+  // Fixed for the whole conversation; the question says whether it may search.
+  const tools = webDeclared ? [...TOOLS, WEB_SEARCH] : TOOLS;
   setBusy(true, "Loading the season data…");
   try {
     await loadPack();
@@ -242,6 +252,14 @@ async function ask(question) {
   }
 }
 
+function newConversation() {
+  conversation = [];
+  containerId = null;
+  webDeclared = null;
+  $("ask-thread").replaceChildren();
+  $("ask-new").hidden = true;
+}
+
 // One get_table call answered from the loaded data.
 function tableResult(call) {
   const name = call.input?.table;
@@ -261,11 +279,6 @@ function explainError(e) {
   if (e instanceof Anthropic.APIConnectionError) return "Couldn't reach api.anthropic.com. Check your connection - some networks block it.";
   if (e instanceof Anthropic.APIError) return `Anthropic returned an error (${e.status}): ${e.message}`;
   return "Something went wrong: " + (e?.message || e);
-}
-
-function searchedBefore() {
-  return conversation.some((m) => Array.isArray(m.content) &&
-    m.content.some((b) => b.type === "server_tool_use" && b.name === "web_search"));
 }
 
 function costLine(cfg, u, model) {
@@ -487,12 +500,7 @@ function init() {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submit(); }
   });
   $("ask-stop").onclick = () => running?.abort();
-  $("ask-new").onclick = () => {
-    conversation = [];
-    containerId = null;
-    $("ask-thread").replaceChildren();
-    $("ask-new").hidden = true;
-  };
+  $("ask-new").onclick = newConversation;
   const ex = $("ask-examples");
   for (const q of EXAMPLES) {
     const b = el("button", "chip ask-example", q);

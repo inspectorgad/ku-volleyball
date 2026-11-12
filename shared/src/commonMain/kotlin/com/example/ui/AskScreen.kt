@@ -88,7 +88,9 @@ const val EXPLAIN_ASK_WEB =
         "numbered to match the [1], [2] marks in the text. Statistics still come from the box scores. " +
         "Each search costs 1 cent on your Anthropic account plus the cost of reading the pages, so a " +
         "question can cost several cents more; it uses at most 5 searches. Web pages can be wrong or " +
-        "out of date, so check the dates on the sources."
+        "out of date, so check the dates on the sources. Turning it on partway through a conversation " +
+        "starts a new one with your next question, because Claude can't take on web search partway " +
+        "through; turning it off keeps the conversation going."
 
 const val EXPLAIN_ASK_KEY =
     "This uses your own Anthropic API key, so questions are billed to your Anthropic account - " +
@@ -130,6 +132,10 @@ object AskSession {
 
     fun ask(question: String, key: String, model: AskModel, webSearch: Boolean = false) {
         if (running != null) return
+        // A conversation begun without web search can't take it on: the engine
+        // starts a new one, so the earlier turns leave the screen too. (After
+        // New conversation the list is already empty, so this changes nothing.)
+        if (engine.startsNewConversation(webSearch)) turns.clear()
         val turn = AskTurn(question).also { turns += it }
         val today = todayIso()
         // Off the main thread: the requests carry the season's tables, and

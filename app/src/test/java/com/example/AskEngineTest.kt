@@ -185,8 +185,8 @@ class AskEngineTest {
         assertTrue(body.getJSONArray("messages").getJSONObject(0).getJSONArray("content").getJSONObject(0)
             .getString("text").contains("Web search is on for this question."))
 
-        // Turned off for a follow-up: the tool stays declared, since the thread
-        // holds its results, and the question says search is off.
+        // Turned off for a follow-up: the tool stays declared, since the tool
+        // list can't change partway through, and the question says search is off.
         server.enqueue(reply("end_turn", text("From the tables only.")))
         engine.ask("And their serving?", "sk-ant-test", opus, "2026-11-12", webSearch = false)
         val body2 = nextBody()
@@ -224,6 +224,48 @@ class AskEngineTest {
         }
         assertEquals(listOf("https://x.example/a"), answer.sources.map { it.title })
         assertTrue(partials.any { (text, titles) -> text.contains("[1]") && titles == listOf("https://x.example/a") })
+    }
+
+    @Test
+    fun `the tool list never changes partway through a conversation`() = runBlocking {
+        val engine = engine()
+        // On from the first question, off later, with no search ever made: still declared.
+        server.enqueue(reply("end_turn", text("One.")))
+        server.enqueue(reply("end_turn", text("Two.")))
+        engine.ask("One?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        engine.ask("Two?", "sk-ant-test", opus, "2026-11-12", webSearch = false)
+        assertEquals(3, nextBody().getJSONArray("tools").length())
+        assertEquals(3, nextBody().getJSONArray("tools").length())
+
+        // Off from the first question, then turned on: a new conversation, with a note.
+        engine.reset()
+        server.enqueue(reply("end_turn", text("Three.")))
+        engine.ask("Three?", "sk-ant-test", opus, "2026-11-12", webSearch = false)
+        assertEquals(2, nextBody().getJSONArray("tools").length())
+        assertFalse(engine.startsNewConversation(false))
+        assertTrue(engine.startsNewConversation(true))
+        server.enqueue(reply("end_turn", text("Four.")))
+        val four = engine.ask("Four?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        assertEquals(AskEngine.NEW_CONVERSATION_NOTE, four.notes.first())
+        val body = nextBody()
+        assertEquals(3, body.getJSONArray("tools").length())
+        assertEquals(1, body.getJSONArray("messages").length())
+        assertFalse(body.has("container"))
+        assertFalse(engine.startsNewConversation(true))
+    }
+
+    @Test
+    fun `a first question that fails leaves the next one free to choose`() = runBlocking {
+        val engine = engine()
+        server.enqueue(reply("refusal"))
+        engine.ask("Off-topic", "sk-ant-test", opus, "2026-11-12", webSearch = false)
+        server.takeRequest()
+        // The thread is empty again, so turning search on is not a restart.
+        assertFalse(engine.startsNewConversation(true))
+        server.enqueue(reply("end_turn", text("OK.")))
+        val answer = engine.ask("News?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        assertFalse(answer.notes.contains(AskEngine.NEW_CONVERSATION_NOTE))
+        assertEquals(3, nextBody().getJSONArray("tools").length())
     }
 
     @Test
