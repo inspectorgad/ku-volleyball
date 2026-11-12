@@ -509,11 +509,16 @@ private fun AskInput(
     }
 }
 
-/** The Preview button's question; the dashboard's ask.js asks the same. */
+/**
+ * The Preview button's question; the dashboard's ask.js asks the same. The
+ * injury and lineup news is looked up only when web search is on: each
+ * question tells Claude whether it is.
+ */
 fun previewQuestion(date: String, versus: String, opponent: String) =
     "Give me a short scouting report for the $date match $versus $opponent: their season so far and " +
         "what they do well, our last meeting and any common opponents, the players to watch on each " +
-        "side, how we match up, and the win model's estimate."
+        "side, how we match up, the win model's estimate, and, if web search is on, any injury or " +
+        "lineup news for either team."
 
 /** The Recap button's question. */
 fun recapQuestion(date: String, versus: String, opponent: String) =

@@ -621,7 +621,8 @@ function init() {
 window.kuPreviewQuestion = (date, versus, opponent) =>
   `Give me a short scouting report for the ${date} match ${versus} ${opponent}: their season so far and ` +
   "what they do well, our last meeting and any common opponents, the players to watch on each " +
-  "side, how we match up, and the win model's estimate.";
+  "side, how we match up, the win model's estimate, and, if web search is on, any injury or " +
+  "lineup news for either team.";
 window.kuRecapQuestion = (date, versus, opponent) =>
   `Recap the ${date} match ${versus} ${opponent}: the result and how each set went, our standout ` +
   "players and theirs, how the night compared with our season averages, and which performance " +
