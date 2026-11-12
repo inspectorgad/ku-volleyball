@@ -227,6 +227,49 @@ class AskEngineTest {
     }
 
     @Test
+    fun `a paused answer is resumed without ever ending on Claude's own reply unless a search is pending`() = runBlocking {
+        val engine = engine()
+        val search = { id: String, q: String ->
+            JSONObject().put("type", "server_tool_use").put("id", id).put("name", "web_search")
+                .put("input", JSONObject().put("query", q))
+        }
+        val results = { id: String ->
+            JSONObject().put("type", "web_search_tool_result").put("tool_use_id", id)
+                .put("content", JSONArray().put(JSONObject().put("type", "web_search_result")
+                    .put("url", "https://cubuffs.com/r").put("title", "Roster").put("encrypted_content", "enc")))
+        }
+        // 1. Paused on a search that hasn't run yet: goes back as it is.
+        server.enqueue(reply("pause_turn", text("Checking the news."), search("srv_1", "Colorado volleyball injuries")))
+        // 2. Paused after a finished search and some text: needs a nudge.
+        server.enqueue(reply("pause_turn", results("srv_1"), text("Colorado's lineup")))
+        server.enqueue(reply("end_turn", text("has no reported injuries.")))
+
+        val answer = engine.ask("Any injuries for Colorado?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
+        assertNull(answer.error)
+        assertTrue(answer.text, answer.text.endsWith("has no reported injuries."))
+        assertEquals(listOf("Colorado volleyball injuries"), answer.searches)
+
+        nextBody()
+        val second = nextBody().getJSONArray("messages")
+        assertEquals(2, second.length())
+        assertEquals("assistant", second.getJSONObject(1).getString("role"))
+        assertEquals("server_tool_use",
+            second.getJSONObject(1).getJSONArray("content").getJSONObject(1).getString("type"))
+
+        val third = nextBody().getJSONArray("messages")
+        assertEquals(4, third.length())
+        val last = third.getJSONObject(3)
+        assertEquals("user", last.getString("role"))
+        assertEquals(AskEngine.CONTINUE_NOTE, last.getJSONArray("content").getJSONObject(0).getString("text"))
+        // The nudge isn't one of the reader's questions.
+        assertEquals(1, engine.turns)
+
+        assertTrue(AskEngine.waitsOnServerTool(JSONArray().put(search("a", "q"))))
+        assertFalse(AskEngine.waitsOnServerTool(JSONArray().put(search("a", "q")).put(results("a"))))
+        assertFalse(AskEngine.waitsOnServerTool(JSONArray().put(text("Hi"))))
+    }
+
+    @Test
     fun `the tool list never changes partway through a conversation`() = runBlocking {
         val engine = engine()
         // On from the first question, off later, with no search ever made: still declared.

@@ -97,7 +97,7 @@ class AskEngine(
     // signature in thinking block ... The tools list differs") once they do.
     private var webDeclared: Boolean? = null
 
-    val turns: Int get() = conversation.count { it.optString("role") == "user" && hasText(it) }
+    val turns: Int get() = conversation.count { it.optString("role") == "user" && hasText(it) && !isContinueNote(it) }
 
     /** Forgets the thread, so the next question starts fresh. */
     fun reset() {
@@ -181,6 +181,15 @@ class AskEngine(
                     continue
                 }
                 if (stop != "pause_turn") break
+                // Anthropic paused a long turn (a run of web searches, say). It
+                // picks the turn up again from a search or code run that hasn't
+                // happened yet, so a reply ending in one goes back as it is. A
+                // reply that stopped anywhere else would be the last message,
+                // which these models refuse as a prefill: ask Claude to carry on.
+                if (!waitsOnServerTool(content)) {
+                    conversation += JSONObject().put("role", "user")
+                        .put("content", JSONArray().put(textBlock(CONTINUE_NOTE)))
+                }
             }
 
             val notes = mutableListOf<String>()
@@ -415,6 +424,28 @@ class AskEngine(
 
         private fun hasText(message: JSONObject) =
             blocks(message.optJSONArray("content")).any { it.optString("type") == "text" }
+
+        /**
+         * Sent in the reader's place when a paused answer has to be resumed by
+         * a new message (see [ask]); it isn't one of the reader's questions.
+         */
+        const val CONTINUE_NOTE =
+            "(Sent by the app, not the reader: Anthropic paused your answer partway through. " +
+                "Carry on from where it stopped, without repeating what you've already written.)"
+
+        private fun isContinueNote(message: JSONObject) =
+            blocks(message.optJSONArray("content")).any { it.optString("text") == CONTINUE_NOTE }
+
+        /**
+         * True when a paused reply ends on a search or code run Anthropic hasn't
+         * carried out yet: a server tool call with no result after it. Sending
+         * that reply back as it is resumes the turn.
+         */
+        fun waitsOnServerTool(content: JSONArray): Boolean {
+            val all = blocks(content)
+            val answered = all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
+            return all.any { it.optString("type") == "server_tool_use" && it.optString("id") !in answered }
+        }
 
         // The basic web search, called by Claude directly rather than from its
         // Python: its results and citations then reach the answer as they are,

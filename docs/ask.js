@@ -41,6 +41,19 @@ const MODELS = {
 const DEFAULT_MODEL = "claude-opus-5-5";
 // Round trips per question: pause_turn resumptions plus get_table answers.
 const MAX_HOPS = 16;
+
+// Sent in the reader's place when a paused answer has to be resumed by a new
+// message; it isn't one of the reader's questions. Same words as the app's.
+const CONTINUE_NOTE = "(Sent by the app, not the reader: Anthropic paused your answer partway through. " +
+  "Carry on from where it stopped, without repeating what you've already written.)";
+
+// True when a paused reply ends on a search or code run Anthropic hasn't
+// carried out yet: a server tool call with no result after it. Sending that
+// reply back as it is resumes the turn.
+function waitsOnServerTool(content) {
+  const answered = new Set(content.filter((b) => b.tool_use_id).map((b) => b.tool_use_id));
+  return content.some((b) => b.type === "server_tool_use" && !answered.has(b.id));
+}
 const TABLES = ["matches", "sets", "ku_lines", "team_totals", "opponent_lines", "goals", "upcoming",
   "standings", "poll", "roster", "definitions",
   "opponent_rosters", "opponent_form", "team_serving", "national_leaders", "d1_results"];
@@ -209,6 +222,14 @@ async function ask(question) {
         continue;
       }
       if (final.stop_reason !== "pause_turn") break;
+      // Anthropic paused a long turn (a run of web searches, say). It picks the
+      // turn up again from a search or code run that hasn't happened yet, so a
+      // reply ending in one goes back as it is. A reply that stopped anywhere
+      // else would be the last message, which these models refuse as a
+      // prefill: ask Claude to carry on.
+      if (!waitsOnServerTool(final.content)) {
+        conversation.push({ role: "user", content: [{ type: "text", text: CONTINUE_NOTE }] });
+      }
     }
 
     // Taken before any rollback, so the sources and code shown always match
