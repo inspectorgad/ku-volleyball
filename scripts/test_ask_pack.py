@@ -110,6 +110,8 @@ class AskPackTest(unittest.TestCase):
             self.assertIn(t, self.p["definitions"])
             self.assertIn(t, self.p["system_prompt"])
         self.assertIn("web_search", self.p["system_prompt"])
+        # Two code runs at once can leave a table request that Anthropic refuses to resume.
+        self.assertIn("Run one piece of code at a time", self.p["system_prompt"])
 
     def test_an_exhibition_against_a_conference_school_is_not_a_conference_match(self):
         seed = dict(SEED, matches=[{"date": "2026-08-20", "opponent": "Houston (Exh.)", "season": "2026"}])
