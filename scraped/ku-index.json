@@ -633,10 +633,10 @@
   },
   "6625752": {
    "date": "2026-11-12",
-   "final": false,
+   "final": true,
    "home": "Colorado",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   },
   "6627522": {
    "date": "2026-10-30",
@@ -8312,6 +8312,27 @@
    },
    "conferenceGame": true
   },
+  "6625752": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "home": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 0,
+    "winner": false,
+    "rank": 14,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8707,6 +8728,27 @@
     "score": 3,
     "winner": true,
     "rank": 24,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6625843": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "home": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": 23,
+    "inConference": true
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 1,
+    "winner": false,
+    "rank": 7,
     "inConference": true
    },
    "conferenceGame": true
@@ -9358,6 +9400,27 @@
     "score": 1,
     "winner": false,
     "rank": 25,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6626581": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "home": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 3,
+    "winner": true,
+    "rank": null,
     "inConference": true
    },
    "conferenceGame": true
@@ -11583,6 +11646,27 @@
     "seo": "arizona",
     "score": 3,
     "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6628045": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 0,
+    "winner": false,
     "rank": null,
     "inConference": true
    },
@@ -14154,6 +14238,14 @@
    ],
    "boxscored": true
   },
+  "6625752": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "teams": [
+    "Colorado"
+   ],
+   "boxscored": true
+  },
   "6625787": {
    "date": "2026-08-30",
    "season": "2026",
@@ -14319,6 +14411,15 @@
    "teams": [
     "Kansas St.",
     "Baylor"
+   ],
+   "boxscored": true
+  },
+  "6625843": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "teams": [
+    "Baylor",
+    "BYU"
    ],
    "boxscored": true
   },
@@ -14794,6 +14895,15 @@
    ],
    "boxscored": true
   },
+  "6626308": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "teams": [
+    "SMU",
+    "Louisville"
+   ],
+   "boxscored": true
+  },
   "6626318": {
    "date": "2026-09-18",
    "season": "2026",
@@ -15158,6 +15268,14 @@
    "teams": [
     "West Virginia",
     "Colorado"
+   ],
+   "boxscored": true
+  },
+  "6626581": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
    ],
    "boxscored": true
   },
@@ -16802,6 +16920,15 @@
    "season": "2026",
    "teams": [
     "Arizona"
+   ],
+   "boxscored": true
+  },
+  "6628045": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "teams": [
+    "Utah",
+    "Texas Tech"
    ],
    "boxscored": true
   },
