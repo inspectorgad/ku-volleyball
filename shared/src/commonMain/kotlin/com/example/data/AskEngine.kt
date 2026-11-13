@@ -50,8 +50,7 @@ data class AskAnswer(
     val searches: List<String> = emptyList()
 )
 
-/** A plain-words failure, shown in place of an answer. */
-/** [code] is Anthropic's HTTP status when it answered with an error. */
+/** A plain-words failure, shown in place of an answer; [code] is Anthropic's HTTP status, if it answered. */
 class AskException(message: String, val code: Int? = null) : Exception(message)
 
 /**
@@ -157,11 +156,13 @@ class AskEngine(
             var startedOver = false // after Anthropic refused to carry on (see below)
             var hops = 0
             var limit = MAX_HOPS
+            var pendingStatus: String? = null // shown for the next request instead of "Still working…"
             while (hops < limit) {
                 val hop = hops++
                 answerWithSources(mark).let { (text, sources) ->
-                    onStatus(if (hop == 0) "Thinking…" else "Still working…", text, sources)
+                    onStatus(pendingStatus ?: if (hop == 0) "Thinking…" else "Still working…", text, sources)
                 }
+                pendingStatus = null
                 val reply = try {
                     send(apiKey, requestBody(model, system, withWeb), requestDetail(hop, before))
                 } catch (e: AskException) {
@@ -172,15 +173,17 @@ class AskEngine(
                     // aside once and the question asked again. A first request
                     // that fails is a real error and goes to the reader.
                     val continuing = conversation.drop(mark + 1).any { it.optString("role") == "assistant" }
-                    if (e.code != 400 || !continuing || startedOver) throw e
+                    // Only with requests left to try again; otherwise the reader gets the error.
+                    if (e.code != 400 || !continuing || startedOver || hops >= 2 * MAX_HOPS) throw e
                     startedOver = true
                     firstFailure = e.message
                     rollBack(mark + 1)
                     containerId = null
+                    before = null // the set-aside reply isn't part of the next request
                     conversation += JSONObject().put("role", "user")
                         .put("content", JSONArray().put(textBlock(RESTART_NOTE)))
                     limit = minOf(hops + MAX_HOPS, 2 * MAX_HOPS)
-                    onStatus("Starting the answer over…", "", emptyList())
+                    pendingStatus = "Starting the answer over…"
                     continue
                 }
                 before = reply
@@ -208,9 +211,11 @@ class AskEngine(
                         asksAgain++
                         rollBack(mark + 1)
                         containerId = null // this reply's code is paused in it
+                        before = null // the set-aside reply isn't part of the next request
                         conversation += JSONObject().put("role", "user")
                             .put("content", JSONArray().put(textBlock(SEPARATE_NOTE)))
                         limit = minOf(hops + MAX_HOPS, 2 * MAX_HOPS)
+                        pendingStatus = "Starting the answer over…"
                         continue
                     }
                     // Claude's code asked for tables: answer every pending call
@@ -262,13 +267,20 @@ class AskEngine(
 
             val notes = mutableListOf<String>()
             if (restarted) notes += NEW_CONVERSATION_NOTE
-            if (asksAgain > 0 || startedOver) notes += STARTED_OVER_NOTE
+            if (asksAgain > 0) notes += SET_ASIDE_NOTE
+            if (startedOver) {
+                notes += STARTED_OVER_NOTE
+                // Kept even when the second attempt works, so a failure that keeps
+                // happening (say, Anthropic stops accepting withClientCallsLast's
+                // order) shows up in a screenshot instead of only in the cost.
+                notes += "For the developer: started over after: $firstFailure"
+            }
             if (stop == "refusal") {
                 rollBack(mark)
                 done = true
                 return AskAnswer(
                     text = "",
-                    notes = listOf(costLine(model, usage)),
+                    notes = notes + costLine(model, usage),
                     error = "Claude declined to answer that one. Try rephrasing it as a question about the stats."
                 )
             }
@@ -582,6 +594,11 @@ class AskEngine(
         const val STARTED_OVER_NOTE =
             "Claude started this answer over partway through, because Anthropic couldn't continue the " +
                 "first attempt. The cost below covers both."
+
+        /** Shown under an answer set aside for a search asked for while Claude's Python waited (see [ask]). */
+        const val SET_ASIDE_NOTE =
+            "Claude started this answer over partway through, because it searched the web while its " +
+                "Python was waiting on the season data, which the app can't handle. The cost below covers both."
 
         /** A server tool's result: a block that answers a call but isn't the app's own tool_result. */
         private fun isServerResult(b: JSONObject) =

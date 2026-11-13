@@ -319,6 +319,7 @@ class AskEngineTest {
         val answer = engine.ask("Injuries?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
         assertNull(answer.error)
         assertEquals("No injuries reported.", answer.text)
+        assertEquals(AskEngine.SET_ASIDE_NOTE, answer.notes.first())
         val first = nextBody().getJSONArray("messages").getJSONObject(0).getJSONArray("content")
             .getJSONObject(0).getString("text")
         assertTrue(first, first.contains(AskEngine.SEARCH_APART))
@@ -359,9 +360,9 @@ class AskEngineTest {
         val answer = engine().ask("News?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
         val error = answer.error!!
         assertTrue(error, error.startsWith("Anthropic couldn't accept the request: Something else."))
+        // Request 3 starts over from the question, so it continues no earlier reply.
         assertTrue(error, error.contains(
-            "(For the developer: request 3 of this answer; it ended with a user message: text. " +
-                "Reply before it (claude-opus-5-5, pause_turn, 1 block): text.)"))
+            "(For the developer: request 3 of this answer; it ended with a user message: text.)"))
         assertTrue(error, error.contains(
             "Before starting over: Anthropic couldn't accept the request: Something about the request.\n\n" +
                 "(For the developer: request 2 of this answer; it ended with a user message: text. " +
@@ -383,6 +384,9 @@ class AskEngineTest {
         assertNull(answer.error)
         assertEquals("Done.", answer.text)
         assertEquals(AskEngine.STARTED_OVER_NOTE, answer.notes.first())
+        // Why the first attempt stopped stays visible even though the second worked.
+        assertTrue(answer.notes[1], answer.notes[1].startsWith(
+            "For the developer: started over after: Anthropic couldn't accept the request: messages.1:"))
         nextBody(); nextBody()
         val third = nextBody()
         assertEquals(listOf("user", "user"), roles(third))
