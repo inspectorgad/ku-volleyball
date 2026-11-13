@@ -319,6 +319,7 @@ class AskEngineTest {
         val answer = engine.ask("Injuries?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
         assertNull(answer.error)
         assertEquals("No injuries reported.", answer.text)
+        assertEquals(AskEngine.SET_ASIDE_NOTE, answer.notes.first())
         val first = nextBody().getJSONArray("messages").getJSONObject(0).getJSONArray("content")
             .getJSONObject(0).getString("text")
         assertTrue(first, first.contains(AskEngine.SEARCH_APART))
@@ -345,26 +346,82 @@ class AskEngineTest {
         assertEquals(listOf("user", "user", "assistant", "user"), roles(nextBody()))
     }
 
+    private fun rejected(message: String) = MockResponse().setResponseCode(400).setBody(
+        JSONObject().put("type", "error").put("error", JSONObject().put("type", "invalid_request_error")
+            .put("message", message)).toString()
+    )
+
     @Test
     fun `a rejected request says which step failed, how it ended and what the reply before it held`() = runBlocking {
         server.enqueue(reply("pause_turn", text("Looking.")))
-        server.enqueue(
-            MockResponse().setResponseCode(400).setBody(
-                JSONObject().put("type", "error").put("error", JSONObject().put("type", "invalid_request_error")
-                    .put("message", "Something about the request.")).toString()
-            )
-        )
+        server.enqueue(rejected("Something about the request."))
+        // Refused partway through, the answer is started over once; refused again, the reader sees both.
+        server.enqueue(rejected("Something else."))
         val answer = engine().ask("News?", "sk-ant-test", opus, "2026-11-12", webSearch = true)
         val error = answer.error!!
-        assertTrue(error, error.startsWith("Anthropic couldn't accept the request: Something about the request."))
-        assertTrue(error, error.endsWith(
-            "(For the developer: request 2 of this answer; it ended with a user message: text. " +
+        assertTrue(error, error.startsWith("Anthropic couldn't accept the request: Something else."))
+        // Request 3 starts over from the question, so it continues no earlier reply.
+        assertTrue(error, error.contains(
+            "(For the developer: request 3 of this answer; it ended with a user message: text.)"))
+        assertTrue(error, error.contains(
+            "Before starting over: Anthropic couldn't accept the request: Something about the request.\n\n" +
+                "(For the developer: request 2 of this answer; it ended with a user message: text. " +
                 "Reply before it (claude-opus-5-5, pause_turn, 1 block): text.)"))
         assertEquals(
             "thinking, server_tool_use web_search (waiting), server_tool_use code_execution (waiting), " +
                 "tool_use get_table via code_execution_20260120",
             AskEngine.describe(JSONArray(listOf(thinking, search("w", "q"), code("c"), tableCall("t", "c"))))
         )
+    }
+
+    @Test
+    fun `an answer Anthropic won't continue is started over once, and a first request that fails is not`() = runBlocking {
+        val engine = engine()
+        server.enqueue(reply("tool_use", code("srv_c"), tableCall("tu_1", "srv_c"), container = "cont_a"))
+        server.enqueue(rejected("messages.1: `tool_use` ids were found without `tool_result` blocks immediately after"))
+        server.enqueue(reply("end_turn", text("Done."), container = "cont_b"))
+        val answer = engine.ask("Recap?", "sk-ant-test", opus, "2026-11-13", webSearch = true)
+        assertNull(answer.error)
+        assertEquals("Done.", answer.text)
+        assertEquals(AskEngine.STARTED_OVER_NOTE, answer.notes.first())
+        // Why the first attempt stopped stays visible even though the second worked.
+        assertTrue(answer.notes[1], answer.notes[1].startsWith(
+            "For the developer: started over after: Anthropic couldn't accept the request: messages.1:"))
+        nextBody(); nextBody()
+        val third = nextBody()
+        assertEquals(listOf("user", "user"), roles(third))
+        assertEquals(AskEngine.RESTART_NOTE, third.getJSONArray("messages").getJSONObject(1)
+            .getJSONArray("content").getJSONObject(0).getString("text"))
+        assertFalse(third.has("container"))
+        assertEquals(1, engine.turns)
+
+        // A first request Anthropic rejects is a real error: no second try.
+        val fresh = engine()
+        server.enqueue(rejected("Bad request."))
+        val failed = fresh.ask("News?", "sk-ant-test", opus, "2026-11-13")
+        assertTrue(failed.error!!, failed.error!!.startsWith("Anthropic couldn't accept the request: Bad request."))
+        assertEquals(4, server.requestCount)
+    }
+
+    @Test
+    fun `results that come after a table request are moved before it`() = runBlocking {
+        // Two code runs at once: one paused on get_table, the other finished after it.
+        val finished = JSONObject().put("type", "code_execution_tool_result").put("tool_use_id", "srv_b")
+            .put("content", JSONObject().put("type", "code_execution_result").put("stdout", "ok"))
+        server.enqueue(reply("tool_use", thinking, code("srv_a"), code("srv_b"), tableCall("tu_1", "srv_a"), finished))
+        server.enqueue(reply("end_turn", text("Done.")))
+        engine().ask("Recap?", "sk-ant-test", opus, "2026-11-13")
+        nextBody()
+        val sent = nextBody().getJSONArray("messages").getJSONObject(1).getJSONArray("content")
+        assertEquals(
+            listOf("thinking", "server_tool_use", "server_tool_use", "code_execution_tool_result", "tool_use"),
+            (0 until sent.length()).map { sent.getJSONObject(it).getString("type") }
+        )
+        // Left alone when a thinking block follows the table request, or when nothing needs moving.
+        val withThinking = JSONArray(listOf(code("a"), tableCall("t", "a"), thinking, finished))
+        assertEquals("tool_use", AskEngine.withClientCallsLast(withThinking).getJSONObject(1).getString("type"))
+        val plain = JSONArray(listOf(code("a"), tableCall("t", "a")))
+        assertTrue(AskEngine.withClientCallsLast(plain) === plain)
     }
 
     @Test

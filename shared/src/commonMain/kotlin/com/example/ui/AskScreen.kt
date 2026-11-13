@@ -148,10 +148,10 @@ object AskSession {
                 resetting?.join()
                 val result = engine.ask(question, key, model, today, webSearch) { status, partial, sources ->
                     turn.status = status
-                    if (partial.isNotEmpty()) {
-                        turn.answer = partial
-                        turn.sources = sources
-                    }
+                    // Every update, empty ones included: an answer started over
+                    // partway through must clear what the first attempt showed.
+                    turn.answer = partial
+                    turn.sources = sources
                 }
                 turn.answer = result.text
                 turn.code = result.code

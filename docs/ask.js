@@ -56,6 +56,39 @@ const SEPARATE_NOTE = "(Sent by the app, not the reader: your last step asked fo
 // Times an answer is set back and asked again for that.
 const MAX_ASK_AGAIN = 1;
 
+// Sent in the reader's place when Anthropic refused to carry on with an answer
+// and it was started over; same words as the app's.
+const RESTART_NOTE = "(Sent by the app, not the reader: Anthropic couldn't carry on with your answer, so it was set " +
+  "aside. Start again. Run one piece of Python at a time, and run your searches and your " +
+  "Python in separate steps.)";
+// Shown under an answer that was started over, since its cost covers both attempts.
+const STARTED_OVER_NOTE = "Claude started this answer over partway through, because Anthropic couldn't continue the " +
+  "first attempt. The cost below covers both.";
+// Shown under an answer set aside for a search asked for while Claude's Python waited.
+const SET_ASIDE_NOTE = "Claude started this answer over partway through, because it searched the web while its " +
+  "Python was waiting on the season data, which the app can't handle. The cost below covers both.";
+
+// A server tool's result: a block that answers a call but isn't the page's own tool_result.
+const isServerResult = (b) => !!b.tool_use_id && b.type !== "tool_result";
+
+// Claude's reply with any search or code results that came after its table
+// requests moved to just before them. When Claude runs two pieces of Python at
+// once, one can finish after the other has paused on get_table; Anthropic then
+// lists that result after the table request, and refused the reply sent back
+// that way ("tool_use ids were found without tool_result blocks immediately
+// after"). Results pair with their calls by id, not position. Left as it is
+// when anything else follows a table request, or when a thinking block does,
+// since moving a block from before a thinking block invalidates it.
+function withClientCallsLast(content) {
+  const first = content.findIndex((b) => b.type === "tool_use");
+  if (first < 0) return content;
+  const tail = content.slice(first);
+  const results = tail.filter(isServerResult);
+  if (!results.length) return content;
+  if (tail.some((b) => b.type !== "tool_use" && !isServerResult(b))) return content;
+  return [...content.slice(0, first), ...results, ...tail.filter((b) => b.type === "tool_use")];
+}
+
 // Asked of Claude with every web-search question; same words as the app's.
 const SEARCH_APART = "Search before or after running Python, not in the same step: the app can't " +
   "run a search while your code is waiting on get_table.";
@@ -266,6 +299,7 @@ async function ask(question) {
   const tools = webDeclared ? [...TOOLS, WEB_SEARCH] : TOOLS;
   setBusy(true, "Loading the season data…");
   let detail = ""; // where the last request sat, for a rejected request's error
+  let firstFailure = ""; // why the first attempt stopped, if it was started over
   try {
     await loadPack();
     conversation.push({ role: "user", content: [
@@ -275,8 +309,13 @@ async function ask(question) {
     const usage = { input: 0, write: 0, read: 0, output: 0, searches: 0 };
     let final = null;
     let asksAgain = 0;
-    for (let hop = 0; hop < MAX_HOPS; hop++) {
-      setBusy(true, hop ? "Still working…" : "Thinking…");
+    let startedOver = false; // after Anthropic refused to carry on (see below)
+    let limit = MAX_HOPS;
+    let previous = null; // the reply the next request continues, for a rejected request's error
+    let pendingStatus = null; // shown for the next request instead of "Still working…"
+    for (let hop = 0; hop < limit; hop++) {
+      setBusy(true, pendingStatus || (hop ? "Still working…" : "Thinking…"));
+      pendingStatus = null;
       const params = {
         model,
         max_tokens: 16000,
@@ -288,7 +327,7 @@ async function ask(question) {
         ...(cfg.effort ? { output_config: { effort: cfg.effort } } : {}),
         ...(cfg.fallbacks ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" } : {}),
       };
-      detail = requestDetail(hop, final);
+      detail = requestDetail(hop, previous);
       running = client.beta.messages.stream(params);
       running.on("streamEvent", (ev) => {
         if (ev.type === "content_block_start" && ev.content_block.type === "server_tool_use") {
@@ -302,8 +341,34 @@ async function ask(question) {
         shown = [...earlier, running.currentMessage];
         renderAnswer(turn, shown);
       });
-      final = await running.finalMessage();
+      try {
+        final = await running.finalMessage();
+      } catch (e) {
+        // Anthropic refused to carry on with an answer partway through: a reply
+        // of its own it wouldn't take back, the kind of quirk behind
+        // withClientCallsLast and the waiting search below. Rather than fail,
+        // the answer so far is set aside once and the question asked again. A
+        // first request that fails is a real error and goes to the reader.
+        const continuing = conversation.slice(mark + 1).some((m) => m.role === "assistant");
+        // Only with requests left to try again; otherwise the reader gets the error.
+        if (!(e instanceof Anthropic.BadRequestError) || !continuing || startedOver ||
+            hop + 1 >= 2 * MAX_HOPS) throw e;
+        startedOver = true;
+        firstFailure = explainError(e) + " " + detail + (e.requestID ? ` (request ${e.requestID})` : "");
+        running = null;
+        rollBack(mark + 1);
+        containerId = null;
+        previous = null; // the set-aside reply isn't part of the next request
+        conversation.push({ role: "user", content: [{ type: "text", text: RESTART_NOTE }] });
+        limit = Math.min(hop + 1 + MAX_HOPS, 2 * MAX_HOPS);
+        cancelDraw();
+        shown = [];
+        renderAnswer(turn, conversation.slice(mark));
+        pendingStatus = "Starting the answer over…";
+        continue;
+      }
       running = null;
+      previous = final;
       const u = final.usage || {};
       usage.input += u.input_tokens || 0;
       usage.write += u.cache_creation_input_tokens || 0;
@@ -324,12 +389,19 @@ async function ask(question) {
           asksAgain++;
           rollBack(mark + 1);
           containerId = null; // this reply's code is paused in it
+          previous = null; // the set-aside reply isn't part of the next request
           conversation.push({ role: "user", content: [{ type: "text", text: SEPARATE_NOTE }] });
+          limit = Math.min(hop + 1 + MAX_HOPS, 2 * MAX_HOPS);
+          cancelDraw();
+          shown = [];
+          renderAnswer(turn, conversation.slice(mark));
+          pendingStatus = "Starting the answer over…";
           continue;
         }
         // Claude's code asked for tables: answer every pending call in one
-        // message of tool_result blocks only, then let the code carry on.
-        conversation.push({ role: "assistant", content });
+        // message of tool_result blocks only, with the table requests last in
+        // the reply (see withClientCallsLast), then let the code carry on.
+        conversation.push({ role: "assistant", content: withClientCallsLast(content) });
         conversation.push({ role: "user", content: calls.map((c) => tableResult(c)) });
         setBusy(true, "Running Python on the season data…");
         continue;
@@ -383,6 +455,14 @@ async function ask(question) {
       showSources(turn, answered);
       showCode(turn, answered);
     }
+    if (asksAgain > 0) note(turn, SET_ASIDE_NOTE);
+    if (startedOver) {
+      note(turn, STARTED_OVER_NOTE);
+      // Kept even when the second attempt works, so a failure that keeps happening
+      // (say, Anthropic stops accepting withClientCallsLast's order) shows up in a
+      // screenshot instead of only in the cost.
+      note(turn, "For the developer: started over after: " + firstFailure);
+    }
     note(turn, costLine(cfg, usage, model));
   } catch (e) {
     // What was on screen when it stopped, so its [n] marks keep their sources.
@@ -395,6 +475,7 @@ async function ask(question) {
       cancelDraw();
       turn.answer.replaceChildren(el("p", "ask-error", explainError(e)));
       if (e instanceof Anthropic.BadRequestError && detail) turn.answer.append(el("p", "ask-note", detail));
+      if (firstFailure) turn.answer.append(el("p", "ask-note", "Before starting over: " + firstFailure));
     }
   } finally {
     running = null;

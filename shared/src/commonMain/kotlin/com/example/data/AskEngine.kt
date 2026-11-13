@@ -50,8 +50,8 @@ data class AskAnswer(
     val searches: List<String> = emptyList()
 )
 
-/** A plain-words failure, shown in place of an answer. */
-class AskException(message: String) : Exception(message)
+/** A plain-words failure, shown in place of an answer; [code] is Anthropic's HTTP status, if it answered. */
+class AskException(message: String, val code: Int? = null) : Exception(message)
 
 /**
  * "Ask about the team" for the app: questions about the season, answered by
@@ -136,6 +136,7 @@ class AskEngine(
         if (conversation.isEmpty()) webDeclared = webSearch
         val mark = conversation.size
         var done = false
+        var firstFailure: String? = null // why the first attempt stopped, if it was started over
         try {
             onStatus("Loading the season data…", "", emptyList())
             val data = pack ?: loadPack().also { pack = it }
@@ -152,11 +153,39 @@ class AskEngine(
             var stop = ""
             var before: JSONObject? = null // the reply before this request, for a rejected request's error
             var asksAgain = 0
-            for (hop in 0 until MAX_HOPS) {
+            var startedOver = false // after Anthropic refused to carry on (see below)
+            var hops = 0
+            var limit = MAX_HOPS
+            var pendingStatus: String? = null // shown for the next request instead of "Still working…"
+            while (hops < limit) {
+                val hop = hops++
                 answerWithSources(mark).let { (text, sources) ->
-                    onStatus(if (hop == 0) "Thinking…" else "Still working…", text, sources)
+                    onStatus(pendingStatus ?: if (hop == 0) "Thinking…" else "Still working…", text, sources)
                 }
-                val reply = send(apiKey, requestBody(model, system, withWeb), requestDetail(hop, before))
+                pendingStatus = null
+                val reply = try {
+                    send(apiKey, requestBody(model, system, withWeb), requestDetail(hop, before))
+                } catch (e: AskException) {
+                    // Anthropic refused to carry on with an answer partway
+                    // through: a reply of its own it wouldn't take back, the
+                    // kind of quirk behind withClientCallsLast and the waiting
+                    // search above. Rather than fail, the answer so far is set
+                    // aside once and the question asked again. A first request
+                    // that fails is a real error and goes to the reader.
+                    val continuing = conversation.drop(mark + 1).any { it.optString("role") == "assistant" }
+                    // Only with requests left to try again; otherwise the reader gets the error.
+                    if (e.code != 400 || !continuing || startedOver || hops >= 2 * MAX_HOPS) throw e
+                    startedOver = true
+                    firstFailure = e.message
+                    rollBack(mark + 1)
+                    containerId = null
+                    before = null // the set-aside reply isn't part of the next request
+                    conversation += JSONObject().put("role", "user")
+                        .put("content", JSONArray().put(textBlock(RESTART_NOTE)))
+                    limit = minOf(hops + MAX_HOPS, 2 * MAX_HOPS)
+                    pendingStatus = "Starting the answer over…"
+                    continue
+                }
                 before = reply
                 reply.optJSONObject("usage")?.let { u ->
                     usage[0] += u.optLong("input_tokens")
@@ -182,13 +211,17 @@ class AskEngine(
                         asksAgain++
                         rollBack(mark + 1)
                         containerId = null // this reply's code is paused in it
+                        before = null // the set-aside reply isn't part of the next request
                         conversation += JSONObject().put("role", "user")
                             .put("content", JSONArray().put(textBlock(SEPARATE_NOTE)))
+                        limit = minOf(hops + MAX_HOPS, 2 * MAX_HOPS)
+                        pendingStatus = "Starting the answer over…"
                         continue
                     }
                     // Claude's code asked for tables: answer every pending call
-                    // in one message of tool_result blocks only.
-                    conversation += JSONObject().put("role", "assistant").put("content", content)
+                    // in one message of tool_result blocks only, with the table
+                    // requests last in the reply (see withClientCallsLast).
+                    conversation += JSONObject().put("role", "assistant").put("content", withClientCallsLast(content))
                     val results = JSONArray()
                     calls.forEach { results.put(tableResult(it, data)) }
                     conversation += JSONObject().put("role", "user").put("content", results)
@@ -234,12 +267,20 @@ class AskEngine(
 
             val notes = mutableListOf<String>()
             if (restarted) notes += NEW_CONVERSATION_NOTE
+            if (asksAgain > 0) notes += SET_ASIDE_NOTE
+            if (startedOver) {
+                notes += STARTED_OVER_NOTE
+                // Kept even when the second attempt works, so a failure that keeps
+                // happening (say, Anthropic stops accepting withClientCallsLast's
+                // order) shows up in a screenshot instead of only in the cost.
+                notes += "For the developer: started over after: $firstFailure"
+            }
             if (stop == "refusal") {
                 rollBack(mark)
                 done = true
                 return AskAnswer(
                     text = "",
-                    notes = listOf(costLine(model, usage)),
+                    notes = notes + costLine(model, usage),
                     error = "Claude declined to answer that one. Try rephrasing it as a question about the stats."
                 )
             }
@@ -257,7 +298,8 @@ class AskEngine(
             done = true
             return AskAnswer(text = text, code = code, notes = notes, sources = sources, searches = searches)
         } catch (e: AskException) {
-            return AskAnswer(text = "", error = e.message)
+            val error = listOfNotNull(e.message, firstFailure?.let { "Before starting over: $it" }).joinToString("\n\n")
+            return AskAnswer(text = "", error = error)
         } finally {
             if (!done) rollBack(mark)
         }
@@ -329,7 +371,7 @@ class AskEngine(
         val text = response.text()
         if (!response.isSuccessful) {
             val why = explainError(response.code, text)
-            throw AskException(if (response.code == 400 && detail.isNotEmpty()) "$why\n\n$detail" else why)
+            throw AskException(if (response.code == 400 && detail.isNotEmpty()) "$why\n\n$detail" else why, response.code)
         }
         return try {
             JSONObject(text)
@@ -535,7 +577,54 @@ class AskEngine(
 
         /** One of the app's own notes to Claude, not a question of the reader's. */
         private fun isAppNote(message: JSONObject) =
-            blocks(message.optJSONArray("content")).any { it.optString("text") in setOf(CONTINUE_NOTE, SEPARATE_NOTE) }
+            blocks(message.optJSONArray("content")).any {
+                it.optString("text") in setOf(CONTINUE_NOTE, SEPARATE_NOTE, RESTART_NOTE)
+            }
+
+        /**
+         * Sent in the reader's place when Anthropic refused to carry on with an
+         * answer and it was started over (see [ask]).
+         */
+        const val RESTART_NOTE =
+            "(Sent by the app, not the reader: Anthropic couldn't carry on with your answer, so it was set " +
+                "aside. Start again. Run one piece of Python at a time, and run your searches and your " +
+                "Python in separate steps.)"
+
+        /** Shown under an answer that was started over, since its cost covers both attempts. */
+        const val STARTED_OVER_NOTE =
+            "Claude started this answer over partway through, because Anthropic couldn't continue the " +
+                "first attempt. The cost below covers both."
+
+        /** Shown under an answer set aside for a search asked for while Claude's Python waited (see [ask]). */
+        const val SET_ASIDE_NOTE =
+            "Claude started this answer over partway through, because it searched the web while its " +
+                "Python was waiting on the season data, which the app can't handle. The cost below covers both."
+
+        /** A server tool's result: a block that answers a call but isn't the app's own tool_result. */
+        private fun isServerResult(b: JSONObject) =
+            b.optString("tool_use_id").isNotEmpty() && b.optString("type") != "tool_result"
+
+        /**
+         * Claude's reply with any search or code results that came after its
+         * table requests moved to just before them. When Claude runs two pieces
+         * of Python at once, one can finish after the other has paused on
+         * get_table; Anthropic then lists that result after the table request,
+         * and refused the reply sent back that way ("tool_use ids were found
+         * without tool_result blocks immediately after"). Results pair with
+         * their calls by id, not position. Left as it is when anything else
+         * follows a table request, or when a thinking block does, since moving
+         * a block from before a thinking block invalidates it.
+         */
+        fun withClientCallsLast(content: JSONArray): JSONArray {
+            val all = blocks(content)
+            val first = all.indexOfFirst { it.optString("type") == "tool_use" }
+            if (first < 0) return content
+            val tail = all.drop(first)
+            val results = tail.filter { isServerResult(it) }
+            if (results.isEmpty()) return content
+            if (tail.any { it.optString("type") != "tool_use" && !isServerResult(it) }) return content
+            return JSONArray(all.take(first) + results + tail.filter { it.optString("type") == "tool_use" })
+        }
 
         private fun answeredIds(all: List<JSONObject>): Set<String> =
             all.mapNotNull { b -> b.optString("tool_use_id").takeIf { it.isNotEmpty() } }.toSet()
