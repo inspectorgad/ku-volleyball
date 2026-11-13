@@ -197,6 +197,11 @@
   .ask-table { overflow-x: auto; margin: 0 0 8px; }
   .ask-note { font-size: 11px; color: var(--ink-3); margin: 4px 0 0; }
   .ask-error { color: var(--loss); }
+  .ask-web-check { align-items: flex-start; margin: 6px 0; }
+  .ask-web-check input { margin-top: 2px; flex: none; }
+  .ask-sources { font-size: 12px; margin-top: 6px; }
+  .ask-sources ol { margin: 2px 0 0; padding-left: 22px; }
+  .ask-sources a { color: var(--ku-blue); overflow-wrap: anywhere; }
   .ask-code summary { font-size: 12px; color: var(--ink-3); cursor: pointer; margin-top: 6px; }
   .subscribe { color: var(--ku-blue); font-size: 14px; text-decoration: none; }
   .subscribe:hover { text-decoration: underline; }
@@ -240,6 +245,11 @@
       <button class="chip ask-go" id="ask-go">Ask</button>
       <button class="chip" id="ask-stop" hidden>Stop</button>
     </div>
+    <label class="ask-check ask-web-check"><input type="checkbox" id="ask-web"><span>Search the web too
+      <span class="muted">— lets Claude look up news, previews and injury reports, and list the pages it used
+      (numbered like [1] in the answer). Statistics still come from the box scores. Each search costs 1¢ on your
+      Anthropic account plus reading the pages, at most 5 searches a question; web pages can be wrong or dated.
+      Turning it on partway through a conversation starts a new one.</span></span></label>
     <div class="ask-row"><span id="ask-status" class="ask-status" role="status"></span>
       <button class="chip" id="ask-new" hidden>New conversation</button></div>
     <div class="ask-examples" id="ask-examples"></div>
@@ -248,9 +258,10 @@
       account: usually a few cents to about 12¢ each with Claude Opus 5.5 (the default), less with Sonnet 5, and follow-ups within
       a few minutes cost less because the season data is cached. Claude works from the same validated box
       scores as this dashboard: it runs Python on the season's tables for every number, and you can open
-      the code it ran under each answer. It knows only what is in the box scores, schedule, polls, RPI and
-      goals - not injuries, line-ups, practice or anything else not in the data - and it says so when a
-      question goes beyond them.</p>
+      the code it ran under each answer. Besides Kansas's own data it has the other teams' too: the rosters and
+      season stats of the teams KU plays, every team's serving, the national leaders and every Division I
+      result this season. On its own it knows nothing about injuries, line-ups or practice and says so; tick
+      "Search the web too" to let it look such things up, with the pages it used listed under the answer.</p>
   </section>
   <div class="grid two-col">
     <section class="card">
