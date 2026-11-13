@@ -227,7 +227,8 @@
   "2026-11-08": true,
   "2026-11-09": true,
   "2026-11-10": true,
-  "2026-11-11": true
+  "2026-11-11": true,
+  "2026-11-12": true
  },
  "games": {
   "6479442": {
@@ -628,6 +629,13 @@
    "home": "Kansas",
    "away": "Cincinnati",
    "boxscored": true
+  },
+  "6625752": {
+   "date": "2026-11-12",
+   "final": false,
+   "home": "Colorado",
+   "away": "Kansas",
+   "boxscored": false
   },
   "6627522": {
    "date": "2026-10-30",
@@ -12784,6 +12792,15 @@
    ],
    "boxscored": true
   },
+  "6624259": {
+   "date": "2026-11-11",
+   "season": "2026",
+   "teams": [
+    "Minnesota",
+    "Indiana"
+   ],
+   "boxscored": true
+  },
   "6624279": {
    "date": "2026-09-25",
    "season": "2026",
@@ -13129,6 +13146,14 @@
    "season": "2026",
    "teams": [
     "Minnesota"
+   ],
+   "boxscored": true
+  },
+  "6624640": {
+   "date": "2026-11-11",
+   "season": "2026",
+   "teams": [
+    "Penn St."
    ],
    "boxscored": true
   },
@@ -14383,6 +14408,14 @@
    ],
    "boxscored": true
   },
+  "6625963": {
+   "date": "2026-11-12",
+   "season": "2026",
+   "teams": [
+    "Washington"
+   ],
+   "boxscored": true
+  },
   "6626048": {
    "date": "2026-08-28",
    "season": "2026",
@@ -14780,6 +14813,14 @@
    "season": "2026",
    "teams": [
     "Penn St."
+   ],
+   "boxscored": true
+  },
+  "6626352": {
+   "date": "2026-11-11",
+   "season": "2026",
+   "teams": [
+    "Pittsburgh"
    ],
    "boxscored": true
   },
