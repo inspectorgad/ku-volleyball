@@ -229,7 +229,8 @@
   "2026-11-10": true,
   "2026-11-11": true,
   "2026-11-12": true,
-  "2026-11-13": true
+  "2026-11-13": true,
+  "2026-11-14": true
  },
  "games": {
   "6479442": {
@@ -10391,6 +10392,27 @@
    },
    "conferenceGame": true
   },
+  "6627019": {
+   "date": "2026-11-13",
+   "season": "2026",
+   "home": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627046": {
    "date": "2026-09-15",
    "season": "2026",
@@ -13706,6 +13728,14 @@
    ],
    "boxscored": true
   },
+  "6625248": {
+   "date": "2026-11-13",
+   "season": "2026",
+   "teams": [
+    "Tennessee"
+   ],
+   "boxscored": true
+  },
   "6625270": {
    "date": "2026-08-28",
    "season": "2026",
@@ -14060,6 +14090,14 @@
    "season": "2026",
    "teams": [
     "Florida"
+   ],
+   "boxscored": true
+  },
+  "6625649": {
+   "date": "2026-11-13",
+   "season": "2026",
+   "teams": [
+    "Kentucky"
    ],
    "boxscored": true
   },
@@ -15758,6 +15796,14 @@
    ],
    "boxscored": true
   },
+  "6626975": {
+   "date": "2026-11-13",
+   "season": "2026",
+   "teams": [
+    "Creighton"
+   ],
+   "boxscored": true
+  },
   "6626976": {
    "date": "2026-08-30",
    "season": "2026",
@@ -15975,6 +16021,15 @@
    "teams": [
     "UCF",
     "Houston"
+   ],
+   "boxscored": true
+  },
+  "6627019": {
+   "date": "2026-11-13",
+   "season": "2026",
+   "teams": [
+    "Cincinnati",
+    "UCF"
    ],
    "boxscored": true
   },
