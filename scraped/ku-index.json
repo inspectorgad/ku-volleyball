@@ -230,7 +230,8 @@
   "2026-11-11": true,
   "2026-11-12": true,
   "2026-11-13": true,
-  "2026-11-14": true
+  "2026-11-14": true,
+  "2026-11-15": true
  },
  "games": {
   "6479442": {
@@ -638,6 +639,13 @@
    "home": "Colorado",
    "away": "Kansas",
    "boxscored": true
+  },
+  "6625753": {
+   "date": "2026-11-15",
+   "final": false,
+   "home": "Kansas",
+   "away": "TCU",
+   "boxscored": false
   },
   "6627522": {
    "date": "2026-10-30",
@@ -10098,6 +10106,27 @@
    },
    "conferenceGame": true
   },
+  "6626901": {
+   "date": "2026-11-14",
+   "season": "2026",
+   "home": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 7,
+    "inConference": true
+   },
+   "away": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626979": {
    "date": "2026-09-04",
    "season": "2026",
@@ -13054,6 +13083,14 @@
    ],
    "boxscored": true
   },
+  "6624348": {
+   "date": "2026-11-14",
+   "season": "2026",
+   "teams": [
+    "Purdue"
+   ],
+   "boxscored": true
+  },
   "6624351": {
    "date": "2026-08-28",
    "season": "2026",
@@ -13971,6 +14008,14 @@
    "season": "2026",
    "teams": [
     "Southern California",
+    "Oregon"
+   ],
+   "boxscored": true
+  },
+  "6625299": {
+   "date": "2026-11-14",
+   "season": "2026",
+   "teams": [
     "Oregon"
    ],
    "boxscored": true
@@ -15810,6 +15855,15 @@
    "teams": [
     "Iowa St.",
     "BYU"
+   ],
+   "boxscored": true
+  },
+  "6626901": {
+   "date": "2026-11-14",
+   "season": "2026",
+   "teams": [
+    "BYU",
+    "Texas Tech"
    ],
    "boxscored": true
   },
