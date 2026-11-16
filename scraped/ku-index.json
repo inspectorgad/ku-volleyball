@@ -231,7 +231,8 @@
   "2026-11-12": true,
   "2026-11-13": true,
   "2026-11-14": true,
-  "2026-11-15": true
+  "2026-11-15": true,
+  "2026-11-16": true
  },
  "games": {
   "6479442": {
@@ -8783,6 +8784,27 @@
    },
    "conferenceGame": true
   },
+  "6625844": {
+   "date": "2026-11-15",
+   "season": "2026",
+   "home": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": 23,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625955": {
    "date": "2026-09-11",
    "season": "2026",
@@ -14682,6 +14704,15 @@
    "teams": [
     "Baylor",
     "BYU"
+   ],
+   "boxscored": true
+  },
+  "6625844": {
+   "date": "2026-11-15",
+   "season": "2026",
+   "teams": [
+    "Colorado",
+    "Baylor"
    ],
    "boxscored": true
   },
