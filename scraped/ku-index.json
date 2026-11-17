@@ -12523,6 +12523,27 @@
    },
    "conferenceGame": true
   },
+  "6628342": {
+   "date": "2026-11-16",
+   "season": "2026",
+   "home": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6628485": {
    "date": "2026-09-18",
    "season": "2026",
@@ -17858,6 +17879,15 @@
    "season": "2026",
    "teams": [
     "Iowa St."
+   ],
+   "boxscored": true
+  },
+  "6628342": {
+   "date": "2026-11-16",
+   "season": "2026",
+   "teams": [
+    "Iowa St.",
+    "Cincinnati"
    ],
    "boxscored": true
   },
