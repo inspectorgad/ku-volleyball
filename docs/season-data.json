@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-11-18T03:07:52Z",
+ "generatedAt": "2026-11-18T09:03:25Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -30462,7 +30462,7 @@
    "city": "Lawrence, KS",
    "time": "19:30",
    "tv": "ESPN+",
-   "winProbability": 0.8501,
+   "winProbability": 0.847,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -30526,7 +30526,7 @@
    "city": "Tucson, AZ",
    "time": "19:00",
    "tv": "ESPN+",
-   "winProbability": 0.8107,
+   "winProbability": 0.8055,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -31682,7 +31682,7 @@
  "opponentRosters": [
   {
    "team": "Arizona",
-   "fetchedAt": "2026-11-11T08:17:49.469Z",
+   "fetchedAt": "2026-11-18T09:02:43.142Z",
    "players": [
     {
      "player": "Maria Olga Siapani",
@@ -31848,7 +31848,7 @@
   },
   {
    "team": "Arizona St.",
-   "fetchedAt": "2026-11-11T08:17:45.873Z",
+   "fetchedAt": "2026-11-18T09:02:40.076Z",
    "players": [
     {
      "player": "Una Vajagi\u0107",
@@ -32011,7 +32011,7 @@
   },
   {
    "team": "Baylor",
-   "fetchedAt": "2026-11-11T08:17:52.116Z",
+   "fetchedAt": "2026-11-18T09:02:45.978Z",
    "players": [
     {
      "player": "Harley Greek",
@@ -32162,7 +32162,7 @@
   },
   {
    "team": "BYU",
-   "fetchedAt": "2026-11-11T08:17:55.555Z",
+   "fetchedAt": "2026-11-18T09:02:48.890Z",
    "players": [
     {
      "player": "Kate Prior",
@@ -32320,7 +32320,7 @@
   },
   {
    "team": "Cincinnati",
-   "fetchedAt": "2026-11-11T08:17:58.161Z",
+   "fetchedAt": "2026-11-18T09:02:51.414Z",
    "players": [
     {
      "player": "Andi Spies",
@@ -32452,7 +32452,7 @@
   },
   {
    "team": "Colorado",
-   "fetchedAt": "2026-11-11T08:18:01.938Z",
+   "fetchedAt": "2026-11-18T09:02:54.447Z",
    "players": [
     {
      "player": "Jenna Ylivainio",
@@ -32968,7 +32968,7 @@
   },
   {
    "team": "Houston",
-   "fetchedAt": "2026-11-11T08:18:05.094Z",
+   "fetchedAt": "2026-11-18T09:02:57.166Z",
    "players": [
     {
      "player": "Alyssa Gonzales",
@@ -33146,7 +33146,7 @@
   },
   {
    "team": "Iowa St.",
-   "fetchedAt": "2026-11-11T08:18:07.785Z",
+   "fetchedAt": "2026-11-18T09:03:00.103Z",
    "players": [
     {
      "player": "Pam McCune",
@@ -33980,7 +33980,7 @@
   },
   {
    "team": "TCU",
-   "fetchedAt": "2026-11-11T08:18:14.574Z",
+   "fetchedAt": "2026-11-18T09:03:13.042Z",
    "players": [
     {
      "player": "Alice Volpe",
@@ -34157,7 +34157,7 @@
   },
   {
    "team": "Texas Tech",
-   "fetchedAt": "2026-11-11T08:18:17.675Z",
+   "fetchedAt": "2026-11-18T09:03:15.810Z",
    "players": [
     {
      "player": "Faith Jordan",
@@ -34442,7 +34442,7 @@
   },
   {
    "team": "UCF",
-   "fetchedAt": "2026-11-11T08:18:20.140Z",
+   "fetchedAt": "2026-11-18T09:03:18.644Z",
    "players": [
     {
      "player": "Abby Schomers",
@@ -34584,7 +34584,7 @@
   },
   {
    "team": "Utah",
-   "fetchedAt": "2026-11-11T08:18:23.122Z",
+   "fetchedAt": "2026-11-18T09:03:21.503Z",
    "players": [
     {
      "player": "Princess Atamah",
@@ -34756,7 +34756,7 @@
   },
   {
    "team": "West Virginia",
-   "fetchedAt": "2026-11-11T08:18:25.928Z",
+   "fetchedAt": "2026-11-18T09:03:24.822Z",
    "players": [
     {
      "player": "Lauren Duncan",
@@ -36313,22 +36313,22 @@
   {
    "team": "Minnesota",
    "season": "2026",
-   "matches": 24,
-   "sets": 87,
-   "serviceAces": 170,
-   "serviceErrors": 244,
-   "serveAttempts": 2028,
+   "matches": 25,
+   "sets": 91,
+   "serviceAces": 173,
+   "serviceErrors": 247,
+   "serveAttempts": 2106,
    "big12": false,
    "pollRank": 18
   },
   {
    "team": "Nebraska",
    "season": "2026",
-   "matches": 27,
-   "sets": 87,
-   "serviceAces": 141,
-   "serviceErrors": 202,
-   "serveAttempts": 2121,
+   "matches": 28,
+   "sets": 91,
+   "serviceAces": 146,
+   "serviceErrors": 208,
+   "serveAttempts": 2218,
    "big12": false,
    "pollRank": 1
   },
@@ -36346,11 +36346,11 @@
   {
    "team": "Oregon",
    "season": "2026",
-   "matches": 26,
-   "sets": 97,
-   "serviceAces": 144,
-   "serviceErrors": 248,
-   "serveAttempts": 2258,
+   "matches": 27,
+   "sets": 100,
+   "serviceAces": 149,
+   "serviceErrors": 258,
+   "serveAttempts": 2345,
    "big12": false,
    "pollRank": 12
   },
@@ -36476,11 +36476,11 @@
   {
    "team": "UCLA",
    "season": "2026",
-   "matches": 13,
-   "sets": 49,
-   "serviceAces": 40,
-   "serviceErrors": 71,
-   "serveAttempts": 1004,
+   "matches": 14,
+   "sets": 52,
+   "serviceAces": 43,
+   "serviceErrors": 77,
+   "serveAttempts": 1079,
    "big12": false,
    "pollRank": 25
   },
@@ -36508,11 +36508,11 @@
   {
    "team": "Washington",
    "season": "2026",
-   "matches": 17,
-   "sets": 62,
-   "serviceAces": 103,
-   "serviceErrors": 139,
-   "serveAttempts": 1395,
+   "matches": 18,
+   "sets": 65,
+   "serviceAces": 106,
+   "serviceErrors": 147,
+   "serveAttempts": 1473,
    "big12": false,
    "pollRank": 22
   },
@@ -45169,7 +45169,7 @@
     "venue": "H",
     "conference": true,
     "key": "west virginia",
-    "p": 0.8501
+    "p": 0.847
    },
    {
     "date": "2026-11-25",
@@ -45177,7 +45177,7 @@
     "venue": "A",
     "conference": true,
     "key": "arizona",
-    "p": 0.8107
+    "p": 0.8055
    },
    {
     "date": "2026-11-27",
@@ -45195,7 +45195,7 @@
     "confW": 13,
     "confL": 1,
     "remaining": 4,
-    "pVsAverage": 0.7874
+    "pVsAverage": 0.7843
    },
    {
     "team": "Arizona St.",
@@ -45203,7 +45203,7 @@
     "confW": 12,
     "confL": 2,
     "remaining": 3,
-    "pVsAverage": 0.7966
+    "pVsAverage": 0.7937
    },
    {
     "team": "TCU",
@@ -45211,7 +45211,7 @@
     "confW": 10,
     "confL": 4,
     "remaining": 4,
-    "pVsAverage": 0.696
+    "pVsAverage": 0.6921
    },
    {
     "team": "Baylor",
@@ -45219,7 +45219,7 @@
     "confW": 8,
     "confL": 6,
     "remaining": 4,
-    "pVsAverage": 0.6507
+    "pVsAverage": 0.6465
    },
    {
     "team": "Iowa St.",
@@ -45227,7 +45227,7 @@
     "confW": 8,
     "confL": 6,
     "remaining": 4,
-    "pVsAverage": 0.4752
+    "pVsAverage": 0.478
    },
    {
     "team": "Colorado",
@@ -45235,7 +45235,7 @@
     "confW": 8,
     "confL": 7,
     "remaining": 3,
-    "pVsAverage": 0.5914
+    "pVsAverage": 0.587
    },
    {
     "team": "UCF",
@@ -45243,7 +45243,7 @@
     "confW": 8,
     "confL": 7,
     "remaining": 3,
-    "pVsAverage": 0.3999
+    "pVsAverage": 0.4017
    },
    {
     "team": "Utah",
@@ -45251,7 +45251,7 @@
     "confW": 7,
     "confL": 7,
     "remaining": 4,
-    "pVsAverage": 0.5332
+    "pVsAverage": 0.5353
    },
    {
     "team": "West Virginia",
@@ -45259,7 +45259,7 @@
     "confW": 6,
     "confL": 8,
     "remaining": 3,
-    "pVsAverage": 0.3882
+    "pVsAverage": 0.3896
    },
    {
     "team": "Houston",
@@ -45267,7 +45267,7 @@
     "confW": 6,
     "confL": 9,
     "remaining": 3,
-    "pVsAverage": 0.295
+    "pVsAverage": 0.298
    },
    {
     "team": "Cincinnati",
@@ -45275,7 +45275,7 @@
     "confW": 4,
     "confL": 10,
     "remaining": 4,
-    "pVsAverage": 0.3179
+    "pVsAverage": 0.3204
    },
    {
     "team": "Kansas St.",
@@ -45283,7 +45283,7 @@
     "confW": 3,
     "confL": 11,
     "remaining": 4,
-    "pVsAverage": 0.3737
+    "pVsAverage": 0.3755
    },
    {
     "team": "Arizona",
@@ -45291,7 +45291,7 @@
     "confW": 2,
     "confL": 12,
     "remaining": 3,
-    "pVsAverage": 0.2869
+    "pVsAverage": 0.29
    },
    {
     "team": "Texas Tech",
@@ -45299,165 +45299,165 @@
     "confW": 0,
     "confL": 14,
     "remaining": 4,
-    "pVsAverage": 0.1798
+    "pVsAverage": 0.1838
    }
   ],
   "rpi": {
    "wins": 19,
    "played": 25,
    "owp": 0.61988,
-   "oowp": 0.59124,
+   "oowp": 0.59112,
    "field": [
-    0.71736,
-    0.71027,
-    0.68652,
-    0.68145,
-    0.67332,
-    0.67193,
-    0.6716,
-    0.67127,
-    0.66994,
-    0.66769,
-    0.66084,
-    0.65785,
-    0.65077,
-    0.64989,
-    0.64906,
-    0.6483,
-    0.64774,
-    0.6445,
-    0.63511,
-    0.63407,
-    0.63338,
-    0.6317,
-    0.62576,
-    0.62263,
-    0.62218,
-    0.62151,
-    0.61936,
-    0.6192,
-    0.61689,
-    0.61598,
-    0.61502,
-    0.61453,
-    0.61431,
-    0.614,
+    0.71738,
+    0.71149,
+    0.68647,
+    0.68093,
+    0.67516,
+    0.67352,
+    0.6718,
+    0.67155,
+    0.66879,
+    0.66658,
+    0.66077,
+    0.65718,
+    0.65079,
+    0.64981,
+    0.64863,
+    0.64839,
+    0.64765,
+    0.64402,
+    0.63513,
+    0.63311,
+    0.6322,
+    0.63171,
+    0.62551,
+    0.62251,
+    0.62079,
+    0.61968,
+    0.61927,
+    0.6191,
+    0.6173,
+    0.61493,
+    0.61491,
+    0.61443,
+    0.61409,
+    0.6134,
     0.60634,
-    0.60601,
-    0.60543,
-    0.6049,
-    0.60467,
-    0.60358,
-    0.60274,
-    0.59812,
-    0.5981,
-    0.59771,
-    0.59553,
-    0.59528,
-    0.59466,
+    0.60598,
+    0.60554,
+    0.60479,
+    0.60444,
+    0.60354,
+    0.60271,
+    0.59811,
+    0.59809,
+    0.59766,
+    0.59524,
+    0.59447,
+    0.59435,
     0.59258,
-    0.59054,
-    0.58748,
-    0.58747,
-    0.58737,
-    0.58734,
-    0.58541,
-    0.58477,
-    0.58433,
-    0.58161,
-    0.57951,
-    0.57725,
-    0.57592,
+    0.58972,
+    0.58745,
+    0.58739,
+    0.58724,
+    0.58647,
+    0.5856,
+    0.58533,
+    0.58476,
+    0.5816,
+    0.57946,
+    0.57671,
+    0.57607,
+    0.57591,
     0.57564,
-    0.57563,
-    0.57541,
-    0.57457,
-    0.57414,
-    0.57307,
+    0.57539,
+    0.57521,
+    0.57407,
+    0.57306,
     0.57263,
-    0.57246,
-    0.57001,
-    0.56984,
+    0.57195,
+    0.56997,
     0.56973,
-    0.56972,
-    0.56909,
-    0.56881,
-    0.56846,
-    0.56782,
-    0.56411,
-    0.56329,
-    0.56183,
-    0.56086,
-    0.56054,
-    0.56024,
+    0.56965,
+    0.56911,
+    0.56885,
+    0.5688,
+    0.56779,
+    0.56444,
+    0.56358,
+    0.56233,
+    0.5618,
+    0.56087,
+    0.5602,
     0.56009,
-    0.55859,
-    0.55643,
-    0.55635,
-    0.55621,
-    0.55308,
-    0.55276,
-    0.55262,
-    0.55006,
+    0.56001,
+    0.55858,
+    0.55642,
+    0.55627,
+    0.55599,
+    0.55304,
+    0.55268,
+    0.55264,
+    0.55001,
     0.54942,
     0.54869,
-    0.54709,
+    0.54622,
     0.54494,
-    0.54358,
-    0.54279,
+    0.54278,
+    0.54256,
     0.5424,
-    0.54212,
-    0.54137,
-    0.53944,
-    0.53893,
-    0.53852,
-    0.53839,
+    0.54143,
+    0.54043,
+    0.53888,
+    0.53845,
+    0.53838,
     0.53837,
-    0.53789,
-    0.53687,
-    0.53667,
-    0.53616,
-    0.53575,
-    0.53503,
-    0.5347,
-    0.53458,
-    0.53434,
-    0.53227,
-    0.53194,
-    0.53121,
-    0.53095,
-    0.53035,
-    0.52909,
-    0.52868,
+    0.5378,
+    0.53665,
+    0.53617,
+    0.53578,
+    0.53498,
+    0.53485,
+    0.53436,
+    0.53367,
+    0.53351,
+    0.53236,
+    0.53224,
+    0.53122,
+    0.53034,
+    0.52981,
+    0.52958,
+    0.52863,
     0.52856,
+    0.5285,
     0.52805,
-    0.52708,
-    0.52658,
+    0.52753,
     0.52642,
+    0.52599,
     0.52513,
     0.52441,
-    0.52407,
-    0.52358,
-    0.52317,
+    0.52404,
+    0.52355,
+    0.52315,
     0.52184,
     0.52153,
-    0.52147,
-    0.52078,
-    0.52066,
-    0.51987,
-    0.51962,
-    0.51948,
-    0.51935,
+    0.52145,
+    0.52069,
+    0.52064,
+    0.51959,
+    0.51947,
+    0.51937,
     0.51889,
-    0.51789,
-    0.5177,
-    0.51757,
-    0.51686,
-    0.51569,
-    0.51561,
-    0.51542,
-    0.51486,
-    0.51424
+    0.51882,
+    0.51799,
+    0.51772,
+    0.51754,
+    0.51687,
+    0.51541,
+    0.5151,
+    0.5147,
+    0.51421,
+    0.51408
    ],
    "atLargeCutoff": 45
   }
