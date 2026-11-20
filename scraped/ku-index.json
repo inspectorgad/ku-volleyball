@@ -235,7 +235,8 @@
   "2026-11-16": true,
   "2026-11-17": true,
   "2026-11-18": true,
-  "2026-11-19": true
+  "2026-11-19": true,
+  "2026-11-20": true
  },
  "games": {
   "6479442": {
@@ -650,6 +651,13 @@
    "home": "Kansas",
    "away": "TCU",
    "boxscored": true
+  },
+  "6625754": {
+   "date": "2026-11-20",
+   "final": false,
+   "home": "Kansas",
+   "away": "West Virginia",
+   "boxscored": false
   },
   "6627522": {
    "date": "2026-10-30",
@@ -11307,6 +11315,27 @@
    },
    "conferenceGame": true
   },
+  "6627536": {
+   "date": "2026-11-19",
+   "season": "2026",
+   "home": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627537": {
    "date": "2026-10-22",
    "season": "2026",
@@ -17010,6 +17039,15 @@
    "season": "2026",
    "teams": [
     "TCU"
+   ],
+   "boxscored": true
+  },
+  "6627536": {
+   "date": "2026-11-19",
+   "season": "2026",
+   "teams": [
+    "Texas Tech",
+    "Kansas St."
    ],
    "boxscored": true
   },
