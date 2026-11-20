@@ -10202,6 +10202,27 @@
    },
    "conferenceGame": true
   },
+  "6626904": {
+   "date": "2026-11-19",
+   "season": "2026",
+   "home": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 10,
+    "inConference": true
+   },
+   "away": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626979": {
    "date": "2026-09-04",
    "season": "2026",
@@ -12610,6 +12631,27 @@
    "away": {
     "name": "Utah",
     "seo": "utah",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6628511": {
+   "date": "2026-11-19",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
     "score": 3,
     "winner": true,
     "rank": null,
@@ -16155,6 +16197,14 @@
    ],
    "boxscored": true
   },
+  "6626904": {
+   "date": "2026-11-19",
+   "season": "2026",
+   "teams": [
+    "Arizona"
+   ],
+   "boxscored": true
+  },
   "6626911": {
    "date": "2026-08-30",
    "season": "2026",
@@ -18077,6 +18127,15 @@
    "teams": [
     "Houston",
     "Utah"
+   ],
+   "boxscored": true
+  },
+  "6628511": {
+   "date": "2026-11-19",
+   "season": "2026",
+   "teams": [
+    "Utah",
+    "Cincinnati"
    ],
    "boxscored": true
   },
