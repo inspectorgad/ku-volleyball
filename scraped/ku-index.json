@@ -236,7 +236,8 @@
   "2026-11-17": true,
   "2026-11-18": true,
   "2026-11-19": true,
-  "2026-11-20": true
+  "2026-11-20": true,
+  "2026-11-21": true
  },
  "games": {
   "6479442": {
@@ -11462,6 +11463,27 @@
    },
    "conferenceGame": true
   },
+  "6627545": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "home": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 0,
+    "winner": false,
+    "rank": 17,
+    "inConference": true
+   },
+   "away": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 8,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627597": {
    "date": "2026-09-04",
    "season": "2026",
@@ -15352,6 +15374,14 @@
    ],
    "boxscored": true
   },
+  "6626311": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "teams": [
+    "SMU"
+   ],
+   "boxscored": true
+  },
   "6626318": {
    "date": "2026-09-18",
    "season": "2026",
@@ -16590,6 +16620,14 @@
    ],
    "boxscored": true
   },
+  "6627042": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "teams": [
+    "Louisville"
+   ],
+   "boxscored": true
+  },
   "6627046": {
    "date": "2026-09-15",
    "season": "2026",
@@ -17138,6 +17176,14 @@
    "season": "2026",
    "teams": [
     "Arizona",
+    "Arizona St."
+   ],
+   "boxscored": true
+  },
+  "6627545": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "teams": [
     "Arizona St."
    ],
    "boxscored": true
@@ -17980,6 +18026,14 @@
    "season": "2026",
    "teams": [
     "Iowa St."
+   ],
+   "boxscored": true
+  },
+  "6628336": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "teams": [
+    "Pittsburgh"
    ],
    "boxscored": true
   },
