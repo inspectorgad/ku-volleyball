@@ -10266,6 +10266,27 @@
    },
    "conferenceGame": true
   },
+  "6626906": {
+   "date": "2026-11-21",
+   "season": "2026",
+   "home": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 10,
+    "inConference": true
+   },
+   "away": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626979": {
    "date": "2026-09-04",
    "season": "2026",
@@ -16323,6 +16344,15 @@
    ],
    "boxscored": true
   },
+  "6626906": {
+   "date": "2026-11-21",
+   "season": "2026",
+   "teams": [
+    "BYU",
+    "Cincinnati"
+   ],
+   "boxscored": true
+  },
   "6626911": {
    "date": "2026-08-30",
    "season": "2026",
@@ -19041,6 +19071,14 @@
    "teams": [
     "Indiana",
     "UCLA"
+   ],
+   "boxscored": true
+  },
+  "6679352": {
+   "date": "2026-11-21",
+   "season": "2026",
+   "teams": [
+    "Purdue"
    ],
    "boxscored": true
   },
