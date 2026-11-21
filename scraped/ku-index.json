@@ -655,10 +655,10 @@
   },
   "6625754": {
    "date": "2026-11-20",
-   "final": false,
+   "final": true,
    "home": "Kansas",
    "away": "West Virginia",
-   "boxscored": false
+   "boxscored": true
   },
   "6627522": {
    "date": "2026-10-30",
@@ -8376,6 +8376,27 @@
    },
    "conferenceGame": true
   },
+  "6625754": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "home": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 16,
+    "inConference": true
+   },
+   "away": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -8813,6 +8834,27 @@
     "score": 3,
     "winner": true,
     "rank": 23,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6625845": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "home": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": 20,
+    "inConference": true
+   },
+   "away": {
+    "name": "Iowa St.",
+    "seo": "iowa-st",
+    "score": 2,
+    "winner": false,
+    "rank": null,
     "inConference": true
    },
    "conferenceGame": true
@@ -12156,6 +12198,27 @@
    },
    "conferenceGame": true
   },
+  "6628233": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "home": {
+    "name": "Houston",
+    "seo": "houston",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Colorado",
+    "seo": "colorado",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6628235": {
    "date": "2026-09-12",
    "season": "2026",
@@ -14682,6 +14745,14 @@
    ],
    "boxscored": true
   },
+  "6625754": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "teams": [
+    "West Virginia"
+   ],
+   "boxscored": true
+  },
   "6625787": {
    "date": "2026-08-30",
    "season": "2026",
@@ -14868,6 +14939,15 @@
    ],
    "boxscored": true
   },
+  "6625845": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "teams": [
+    "Baylor",
+    "Iowa St."
+   ],
+   "boxscored": true
+  },
   "6625870": {
    "date": "2026-08-29",
    "season": "2026",
@@ -14913,6 +14993,14 @@
    "season": "2026",
    "teams": [
     "Stanford"
+   ],
+   "boxscored": true
+  },
+  "6625920": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "teams": [
+    "North Carolina"
    ],
    "boxscored": true
   },
@@ -17692,6 +17780,15 @@
    ],
    "boxscored": true
   },
+  "6628233": {
+   "date": "2026-11-20",
+   "season": "2026",
+   "teams": [
+    "Houston",
+    "Colorado"
+   ],
+   "boxscored": true
+  },
   "6628235": {
    "date": "2026-09-12",
    "season": "2026",
@@ -17885,6 +17982,14 @@
   },
   "6628270": {
    "date": "2026-11-14",
+   "season": "2026",
+   "teams": [
+    "Stanford"
+   ],
+   "boxscored": true
+  },
+  "6628271": {
+   "date": "2026-11-20",
    "season": "2026",
    "teams": [
     "Stanford"
