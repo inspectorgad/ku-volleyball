@@ -237,7 +237,8 @@
   "2026-11-18": true,
   "2026-11-19": true,
   "2026-11-20": true,
-  "2026-11-21": true
+  "2026-11-21": true,
+  "2026-11-22": true
  },
  "games": {
   "6479442": {
@@ -12429,6 +12430,27 @@
    },
    "conferenceGame": true
   },
+  "6628258": {
+   "date": "2026-11-21",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6628262": {
    "date": "2026-09-06",
    "season": "2026",
@@ -18002,6 +18024,14 @@
    ],
    "boxscored": true
   },
+  "6628258": {
+   "date": "2026-11-21",
+   "season": "2026",
+   "teams": [
+    "Arizona"
+   ],
+   "boxscored": true
+  },
   "6628262": {
    "date": "2026-09-06",
    "season": "2026",
@@ -19057,6 +19087,14 @@
    ],
    "boxscored": true
   },
+  "6679294": {
+   "date": "2026-11-21",
+   "season": "2026",
+   "teams": [
+    "Tennessee"
+   ],
+   "boxscored": true
+  },
   "6679337": {
    "date": "2026-11-21",
    "season": "2026",
@@ -19079,6 +19117,14 @@
    "season": "2026",
    "teams": [
     "Purdue"
+   ],
+   "boxscored": true
+  },
+  "6679353": {
+   "date": "2026-11-21",
+   "season": "2026",
+   "teams": [
+    "Washington"
    ],
    "boxscored": true
   },
