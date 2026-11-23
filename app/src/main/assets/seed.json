@@ -1,6 +1,6 @@
 {
  "formatVersion": 1,
- "generatedAt": "2026-11-23T16:26:00Z",
+ "generatedAt": "2026-11-23T21:39:02Z",
  "team": "Kansas Jayhawks Women's Volleyball",
  "players": [
   {
@@ -30958,7 +30958,7 @@
    "city": "Tucson, AZ",
    "time": "19:00",
    "tv": "ESPN+",
-   "winProbability": 0.8247,
+   "winProbability": 0.8289,
    "ratingSource": "results",
    "commonOpponents": [
     {
@@ -31037,7 +31037,7 @@
    "city": "Tempe, AZ",
    "time": "19:00",
    "tv": "ESPN+",
-   "winProbability": 0.3054,
+   "winProbability": 0.3074,
    "ratingSource": "poll",
    "commonOpponents": [
     {
@@ -31309,7 +31309,7 @@
    "confL": 2,
    "overallW": 23,
    "overallL": 4,
-   "nationalRank": 8,
+   "nationalRank": 9,
    "rpiRank": 8,
    "rpiSource": "ncaa"
   },
@@ -31871,34 +31871,34 @@
   {
    "season": "2026",
    "name": "AVCA Coaches Poll",
-   "updated": "Through Games NOV. 15, 2026",
+   "updated": "Through Games NOV. 22, 2026",
    "rows": [
     {
      "rank": 1,
      "rankLabel": "1",
      "team": "Nebraska",
-     "record": "27-0",
-     "points": "1573",
+     "record": "29-0",
+     "points": "1575",
      "previous": "1",
-     "firstPlaceVotes": 61,
+     "firstPlaceVotes": 63,
      "big12": false
     },
     {
      "rank": 2,
      "rankLabel": "2",
      "team": "Pittsburgh",
-     "record": "25-1",
-     "points": "1514",
+     "record": "27-1",
+     "points": "1512",
      "previous": "2",
-     "firstPlaceVotes": 2,
+     "firstPlaceVotes": 0,
      "big12": false
     },
     {
      "rank": 3,
      "rankLabel": "3",
-     "team": "Florida",
-     "record": "23-2",
-     "points": "1419",
+     "team": "SMU",
+     "record": "24-4",
+     "points": "1438",
      "previous": "4",
      "firstPlaceVotes": 0,
      "big12": false
@@ -31906,9 +31906,9 @@
     {
      "rank": 4,
      "rankLabel": "4",
-     "team": "SMU",
-     "record": "22-4",
-     "points": "1388",
+     "team": "Louisville",
+     "record": "26-4",
+     "points": "1324",
      "previous": "5",
      "firstPlaceVotes": 0,
      "big12": false
@@ -31916,20 +31916,20 @@
     {
      "rank": 5,
      "rankLabel": "5",
-     "team": "Louisville",
-     "record": "24-4",
-     "points": "1295",
-     "previous": "3",
+     "team": "Kentucky",
+     "record": "21-5",
+     "points": "1308",
+     "previous": "6",
      "firstPlaceVotes": 0,
      "big12": false
     },
     {
      "rank": 6,
      "rankLabel": "6",
-     "team": "Kentucky",
-     "record": "20-5",
-     "points": "1271",
-     "previous": "6",
+     "team": "Florida",
+     "record": "23-3",
+     "points": "1274",
+     "previous": "3",
      "firstPlaceVotes": 0,
      "big12": false
     },
@@ -31937,39 +31937,39 @@
      "rank": 7,
      "rankLabel": "7",
      "team": "Penn State",
-     "record": "21-5",
-     "points": "1115",
-     "previous": "10",
+     "record": "23-5",
+     "points": "1158",
+     "previous": "7",
      "firstPlaceVotes": 0,
      "big12": false
     },
     {
      "rank": 8,
      "rankLabel": "8",
-     "team": "Arizona State",
-     "record": "21-4",
-     "points": "1100",
-     "previous": "8",
-     "firstPlaceVotes": 0,
-     "big12": true
-    },
-    {
-     "rank": 9,
-     "rankLabel": "9",
      "team": "Wisconsin",
-     "record": "19-7",
-     "points": "1089",
+     "record": "21-7",
+     "points": "1112",
      "previous": "9",
      "firstPlaceVotes": 0,
      "big12": false
     },
     {
+     "rank": 9,
+     "rankLabel": "9",
+     "team": "Arizona State",
+     "record": "23-4",
+     "points": "1096",
+     "previous": "8",
+     "firstPlaceVotes": 0,
+     "big12": true
+    },
+    {
      "rank": 10,
      "rankLabel": "10",
      "team": "BYU",
-     "record": "21-2",
-     "points": "1043",
-     "previous": "7",
+     "record": "23-2",
+     "points": "1027",
+     "previous": "10",
      "firstPlaceVotes": 0,
      "big12": true
     },
@@ -31977,8 +31977,8 @@
      "rank": 11,
      "rankLabel": "11",
      "team": "Tennessee",
-     "record": "20-5",
-     "points": "936",
+     "record": "22-5",
+     "points": "953",
      "previous": "11",
      "firstPlaceVotes": 0,
      "big12": false
@@ -31986,20 +31986,20 @@
     {
      "rank": 12,
      "rankLabel": "12",
-     "team": "Oregon",
-     "record": "22-4",
-     "points": "880",
-     "previous": "12",
+     "team": "Purdue",
+     "record": "20-8",
+     "points": "844",
+     "previous": "13",
      "firstPlaceVotes": 0,
      "big12": false
     },
     {
      "rank": 13,
      "rankLabel": "13",
-     "team": "Purdue",
-     "record": "18-7",
-     "points": "796",
-     "previous": "13",
+     "team": "Oregon",
+     "record": "23-5",
+     "points": "795",
+     "previous": "12",
      "firstPlaceVotes": 0,
      "big12": false
     },
@@ -32007,9 +32007,9 @@
      "rank": 14,
      "rankLabel": "14",
      "team": "Vanderbilt",
-     "record": "21-3",
-     "points": "743",
-     "previous": "15",
+     "record": "22-3",
+     "points": "772",
+     "previous": "14",
      "firstPlaceVotes": 0,
      "big12": false
     },
@@ -32017,9 +32017,9 @@
      "rank": 15,
      "rankLabel": "15",
      "team": "Texas",
-     "record": "15-8",
-     "points": "699",
-     "previous": "16",
+     "record": "15-9",
+     "points": "667",
+     "previous": "15",
      "firstPlaceVotes": 0,
      "big12": false
     },
@@ -32027,9 +32027,9 @@
      "rank": 16,
      "rankLabel": "16",
      "team": "Kansas",
-     "record": "19-6",
-     "points": "641",
-     "previous": "14",
+     "record": "20-6",
+     "points": "647",
+     "previous": "16",
      "firstPlaceVotes": 0,
      "big12": true
     },
@@ -32037,8 +32037,8 @@
      "rank": 17,
      "rankLabel": "17",
      "team": "TCU",
-     "record": "19-6",
-     "points": "556",
+     "record": "20-7",
+     "points": "557",
      "previous": "17",
      "firstPlaceVotes": 0,
      "big12": true
@@ -32047,18 +32047,18 @@
      "rank": 18,
      "rankLabel": "18",
      "team": "Minnesota",
-     "record": "17-7",
-     "points": "507",
-     "previous": "19",
+     "record": "17-9",
+     "points": "417",
+     "previous": "18",
      "firstPlaceVotes": 0,
      "big12": false
     },
     {
      "rank": 19,
      "rankLabel": "19",
-     "team": "Texas A&M",
-     "record": "16-11",
-     "points": "363",
+     "team": "North Carolina",
+     "record": "20-6",
+     "points": "392",
      "previous": "21",
      "firstPlaceVotes": 0,
      "big12": false
@@ -32067,38 +32067,38 @@
      "rank": 20,
      "rankLabel": "20",
      "team": "Baylor",
-     "record": "16-8",
-     "points": "347",
-     "previous": "23",
+     "record": "17-9",
+     "points": "365",
+     "previous": "20",
      "firstPlaceVotes": 0,
      "big12": true
     },
     {
      "rank": 21,
      "rankLabel": "21",
-     "team": "North Carolina",
-     "record": "18-6",
-     "points": "323",
-     "previous": "20",
+     "team": "Indiana",
+     "record": "17-11",
+     "points": "306",
+     "previous": "23",
      "firstPlaceVotes": 0,
      "big12": false
     },
     {
      "rank": 22,
      "rankLabel": "22",
-     "team": "Washington",
-     "record": "18-7",
+     "team": "Texas A&M",
+     "record": "16-12",
      "points": "238",
-     "previous": "18",
+     "previous": "19",
      "firstPlaceVotes": 0,
      "big12": false
     },
     {
      "rank": 23,
      "rankLabel": "23",
-     "team": "Indiana",
-     "record": "15-10",
-     "points": "197",
+     "team": "Washington",
+     "record": "19-9",
+     "points": "161",
      "previous": "22",
      "firstPlaceVotes": 0,
      "big12": false
@@ -32107,8 +32107,8 @@
      "rank": 24,
      "rankLabel": "24",
      "team": "Stanford",
-     "record": "17-9",
-     "points": "122",
+     "record": "19-9",
+     "points": "144",
      "previous": "24",
      "firstPlaceVotes": 0,
      "big12": false
@@ -32117,9 +32117,9 @@
      "rank": 25,
      "rankLabel": "25",
      "team": "UCLA",
-     "record": "17-10",
-     "points": "91",
-     "previous": "NR",
+     "record": "18-11",
+     "points": "74",
+     "previous": "25",
      "firstPlaceVotes": 0,
      "big12": false
     }
@@ -36242,7 +36242,7 @@
    "serviceErrors": 230,
    "serveAttempts": 2319,
    "big12": true,
-   "pollRank": 8
+   "pollRank": 9
   },
   {
    "team": "Baylor",
@@ -36295,7 +36295,7 @@
    "serviceErrors": 235,
    "serveAttempts": 2173,
    "big12": false,
-   "pollRank": 3
+   "pollRank": 6
   },
   {
    "team": "Houston",
@@ -36316,7 +36316,7 @@
    "serviceErrors": 228,
    "serveAttempts": 2164,
    "big12": false,
-   "pollRank": 23
+   "pollRank": 21
   },
   {
    "team": "Iowa St.",
@@ -36358,7 +36358,7 @@
    "serviceErrors": 243,
    "serveAttempts": 2128,
    "big12": false,
-   "pollRank": 6
+   "pollRank": 5
   },
   {
    "team": "Louisville",
@@ -36369,7 +36369,7 @@
    "serviceErrors": 219,
    "serveAttempts": 2360,
    "big12": false,
-   "pollRank": 5
+   "pollRank": 4
   },
   {
    "team": "Minnesota",
@@ -36402,7 +36402,7 @@
    "serviceErrors": 179,
    "serveAttempts": 2154,
    "big12": false,
-   "pollRank": 21
+   "pollRank": 19
   },
   {
    "team": "Oregon",
@@ -36413,7 +36413,7 @@
    "serviceErrors": 264,
    "serveAttempts": 2410,
    "big12": false,
-   "pollRank": 12
+   "pollRank": 13
   },
   {
    "team": "Penn St.",
@@ -36446,7 +36446,7 @@
    "serviceErrors": 192,
    "serveAttempts": 2282,
    "big12": false,
-   "pollRank": 13
+   "pollRank": 12
   },
   {
    "team": "SMU",
@@ -36457,7 +36457,7 @@
    "serviceErrors": 325,
    "serveAttempts": 2362,
    "big12": false,
-   "pollRank": 4
+   "pollRank": 3
   },
   {
    "team": "Stanford",
@@ -36512,7 +36512,7 @@
    "serviceErrors": 270,
    "serveAttempts": 2331,
    "big12": false,
-   "pollRank": 19
+   "pollRank": 22
   },
   {
    "team": "Texas Tech",
@@ -36575,7 +36575,7 @@
    "serviceErrors": 164,
    "serveAttempts": 1683,
    "big12": false,
-   "pollRank": 22
+   "pollRank": 23
   },
   {
    "team": "West Virginia",
@@ -36596,7 +36596,7 @@
    "serviceErrors": 247,
    "serveAttempts": 2427,
    "big12": false,
-   "pollRank": 9
+   "pollRank": 8
   }
  ],
  "nationalLeaders": {
@@ -45221,7 +45221,7 @@
    "confL": 3,
    "overallW": 20,
    "overallL": 6,
-   "rating": 76.28
+   "rating": 76.34
   },
   "remaining": [
    {
@@ -45230,7 +45230,7 @@
     "venue": "A",
     "conference": true,
     "key": "arizona",
-    "p": 0.8247
+    "p": 0.8289
    },
    {
     "date": "2026-11-27",
@@ -45238,7 +45238,7 @@
     "venue": "A",
     "conference": true,
     "key": "arizona st",
-    "p": 0.3054
+    "p": 0.3074
    }
   ],
   "others": [
@@ -45248,7 +45248,7 @@
     "confW": 15,
     "confL": 1,
     "remaining": 2,
-    "pVsAverage": 0.7958
+    "pVsAverage": 0.7952
    },
    {
     "team": "Arizona St.",
@@ -45256,7 +45256,7 @@
     "confW": 14,
     "confL": 2,
     "remaining": 1,
-    "pVsAverage": 0.8047
+    "pVsAverage": 0.806
    },
    {
     "team": "TCU",
@@ -45264,7 +45264,7 @@
     "confW": 11,
     "confL": 5,
     "remaining": 2,
-    "pVsAverage": 0.7067
+    "pVsAverage": 0.7093
    },
    {
     "team": "Colorado",
@@ -45272,7 +45272,7 @@
     "confW": 10,
     "confL": 7,
     "remaining": 1,
-    "pVsAverage": 0.6036
+    "pVsAverage": 0.6023
    },
    {
     "team": "Baylor",
@@ -45280,7 +45280,7 @@
     "confW": 9,
     "confL": 7,
     "remaining": 2,
-    "pVsAverage": 0.6622
+    "pVsAverage": 0.6687
    },
    {
     "team": "UCF",
@@ -45288,7 +45288,7 @@
     "confW": 8,
     "confL": 8,
     "remaining": 2,
-    "pVsAverage": 0.3874
+    "pVsAverage": 0.3861
    },
    {
     "team": "Utah",
@@ -45296,7 +45296,7 @@
     "confW": 8,
     "confL": 8,
     "remaining": 2,
-    "pVsAverage": 0.5225
+    "pVsAverage": 0.5227
    },
    {
     "team": "Iowa St.",
@@ -45304,7 +45304,7 @@
     "confW": 8,
     "confL": 8,
     "remaining": 2,
-    "pVsAverage": 0.4675
+    "pVsAverage": 0.4668
    },
    {
     "team": "Houston",
@@ -45312,7 +45312,7 @@
     "confW": 7,
     "confL": 10,
     "remaining": 1,
-    "pVsAverage": 0.2888
+    "pVsAverage": 0.2871
    },
    {
     "team": "West Virginia",
@@ -45320,7 +45320,7 @@
     "confW": 6,
     "confL": 10,
     "remaining": 2,
-    "pVsAverage": 0.3669
+    "pVsAverage": 0.3658
    },
    {
     "team": "Kansas St.",
@@ -45328,7 +45328,7 @@
     "confW": 5,
     "confL": 11,
     "remaining": 2,
-    "pVsAverage": 0.3876
+    "pVsAverage": 0.3868
    },
    {
     "team": "Cincinnati",
@@ -45336,7 +45336,7 @@
     "confW": 5,
     "confL": 11,
     "remaining": 2,
-    "pVsAverage": 0.3381
+    "pVsAverage": 0.3367
    },
    {
     "team": "Arizona",
@@ -45344,7 +45344,7 @@
     "confW": 2,
     "confL": 14,
     "remaining": 1,
-    "pVsAverage": 0.2782
+    "pVsAverage": 0.2758
    },
    {
     "team": "Texas Tech",
@@ -45352,14 +45352,14 @@
     "confW": 0,
     "confL": 16,
     "remaining": 2,
-    "pVsAverage": 0.1566
+    "pVsAverage": 0.1543
    }
   ],
   "rpi": {
    "wins": 20,
    "played": 26,
    "owp": 0.61664,
-   "oowp": 0.58703,
+   "oowp": 0.58705,
    "field": [
     0.70999,
     0.70071,
@@ -45368,28 +45368,28 @@
     0.66834,
     0.66819,
     0.6675,
-    0.66712,
+    0.66711,
     0.66589,
-    0.66221,
+    0.66222,
     0.66098,
     0.65999,
-    0.65074,
+    0.65075,
     0.64962,
     0.64814,
-    0.64756,
+    0.64757,
     0.64244,
     0.63869,
     0.636,
-    0.63475,
+    0.63474,
     0.62888,
     0.62765,
-    0.62637,
-    0.6235,
+    0.62638,
+    0.62349,
     0.62266,
-    0.62032,
+    0.62031,
     0.61692,
-    0.61608,
-    0.61587,
+    0.61607,
+    0.61588,
     0.61522,
     0.61489,
     0.61432,
@@ -45397,49 +45397,49 @@
     0.61278,
     0.61181,
     0.61108,
-    0.60766,
+    0.60767,
     0.60653,
     0.6065,
-    0.60488,
-    0.60226,
-    0.60158,
-    0.60068,
-    0.5979,
+    0.60487,
+    0.60223,
+    0.60157,
+    0.60069,
+    0.59789,
     0.59746,
     0.59741,
     0.59594,
-    0.59518,
-    0.59465,
+    0.59516,
+    0.59464,
     0.59221,
-    0.59065,
-    0.59025,
+    0.59066,
+    0.59023,
     0.5872,
-    0.58515,
+    0.58514,
     0.58505,
-    0.58475,
-    0.58374,
+    0.58474,
+    0.58339,
     0.58164,
     0.58114,
-    0.57431,
+    0.5743,
     0.57422,
-    0.57413,
+    0.57414,
     0.57308,
-    0.57008,
+    0.57025,
     0.56861,
     0.56806,
-    0.56715,
-    0.56673,
+    0.56712,
+    0.56672,
     0.56615,
     0.56612,
-    0.5655,
+    0.56549,
     0.56526,
-    0.564,
-    0.5627,
+    0.56399,
+    0.56269,
     0.56263,
-    0.56101,
+    0.561,
     0.56011,
-    0.55918,
-    0.55822,
+    0.55916,
+    0.55821,
     0.55766,
     0.5576,
     0.5575,
@@ -45447,70 +45447,70 @@
     0.5569,
     0.55658,
     0.55651,
-    0.55383,
-    0.55382,
-    0.55368,
+    0.55384,
+    0.55381,
+    0.55369,
     0.5534,
+    0.55177,
     0.55097,
     0.54883,
-    0.54871,
-    0.54828,
-    0.54383,
+    0.5487,
+    0.54384,
     0.54372,
     0.54338,
-    0.5417,
-    0.53944,
-    0.53728,
+    0.54169,
+    0.53943,
+    0.53729,
     0.53698,
     0.53612,
     0.53595,
-    0.53424,
+    0.53423,
     0.53412,
-    0.53321,
-    0.53321,
+    0.53322,
+    0.53322,
     0.53316,
-    0.53282,
+    0.5328,
     0.53236,
     0.53171,
-    0.53131,
+    0.53129,
     0.53077,
     0.52969,
-    0.52933,
-    0.52909,
+    0.52932,
     0.52906,
     0.52876,
-    0.5285,
+    0.52872,
+    0.52837,
     0.52728,
-    0.52716,
+    0.52715,
     0.52667,
     0.52627,
-    0.52575,
+    0.52542,
     0.52524,
     0.52505,
-    0.52466,
-    0.52383,
-    0.52379,
-    0.52313,
+    0.52503,
+    0.52382,
+    0.52377,
+    0.52285,
     0.52248,
-    0.52105,
+    0.52104,
     0.52054,
-    0.52034,
-    0.51933,
-    0.51874,
+    0.52033,
+    0.51932,
+    0.51873,
     0.51858,
     0.5182,
-    0.51737,
-    0.5155,
-    0.5154,
+    0.51738,
+    0.5157,
+    0.51539,
     0.51499,
-    0.51474,
-    0.51474,
+    0.51473,
+    0.51472,
     0.5147,
     0.51462,
-    0.51385,
-    0.51385,
-    0.51221,
-    0.51162
+    0.51386,
+    0.51383,
+    0.5122,
+    0.51161
    ],
    "atLargeCutoff": 45
   }
