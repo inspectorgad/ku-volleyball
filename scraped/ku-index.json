@@ -8891,6 +8891,27 @@
    },
    "conferenceGame": true
   },
+  "6625849": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "home": {
+    "name": "West Virginia",
+    "seo": "west-virginia",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Baylor",
+    "seo": "baylor",
+    "score": 3,
+    "winner": true,
+    "rank": 20,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625955": {
    "date": "2026-09-11",
    "season": "2026",
@@ -10336,6 +10357,27 @@
     "score": 0,
     "winner": false,
     "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6626907": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "home": {
+    "name": "UCF",
+    "seo": "ucf",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 10,
     "inConference": true
    },
    "conferenceGame": true
@@ -15135,6 +15177,15 @@
    ],
    "boxscored": true
   },
+  "6625849": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "teams": [
+    "West Virginia",
+    "Baylor"
+   ],
+   "boxscored": true
+  },
   "6625870": {
    "date": "2026-08-29",
    "season": "2026",
@@ -15659,6 +15710,14 @@
   },
   "6626312": {
    "date": "2026-11-22",
+   "season": "2026",
+   "teams": [
+    "SMU"
+   ],
+   "boxscored": true
+  },
+  "6626313": {
+   "date": "2026-11-25",
    "season": "2026",
    "teams": [
     "SMU"
@@ -16533,6 +16592,15 @@
    "teams": [
     "BYU",
     "Cincinnati"
+   ],
+   "boxscored": true
+  },
+  "6626907": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "teams": [
+    "UCF",
+    "BYU"
    ],
    "boxscored": true
   },
