@@ -240,7 +240,8 @@
   "2026-11-21": true,
   "2026-11-22": true,
   "2026-11-23": true,
-  "2026-11-24": true
+  "2026-11-24": true,
+  "2026-11-25": true
  },
  "games": {
   "6479442": {
@@ -662,6 +663,13 @@
    "home": "Kansas",
    "away": "West Virginia",
    "boxscored": true
+  },
+  "6625755": {
+   "date": "2026-11-25",
+   "final": false,
+   "home": "Arizona",
+   "away": "Kansas",
+   "boxscored": false
   },
   "6627522": {
    "date": "2026-10-30",
@@ -19357,6 +19365,15 @@
    "season": "2026",
    "teams": [
     "Creighton"
+   ],
+   "boxscored": true
+  },
+  "6679341": {
+   "date": "2026-11-24",
+   "season": "2026",
+   "teams": [
+    "Nebraska",
+    "Purdue"
    ],
    "boxscored": true
   },
