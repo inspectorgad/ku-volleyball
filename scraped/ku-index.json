@@ -12062,6 +12062,27 @@
    },
    "conferenceGame": true
   },
+  "6628047": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "home": {
+    "name": "Cincinnati",
+    "seo": "cincinnati",
+    "score": 3,
+    "winner": true,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Texas Tech",
+    "seo": "texas-tech",
+    "score": 0,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6628103": {
    "date": "2026-08-29",
    "season": "2026",
@@ -17822,6 +17843,15 @@
    "teams": [
     "Texas Tech",
     "Houston"
+   ],
+   "boxscored": true
+  },
+  "6628047": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "teams": [
+    "Cincinnati",
+    "Texas Tech"
    ],
    "boxscored": true
   },
