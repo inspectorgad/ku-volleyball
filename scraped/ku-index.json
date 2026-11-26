@@ -667,10 +667,10 @@
   },
   "6625755": {
    "date": "2026-11-25",
-   "final": false,
+   "final": true,
    "home": "Arizona",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   },
   "6627522": {
    "date": "2026-10-30",
@@ -8409,6 +8409,27 @@
    },
    "conferenceGame": true
   },
+  "6625755": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "home": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 3,
+    "winner": true,
+    "rank": 16,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -12987,6 +13008,27 @@
    },
    "conferenceGame": true
   },
+  "6628513": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "home": {
+    "name": "Utah",
+    "seo": "utah",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 3,
+    "winner": true,
+    "rank": 17,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6628518": {
    "date": "2026-08-29",
    "season": "2026",
@@ -14993,6 +15035,14 @@
    "season": "2026",
    "teams": [
     "West Virginia"
+   ],
+   "boxscored": true
+  },
+  "6625755": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "teams": [
+    "Arizona"
    ],
    "boxscored": true
   },
@@ -18701,6 +18751,15 @@
    "teams": [
     "Utah",
     "Cincinnati"
+   ],
+   "boxscored": true
+  },
+  "6628513": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "teams": [
+    "Utah",
+    "TCU"
    ],
    "boxscored": true
   },
