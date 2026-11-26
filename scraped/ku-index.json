@@ -241,7 +241,8 @@
   "2026-11-22": true,
   "2026-11-23": true,
   "2026-11-24": true,
-  "2026-11-25": true
+  "2026-11-25": true,
+  "2026-11-26": true
  },
  "games": {
   "6479442": {
@@ -17010,6 +17011,15 @@
    "date": "2026-11-22",
    "season": "2026",
    "teams": [
+    "Louisville"
+   ],
+   "boxscored": true
+  },
+  "6627044": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "teams": [
+    "North Carolina",
     "Louisville"
    ],
    "boxscored": true
