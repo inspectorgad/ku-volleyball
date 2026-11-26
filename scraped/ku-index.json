@@ -11580,6 +11580,27 @@
    },
    "conferenceGame": true
   },
+  "6627538": {
+   "date": "2026-11-25",
+   "season": "2026",
+   "home": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 9,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 1,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6627539": {
    "date": "2026-11-01",
    "season": "2026",
@@ -17608,6 +17629,14 @@
   },
   "6627537": {
    "date": "2026-10-22",
+   "season": "2026",
+   "teams": [
+    "Arizona St."
+   ],
+   "boxscored": true
+  },
+  "6627538": {
+   "date": "2026-11-25",
    "season": "2026",
    "teams": [
     "Arizona St."
