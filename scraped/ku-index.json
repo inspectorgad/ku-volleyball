@@ -676,10 +676,10 @@
   },
   "6625756": {
    "date": "2026-11-27",
-   "final": false,
+   "final": true,
    "home": "Arizona St.",
    "away": "Kansas",
-   "boxscored": false
+   "boxscored": true
   },
   "6627522": {
    "date": "2026-10-30",
@@ -8439,6 +8439,27 @@
    },
    "conferenceGame": true
   },
+  "6625756": {
+   "date": "2026-11-27",
+   "season": "2026",
+   "home": {
+    "name": "Arizona St.",
+    "seo": "arizona-st",
+    "score": 3,
+    "winner": true,
+    "rank": 9,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas",
+    "seo": "kansas",
+    "score": 2,
+    "winner": false,
+    "rank": 16,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6625818": {
    "date": "2026-08-28",
    "season": "2026",
@@ -10455,6 +10476,27 @@
    },
    "conferenceGame": true
   },
+  "6626909": {
+   "date": "2026-11-27",
+   "season": "2026",
+   "home": {
+    "name": "BYU",
+    "seo": "byu",
+    "score": 3,
+    "winner": true,
+    "rank": 10,
+    "inConference": true
+   },
+   "away": {
+    "name": "TCU",
+    "seo": "tcu",
+    "score": 1,
+    "winner": false,
+    "rank": 17,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
   "6626979": {
    "date": "2026-09-04",
    "season": "2026",
@@ -11689,6 +11731,27 @@
     "seo": "houston",
     "score": 0,
     "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "conferenceGame": true
+  },
+  "6627540": {
+   "date": "2026-11-27",
+   "season": "2026",
+   "home": {
+    "name": "Arizona",
+    "seo": "arizona",
+    "score": 2,
+    "winner": false,
+    "rank": null,
+    "inConference": true
+   },
+   "away": {
+    "name": "Kansas St.",
+    "seo": "kansas-st",
+    "score": 3,
+    "winner": true,
     "rank": null,
     "inConference": true
    },
@@ -15160,6 +15223,14 @@
    ],
    "boxscored": true
   },
+  "6625756": {
+   "date": "2026-11-27",
+   "season": "2026",
+   "teams": [
+    "Arizona St."
+   ],
+   "boxscored": true
+  },
   "6625787": {
    "date": "2026-08-30",
    "season": "2026",
@@ -16816,6 +16887,15 @@
    ],
    "boxscored": true
   },
+  "6626909": {
+   "date": "2026-11-27",
+   "season": "2026",
+   "teams": [
+    "BYU",
+    "TCU"
+   ],
+   "boxscored": true
+  },
   "6626911": {
    "date": "2026-08-30",
    "season": "2026",
@@ -17776,6 +17856,15 @@
    "season": "2026",
    "teams": [
     "Arizona St."
+   ],
+   "boxscored": true
+  },
+  "6627540": {
+   "date": "2026-11-27",
+   "season": "2026",
+   "teams": [
+    "Arizona",
+    "Kansas St."
    ],
    "boxscored": true
   },
